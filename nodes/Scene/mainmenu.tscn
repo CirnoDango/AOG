@@ -1,0 +1,79 @@
+[gd_scene load_steps=5 format=3 uid="uid://cslun0ygwlodq"]
+
+[ext_resource type="Script" uid="uid://bwf2ipfqc7iok" path="res://Cscript/UI/Mainmenu.cs" id="1_giku7"]
+[ext_resource type="Texture2D" uid="uid://dkwawkraos6qs" path="res://assets/Sprites/rumia.png" id="2_b8vaj"]
+[ext_resource type="Texture2D" uid="uid://capy2552dcngi" path="res://assets/Sprites/marisa.png" id="3_pbe7u"]
+[ext_resource type="Texture2D" uid="uid://dilke75bhdygu" path="res://assets/Sprites/cirno.png" id="4_vy6a5"]
+
+[node name="Mainmenu" type="Control" node_paths=PackedStringArray("label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_giku7")
+label = NodePath("Label")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1
+layout_mode = 0
+offset_left = -3.05176e-05
+offset_top = -6.10352e-05
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+
+[node name="rumia" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 1216.0
+offset_top = 390.0
+offset_right = 1316.0
+offset_bottom = 490.0
+scale = Vector2(3, 3)
+texture_normal = ExtResource("2_b8vaj")
+
+[node name="marisa" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 835.0
+offset_top = 388.0
+offset_right = 935.0
+offset_bottom = 488.0
+scale = Vector2(3, 3)
+texture_normal = ExtResource("3_pbe7u")
+
+[node name="cirno" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 418.0
+offset_top = 386.0
+offset_right = 518.0
+offset_bottom = 486.0
+scale = Vector2(3, 3)
+texture_normal = ExtResource("4_vy6a5")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 545.0
+offset_top = 246.0
+offset_right = 673.0
+offset_bottom = 269.0
+theme_override_font_sizes/font_size = 80
+text = "选择自机：cirno"
+
+[node name="cave" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1060.0
+offset_top = 757.0
+offset_right = 1132.0
+offset_bottom = 788.0
+theme_override_font_sizes/font_size = 80
+text = "地穴关卡"
+
+[node name="tutorial" type="Button" parent="."]
+layout_mode = 0
+offset_left = 627.0
+offset_top = 756.0
+offset_right = 699.0
+offset_bottom = 787.0
+theme_override_font_sizes/font_size = 80
+text = "教程关卡"

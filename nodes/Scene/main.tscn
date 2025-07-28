@@ -1,0 +1,869 @@
+[gd_scene load_steps=45 format=4 uid="uid://b0mqdj26pycpr"]
+
+[ext_resource type="Script" uid="uid://bqj7vjv1wu0wj" path="res://Cscript/Core/GameLoader.cs" id="1_jtptn"]
+[ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="2_8tnvb"]
+[ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="3_0xujf"]
+[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://assets/tiles/fog.png" id="4_b00a6"]
+[ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://nodes/Scene/SkillTree.tscn" id="4_gsdxd"]
+[ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="6_q4vul"]
+[ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://nodes/Ui/ItemDropped.tscn" id="7_gsdxd"]
+[ext_resource type="Script" uid="uid://mgbju6wq5qdr" path="res://Cscript/UI/Player.cs" id="8_d456v"]
+[ext_resource type="PackedScene" uid="uid://cslun0ygwlodq" path="res://nodes/Scene/mainmenu.tscn" id="9_dkhus"]
+[ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="10_5elg3"]
+[ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://assets/Font/TjfPastaRegular-3lRDz.ttf" id="11_nxf1r"]
+[ext_resource type="Script" uid="uid://befekncgewd8s" path="res://Cscript/UI/Info.cs" id="12_0asgl"]
+[ext_resource type="Script" uid="uid://bvi1fgh3td4rw" path="res://Cscript/UI/SkillBar.cs" id="13_nu0so"]
+[ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="14_5elg3"]
+[ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="14_b00a6"]
+[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://assets/UI/equip.png" id="14_nu0so"]
+[ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://nodes/Ui/skillbox.tscn" id="14_vog8u"]
+[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://assets/UI/CAbox.png" id="15_avsuv"]
+[ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://nodes/Ui/spellbox.tscn" id="15_o0ha0"]
+[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://assets/UI/bluelight.png" id="15_vog8u"]
+[ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="16_7fny7"]
+[ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/Enemy/Ua.cs" id="16_d456v"]
+[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://assets/UI/throw.png" id="16_o0ha0"]
+[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://assets/Portraits/cirno_fight_hahaha.png" id="16_q4vul"]
+[ext_resource type="Script" uid="uid://1o0nxihbplfl" path="res://Cscript/UI/PauseMenu.cs" id="17_avsuv"]
+[ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="17_vout4"]
+[ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="18_q4vul"]
+[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://assets/UI/box_sign.png" id="18_u7a5e"]
+[ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="19_rilar"]
+[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://assets/UI/Inventory.png" id="20_0723m"]
+[ext_resource type="Script" uid="uid://d3ab0k3gxv2nm" path="res://Cscript/UI/HighlightManager.cs" id="21_cbrmb"]
+[ext_resource type="PackedScene" uid="uid://bg318vxlkr5tm" path="res://nodes/Ui/blue_select.tscn" id="22_rp6l0"]
+[ext_resource type="PackedScene" uid="uid://c1q3i2jujapps" path="res://nodes/Ui/green_select.tscn" id="23_6pfom"]
+[ext_resource type="Texture2D" uid="uid://bf8btdv0nsysx" path="res://assets/tiles/stand.png" id="24_dkhus"]
+[ext_resource type="PackedScene" uid="uid://0edv3xem63n5" path="res://nodes/Ui/red_select.tscn" id="24_sumwq"]
+[ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://nodes/Ui/yellow_select.tscn" id="25_h2onj"]
+[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://assets/UI/skillbox.png" id="25_vog8u"]
+[ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="26_7dti5"]
+[ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="27_ogw32"]
+[ext_resource type="Script" uid="uid://d06tg36jdqgng" path="res://Cscript/Scene/CaveD.cs" id="36_5elg3"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jky6x"]
+texture = ExtResource("4_b00a6")
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 1
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 2
+
+[sub_resource type="TileSet" id="TileSet_4sf5t"]
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Fog"
+terrain_set_0/terrain_0/color = Color(1, 0.0241909, 0.379418, 1)
+terrain_set_0/terrain_1/name = "HalfFog"
+terrain_set_0/terrain_1/color = Color(0, 1, 0, 1)
+terrain_set_0/terrain_2/name = "Clear"
+terrain_set_0/terrain_2/color = Color(0, 0.501961, 1, 1)
+sources/0 = SubResource("TileSetAtlasSource_jky6x")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5elg3"]
+texture = ExtResource("24_dkhus")
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 1
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 2
+3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 3
+
+[sub_resource type="TileSet" id="TileSet_nxf1r"]
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "DoorClosed"
+terrain_set_0/terrain_0/color = Color(0.0539745, 0.00589687, 0, 1)
+terrain_set_0/terrain_1/name = "DoorOpen"
+terrain_set_0/terrain_1/color = Color(0.950757, 0.921025, 0.832535, 1)
+terrain_set_0/terrain_2/name = "ChestClosed"
+terrain_set_0/terrain_2/color = Color(0.874082, 0, 0.339996, 1)
+terrain_set_0/terrain_3/name = "ChestOpen"
+terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
+sources/0 = SubResource("TileSetAtlasSource_5elg3")
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_jtptn")
+
+[node name="UI" type="CanvasLayer" parent="."]
+scale = Vector2(0.1, 0.1)
+transform = Transform2D(0.1, 0, 0, 0.1, 0, 0)
+
+[node name="SkillBar" type="HFlowContainer" parent="UI" node_paths=PackedStringArray("skillContainer")]
+custom_minimum_size = Vector2(660, 600)
+offset_left = 90.0
+offset_top = 4830.0
+offset_right = 750.0
+offset_bottom = 5430.0
+scale = Vector2(10, 10)
+script = ExtResource("13_nu0so")
+skillContainer = NodePath(".")
+skillButtonScene = ExtResource("14_vog8u")
+spellButtonScene = ExtResource("15_o0ha0")
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 4000.0
+offset_bottom = 4000.0
+
+[node name="Label" type="Label" parent="UI/Control"]
+visible = false
+texture_filter = 2
+layout_mode = 2
+offset_right = 259.0
+offset_bottom = 300.0
+theme_override_fonts/font = ExtResource("11_nxf1r")
+theme_override_font_sizes/font_size = 300
+text = "12"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Control"]
+texture_filter = 4
+layout_mode = 0
+offset_left = 11930.0
+offset_top = 6660.0
+offset_right = 18930.0
+offset_bottom = 10660.0
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/bold_italics_font_size = 240
+theme_override_font_sizes/italics_font_size = 240
+theme_override_font_sizes/mono_font_size = 240
+theme_override_font_sizes/normal_font_size = 240
+theme_override_font_sizes/bold_font_size = 240
+bbcode_enabled = true
+scroll_following = true
+vertical_alignment = 2
+script = ExtResource("12_0asgl")
+
+[node name="fps" type="Label" parent="UI"]
+offset_left = 14000.0
+offset_top = 130.0
+offset_right = 19000.0
+offset_bottom = 1130.0
+theme_override_font_sizes/font_size = 300
+text = "1"
+horizontal_alignment = 2
+script = ExtResource("16_7fny7")
+
+[node name="PlayerStatusBar" type="VBoxContainer" parent="UI" node_paths=PackedStringArray("uilayer")]
+offset_right = 4000.0
+offset_bottom = 4000.0
+script = ExtResource("10_5elg3")
+uilayer = NodePath("..")
+
+[node name="HpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+layout_mode = 2
+
+[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/HpRow"]
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 2
+color = Color(0.721569, 0, 0, 1)
+
+[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/HpRow/Bar"]
+z_index = -1
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 0
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Value" type="Label" parent="UI/PlayerStatusBar/HpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 360
+text = "100"
+
+[node name="SpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+layout_mode = 2
+
+[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/SpRow"]
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 2
+color = Color(1, 1, 0, 1)
+
+[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/SpRow/Bar"]
+z_index = -1
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 0
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Value" type="Label" parent="UI/PlayerStatusBar/SpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 360
+text = "100"
+
+[node name="MpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+layout_mode = 2
+
+[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/MpRow"]
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 2
+color = Color(0.0836337, 0.350465, 0.769215, 1)
+
+[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/MpRow/Bar"]
+z_index = -1
+custom_minimum_size = Vector2(4000, 400)
+layout_mode = 0
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Value" type="Label" parent="UI/PlayerStatusBar/MpRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 360
+text = "100"
+
+[node name="Status" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/PlayerStatusBar/Status"]
+layout_mode = 2
+
+[node name="CombatAbilityBox" type="Control" parent="UI" node_paths=PackedStringArray("HeadPicture", "Info1", "Info2", "Info3")]
+visible = false
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_b00a6")
+HeadPicture = NodePath("HBoxContainer/VBoxContainer/TextureRect")
+Info1 = NodePath("HBoxContainer/VBoxContainer/Label")
+Info2 = NodePath("HBoxContainer/VBoxContainer2/Label")
+Info3 = NodePath("HBoxContainer/VBoxContainer3/Label")
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/CombatAbilityBox"]
+modulate = Color(0.592157, 1, 1, 1)
+position = Vector2(9410, 5260)
+scale = Vector2(100, 100)
+texture = ExtResource("15_avsuv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CombatAbilityBox"]
+custom_minimum_size = Vector2(17000, 8500)
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 1060.0
+offset_right = 18000.0
+offset_bottom = 9560.0
+theme_override_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+custom_minimum_size = Vector2(5500, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(5500, 3000)
+layout_mode = 2
+texture = ExtResource("16_q4vul")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "535
+543
+543"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+custom_minimum_size = Vector2(5500, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "535
+543
+543"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+custom_minimum_size = Vector2(5500, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "535
+543
+543"
+
+[node name="InventoryBox" type="Control" parent="UI" node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
+visible = false
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("19_rilar")
+EquipList = NodePath("ScrollContainer/EquipBox")
+BagList = NodePath("ScrollContainer2/BagBox")
+equipnumber = NodePath("Label")
+bagnumber = NodePath("Label2")
+
+[node name="Label" type="Label" parent="UI/InventoryBox"]
+layout_mode = 2
+offset_left = 2780.0
+offset_top = 960.0
+offset_right = 6725.0
+offset_bottom = 1369.0
+theme_override_font_sizes/font_size = 300
+text = "Equip: 0/0"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="UI/InventoryBox"]
+layout_mode = 2
+offset_left = 11970.0
+offset_top = 990.0
+offset_right = 15928.0
+offset_bottom = 1399.0
+theme_override_font_sizes/font_size = 300
+text = "Bag: 0/0"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/InventoryBox"]
+custom_minimum_size = Vector2(4000, 8000)
+layout_mode = 2
+offset_left = 800.0
+offset_top = 1600.0
+offset_right = 8800.0
+offset_bottom = 9600.0
+
+[node name="EquipBox" type="VBoxContainer" parent="UI/InventoryBox/ScrollContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="UI/InventoryBox"]
+custom_minimum_size = Vector2(4000, 8000)
+layout_mode = 2
+offset_left = 9920.0
+offset_top = 1600.0
+offset_right = 17920.0
+offset_bottom = 9600.0
+
+[node name="BagBox" type="VBoxContainer" parent="UI/InventoryBox/ScrollContainer2"]
+layout_mode = 2
+
+[node name="Inventory" type="Sprite2D" parent="UI/InventoryBox"]
+z_index = -1
+position = Vector2(9410, 5260)
+scale = Vector2(100, 100)
+texture = ExtResource("20_0723m")
+
+[node name="EquipButton" type="TextureButton" parent="UI/InventoryBox"]
+layout_mode = 0
+offset_left = 9600.0
+offset_top = 1000.0
+offset_right = 10000.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("14_nu0so")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/InventoryBox/EquipButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="ThrowButton" type="TextureButton" parent="UI/InventoryBox"]
+layout_mode = 0
+offset_left = 10100.0
+offset_top = 1000.0
+offset_right = 10500.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("16_o0ha0")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/InventoryBox/ThrowButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="MemoryBox" type="Control" parent="UI" node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
+visible = false
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_5elg3")
+EquipList = NodePath("ScrollContainer/EquipBox")
+BagList = NodePath("ScrollContainer2/BagBox")
+equipnumber = NodePath("Label")
+bagnumber = NodePath("Label2")
+
+[node name="Label" type="Label" parent="UI/MemoryBox"]
+layout_mode = 2
+offset_left = 2780.0
+offset_top = 960.0
+offset_right = 6725.0
+offset_bottom = 1369.0
+theme_override_font_sizes/font_size = 300
+text = "Memory: 0/0"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="UI/MemoryBox"]
+layout_mode = 2
+offset_left = 11970.0
+offset_top = 990.0
+offset_right = 15928.0
+offset_bottom = 1399.0
+theme_override_font_sizes/font_size = 300
+text = "Bag: 0/0"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MemoryBox"]
+custom_minimum_size = Vector2(4000, 8000)
+layout_mode = 2
+offset_left = 800.0
+offset_top = 1600.0
+offset_right = 8800.0
+offset_bottom = 9600.0
+
+[node name="EquipBox" type="VBoxContainer" parent="UI/MemoryBox/ScrollContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="UI/MemoryBox"]
+custom_minimum_size = Vector2(4000, 8000)
+layout_mode = 2
+offset_left = 9920.0
+offset_top = 1600.0
+offset_right = 17920.0
+offset_bottom = 9600.0
+
+[node name="BagBox" type="VBoxContainer" parent="UI/MemoryBox/ScrollContainer2"]
+layout_mode = 2
+
+[node name="Inventory" type="Sprite2D" parent="UI/MemoryBox"]
+modulate = Color(0.796078, 0.298039, 0.792157, 1)
+z_index = -1
+position = Vector2(9410, 5260)
+scale = Vector2(100, 100)
+texture = ExtResource("20_0723m")
+
+[node name="EquipButton" type="TextureButton" parent="UI/MemoryBox"]
+layout_mode = 0
+offset_left = 9600.0
+offset_top = 1000.0
+offset_right = 10000.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("14_nu0so")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/MemoryBox/EquipButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="ThrowButton" type="TextureButton" parent="UI/MemoryBox"]
+layout_mode = 0
+offset_left = 10100.0
+offset_top = 1000.0
+offset_right = 10500.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("16_o0ha0")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/MemoryBox/ThrowButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="DialogBox" type="Control" parent="UI" node_paths=PackedStringArray("Portrait", "NameLabel", "DialogText", "ContinueHint")]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 5810.0
+offset_top = 80.0
+offset_right = 5850.0
+offset_bottom = 120.0
+script = ExtResource("17_vout4")
+Portrait = NodePath("Image")
+NameLabel = NodePath("Name")
+DialogText = NodePath("Dialog")
+ContinueHint = NodePath("Hint")
+
+[node name="Name" type="Label" parent="UI/DialogBox"]
+layout_mode = 0
+offset_left = 2240.0
+offset_top = 7490.0
+offset_right = 6240.0
+offset_bottom = 11490.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 400
+
+[node name="Image" type="TextureRect" parent="UI/DialogBox"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -2900.0
+offset_top = 7070.0
+offset_right = -2100.0
+offset_bottom = 7670.0
+grow_vertical = 2
+scale = Vector2(6, 6)
+stretch_mode = 6
+
+[node name="Hint" type="Label" parent="UI/DialogBox"]
+layout_mode = 0
+offset_left = 1138.1
+offset_top = 872.0
+offset_right = 1538.1
+offset_bottom = 1172.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="Dialog" type="RichTextLabel" parent="UI/DialogBox"]
+layout_mode = 0
+offset_left = 2210.0
+offset_top = 7970.0
+offset_right = 6210.0
+offset_bottom = 9970.0
+scale = Vector2(1.9, 1.9)
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 240
+
+[node name="BoxSign" type="Sprite2D" parent="UI/DialogBox"]
+z_index = -4096
+z_as_relative = false
+position = Vector2(6120, 8940)
+scale = Vector2(42, 33.812)
+texture = ExtResource("18_u7a5e")
+
+[node name="UaSkillPointBox" type="Control" parent="UI"]
+visible = false
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/UaSkillPointBox"]
+position = Vector2(9504, 5312)
+scale = Vector2(100, 100)
+texture = ExtResource("15_avsuv")
+
+[node name="Ua" type="VBoxContainer" parent="UI/UaSkillPointBox" node_paths=PackedStringArray("Point", "str", "dex", "con", "spi", "mag", "cun", "info")]
+layout_mode = 0
+offset_left = 750.0
+offset_top = 1050.0
+offset_right = 2750.0
+offset_bottom = 9550.0
+theme_override_constants/separation = 200
+script = ExtResource("16_d456v")
+Point = NodePath("Label")
+str = NodePath("Button")
+dex = NodePath("Button2")
+con = NodePath("Button3")
+spi = NodePath("Button4")
+mag = NodePath("Button5")
+cun = NodePath("Button6")
+info = NodePath("../RichTextLabel")
+
+[node name="Label" type="Label" parent="UI/UaSkillPointBox/Ua"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "剩余属性点:99"
+
+[node name="Button" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="Button2" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="Button3" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="Button4" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="Button5" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="Button6" type="Button" parent="UI/UaSkillPointBox/Ua"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "力量:8"
+
+[node name="SkillPanel" type="VFlowContainer" parent="UI/UaSkillPointBox" node_paths=PackedStringArray("Point")]
+custom_minimum_size = Vector2(15000, 0)
+layout_mode = 0
+offset_left = 2860.0
+offset_top = 1060.0
+offset_right = 17860.0
+offset_bottom = 8260.0
+theme_override_constants/h_separation = 300
+theme_override_constants/v_separation = -50
+script = ExtResource("18_q4vul")
+SkillTree = ExtResource("4_gsdxd")
+Point = NodePath("Label2")
+
+[node name="Label2" type="Label" parent="UI/UaSkillPointBox/SkillPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "剩余技能点:99"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/UaSkillPointBox"]
+layout_mode = 0
+offset_left = 770.0
+offset_top = 5120.0
+offset_right = 6770.0
+offset_bottom = 9620.0
+theme_override_font_sizes/normal_font_size = 300
+bbcode_enabled = true
+text = "+1"
+
+[node name="Mainmenu" parent="UI" node_paths=PackedStringArray("GameRoot") instance=ExtResource("9_dkhus")]
+visible = false
+z_index = 1000
+scale = Vector2(10, 10)
+GameRoot = NodePath("../../Scene")
+
+[node name="PauseMenu" type="ColorRect" parent="UI" node_paths=PackedStringArray("ResumeButton", "RestartButton", "ExitButton")]
+visible = false
+z_index = 2000
+offset_left = 4540.0
+offset_top = 2540.0
+offset_right = 14540.0
+offset_bottom = 8540.0
+color = Color(0.310617, 0.310617, 0.310617, 1)
+script = ExtResource("17_avsuv")
+ResumeButton = NodePath("VBoxContainer/Button")
+RestartButton = NodePath("VBoxContainer/Button3")
+ExitButton = NodePath("VBoxContainer/Button4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+custom_minimum_size = Vector2(3000, 6000)
+layout_mode = 0
+offset_left = 3180.0
+offset_top = 1130.0
+offset_right = 6180.0
+offset_bottom = 7130.0
+theme_override_constants/separation = 200
+
+[node name="Button" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button"]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "继续游戏"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button2" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button2"]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "选项"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button3" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button3"]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "重新开始"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button4" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button4"]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "退出游戏"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MemoryBox2" type="Control" parent="UI" node_paths=PackedStringArray("bagnumber")]
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_5elg3")
+bagnumber = NodePath("Label2")
+
+[node name="Label2" type="Label" parent="UI/MemoryBox2"]
+layout_mode = 2
+offset_left = 11970.0
+offset_top = 990.0
+offset_right = 15928.0
+offset_bottom = 1399.0
+theme_override_font_sizes/font_size = 300
+text = "Bag: 0/0"
+horizontal_alignment = 1
+
+[node name="Inventory" type="Sprite2D" parent="UI/MemoryBox2"]
+modulate = Color(0.730027, 0.85426, 0.986022, 1)
+z_index = -1
+position = Vector2(9410, 5260)
+scale = Vector2(100, 100)
+texture = ExtResource("20_0723m")
+
+[node name="EquipButton" type="TextureButton" parent="UI/MemoryBox2"]
+layout_mode = 0
+offset_left = 9600.0
+offset_top = 1000.0
+offset_right = 10000.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("14_nu0so")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/MemoryBox2/EquipButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="ThrowButton" type="TextureButton" parent="UI/MemoryBox2"]
+layout_mode = 0
+offset_left = 10100.0
+offset_top = 1000.0
+offset_right = 10500.0
+offset_bottom = 1400.0
+texture_normal = ExtResource("16_o0ha0")
+stretch_mode = 0
+
+[node name="Light" type="TextureRect" parent="UI/MemoryBox2/ThrowButton"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+texture = ExtResource("15_vog8u")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MemoryBox2"]
+custom_minimum_size = Vector2(8000, 8000)
+layout_mode = 0
+offset_left = 750.0
+offset_top = 1090.0
+offset_right = 8750.0
+offset_bottom = 9090.0
+theme_override_constants/separation = 100
+
+[node name="Label" type="Label" parent="UI/MemoryBox2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "Bullet Box 1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MemoryBox2/VBoxContainer/Label"]
+layout_mode = 2
+offset_top = 400.0
+offset_right = 8000.0
+offset_bottom = 1000.0
+theme_override_constants/separation = 100
+
+[node name="TextureButton" type="TextureButton" parent="UI/MemoryBox2/VBoxContainer/Label/HBoxContainer"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 2
+texture_normal = ExtResource("25_vog8u")
+stretch_mode = 0
+
+[node name="Main" type="Node2D" parent="."]
+
+[node name="Map" type="Node2D" parent="." node_paths=PackedStringArray("BaseGround", "Stand", "FogOfWar")]
+position = Vector2(-8, -8)
+script = ExtResource("3_0xujf")
+BaseGround = NodePath("BaseGround")
+Stand = NodePath("Stand")
+FogOfWar = NodePath("FogOfWar")
+
+[node name="BaseGround" type="TileMapLayer" parent="Map"]
+z_index = -100
+tile_map_data = PackedByteArray("AAACAAEAAAABAAEAAAACAAIAAAABAAEAAAADAAEAAAABAAEAAAAEAAEAAAABAAEAAAAEAAIAAAABAAEAAAACAAMAAAABAAEAAAADAAMAAAABAAEAAAAEAAMAAAABAAEAAAADAAIAAAABAAEAAAAFAAMAAAABAAEAAAAGAAEAAAABAAEAAAAGAAIAAAABAAEAAAAGAAMAAAABAAEAAAAHAAEAAAABAAEAAAAHAAIAAAABAAEAAAAHAAMAAAABAAEAAAACAAQAAAABAAEAAAADAAQAAAABAAEAAAAEAAQAAAABAAEAAAAFAAQAAAABAAEAAAAGAAQAAAABAAEAAAAHAAQAAAABAAEAAAACAAAAAAACAAUAAAADAAAAAAACAAUAAAAEAAAAAAACAAUAAAAFAAAAAAACAAUAAAAGAAAAAAACAAUAAAAHAAAAAAACAAUAAAAIAAAAAAACAAUAAAALAAAAAAACAAUAAAALAAEAAAABAAEAAAALAAIAAAABAAAAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAAKAAYAAAABAAEAAAAJAAYAAAABAAEAAAAIAAYAAAACAAUAAAAHAAYAAAACAAUAAAAGAAYAAAACAAUAAAAFAAYAAAACAAUAAAAEAAYAAAACAAUAAAADAAYAAAACAAUAAAACAAYAAAACAAUAAAABAAYAAAACAAUAAAAAAAYAAAACAAUAAAAAAAAAAAACAAUAAAAAAAEAAAACAAUAAAABAAAAAAACAAUAAAABAAEAAAABAAEAAAABAAIAAAABAAEAAAABAAMAAAABAAEAAAABAAQAAAABAAEAAAABAAUAAAABAAEAAAAAAAUAAAACAAUAAAAAAAQAAAACAAUAAAAAAAMAAAACAAUAAAAAAAIAAAACAAUAAAACAAUAAAABAAEAAAADAAUAAAABAAEAAAAEAAUAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAQAAAACAAUAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAAKAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAMAAAABAAEAAAAJAAIAAAACAAMAAAAJAAEAAAABAAEAAAAJAAAAAAACAAUAAAAIAAEAAAACAAUAAAAIAAIAAAACAAUAAAAIAAMAAAACAAUAAAAKAAIAAAABAAAAAAAKAAEAAAABAAEAAAAKAAAAAAACAAUAAAAKAAMAAAABAAEAAAAMAAEAAAABAAEAAAAMAAIAAAACAAAAAAAMAAMAAAADAAAAAAAMAAAAAAACAAUAAAAMAAUAAAACAAEAAAAMAAQAAAACAAEAAAAMAAYAAAAAAAEAAAAFAAIAAAABAAEAAAAFAAEAAAABAAEAAAANAAEAAAABAAEAAAANAAMAAAABAAAAAAANAAIAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAANAAYAAAABAAEAAAANAAAAAAACAAUAAAARAA8AAAAMAAIAAAARAA4AAAAGAAAAAAARAA0AAAABAAEAAAARAAwAAAABAAEAAAARAAsAAAABAAAAAAARAAoAAAABAAEAAAARAAkAAAABAAEAAAARAAgAAAAGAAIAAAARAAcAAAAMAAEAAAARAAYAAAAHAAEAAAARAAUAAAAHAAEAAAAQAA8AAAAHAAAAAAAQAA4AAAABAAEAAAAQAA0AAAABAAEAAAAQAAwAAAABAAEAAAAQAAsAAAABAAAAAAAQAAoAAAABAAEAAAAQAAkAAAABAAEAAAAQAAgAAAABAAEAAAAQAAcAAAAHAAIAAAAQAAYAAAAHAAEAAAAQAAUAAAAHAAEAAAAPAA8AAAAHAAAAAAAPAA4AAAABAAEAAAAPAA0AAAABAAEAAAAPAAwAAAABAAEAAAAPAAsAAAABAAAAAAAPAAoAAAABAAEAAAAPAAkAAAABAAEAAAAPAAgAAAABAAEAAAAPAAcAAAAGAAIAAAAPAAYAAAAMAAEAAAAPAAUAAAAHAAEAAAAOAA8AAAAMAAAAAAAOAA4AAAACAAIAAAAOAA0AAAAAAAEAAAAOAAwAAAAAAAEAAAAOAAsAAAAEAAEAAAAOAAoAAAABAAEAAAAOAAkAAAABAAEAAAAOAAgAAAABAAEAAAAOAAcAAAABAAEAAAAOAAYAAAAGAAIAAAAOAAUAAAAGAAEAAAANAA8AAAAIAAQAAAANAA4AAAAAAAAAAAANAA0AAAABAAEAAAANAAwAAAABAAEAAAANAAsAAAABAAAAAAANAAoAAAABAAEAAAANAAkAAAABAAEAAAANAAgAAAABAAEAAAANAAcAAAABAAEAAAAMAA8AAAALAAMAAAAMAA4AAAAIAAEAAAAMAA0AAAAIAAAAAAAMAAwAAAABAAEAAAAMAAsAAAADAAEAAAAMAAoAAAAAAAEAAAAMAAkAAAAAAAEAAAAMAAgAAAAAAAEAAAAMAAcAAAACAAEAAAALAA8AAAALAAEAAAALAA4AAAAHAAEAAAALAA0AAAAHAAAAAAALAAwAAAABAAEAAAALAAsAAAABAAAAAAALAAoAAAABAAEAAAALAAkAAAABAAEAAAALAAgAAAABAAEAAAALAAcAAAABAAEAAAAKAA8AAAAHAAEAAAAKAA4AAAAHAAEAAAAKAA0AAAAHAAAAAAAKAAwAAAABAAEAAAAKAAsAAAABAAAAAAAKAAoAAAABAAEAAAAKAAkAAAABAAEAAAAKAAgAAAABAAEAAAAKAAcAAAABAAEAAAAJAA8AAAAHAAEAAAAJAA4AAAAHAAEAAAAJAA0AAAALAAIAAAAJAAwAAAAIAAAAAAAJAAsAAAABAAIAAAAJAAoAAAAIAAIAAAAJAAkAAAAIAAEAAAAJAAgAAAAIAAEAAAAJAAcAAAAIAAAAAAAIAA8AAAAHAAEAAAAIAA4AAAAHAAEAAAAIAA0AAAAHAAEAAAAIAAwAAAAOAAIAAAAIAAsAAAAHAAQAAAAIAAoAAAAOAAEAAAAIAAkAAAAHAAEAAAAIAAgAAAAHAAEAAAAIAAcAAAAHAAAAAAAHAA8AAAAHAAEAAAAHAA4AAAAHAAEAAAAHAA0AAAAMAAIAAAAHAAwAAAAGAAAAAAAHAAsAAAABAAIAAAAHAAoAAAAHAAIAAAAHAAkAAAAHAAEAAAAHAAgAAAAHAAEAAAAHAAcAAAAHAAAAAAAGAA8AAAAHAAEAAAAGAA4AAAAHAAEAAAAGAA0AAAAHAAAAAAAGAAwAAAABAAEAAAAGAAsAAAABAAAAAAAGAAoAAAAHAAIAAAAGAAkAAAAHAAEAAAAGAAgAAAAHAAEAAAAGAAcAAAAHAAAAAAAFAA8AAAAGAAEAAAAFAA4AAAAGAAEAAAAFAA0AAAAGAAAAAAAFAAwAAAACAAIAAAAFAAsAAAAAAAAAAAAFAAoAAAAGAAIAAAAFAAkAAAAMAAEAAAAFAAgAAAAHAAEAAAAFAAcAAAAHAAAAAAAEAA8AAAABAAEAAAAEAA4AAAABAAEAAAAEAA0AAAABAAEAAAAEAAwAAAABAAAAAAAEAAsAAAABAAEAAAAEAAoAAAABAAEAAAAEAAkAAAAHAAIAAAAEAAgAAAAHAAEAAAAEAAcAAAAHAAAAAAAZABYAAAACAAUAAAAZABUAAAACAAUAAAAZABQAAAACAAUAAAAZABMAAAACAAUAAAAZABIAAAACAAUAAAAZABEAAAACAAUAAAAZABAAAAACAAUAAAAZAA8AAAACAAUAAAAZAA4AAAACAAUAAAAZAA0AAAACAAUAAAAZAAwAAAACAAUAAAAZAAsAAAACAAUAAAAZAAoAAAACAAUAAAAZAAkAAAACAAUAAAAZAAgAAAACAAUAAAAZAAcAAAACAAUAAAAZAAYAAAACAAUAAAAZAAUAAAACAAUAAAAZAAQAAAACAAUAAAAZAAMAAAACAAUAAAAZAAIAAAACAAUAAAAZAAEAAAACAAUAAAAZAAAAAAACAAUAAAAYABYAAAACAAUAAAAYABUAAAABAAEAAAAYABQAAAABAAEAAAAYABMAAAABAAEAAAAYABIAAAABAAEAAAAYABEAAAABAAEAAAAYABAAAAABAAEAAAAYAA8AAAABAAEAAAAYAA4AAAABAAEAAAAYAA0AAAABAAEAAAAYAAwAAAABAAEAAAAYAAsAAAABAAEAAAAYAAoAAAABAAEAAAAYAAkAAAABAAEAAAAYAAgAAAABAAEAAAAYAAcAAAABAAEAAAAYAAYAAAABAAEAAAAYAAUAAAABAAEAAAAYAAQAAAABAAEAAAAYAAMAAAABAAEAAAAYAAIAAAABAAEAAAAYAAEAAAABAAEAAAAYAAAAAAACAAUAAAAXABYAAAACAAUAAAAXABUAAAABAAEAAAAXABQAAAABAAEAAAAXABMAAAABAAEAAAAXABIAAAABAAEAAAAXABEAAAABAAEAAAAXABAAAAABAAEAAAAXAA8AAAADAAMAAAAXAA4AAAAAAAEAAAAXAA0AAAAAAAEAAAAXAAwAAAAEAAAAAAAXAAsAAAACAAEAAAAXAAoAAAACAAEAAAAXAAkAAAAAAAEAAAAXAAgAAAAAAAMAAAAXAAcAAAABAAEAAAAXAAYAAAABAAEAAAAXAAUAAAABAAEAAAAXAAQAAAABAAEAAAAXAAMAAAABAAEAAAAXAAIAAAABAAEAAAAXAAEAAAABAAEAAAAXAAAAAAACAAUAAAAWABYAAAACAAUAAAAWABUAAAABAAEAAAAWABQAAAABAAEAAAAWABMAAAABAAEAAAAWABIAAAABAAEAAAAWABEAAAABAAEAAAAWABAAAAABAAEAAAAWAA8AAAABAAEAAAAWAA4AAAABAAEAAAAWAA0AAAABAAEAAAAWAAwAAAABAAAAAAAWAAsAAAABAAEAAAAWAAoAAAAIAAIAAAAWAAkAAAAIAAEAAAAWAAgAAAAIAAAAAAAWAAcAAAABAAEAAAAWAAYAAAABAAEAAAAWAAUAAAABAAEAAAAWAAQAAAABAAEAAAAWAAMAAAABAAEAAAAWAAIAAAABAAEAAAAWAAEAAAABAAEAAAAWAAAAAAACAAUAAAAVABYAAAACAAUAAAAVABUAAAABAAEAAAAVABQAAAABAAEAAAAVABMAAAAIAAIAAAAVABIAAAAIAAEAAAAVABEAAAAIAAEAAAAVABAAAAAIAAEAAAAVAA8AAAAIAAEAAAAVAA4AAAAIAAEAAAAVAA0AAAAIAAAAAAAVAAwAAAAAAAIAAAAVAAsAAAACAAAAAAAVAAoAAAAHAAIAAAAVAAkAAAAHAAEAAAAVAAgAAAALAAIAAAAVAAcAAAAIAAEAAAAVAAYAAAAIAAAAAAAVAAUAAAABAAEAAAAVAAQAAAABAAEAAAAVAAMAAAABAAEAAAAVAAIAAAABAAEAAAAVAAEAAAABAAEAAAAVAAAAAAACAAUAAAAUABYAAAACAAUAAAAUABUAAAABAAEAAAAUABQAAAABAAEAAAAUABMAAAAHAAIAAAAUABIAAAAHAAEAAAAUABEAAAAHAAEAAAAUABAAAAAHAAEAAAAUAA8AAAAHAAEAAAAUAA4AAAAHAAEAAAAUAA0AAAAHAAAAAAAUAAwAAAABAAEAAAAUAAsAAAABAAIAAAAUAAoAAAAGAAIAAAAUAAkAAAAMAAEAAAAUAAgAAAAHAAEAAAAUAAcAAAAHAAEAAAAUAAYAAAALAAIAAAAUAAUAAAAIAAAAAAAUAAQAAAABAAEAAAAUAAMAAAABAAEAAAAUAAIAAAABAAEAAAAUAAEAAAABAAEAAAAUAAAAAAACAAUAAAATABYAAAACAAUAAAATABUAAAABAAEAAAATABQAAAABAAEAAAATABMAAAAHAAIAAAATABIAAAAHAAEAAAATABEAAAAHAAEAAAATABAAAAAHAAEAAAATAA8AAAAHAAEAAAATAA4AAAAHAAEAAAATAA0AAAAHAAAAAAATAAwAAAABAAEAAAATAAsAAAABAAAAAAATAAoAAAABAAEAAAATAAkAAAAGAAIAAAATAAgAAAAMAAEAAAATAAcAAAAHAAEAAAATAAYAAAAHAAEAAAATAAUAAAALAAIAAAATAAQAAAAIAAAAAAATAAMAAAABAAEAAAATAAIAAAABAAEAAAATAAEAAAABAAEAAAATAAAAAAACAAUAAAASABYAAAACAAUAAAASABUAAAABAAEAAAASABQAAAABAAEAAAASABMAAAAHAAIAAAASABIAAAAHAAEAAAASABEAAAAHAAEAAAASABAAAAAHAAEAAAASAA8AAAAHAAEAAAASAA4AAAAMAAIAAAASAA0AAAAGAAAAAAASAAwAAAABAAEAAAASAAsAAAABAAAAAAASAAoAAAABAAEAAAASAAkAAAABAAEAAAASAAgAAAAHAAIAAAASAAcAAAAHAAEAAAASAAYAAAAHAAEAAAASAAUAAAAHAAEAAAASAAQAAAAHAAAAAAASAAMAAAABAAEAAAASAAIAAAABAAEAAAASAAEAAAABAAEAAAASAAAAAAACAAUAAAARABYAAAACAAUAAAARABUAAAABAAEAAAARABQAAAABAAEAAAARABMAAAAHAAIAAAARABIAAAAHAAEAAAARABEAAAAHAAEAAAARABAAAAAHAAEAAAARAAQAAAAHAAAAAAARAAMAAAABAAEAAAARAAIAAAABAAEAAAARAAEAAAABAAEAAAARAAAAAAACAAUAAAAQABYAAAACAAUAAAAQABUAAAABAAEAAAAQABQAAAABAAEAAAAQABMAAAAHAAIAAAAQABIAAAAHAAEAAAAQABEAAAAHAAEAAAAQABAAAAAHAAEAAAAQAAQAAAAHAAAAAAAQAAMAAAACAAIAAAAQAAIAAAAAAAMAAAAQAAEAAAABAAEAAAAQAAAAAAACAAUAAAAPABYAAAACAAUAAAAPABUAAAABAAEAAAAPABQAAAABAAEAAAAPABMAAAAGAAIAAAAPABIAAAAGAAEAAAAPABEAAAAGAAEAAAAPABAAAAAMAAEAAAAPAAQAAAAHAAAAAAAPAAMAAAABAAIAAAAPAAIAAAABAAEAAAAPAAEAAAABAAEAAAAPAAAAAAACAAUAAAAOABYAAAACAAUAAAAOABUAAAABAAEAAAAOABQAAAABAAMAAAAOABMAAAABAAEAAAAOABIAAAABAAEAAAAOABEAAAABAAEAAAAOABAAAAAGAAIAAAAOAAQAAAAGAAAAAAAOAAMAAAABAAIAAAAOAAIAAAABAAEAAAAOAAEAAAABAAEAAAAOAAAAAAACAAUAAAANABYAAAACAAUAAAANABUAAAABAAEAAAANABQAAAAAAAIAAAANABIAAAACAAEAAAANABEAAAAAAAEAAAANABAAAAACAAEAAAAMABYAAAACAAUAAAAMABUAAAABAAEAAAAMABQAAAABAAEAAAAMABIAAAABAAEAAAAMABEAAAABAAEAAAAMABAAAAABAAEAAAALABYAAAACAAUAAAALABUAAAABAAEAAAALABMAAAABAAAAAAALABIAAAABAAEAAAALABEAAAABAAEAAAALABAAAAAIAAIAAAAKABYAAAACAAUAAAAKABUAAAABAAEAAAAKABMAAAABAAAAAAAKABIAAAABAAEAAAAKABEAAAAIAAIAAAAKABAAAAALAAEAAAAJABYAAAACAAUAAAAJABQAAAABAAEAAAAJABMAAAABAAIAAAAJABIAAAABAAEAAAAJABEAAAAHAAIAAAAJABAAAAAHAAEAAAAIABYAAAACAAUAAAAIABQAAAABAAEAAAAIABMAAAABAAIAAAAIABIAAAABAAEAAAAIABEAAAAHAAIAAAAIABAAAAAHAAEAAAAHABYAAAACAAUAAAAHABQAAAABAAEAAAAHABMAAAACAAMAAAAHABIAAAABAAEAAAAHABEAAAAHAAIAAAAHABAAAAAHAAEAAAAGABYAAAACAAUAAAAGABQAAAABAAEAAAAGABMAAAABAAEAAAAGABIAAAABAAEAAAAGABEAAAAGAAIAAAAGABAAAAAMAAEAAAAFABYAAAACAAUAAAAFABMAAAABAAEAAAAFABIAAAABAAEAAAAFABEAAAABAAEAAAAFABAAAAAGAAIAAAAEABYAAAACAAUAAAAEABQAAAABAAEAAAAEABMAAAABAAEAAAAEABIAAAABAAEAAAAEABEAAAABAAEAAAAEABAAAAABAAEAAAADABYAAAACAAUAAAADABUAAAABAAEAAAADABQAAAABAAEAAAADABMAAAABAAEAAAADABIAAAABAAEAAAADABEAAAADAAMAAAADABAAAAACAAEAAAADAA8AAAAAAAEAAAADAA4AAAAAAAEAAAADAA0AAAAAAAEAAAADAAwAAAADAAAAAAADAAsAAAAAAAMAAAADAAoAAAABAAEAAAADAAkAAAAGAAIAAAADAAgAAAAMAAQAAAADAAcAAAAGAAAAAAACABYAAAACAAUAAAACABUAAAABAAEAAAACABQAAAABAAEAAAACABMAAAABAAEAAAACABIAAAABAAEAAAACABEAAAABAAEAAAACABAAAAABAAEAAAACAA8AAAABAAEAAAACAA4AAAABAAEAAAACAA0AAAABAAEAAAACAAwAAAABAAEAAAACAAsAAAABAAEAAAACAAoAAAABAAEAAAACAAkAAAABAAEAAAACAAgAAAAGAAMAAAACAAcAAAABAAEAAAABABYAAAACAAUAAAABABUAAAABAAEAAAABABQAAAABAAEAAAABABMAAAABAAEAAAABABIAAAABAAEAAAABABEAAAABAAEAAAABABAAAAABAAEAAAABAA8AAAABAAEAAAABAA4AAAABAAEAAAABAA0AAAABAAEAAAABAAwAAAABAAEAAAABAAsAAAABAAEAAAABAAoAAAABAAEAAAABAAkAAAABAAEAAAABAAgAAAABAAEAAAABAAcAAAABAAEAAAAAABYAAAACAAUAAAAAABUAAAACAAUAAAAAABQAAAACAAUAAAAAABMAAAACAAUAAAAAABIAAAACAAUAAAAAABEAAAACAAUAAAAAABAAAAACAAUAAAAAAA8AAAACAAUAAAAAAA4AAAACAAUAAAAAAA0AAAACAAUAAAAAAAwAAAACAAUAAAAAAAsAAAACAAUAAAAAAAoAAAACAAUAAAAAAAkAAAACAAUAAAAAAAgAAAACAAUAAAAAAAcAAAACAAUAAAANABMAAAAEAAAAAAAMABMAAAABAAAAAAALABQAAAABAAEAAAAJABUAAAABAAEAAAAKABQAAAABAAEAAAAHABUAAAABAAEAAAAIABUAAAABAAEAAAAGABUAAAABAAEAAAAFABUAAAABAAEAAAAEABUAAAABAAEAAAAFABQAAAABAAEAAAA=")
+tile_set = ExtResource("2_8tnvb")
+
+[node name="FogOfWar" type="TileMapLayer" parent="Map"]
+tile_set = SubResource("TileSet_4sf5t")
+
+[node name="Stand" type="TileMapLayer" parent="Map"]
+z_index = -99
+tile_map_data = PackedByteArray("AAAIAAUAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_nxf1r")
+
+[node name="LayerItemDropped" type="Node2D" parent="Map"]
+z_index = -50
+script = ExtResource("6_q4vul")
+droppedScene = ExtResource("7_gsdxd")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(67, 117)
+script = ExtResource("8_d456v")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+visible = false
+anchor_mode = 0
+
+[node name="HighlightManager" type="Node2D" parent="."]
+script = ExtResource("21_cbrmb")
+highlightBlue = ExtResource("22_rp6l0")
+highlightGreen = ExtResource("23_6pfom")
+highlightRed = ExtResource("24_sumwq")
+highlightYellow = ExtResource("25_h2onj")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 27.0
+offset_top = 50.0
+offset_right = 67.0
+offset_bottom = 73.0
+pivot_offset = Vector2(20, 0)
+
+[node name="Fsm" type="Node" parent="." node_paths=PackedStringArray("InventoryBos", "Cab", "Usbb")]
+script = ExtResource("26_7dti5")
+InventoryBos = NodePath("../UI/InventoryBox")
+Cab = NodePath("../UI/CombatAbilityBox")
+Usbb = NodePath("../UI/UaSkillPointBox")
+
+[node name="SpriteManager" type="Node" parent="."]
+script = ExtResource("27_ogw32")
+
+[node name="Scene" type="Node" parent="."]
+script = ExtResource("36_5elg3")

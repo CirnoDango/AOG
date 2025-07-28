@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1q3i2jujapps"]
+
+[ext_resource type="Texture2D" uid="uid://byquw1p4t22nw" path="res://assets/tiles/greenSelect.png" id="1_1h1mh"]
+
+[node name="GreenSelect" type="Sprite2D"]
+texture = ExtResource("1_1h1mh")

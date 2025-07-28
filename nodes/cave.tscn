@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://clixbw545cq0"]
+
+[ext_resource type="Script" uid="uid://d2mlt8s0xj57s" path="res://Cscript/Scene/Cave.cs" id="1_172cc"]
+
+[node name="Cave" type="Node"]
+script = ExtResource("1_172cc")

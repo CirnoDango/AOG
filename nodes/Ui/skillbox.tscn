@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0b613bgfx2do"]
+
+[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://assets/UI/skillbox.png" id="1_dmsap"]
+
+[node name="Skillbox" type="Sprite2D"]
+position = Vector2(30, 30)
+scale = Vector2(2, 2)
+texture = ExtResource("1_dmsap")

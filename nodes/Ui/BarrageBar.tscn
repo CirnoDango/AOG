@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://ye85afnrc713"]
+
+[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://assets/UI/skillbox.png" id="1_fvxgq"]
+
+[node name="Label" type="Label"]
+theme_override_font_sizes/font_size = 300
+text = "Bullet Box 1"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+offset_top = 400.0
+offset_right = 8000.0
+offset_bottom = 1000.0
+theme_override_constants/separation = 100
+
+[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 2
+texture_normal = ExtResource("1_fvxgq")
+stretch_mode = 0

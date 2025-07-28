@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnrp0abph08yf"]
+
+[ext_resource type="Script" uid="uid://6dq106llmqie" path="res://Cscript/UI/ItemDropped.cs" id="1_iu6yd"]
+[ext_resource type="Texture2D" uid="uid://dgm17vedsubnc" path="res://assets/UI/null.png" id="2_dji0x"]
+
+[node name="ItemDropped" type="Node2D"]
+script = ExtResource("1_iu6yd")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(16, 16)
+offset_right = 16.0
+offset_bottom = 16.0
+texture = ExtResource("2_dji0x")
+expand_mode = 1

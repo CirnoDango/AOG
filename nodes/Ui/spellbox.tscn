@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5ig21a8jomxe"]
+
+[ext_resource type="Texture2D" uid="uid://blcs0160y4i8q" path="res://assets/UI/spellbox.png" id="1_ae8qw"]
+
+[node name="Spellbox" type="Sprite2D"]
+position = Vector2(30, 30)
+scale = Vector2(2, 2)
+texture = ExtResource("1_ae8qw")
