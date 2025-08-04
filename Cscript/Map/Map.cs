@@ -351,8 +351,12 @@ public class Map
             {
                 j++;
                 it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
-                if (it is SkillItem si)
-                    si.RandomSummon();
+                if (it is IParamable si)
+                {
+                    var item = si.RandomSummonParam();
+                    ((IParamable)item).ApplyParameters([]);
+                    it = (Item)item;
+                }
                 if (v + it.Weight - 1 < value)
                 {
                     c.items.Add(new ItemInstance(it));
@@ -362,40 +366,40 @@ public class Map
         }
     }
 }
-    public static class Scene
+public static class Scene
+{
+    public static Map CurrentMap = new(2, 2);
+    public static void Enter(Map map)
     {
-        public static Map CurrentMap = new(2, 2);
-        public static void Enter(Map map)
-        {
-            CurrentMap = map;
-            CurrentMap.Units.Clear();
-            CurrentMap.WakeUnits.Clear();
-            MapBuilder.BuildFogOfWar(map);
-            map.Units.Add(Player.PlayerUnit);
-            map.WakeUnits.Add(Player.PlayerUnit);
-            Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));
-            MapBuilder.BuildTileMapFromLogic(CurrentMap);
-            MapBuilder.BuildTileMapFromLogic(CurrentMap);
-            CurrentMap.SummonEnemy();
-            Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
-            CurrentMap.AfterEnter?.Invoke();
-            Player.PlayerUnit.HealHp(Player.PlayerUnit.MaxHp / 2); // 恢复玩家血量
-            Info.Print($"进入了地图");
-        }
-        public static void Quit()
-        {
-            foreach (var child in G.I.LayerItemDropped.GetChildren())
-                child?.QueueFree();
-            foreach (var u in CurrentMap.Units)
-                if (u != Player.PlayerUnit)
-                    u.sprite.QueueFree();
-            CurrentMap.Units.Clear();
-            CurrentMap.WakeUnits.Clear();
-            CurrentMap.Bullets.Clear();
-            SpellCard.currentSpellcards.Clear();
-            Enter(CurrentMap.Exit);
-        }
+        CurrentMap = map;
+        CurrentMap.Units.Clear();
+        CurrentMap.WakeUnits.Clear();
+        MapBuilder.BuildFogOfWar(map);
+        map.Units.Add(Player.PlayerUnit);
+        map.WakeUnits.Add(Player.PlayerUnit);
+        Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));
+        MapBuilder.BuildTileMapFromLogic(CurrentMap);
+        MapBuilder.BuildTileMapFromLogic(CurrentMap);
+        CurrentMap.SummonEnemy();
+        Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
+        CurrentMap.AfterEnter?.Invoke();
+        Player.PlayerUnit.HealHp(Player.PlayerUnit.MaxHp / 2); // 恢复玩家血量
+        Info.Print($"进入了地图");
     }
+    public static void Quit()
+    {
+        foreach (var child in G.I.LayerItemDropped.GetChildren())
+            child?.QueueFree();
+        foreach (var u in CurrentMap.Units)
+            if (u != Player.PlayerUnit)
+                u.sprite.QueueFree();
+        CurrentMap.Units.Clear();
+        CurrentMap.WakeUnits.Clear();
+        CurrentMap.Bullets.Clear();
+        SpellCard.currentSpellcards.Clear();
+        Enter(CurrentMap.Exit);
+    }
+}
 
 
 

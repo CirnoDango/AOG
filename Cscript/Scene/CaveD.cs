@@ -7,7 +7,7 @@ public partial class CaveD : Node
 {
 
     public Map Floor1 = MapGenerator.GenerateMapByBSP(
-    60, 60, "Stone", "Floor");
+    10, 10, "Stone", "Floor");
     public Map Floor2 = MapGenerator.GenerateMapByCellularAutomata(
     60, 60,
     new Dictionary<string, float>
@@ -76,7 +76,7 @@ public partial class CaveD : Node
         Floor1.Exit = Floor2;
         Floor2.Exit = Floor3;
         Scene.Enter(Floor1);
-        Floor1.SummonChest(40, 30);
+        Floor1.SummonChest(200, 1);
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "mp", 30 } }));
         Player.PlayerUnit.inventory.AddItem(

@@ -35,7 +35,7 @@ public abstract class Item
     public string Name { get; set; }
     public string TrName => $"i{Name}";
     public string Description { get; set; }
-    public float Weight { get; set; }
+    public virtual float Weight { get; set; }
     public Texture2D Texture { get; set; }
     // 默认可以装备，非装备道具重写为 false
     public virtual bool CanEquip => true;
@@ -57,15 +57,9 @@ public abstract class SkillItem : Item, IParamable
     {
         Skill.Activate(sc);
     }
-    public object RandomSummon()
-    {
-        var item = RandomSummonParam();
-        ((SkillItem)item).ApplyParameters([]);
-        return item;
-    }
     public virtual object RandomSummonParam()
     {
-        return GetItemName(Name).Template;
+        return GetTemplate(Name);
     }
 }
 // 实际游戏中用于携带、掉落、使用的物品实体

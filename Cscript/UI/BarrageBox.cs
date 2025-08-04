@@ -14,7 +14,9 @@ public partial class BarrageBox : Control, IRegisterToG
     [Export]
     public FlowContainer BagList;
     [Export]
-    public Label bagnumber;
+    public Label equipNumber;
+    [Export]
+    public Label bagNumber;
     [Export]
     public PackedScene BcEntryScene;
     public TextureButton EquipButton;
@@ -41,15 +43,15 @@ public partial class BarrageBox : Control, IRegisterToG
         EquipButton.MouseEntered += () => { if (!EquipState) EquipLight.Modulate = Colors.Gray; };
         EquipButton.MouseExited += () => { if (!EquipState) EquipLight.Modulate = Colors.Transparent; };
         EquipButton.Pressed += () => {
-            EquipState = true;
-            UpdateButtonStates();
+            if (draggedItem != null)
+                EquipState = true; UpdateButtonStates();
         };
 
         ThrowButton.MouseEntered += () => { if (EquipState) ThrowLight.Modulate = Colors.Gray; };
         ThrowButton.MouseExited += () => { if (EquipState) ThrowLight.Modulate = Colors.Transparent; };
         ThrowButton.Pressed += () => {
-            EquipState = false;
-            UpdateButtonStates();
+            if (draggedItem != null)
+                EquipState = false; UpdateButtonStates();
         };
     }
     public void OnSlotClicked(BarrageSetBox parent, TextureButton slotButton)
@@ -78,11 +80,62 @@ public partial class BarrageBox : Control, IRegisterToG
         }
         else if (draggedItem != null && itemIcon != null)
         {
-            // 可选功能：拖动物品与另一个物品交换
-            GD.Print("目标位置已被占用，考虑交换逻辑");
+            if (selectButton != slotButton)
+            {
+                ExchangeItem(parent, slotButton);
+            }
+            else
+            {
+                ReturnItem(draggedParent, selectButton);
+            }
         }
     }
-    
+    public void ExchangeItem(BarrageSetBox parent, TextureButton slotButton)
+    {
+        // 3. 拖动物品与另一个物品交换
+        // 获取目标物品
+        var targetItem = parent.Buttons[slotButton];
+
+        // 从目标槽中取出图标
+        TextureRect targetIcon = (TextureRect)slotButton.GetChild(0);
+        slotButton.RemoveChild(targetIcon);
+
+        // 交换数据
+        parent.Buttons[slotButton] = draggedItem;
+        draggedParent.Buttons[selectButton] = targetItem;
+
+        // 更新 barrage.Components
+        int targetIndex = parent.Buttons
+            .Select((pair, idx) => new { pair.Key, Index = idx })
+            .FirstOrDefault(p => p.Key == slotButton)?.Index ?? -1;
+        int sourceIndex = draggedParent.Buttons
+            .Select((pair, idx) => new { pair.Key, Index = idx })
+            .FirstOrDefault(p => p.Key == selectButton)?.Index ?? -1;
+
+        if (targetIndex != -1)
+            parent.barrage.Components[targetIndex] = draggedItem;
+        if (sourceIndex != -1)
+            draggedParent.barrage.Components[sourceIndex] = targetItem;
+
+        // 图像处理：交换图标
+        TextureRect draggedIcon = (TextureRect)selectButton.GetChild(0);
+        selectButton.RemoveChild(draggedIcon);
+
+        slotButton.AddChild(draggedIcon);
+        draggedIcon.Position = Vector2.Zero;
+        draggedIcon.ZIndex = 0;
+
+        selectButton.AddChild(targetIcon);
+        targetIcon.Position = Vector2.Zero;
+        targetIcon.ZIndex = 0;
+
+        // 颜色恢复
+        selectButton.Modulate = Colors.White;
+
+        // 清除拖拽引用
+        draggedItem = null;
+        selectButton = null;
+    }
     public void ReturnItem(BarrageSetBox parent, TextureButton slotButton)
     {
         // 背包交互
@@ -124,11 +177,13 @@ public partial class BarrageBox : Control, IRegisterToG
     }
     public void Refresh()
     {
+        var unit = Player.PlayerUnit;
+        equipNumber.Text = $"Equip: {unit.equipment.CurrentEquipWeight:F1}/{unit.equipment.MaxEquipWeight:F1}";
+        bagNumber.Text = $"Bag: {unit.inventory.CurrentWeight:F1}/{unit.inventory.MaxWeight:F1}";
         foreach (var child in BagList.GetChildren())
             child.QueueFree();
         foreach (var child in BarrageList.GetChildren())
             child.QueueFree();
-        var unit = Player.PlayerUnit;
         int n = 0;
         bag = new(100);
         foreach (var item in unit.inventory.Items)
@@ -143,7 +198,7 @@ public partial class BarrageBox : Control, IRegisterToG
             if (item.Template is BarrageSet bs)
             {
                 var entry = barrageSetBox.Instantiate<BarrageSetBox>();
-                entry.Init(bs.barrage);
+                entry.Init(bs.B);
                 BarrageList.AddChild(entry);
             }
         }

@@ -1,13 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class BarrageSet : SkillItem
 {
-    public Barrage barrage;
+    public Barrage B = new();
+    public override float Weight
+    {
+        get
+        {
+            if (B.Components == null || B.Components.Count == 0)
+                return 2f;
+            else
+                return 2f + B.Components.Where(a => a != null).Sum(a => a.Weight);
+        }
+    }
     public BarrageSet()
     {
         Name = "BarrageSet";
-        Weight = 2f;
         Description = "弹幕盒子";
     }
 
@@ -15,14 +25,9 @@ public class BarrageSet : SkillItem
     {
         if (parameters.TryGetValue("barrage", out var val))
         {
-            barrage = (Barrage)val;
+            B = (Barrage)val;
         }
-        Skill = new Instance(barrage);
-    }
-
-    public override object RandomSummonParam()
-    {
-        return new BarrageSet();
+        Skill = new Instance(B);
     }
 
     private class Instance : Skill, ISkillInstance

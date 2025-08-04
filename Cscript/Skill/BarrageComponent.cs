@@ -50,7 +50,7 @@ public abstract class BarrageComponent : Item, IParamable
     }
     public virtual object RandomSummonParam()
     {
-        return GetItemName(Name);
+        return GetTemplate(Name);
     }
 }
 
