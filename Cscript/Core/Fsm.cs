@@ -10,16 +10,17 @@ public static class Game
 public partial class Fsm : Node, IRegisterToG
 {
     public GameState currentState;
-    public static GameState startState;
-    public static GameState playerSkillState;
-    public static GameState playerSkillTargetState;
-    public static GameState enemySkillState;
-    public static GameState updateState;
-    public static GameState talkState;
-    public static GameState inventoryBoxState;
-    public static GameState combatAbilityBoxState;
-    public static GameState uaSkillBoxState;
-    public static GameState memoryBoxState;
+    public static GameState StartState             { get; set; }
+    public static GameState PlayerSkillState       { get; set; }
+    public static GameState PlayerSkillTargetState { get; set; }
+    public static GameState EnemySkillState        { get; set; }
+    public static GameState UpdateState            { get; set; }
+    public static GameState TalkState              { get; set; }
+    public static GameState InventoryBoxState      { get; set; }
+    public static GameState CombatAbilityBoxState  { get; set; }
+    public static GameState UaSkillBoxState        { get; set; }
+    public static GameState MemoryBoxState         { get; set; }
+    public static GameState BarrageBoxState        { get; set; }
     [Export]
     public Control InventoryBos;
     [Export]
@@ -42,17 +43,18 @@ public partial class Fsm : Node, IRegisterToG
     public override void _Ready()
     {
         TranslationServer.SetLocale("zh");
-        startState = new StartState(this);
-        playerSkillState = new PlayerSkillState(this);
-        playerSkillTargetState = new PlayerSkillTargetState(this);
-        enemySkillState = new EnemySkillState(this);
-        updateState = new UpdatingState(this);
-        talkState = new TalkState(this);
-        inventoryBoxState = new InventoryState(this);
-        combatAbilityBoxState = new CombatAbilityBoxState(this);
-        uaSkillBoxState = new UaSkillBoxState(this);
-        memoryBoxState = new MemoryBoxState(this);
-        ChangeState(talkState);
+        StartState = new StartState(this);
+        PlayerSkillState = new PlayerSkillState(this);
+        PlayerSkillTargetState = new PlayerSkillTargetState(this);
+        EnemySkillState = new EnemySkillState(this);
+        UpdateState = new UpdatingState(this);
+        TalkState = new TalkState(this);
+        InventoryBoxState = new InventoryState(this);
+        CombatAbilityBoxState = new CombatAbilityBoxState(this);
+        UaSkillBoxState = new UaSkillBoxState(this);
+        MemoryBoxState = new MemoryBoxState(this);
+        BarrageBoxState = new BarrageBoxState(this);
+        ChangeState(TalkState);
     }
 
     public void RegisterToG(G g)
@@ -105,7 +107,7 @@ public class StartState(Fsm fsm) : GameState(fsm), IGameState
         ItemLoader.LoadItemPng();
         
         // 跳转到更新状态
-        fsm.ChangeState(Fsm.updateState);
+        fsm.ChangeState(Fsm.UpdateState);
     }
 }
 public class PlayerSkillState(Fsm fsm) : GameState(fsm), IGameState
@@ -152,12 +154,12 @@ public class UpdatingState(Fsm fsm) : GameState(fsm), IGameState
         }
         else if (activeUnit == Player.PlayerUnit)
         {
-            G.I.Fsm.ChangeState(Fsm.playerSkillState);
+            G.I.Fsm.ChangeState(Fsm.PlayerSkillState);
         }
         else
         {
             Scene.CurrentMap.ActiveUnit = activeUnit;
-            G.I.Fsm.ChangeState(Fsm.enemySkillState);
+            G.I.Fsm.ChangeState(Fsm.EnemySkillState);
             //activeUnit.unitAi?.AttackAi(1, 3);
         }
     }
@@ -216,5 +218,20 @@ public class MemoryBoxState(Fsm fsm) : GameState(fsm), IGameState
     public override void End()
     {
         G.I.MemoryBox.Visible = false;
+    }
+}
+
+public class BarrageBoxState(Fsm fsm) : GameState(fsm), IGameState
+{
+    public override void Start()
+    {
+        G.I.BarrageBox.Refresh();
+        G.I.BarrageBox.Visible = true;
+
+    }
+    public override void End()
+    {
+        G.I.BarrageBox.ReturnItem();
+        G.I.BarrageBox.Visible = false;
     }
 }

@@ -13,8 +13,8 @@ public partial class Tutorial2 : Stage
     public override async void _Ready()
     {
         map = G.I.TileMapAllLayer.BaseGround;
-        G.I.Fsm.ChangeState(Fsm.startState);
-        Fsm.startState.OnEnd += Init;
+        G.I.Fsm.ChangeState(Fsm.StartState);
+        Fsm.StartState.OnEnd += Init;
         await ToSignal(GetTree().CreateTimer(0.01), "timeout");
         Run();
     }
@@ -54,19 +54,19 @@ public partial class Tutorial2 : Stage
         new("那么就到这里，玩去吧小妖精~")
     );
 
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
     public async void TutorialEnd()
     {
         G.I.DialogBox.Show();
-        G.I.Fsm.ChangeState(Fsm.talkState);
+        G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.ShowDialog([
             new("感谢游玩！", L("null"),
             "教程关卡就到此结束了，不过在这后面我设置了无尽的怪物生成，" +
             "您也可以试试能用琪露诺坚持多久。")
         ]); await Click();
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
 }

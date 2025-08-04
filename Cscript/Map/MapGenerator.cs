@@ -112,23 +112,25 @@ public static class MapGenerator
                     map.Grid[x, y] = new Grid(new Vector2I(x, y), floor);
         }
         rooms = Rect.SortRectsNearest(rooms);
-
+        List<Vector2I> doors = [];
         // 连接房间
         for (int i = 1; i < rooms.Count; i++)
         {
             Vector2I a = GetRoomCenter(rooms[i - 1]);
             Vector2I b = GetRoomCenter(rooms[i]);
-            ConnectRoomsWithDoor(map, rooms[i - 1], rooms[i], floor);
-        }
 
+            doors.AddRange(ConnectRoomsWithDoor(map, rooms[i - 1], rooms[i], floor));
+            
+        }
         // 设置入口与出口
         map.Entrance = map.RandomEmptyGrid().Position;
         if (!noExit)
         {
-            var exit = FloodFindFarthest(map, map.Entrance);
             map.SetExit();
         }
 
+        foreach (var door in doors)
+            map.Grid[door.X, door.Y] = new Grid(door, floor, "DoorClosed");
         return map;
     }
 
@@ -270,8 +272,9 @@ public static class MapGenerator
     {
         return new Vector2I(room.Left + room.Width / 2, room.Top + room.Height / 2);
     }
-    public static void ConnectRoomsWithDoor(Map map, Rect ra, Rect rb, string floor, string door = "DoorClosed")
+    public static List<Vector2I> ConnectRoomsWithDoor(Map map, Rect ra, Rect rb, string floor, string door = "DoorClosed")
     {
+        List<Vector2I> Doors = [];
         List<Vector2I> path = new();
         Vector2I a = GetRoomCenter(ra);
         Vector2I b = GetRoomCenter(rb);
@@ -298,17 +301,16 @@ public static class MapGenerator
         {
             var pos = path[i];
             int air = map.NearGrids(map.GetGrid(pos), 1).Where(x => x.IsWalkable).ToList().Count;
-            int dor = map.NearGrids(map.GetGrid(pos), 1).Where(x => x.TerrainStand == "DoorClosed").ToList().Count;
             // 只在开头和结尾考虑放门（且前面是墙，后面是地板）
-            if ((ra.IsAdjacentOutside(pos) || rb.IsAdjacentOutside(pos)) && air < 5 && dor == 0 && Random.Shared.NextDouble() < 1)
+            if ((ra.IsAdjacentOutside(pos) || rb.IsAdjacentOutside(pos)) && air < 7 && Random.Shared.NextDouble() < 1)
             {
-                map.Grid[pos.X, pos.Y] = new Grid(pos, floor, door);
+                Doors.Add(new Vector2I(pos.X, pos.Y));
             }
-            else
-            {
-                map.Grid[pos.X, pos.Y] = new Grid(pos, floor);
-            }
+            map.Grid[pos.X, pos.Y] = new Grid(pos, floor);
         }
+        if (Doors.Count > 2)
+            Doors = [Doors[0], Doors[^1]];
+        return Doors;
     }
 }
 public class Rect

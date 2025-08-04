@@ -7,6 +7,11 @@ public interface IInteractable
 {
     void Interact(Unit unit);
 }
+public interface IParamable
+{
+    void ApplyParameters(Dictionary<string, object> parameters);
+    Object RandomSummonParam();
+}
 public abstract class Item
 {
     public static List<Item> ItemDeck { get; set; } = [];
@@ -18,7 +23,7 @@ public abstract class Item
         var item = new ItemInstance((Item)template);
         if (item.Template is SkillItem skillItem)
         {
-            skillItem.ApplyParameters(parameters);
+            skillItem.ApplyParameters(parameters ?? []);
         }
         return item;
     }
@@ -39,7 +44,7 @@ public abstract class Item
     public virtual void OnEquip(Unit unit) { }
     public virtual void OnUnequip(Unit unit) { }
 }
-public abstract class SkillItem : Item
+public abstract class SkillItem : Item, IParamable
 {
     public override void OnEquip(Unit unit)
     {
@@ -52,10 +57,24 @@ public abstract class SkillItem : Item
     {
         Skill.Activate(sc);
     }
+    public object RandomSummon()
+    {
+        var item = RandomSummonParam();
+        ((SkillItem)item).ApplyParameters([]);
+        return item;
+    }
+    public virtual object RandomSummonParam()
+    {
+        return GetItemName(Name).Template;
+    }
 }
 // 实际游戏中用于携带、掉落、使用的物品实体
 public class ItemInstance : IInteractable
 {
+    public ItemInstance(Item template)
+    {
+        Template = template;
+    }
     public Item Template { get; private set; }
 
     // 实例特有属性
@@ -65,10 +84,6 @@ public class ItemInstance : IInteractable
         set;
     } // 掉落在地图上的位置
 
-    public ItemInstance(Item template)
-    {
-        Template = template;
-    }
     public string Name => Template.Name;
     public string TrName => Template.TrName;
     public string Description => Template.Description;
@@ -149,11 +164,12 @@ public class Equipment(Unit unit)
 
     public void Unequip(ItemInstance item, Unit unit)
     {
-        if (EquippedItems.Contains(item))
+        if (!EquippedItems.Contains(item))
         {
-            EquippedItems.Remove(item);
-            item.OnUnequip(unit);
+            return;
         }
+        EquippedItems.Remove(item);
+        item.OnUnequip(unit);
     }
 }
 
@@ -187,12 +203,14 @@ public static class ItemLoader
                 continue;
 
             // 构建路径
-            string path = $"res://assets/Item/{item.Name}.png";
+            string path = $"res://Assets/Item/{item.Name}.png";
             if (item is Memory)
-                path = "res://assets/Item/memory.png";
+                path = "res://Assets/Item/memory.png";
+            else if (item is BarrageComponent)
+                path = $"res://Assets/Barrage/{item.Name}.png";
 
-            // 检查资源是否存在
-            if (!ResourceLoader.Exists(path))
+			// 检查资源是否存在
+			if (!ResourceLoader.Exists(path))
             {
                 GD.PrintErr($"[LoadItemPng] 图片不存在: {path}");
                 continue;

@@ -308,6 +308,8 @@ public class Unit
     public void LearnSkill(Skill skill)
     {
         SkillInstance si = new(skill);
+        if (skill.SkillGroup == "Item")
+            si.CurrentCooldown = skill.Cooldown;
         AddSkill(si, 1);
         if (Player.PlayerUnit == this)
         {

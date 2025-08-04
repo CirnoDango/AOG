@@ -24,7 +24,7 @@ public partial class SkillTree : Control
 
             var skillName = skill.Name;
             skillNames.Add(skillName);
-            tr[index].Texture = GD.Load<Texture2D>($"res://assets/Skill/{skilltree}_{skillName}.png");
+            tr[index].Texture = GD.Load<Texture2D>($"res://Assets/Skill/{skilltree}_{skillName}.png");
             levelLabels[index].Text = $"{VLevel(skillName)}/3";
 
             int buttonIndex = index; // 必须缓存变量以避免闭包错误！

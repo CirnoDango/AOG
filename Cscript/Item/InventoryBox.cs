@@ -21,7 +21,7 @@ public partial class InventoryBox : Control, IRegisterToG
     public override void _Ready()
     {
         // 加载预制体
-        ItemEntryScene = GD.Load<PackedScene>("res://assets/Item/ItemEntry.tscn");
+        ItemEntryScene = GD.Load<PackedScene>("res://Nodes/Ui/ItemEntry.tscn");
         EquipButton = GetNode<TextureButton>("EquipButton");
         EquipLight = GetNode<TextureRect>("EquipButton/Light");
         ThrowButton = GetNode<TextureButton>("ThrowButton");
@@ -31,14 +31,14 @@ public partial class InventoryBox : Control, IRegisterToG
 
         // 绑定悬停和点击事件
         EquipButton.MouseEntered += () => { if (!EquipState) EquipLight.Modulate = Colors.Gray; };
-        EquipButton.MouseExited += () => { if (!EquipState) EquipLight.Modulate = Colors.White; };
+        EquipButton.MouseExited += () => { if (!EquipState) EquipLight.Modulate = Colors.Transparent; };
         EquipButton.Pressed += () => {
             EquipState = true;
             UpdateButtonStates();
         };
 
         ThrowButton.MouseEntered += () => { if (EquipState) ThrowLight.Modulate = Colors.Gray; };
-        ThrowButton.MouseExited += () => { if (EquipState) ThrowLight.Modulate = Colors.White; };
+        ThrowButton.MouseExited += () => { if (EquipState) ThrowLight.Modulate = Colors.Transparent; };
         ThrowButton.Pressed += () => {
             EquipState = false;
             UpdateButtonStates();
@@ -48,13 +48,13 @@ public partial class InventoryBox : Control, IRegisterToG
     {
         if (EquipState)
         {
-            EquipLight.Modulate = Colors.LightYellow; // 常亮天蓝光
-            ThrowLight.Modulate = Colors.White;   // 关闭 Throw 光
+            EquipLight.Modulate = Colors.LightYellow;
+            ThrowLight.Modulate = Colors.Transparent;
         }
         else
         {
-            EquipLight.Modulate = Colors.White;   // 关闭 Equip 光
-            ThrowLight.Modulate = Colors.LightYellow;  // 常亮天蓝光
+            EquipLight.Modulate = Colors.Transparent;
+            ThrowLight.Modulate = Colors.LightYellow;
         }
     }
     public void Refresh(Unit unit)
@@ -81,6 +81,8 @@ public partial class InventoryBox : Control, IRegisterToG
 
         foreach (var item in unit.inventory.Items)
         {
+            if (!item.CanEquip || item.Template is Memory)
+                continue;
             var entry = ItemEntryScene.Instantiate<ItemEntry>();
             entry.Setup(item, (clickedItem) => {
                 if (EquipState)
@@ -97,6 +99,7 @@ public partial class InventoryBox : Control, IRegisterToG
                 else
                 {
                     unit.inventory.ThrowItem(clickedItem);
+                    Refresh(unit);
                 }
                 
             });

@@ -1,48 +1,50 @@
-[gd_scene load_steps=45 format=4 uid="uid://b0mqdj26pycpr"]
+[gd_scene load_steps=47 format=4 uid="uid://b0mqdj26pycpr"]
 
-[ext_resource type="Script" uid="uid://bqj7vjv1wu0wj" path="res://Cscript/Core/GameLoader.cs" id="1_jtptn"]
-[ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="2_8tnvb"]
-[ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="3_0xujf"]
-[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://assets/tiles/fog.png" id="4_b00a6"]
-[ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://nodes/Scene/SkillTree.tscn" id="4_gsdxd"]
-[ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="6_q4vul"]
-[ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://nodes/Ui/ItemDropped.tscn" id="7_gsdxd"]
-[ext_resource type="Script" uid="uid://mgbju6wq5qdr" path="res://Cscript/UI/Player.cs" id="8_d456v"]
-[ext_resource type="PackedScene" uid="uid://cslun0ygwlodq" path="res://nodes/Scene/mainmenu.tscn" id="9_dkhus"]
-[ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="10_5elg3"]
-[ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://assets/Font/TjfPastaRegular-3lRDz.ttf" id="11_nxf1r"]
-[ext_resource type="Script" uid="uid://befekncgewd8s" path="res://Cscript/UI/Info.cs" id="12_0asgl"]
-[ext_resource type="Script" uid="uid://bvi1fgh3td4rw" path="res://Cscript/UI/SkillBar.cs" id="13_nu0so"]
-[ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="14_5elg3"]
-[ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="14_b00a6"]
-[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://assets/UI/equip.png" id="14_nu0so"]
-[ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://nodes/Ui/skillbox.tscn" id="14_vog8u"]
-[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://assets/UI/CAbox.png" id="15_avsuv"]
-[ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://nodes/Ui/spellbox.tscn" id="15_o0ha0"]
-[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://assets/UI/bluelight.png" id="15_vog8u"]
-[ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="16_7fny7"]
-[ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/Enemy/Ua.cs" id="16_d456v"]
-[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://assets/UI/throw.png" id="16_o0ha0"]
-[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://assets/Portraits/cirno_fight_hahaha.png" id="16_q4vul"]
-[ext_resource type="Script" uid="uid://1o0nxihbplfl" path="res://Cscript/UI/PauseMenu.cs" id="17_avsuv"]
-[ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="17_vout4"]
-[ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="18_q4vul"]
-[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://assets/UI/box_sign.png" id="18_u7a5e"]
-[ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="19_rilar"]
-[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://assets/UI/Inventory.png" id="20_0723m"]
-[ext_resource type="Script" uid="uid://d3ab0k3gxv2nm" path="res://Cscript/UI/HighlightManager.cs" id="21_cbrmb"]
-[ext_resource type="PackedScene" uid="uid://bg318vxlkr5tm" path="res://nodes/Ui/blue_select.tscn" id="22_rp6l0"]
-[ext_resource type="PackedScene" uid="uid://c1q3i2jujapps" path="res://nodes/Ui/green_select.tscn" id="23_6pfom"]
-[ext_resource type="Texture2D" uid="uid://bf8btdv0nsysx" path="res://assets/tiles/stand.png" id="24_dkhus"]
-[ext_resource type="PackedScene" uid="uid://0edv3xem63n5" path="res://nodes/Ui/red_select.tscn" id="24_sumwq"]
-[ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://nodes/Ui/yellow_select.tscn" id="25_h2onj"]
-[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://assets/UI/skillbox.png" id="25_vog8u"]
-[ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="26_7dti5"]
-[ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="27_ogw32"]
-[ext_resource type="Script" uid="uid://d06tg36jdqgng" path="res://Cscript/Scene/CaveD.cs" id="36_5elg3"]
+[ext_resource type="Script" uid="uid://bqj7vjv1wu0wj" path="res://Cscript/Core/GameLoader.cs" id="1_q8ly1"]
+[ext_resource type="Script" uid="uid://bvi1fgh3td4rw" path="res://Cscript/UI/SkillBar.cs" id="2_532rb"]
+[ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://Nodes/Ui/skillbox.tscn" id="3_mj5vu"]
+[ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://Nodes/Ui/spellbox.tscn" id="4_txmn6"]
+[ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://Assets/Font/TjfPastaRegular-3lRDz.ttf" id="5_qbatk"]
+[ext_resource type="Script" uid="uid://befekncgewd8s" path="res://Cscript/UI/Info.cs" id="6_473xd"]
+[ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="7_1e447"]
+[ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_625qn"]
+[ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="9_k6qa2"]
+[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_7lwr1"]
+[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_nl0op"]
+[ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xsmcu"]
+[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://Assets/UI/Inventory.png" id="13_y0fgd"]
+[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://Assets/UI/equip.png" id="14_0khjt"]
+[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://Assets/UI/bluelight.png" id="15_k6egh"]
+[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://Assets/UI/throw.png" id="16_w7sje"]
+[ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="17_3bkec"]
+[ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="18_wkq38"]
+[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://Assets/UI/box_sign.png" id="19_2gfiu"]
+[ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/Unit/Ua.cs" id="20_vh7r3"]
+[ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="21_6ifof"]
+[ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://Nodes/Scene/SkillTree.tscn" id="22_cq2xb"]
+[ext_resource type="PackedScene" uid="uid://cslun0ygwlodq" path="res://Nodes/Scene/mainmenu.tscn" id="23_lb0ae"]
+[ext_resource type="Script" uid="uid://1o0nxihbplfl" path="res://Cscript/UI/PauseMenu.cs" id="24_t0otd"]
+[ext_resource type="Script" uid="uid://b18bcsghqg41i" path="res://Cscript/UI/BarrageBox.cs" id="25_qdyep"]
+[ext_resource type="PackedScene" uid="uid://ye85afnrc713" path="res://Nodes/Ui/barrage_box.tscn" id="26_j3esl"]
+[ext_resource type="PackedScene" uid="uid://d4cn04077ikll" path="res://Nodes/Ui/bc_entry.tscn" id="27_xvj5y"]
+[ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="28_55o6b"]
+[ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="29_8qroj"]
+[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://Assets/tiles/fog.png" id="30_txq0u"]
+[ext_resource type="Texture2D" uid="uid://bf8btdv0nsysx" path="res://Assets/tiles/stand.png" id="31_3h0l3"]
+[ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="32_1kp8j"]
+[ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://Nodes/Ui/ItemDropped.tscn" id="33_1j847"]
+[ext_resource type="Script" uid="uid://mgbju6wq5qdr" path="res://Cscript/UI/Player.cs" id="34_dxvvt"]
+[ext_resource type="Script" uid="uid://d3ab0k3gxv2nm" path="res://Cscript/UI/HighlightManager.cs" id="35_hrpic"]
+[ext_resource type="PackedScene" uid="uid://bg318vxlkr5tm" path="res://Nodes/Ui/blue_select.tscn" id="36_8udl4"]
+[ext_resource type="PackedScene" uid="uid://c1q3i2jujapps" path="res://Nodes/Ui/green_select.tscn" id="37_6txxt"]
+[ext_resource type="PackedScene" uid="uid://0edv3xem63n5" path="res://Nodes/Ui/red_select.tscn" id="38_qt77m"]
+[ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://Nodes/Ui/yellow_select.tscn" id="39_4tlm7"]
+[ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="40_sbq4v"]
+[ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="41_2ujow"]
+[ext_resource type="Script" uid="uid://d06tg36jdqgng" path="res://Cscript/Scene/CaveD.cs" id="42_d56ol"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jky6x"]
-texture = ExtResource("4_b00a6")
+texture = ExtResource("30_txq0u")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
@@ -64,7 +66,7 @@ terrain_set_0/terrain_2/color = Color(0, 0.501961, 1, 1)
 sources/0 = SubResource("TileSetAtlasSource_jky6x")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5elg3"]
-texture = ExtResource("24_dkhus")
+texture = ExtResource("31_3h0l3")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
@@ -91,7 +93,7 @@ terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_5elg3")
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_jtptn")
+script = ExtResource("1_q8ly1")
 
 [node name="UI" type="CanvasLayer" parent="."]
 scale = Vector2(0.1, 0.1)
@@ -104,10 +106,10 @@ offset_top = 4830.0
 offset_right = 750.0
 offset_bottom = 5430.0
 scale = Vector2(10, 10)
-script = ExtResource("13_nu0so")
+script = ExtResource("2_532rb")
 skillContainer = NodePath(".")
-skillButtonScene = ExtResource("14_vog8u")
-spellButtonScene = ExtResource("15_o0ha0")
+skillButtonScene = ExtResource("3_mj5vu")
+spellButtonScene = ExtResource("4_txmn6")
 
 [node name="Control" type="Control" parent="UI"]
 layout_mode = 3
@@ -121,7 +123,7 @@ texture_filter = 2
 layout_mode = 2
 offset_right = 259.0
 offset_bottom = 300.0
-theme_override_fonts/font = ExtResource("11_nxf1r")
+theme_override_fonts/font = ExtResource("5_qbatk")
 theme_override_font_sizes/font_size = 300
 text = "12"
 
@@ -141,7 +143,7 @@ theme_override_font_sizes/bold_font_size = 240
 bbcode_enabled = true
 scroll_following = true
 vertical_alignment = 2
-script = ExtResource("12_0asgl")
+script = ExtResource("6_473xd")
 
 [node name="fps" type="Label" parent="UI"]
 offset_left = 14000.0
@@ -151,12 +153,12 @@ offset_bottom = 1130.0
 theme_override_font_sizes/font_size = 300
 text = "1"
 horizontal_alignment = 2
-script = ExtResource("16_7fny7")
+script = ExtResource("7_1e447")
 
 [node name="PlayerStatusBar" type="VBoxContainer" parent="UI" node_paths=PackedStringArray("uilayer")]
 offset_right = 4000.0
 offset_bottom = 4000.0
-script = ExtResource("10_5elg3")
+script = ExtResource("8_625qn")
 uilayer = NodePath("..")
 
 [node name="HpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
@@ -229,7 +231,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("14_b00a6")
+script = ExtResource("9_k6qa2")
 HeadPicture = NodePath("HBoxContainer/VBoxContainer/TextureRect")
 Info1 = NodePath("HBoxContainer/VBoxContainer/Label")
 Info2 = NodePath("HBoxContainer/VBoxContainer2/Label")
@@ -239,7 +241,7 @@ Info3 = NodePath("HBoxContainer/VBoxContainer3/Label")
 modulate = Color(0.592157, 1, 1, 1)
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
-texture = ExtResource("15_avsuv")
+texture = ExtResource("10_7lwr1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/CombatAbilityBox"]
 custom_minimum_size = Vector2(17000, 8500)
@@ -257,7 +259,7 @@ layout_mode = 2
 [node name="TextureRect" type="TextureRect" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(5500, 3000)
 layout_mode = 2
-texture = ExtResource("16_q4vul")
+texture = ExtResource("11_nl0op")
 expand_mode = 5
 
 [node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
@@ -296,7 +298,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("19_rilar")
+script = ExtResource("12_xsmcu")
 EquipList = NodePath("ScrollContainer/EquipBox")
 BagList = NodePath("ScrollContainer2/BagBox")
 equipnumber = NodePath("Label")
@@ -348,7 +350,7 @@ layout_mode = 2
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
-texture = ExtResource("20_0723m")
+texture = ExtResource("13_y0fgd")
 
 [node name="EquipButton" type="TextureButton" parent="UI/InventoryBox"]
 layout_mode = 0
@@ -356,14 +358,14 @@ offset_left = 9600.0
 offset_top = 1000.0
 offset_right = 10000.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("14_nu0so")
+texture_normal = ExtResource("14_0khjt")
 stretch_mode = 0
 
 [node name="Light" type="TextureRect" parent="UI/InventoryBox/EquipButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
 [node name="ThrowButton" type="TextureButton" parent="UI/InventoryBox"]
 layout_mode = 0
@@ -371,14 +373,14 @@ offset_left = 10100.0
 offset_top = 1000.0
 offset_right = 10500.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("16_o0ha0")
+texture_normal = ExtResource("16_w7sje")
 stretch_mode = 0
 
 [node name="Light" type="TextureRect" parent="UI/InventoryBox/ThrowButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
 [node name="MemoryBox" type="Control" parent="UI" node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
 visible = false
@@ -387,7 +389,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("14_5elg3")
+script = ExtResource("17_3bkec")
 EquipList = NodePath("ScrollContainer/EquipBox")
 BagList = NodePath("ScrollContainer2/BagBox")
 equipnumber = NodePath("Label")
@@ -440,7 +442,7 @@ modulate = Color(0.796078, 0.298039, 0.792157, 1)
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
-texture = ExtResource("20_0723m")
+texture = ExtResource("13_y0fgd")
 
 [node name="EquipButton" type="TextureButton" parent="UI/MemoryBox"]
 layout_mode = 0
@@ -448,14 +450,14 @@ offset_left = 9600.0
 offset_top = 1000.0
 offset_right = 10000.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("14_nu0so")
+texture_normal = ExtResource("14_0khjt")
 stretch_mode = 0
 
 [node name="Light" type="TextureRect" parent="UI/MemoryBox/EquipButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
 [node name="ThrowButton" type="TextureButton" parent="UI/MemoryBox"]
 layout_mode = 0
@@ -463,14 +465,14 @@ offset_left = 10100.0
 offset_top = 1000.0
 offset_right = 10500.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("16_o0ha0")
+texture_normal = ExtResource("16_w7sje")
 stretch_mode = 0
 
 [node name="Light" type="TextureRect" parent="UI/MemoryBox/ThrowButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
 [node name="DialogBox" type="Control" parent="UI" node_paths=PackedStringArray("Portrait", "NameLabel", "DialogText", "ContinueHint")]
 visible = false
@@ -480,7 +482,7 @@ offset_left = 5810.0
 offset_top = 80.0
 offset_right = 5850.0
 offset_bottom = 120.0
-script = ExtResource("17_vout4")
+script = ExtResource("18_wkq38")
 Portrait = NodePath("Image")
 NameLabel = NodePath("Name")
 DialogText = NodePath("Dialog")
@@ -531,7 +533,7 @@ z_index = -4096
 z_as_relative = false
 position = Vector2(6120, 8940)
 scale = Vector2(42, 33.812)
-texture = ExtResource("18_u7a5e")
+texture = ExtResource("19_2gfiu")
 
 [node name="UaSkillPointBox" type="Control" parent="UI"]
 visible = false
@@ -544,7 +546,7 @@ offset_bottom = 40.0
 [node name="Sprite2D" type="Sprite2D" parent="UI/UaSkillPointBox"]
 position = Vector2(9504, 5312)
 scale = Vector2(100, 100)
-texture = ExtResource("15_avsuv")
+texture = ExtResource("10_7lwr1")
 
 [node name="Ua" type="VBoxContainer" parent="UI/UaSkillPointBox" node_paths=PackedStringArray("Point", "str", "dex", "con", "spi", "mag", "cun", "info")]
 layout_mode = 0
@@ -553,7 +555,7 @@ offset_top = 1050.0
 offset_right = 2750.0
 offset_bottom = 9550.0
 theme_override_constants/separation = 200
-script = ExtResource("16_d456v")
+script = ExtResource("20_vh7r3")
 Point = NodePath("Label")
 str = NodePath("Button")
 dex = NodePath("Button2")
@@ -613,9 +615,9 @@ offset_right = 17860.0
 offset_bottom = 8260.0
 theme_override_constants/h_separation = 300
 theme_override_constants/v_separation = -50
-script = ExtResource("18_q4vul")
-SkillTree = ExtResource("4_gsdxd")
+script = ExtResource("21_6ifof")
 Point = NodePath("Label2")
+SkillTree = ExtResource("22_cq2xb")
 
 [node name="Label2" type="Label" parent="UI/UaSkillPointBox/SkillPanel"]
 layout_mode = 2
@@ -632,7 +634,7 @@ theme_override_font_sizes/normal_font_size = 300
 bbcode_enabled = true
 text = "+1"
 
-[node name="Mainmenu" parent="UI" node_paths=PackedStringArray("GameRoot") instance=ExtResource("9_dkhus")]
+[node name="Mainmenu" parent="UI" node_paths=PackedStringArray("GameRoot") instance=ExtResource("23_lb0ae")]
 visible = false
 z_index = 1000
 scale = Vector2(10, 10)
@@ -646,7 +648,7 @@ offset_top = 2540.0
 offset_right = 14540.0
 offset_bottom = 8540.0
 color = Color(0.310617, 0.310617, 0.310617, 1)
-script = ExtResource("17_avsuv")
+script = ExtResource("24_t0otd")
 ResumeButton = NodePath("VBoxContainer/Button")
 RestartButton = NodePath("VBoxContainer/Button3")
 ExitButton = NodePath("VBoxContainer/Button4")
@@ -724,16 +726,28 @@ text = "退出游戏"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MemoryBox2" type="Control" parent="UI" node_paths=PackedStringArray("bagnumber")]
+[node name="BarrageBox" type="Control" parent="UI" node_paths=PackedStringArray("BarrageList", "BagList", "bagnumber")]
+visible = false
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("14_5elg3")
+script = ExtResource("25_qdyep")
+barrageSetBox = ExtResource("26_j3esl")
+BarrageList = NodePath("VBoxContainer")
+BagList = NodePath("FlowContainer2")
 bagnumber = NodePath("Label2")
+BcEntryScene = ExtResource("27_xvj5y")
 
-[node name="Label2" type="Label" parent="UI/MemoryBox2"]
+[node name="FlowContainer2" type="FlowContainer" parent="UI/BarrageBox"]
+layout_mode = 0
+offset_left = 9750.0
+offset_top = 1600.0
+offset_right = 17750.0
+offset_bottom = 9600.0
+
+[node name="Label2" type="Label" parent="UI/BarrageBox"]
 layout_mode = 2
 offset_left = 11970.0
 offset_top = 990.0
@@ -743,44 +757,44 @@ theme_override_font_sizes/font_size = 300
 text = "Bag: 0/0"
 horizontal_alignment = 1
 
-[node name="Inventory" type="Sprite2D" parent="UI/MemoryBox2"]
+[node name="Inventory" type="Sprite2D" parent="UI/BarrageBox"]
 modulate = Color(0.730027, 0.85426, 0.986022, 1)
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
-texture = ExtResource("20_0723m")
+texture = ExtResource("13_y0fgd")
 
-[node name="EquipButton" type="TextureButton" parent="UI/MemoryBox2"]
+[node name="EquipButton" type="TextureButton" parent="UI/BarrageBox"]
 layout_mode = 0
 offset_left = 9600.0
 offset_top = 1000.0
 offset_right = 10000.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("14_nu0so")
+texture_normal = ExtResource("14_0khjt")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/MemoryBox2/EquipButton"]
+[node name="Light" type="TextureRect" parent="UI/BarrageBox/EquipButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
-[node name="ThrowButton" type="TextureButton" parent="UI/MemoryBox2"]
+[node name="ThrowButton" type="TextureButton" parent="UI/BarrageBox"]
 layout_mode = 0
 offset_left = 10100.0
 offset_top = 1000.0
 offset_right = 10500.0
 offset_bottom = 1400.0
-texture_normal = ExtResource("16_o0ha0")
+texture_normal = ExtResource("16_w7sje")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/MemoryBox2/ThrowButton"]
+[node name="Light" type="TextureRect" parent="UI/BarrageBox/ThrowButton"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-texture = ExtResource("15_vog8u")
+texture = ExtResource("15_k6egh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MemoryBox2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/BarrageBox"]
 custom_minimum_size = Vector2(8000, 8000)
 layout_mode = 0
 offset_left = 750.0
@@ -789,65 +803,54 @@ offset_right = 8750.0
 offset_bottom = 9090.0
 theme_override_constants/separation = 100
 
-[node name="Label" type="Label" parent="UI/MemoryBox2/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 300
-text = "Bullet Box 1"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/MemoryBox2/VBoxContainer/Label"]
-layout_mode = 2
-offset_top = 400.0
-offset_right = 8000.0
-offset_bottom = 1000.0
-theme_override_constants/separation = 100
-
-[node name="TextureButton" type="TextureButton" parent="UI/MemoryBox2/VBoxContainer/Label/HBoxContainer"]
-custom_minimum_size = Vector2(600, 600)
-layout_mode = 2
-texture_normal = ExtResource("25_vog8u")
-stretch_mode = 0
-
 [node name="Main" type="Node2D" parent="."]
 
 [node name="Map" type="Node2D" parent="." node_paths=PackedStringArray("BaseGround", "Stand", "FogOfWar")]
 position = Vector2(-8, -8)
-script = ExtResource("3_0xujf")
-BaseGround = NodePath("BaseGround")
-Stand = NodePath("Stand")
-FogOfWar = NodePath("FogOfWar")
+script = ExtResource("28_55o6b")
+BaseGround = NodePath("Control/BaseGround")
+Stand = NodePath("Control/Stand")
+FogOfWar = NodePath("Control/FogOfWar")
 
-[node name="BaseGround" type="TileMapLayer" parent="Map"]
+[node name="Control" type="Control" parent="Map"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BaseGround" type="TileMapLayer" parent="Map/Control"]
 z_index = -100
 tile_map_data = PackedByteArray("AAACAAEAAAABAAEAAAACAAIAAAABAAEAAAADAAEAAAABAAEAAAAEAAEAAAABAAEAAAAEAAIAAAABAAEAAAACAAMAAAABAAEAAAADAAMAAAABAAEAAAAEAAMAAAABAAEAAAADAAIAAAABAAEAAAAFAAMAAAABAAEAAAAGAAEAAAABAAEAAAAGAAIAAAABAAEAAAAGAAMAAAABAAEAAAAHAAEAAAABAAEAAAAHAAIAAAABAAEAAAAHAAMAAAABAAEAAAACAAQAAAABAAEAAAADAAQAAAABAAEAAAAEAAQAAAABAAEAAAAFAAQAAAABAAEAAAAGAAQAAAABAAEAAAAHAAQAAAABAAEAAAACAAAAAAACAAUAAAADAAAAAAACAAUAAAAEAAAAAAACAAUAAAAFAAAAAAACAAUAAAAGAAAAAAACAAUAAAAHAAAAAAACAAUAAAAIAAAAAAACAAUAAAALAAAAAAACAAUAAAALAAEAAAABAAEAAAALAAIAAAABAAAAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAAKAAYAAAABAAEAAAAJAAYAAAABAAEAAAAIAAYAAAACAAUAAAAHAAYAAAACAAUAAAAGAAYAAAACAAUAAAAFAAYAAAACAAUAAAAEAAYAAAACAAUAAAADAAYAAAACAAUAAAACAAYAAAACAAUAAAABAAYAAAACAAUAAAAAAAYAAAACAAUAAAAAAAAAAAACAAUAAAAAAAEAAAACAAUAAAABAAAAAAACAAUAAAABAAEAAAABAAEAAAABAAIAAAABAAEAAAABAAMAAAABAAEAAAABAAQAAAABAAEAAAABAAUAAAABAAEAAAAAAAUAAAACAAUAAAAAAAQAAAACAAUAAAAAAAMAAAACAAUAAAAAAAIAAAACAAUAAAACAAUAAAABAAEAAAADAAUAAAABAAEAAAAEAAUAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAQAAAACAAUAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAAKAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAMAAAABAAEAAAAJAAIAAAACAAMAAAAJAAEAAAABAAEAAAAJAAAAAAACAAUAAAAIAAEAAAACAAUAAAAIAAIAAAACAAUAAAAIAAMAAAACAAUAAAAKAAIAAAABAAAAAAAKAAEAAAABAAEAAAAKAAAAAAACAAUAAAAKAAMAAAABAAEAAAAMAAEAAAABAAEAAAAMAAIAAAACAAAAAAAMAAMAAAADAAAAAAAMAAAAAAACAAUAAAAMAAUAAAACAAEAAAAMAAQAAAACAAEAAAAMAAYAAAAAAAEAAAAFAAIAAAABAAEAAAAFAAEAAAABAAEAAAANAAEAAAABAAEAAAANAAMAAAABAAAAAAANAAIAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAANAAYAAAABAAEAAAANAAAAAAACAAUAAAARAA8AAAAMAAIAAAARAA4AAAAGAAAAAAARAA0AAAABAAEAAAARAAwAAAABAAEAAAARAAsAAAABAAAAAAARAAoAAAABAAEAAAARAAkAAAABAAEAAAARAAgAAAAGAAIAAAARAAcAAAAMAAEAAAARAAYAAAAHAAEAAAARAAUAAAAHAAEAAAAQAA8AAAAHAAAAAAAQAA4AAAABAAEAAAAQAA0AAAABAAEAAAAQAAwAAAABAAEAAAAQAAsAAAABAAAAAAAQAAoAAAABAAEAAAAQAAkAAAABAAEAAAAQAAgAAAABAAEAAAAQAAcAAAAHAAIAAAAQAAYAAAAHAAEAAAAQAAUAAAAHAAEAAAAPAA8AAAAHAAAAAAAPAA4AAAABAAEAAAAPAA0AAAABAAEAAAAPAAwAAAABAAEAAAAPAAsAAAABAAAAAAAPAAoAAAABAAEAAAAPAAkAAAABAAEAAAAPAAgAAAABAAEAAAAPAAcAAAAGAAIAAAAPAAYAAAAMAAEAAAAPAAUAAAAHAAEAAAAOAA8AAAAMAAAAAAAOAA4AAAACAAIAAAAOAA0AAAAAAAEAAAAOAAwAAAAAAAEAAAAOAAsAAAAEAAEAAAAOAAoAAAABAAEAAAAOAAkAAAABAAEAAAAOAAgAAAABAAEAAAAOAAcAAAABAAEAAAAOAAYAAAAGAAIAAAAOAAUAAAAGAAEAAAANAA8AAAAIAAQAAAANAA4AAAAAAAAAAAANAA0AAAABAAEAAAANAAwAAAABAAEAAAANAAsAAAABAAAAAAANAAoAAAABAAEAAAANAAkAAAABAAEAAAANAAgAAAABAAEAAAANAAcAAAABAAEAAAAMAA8AAAALAAMAAAAMAA4AAAAIAAEAAAAMAA0AAAAIAAAAAAAMAAwAAAABAAEAAAAMAAsAAAADAAEAAAAMAAoAAAAAAAEAAAAMAAkAAAAAAAEAAAAMAAgAAAAAAAEAAAAMAAcAAAACAAEAAAALAA8AAAALAAEAAAALAA4AAAAHAAEAAAALAA0AAAAHAAAAAAALAAwAAAABAAEAAAALAAsAAAABAAAAAAALAAoAAAABAAEAAAALAAkAAAABAAEAAAALAAgAAAABAAEAAAALAAcAAAABAAEAAAAKAA8AAAAHAAEAAAAKAA4AAAAHAAEAAAAKAA0AAAAHAAAAAAAKAAwAAAABAAEAAAAKAAsAAAABAAAAAAAKAAoAAAABAAEAAAAKAAkAAAABAAEAAAAKAAgAAAABAAEAAAAKAAcAAAABAAEAAAAJAA8AAAAHAAEAAAAJAA4AAAAHAAEAAAAJAA0AAAALAAIAAAAJAAwAAAAIAAAAAAAJAAsAAAABAAIAAAAJAAoAAAAIAAIAAAAJAAkAAAAIAAEAAAAJAAgAAAAIAAEAAAAJAAcAAAAIAAAAAAAIAA8AAAAHAAEAAAAIAA4AAAAHAAEAAAAIAA0AAAAHAAEAAAAIAAwAAAAOAAIAAAAIAAsAAAAHAAQAAAAIAAoAAAAOAAEAAAAIAAkAAAAHAAEAAAAIAAgAAAAHAAEAAAAIAAcAAAAHAAAAAAAHAA8AAAAHAAEAAAAHAA4AAAAHAAEAAAAHAA0AAAAMAAIAAAAHAAwAAAAGAAAAAAAHAAsAAAABAAIAAAAHAAoAAAAHAAIAAAAHAAkAAAAHAAEAAAAHAAgAAAAHAAEAAAAHAAcAAAAHAAAAAAAGAA8AAAAHAAEAAAAGAA4AAAAHAAEAAAAGAA0AAAAHAAAAAAAGAAwAAAABAAEAAAAGAAsAAAABAAAAAAAGAAoAAAAHAAIAAAAGAAkAAAAHAAEAAAAGAAgAAAAHAAEAAAAGAAcAAAAHAAAAAAAFAA8AAAAGAAEAAAAFAA4AAAAGAAEAAAAFAA0AAAAGAAAAAAAFAAwAAAACAAIAAAAFAAsAAAAAAAAAAAAFAAoAAAAGAAIAAAAFAAkAAAAMAAEAAAAFAAgAAAAHAAEAAAAFAAcAAAAHAAAAAAAEAA8AAAABAAEAAAAEAA4AAAABAAEAAAAEAA0AAAABAAEAAAAEAAwAAAABAAAAAAAEAAsAAAABAAEAAAAEAAoAAAABAAEAAAAEAAkAAAAHAAIAAAAEAAgAAAAHAAEAAAAEAAcAAAAHAAAAAAAZABYAAAACAAUAAAAZABUAAAACAAUAAAAZABQAAAACAAUAAAAZABMAAAACAAUAAAAZABIAAAACAAUAAAAZABEAAAACAAUAAAAZABAAAAACAAUAAAAZAA8AAAACAAUAAAAZAA4AAAACAAUAAAAZAA0AAAACAAUAAAAZAAwAAAACAAUAAAAZAAsAAAACAAUAAAAZAAoAAAACAAUAAAAZAAkAAAACAAUAAAAZAAgAAAACAAUAAAAZAAcAAAACAAUAAAAZAAYAAAACAAUAAAAZAAUAAAACAAUAAAAZAAQAAAACAAUAAAAZAAMAAAACAAUAAAAZAAIAAAACAAUAAAAZAAEAAAACAAUAAAAZAAAAAAACAAUAAAAYABYAAAACAAUAAAAYABUAAAABAAEAAAAYABQAAAABAAEAAAAYABMAAAABAAEAAAAYABIAAAABAAEAAAAYABEAAAABAAEAAAAYABAAAAABAAEAAAAYAA8AAAABAAEAAAAYAA4AAAABAAEAAAAYAA0AAAABAAEAAAAYAAwAAAABAAEAAAAYAAsAAAABAAEAAAAYAAoAAAABAAEAAAAYAAkAAAABAAEAAAAYAAgAAAABAAEAAAAYAAcAAAABAAEAAAAYAAYAAAABAAEAAAAYAAUAAAABAAEAAAAYAAQAAAABAAEAAAAYAAMAAAABAAEAAAAYAAIAAAABAAEAAAAYAAEAAAABAAEAAAAYAAAAAAACAAUAAAAXABYAAAACAAUAAAAXABUAAAABAAEAAAAXABQAAAABAAEAAAAXABMAAAABAAEAAAAXABIAAAABAAEAAAAXABEAAAABAAEAAAAXABAAAAABAAEAAAAXAA8AAAADAAMAAAAXAA4AAAAAAAEAAAAXAA0AAAAAAAEAAAAXAAwAAAAEAAAAAAAXAAsAAAACAAEAAAAXAAoAAAACAAEAAAAXAAkAAAAAAAEAAAAXAAgAAAAAAAMAAAAXAAcAAAABAAEAAAAXAAYAAAABAAEAAAAXAAUAAAABAAEAAAAXAAQAAAABAAEAAAAXAAMAAAABAAEAAAAXAAIAAAABAAEAAAAXAAEAAAABAAEAAAAXAAAAAAACAAUAAAAWABYAAAACAAUAAAAWABUAAAABAAEAAAAWABQAAAABAAEAAAAWABMAAAABAAEAAAAWABIAAAABAAEAAAAWABEAAAABAAEAAAAWABAAAAABAAEAAAAWAA8AAAABAAEAAAAWAA4AAAABAAEAAAAWAA0AAAABAAEAAAAWAAwAAAABAAAAAAAWAAsAAAABAAEAAAAWAAoAAAAIAAIAAAAWAAkAAAAIAAEAAAAWAAgAAAAIAAAAAAAWAAcAAAABAAEAAAAWAAYAAAABAAEAAAAWAAUAAAABAAEAAAAWAAQAAAABAAEAAAAWAAMAAAABAAEAAAAWAAIAAAABAAEAAAAWAAEAAAABAAEAAAAWAAAAAAACAAUAAAAVABYAAAACAAUAAAAVABUAAAABAAEAAAAVABQAAAABAAEAAAAVABMAAAAIAAIAAAAVABIAAAAIAAEAAAAVABEAAAAIAAEAAAAVABAAAAAIAAEAAAAVAA8AAAAIAAEAAAAVAA4AAAAIAAEAAAAVAA0AAAAIAAAAAAAVAAwAAAAAAAIAAAAVAAsAAAACAAAAAAAVAAoAAAAHAAIAAAAVAAkAAAAHAAEAAAAVAAgAAAALAAIAAAAVAAcAAAAIAAEAAAAVAAYAAAAIAAAAAAAVAAUAAAABAAEAAAAVAAQAAAABAAEAAAAVAAMAAAABAAEAAAAVAAIAAAABAAEAAAAVAAEAAAABAAEAAAAVAAAAAAACAAUAAAAUABYAAAACAAUAAAAUABUAAAABAAEAAAAUABQAAAABAAEAAAAUABMAAAAHAAIAAAAUABIAAAAHAAEAAAAUABEAAAAHAAEAAAAUABAAAAAHAAEAAAAUAA8AAAAHAAEAAAAUAA4AAAAHAAEAAAAUAA0AAAAHAAAAAAAUAAwAAAABAAEAAAAUAAsAAAABAAIAAAAUAAoAAAAGAAIAAAAUAAkAAAAMAAEAAAAUAAgAAAAHAAEAAAAUAAcAAAAHAAEAAAAUAAYAAAALAAIAAAAUAAUAAAAIAAAAAAAUAAQAAAABAAEAAAAUAAMAAAABAAEAAAAUAAIAAAABAAEAAAAUAAEAAAABAAEAAAAUAAAAAAACAAUAAAATABYAAAACAAUAAAATABUAAAABAAEAAAATABQAAAABAAEAAAATABMAAAAHAAIAAAATABIAAAAHAAEAAAATABEAAAAHAAEAAAATABAAAAAHAAEAAAATAA8AAAAHAAEAAAATAA4AAAAHAAEAAAATAA0AAAAHAAAAAAATAAwAAAABAAEAAAATAAsAAAABAAAAAAATAAoAAAABAAEAAAATAAkAAAAGAAIAAAATAAgAAAAMAAEAAAATAAcAAAAHAAEAAAATAAYAAAAHAAEAAAATAAUAAAALAAIAAAATAAQAAAAIAAAAAAATAAMAAAABAAEAAAATAAIAAAABAAEAAAATAAEAAAABAAEAAAATAAAAAAACAAUAAAASABYAAAACAAUAAAASABUAAAABAAEAAAASABQAAAABAAEAAAASABMAAAAHAAIAAAASABIAAAAHAAEAAAASABEAAAAHAAEAAAASABAAAAAHAAEAAAASAA8AAAAHAAEAAAASAA4AAAAMAAIAAAASAA0AAAAGAAAAAAASAAwAAAABAAEAAAASAAsAAAABAAAAAAASAAoAAAABAAEAAAASAAkAAAABAAEAAAASAAgAAAAHAAIAAAASAAcAAAAHAAEAAAASAAYAAAAHAAEAAAASAAUAAAAHAAEAAAASAAQAAAAHAAAAAAASAAMAAAABAAEAAAASAAIAAAABAAEAAAASAAEAAAABAAEAAAASAAAAAAACAAUAAAARABYAAAACAAUAAAARABUAAAABAAEAAAARABQAAAABAAEAAAARABMAAAAHAAIAAAARABIAAAAHAAEAAAARABEAAAAHAAEAAAARABAAAAAHAAEAAAARAAQAAAAHAAAAAAARAAMAAAABAAEAAAARAAIAAAABAAEAAAARAAEAAAABAAEAAAARAAAAAAACAAUAAAAQABYAAAACAAUAAAAQABUAAAABAAEAAAAQABQAAAABAAEAAAAQABMAAAAHAAIAAAAQABIAAAAHAAEAAAAQABEAAAAHAAEAAAAQABAAAAAHAAEAAAAQAAQAAAAHAAAAAAAQAAMAAAACAAIAAAAQAAIAAAAAAAMAAAAQAAEAAAABAAEAAAAQAAAAAAACAAUAAAAPABYAAAACAAUAAAAPABUAAAABAAEAAAAPABQAAAABAAEAAAAPABMAAAAGAAIAAAAPABIAAAAGAAEAAAAPABEAAAAGAAEAAAAPABAAAAAMAAEAAAAPAAQAAAAHAAAAAAAPAAMAAAABAAIAAAAPAAIAAAABAAEAAAAPAAEAAAABAAEAAAAPAAAAAAACAAUAAAAOABYAAAACAAUAAAAOABUAAAABAAEAAAAOABQAAAABAAMAAAAOABMAAAABAAEAAAAOABIAAAABAAEAAAAOABEAAAABAAEAAAAOABAAAAAGAAIAAAAOAAQAAAAGAAAAAAAOAAMAAAABAAIAAAAOAAIAAAABAAEAAAAOAAEAAAABAAEAAAAOAAAAAAACAAUAAAANABYAAAACAAUAAAANABUAAAABAAEAAAANABQAAAAAAAIAAAANABIAAAACAAEAAAANABEAAAAAAAEAAAANABAAAAACAAEAAAAMABYAAAACAAUAAAAMABUAAAABAAEAAAAMABQAAAABAAEAAAAMABIAAAABAAEAAAAMABEAAAABAAEAAAAMABAAAAABAAEAAAALABYAAAACAAUAAAALABUAAAABAAEAAAALABMAAAABAAAAAAALABIAAAABAAEAAAALABEAAAABAAEAAAALABAAAAAIAAIAAAAKABYAAAACAAUAAAAKABUAAAABAAEAAAAKABMAAAABAAAAAAAKABIAAAABAAEAAAAKABEAAAAIAAIAAAAKABAAAAALAAEAAAAJABYAAAACAAUAAAAJABQAAAABAAEAAAAJABMAAAABAAIAAAAJABIAAAABAAEAAAAJABEAAAAHAAIAAAAJABAAAAAHAAEAAAAIABYAAAACAAUAAAAIABQAAAABAAEAAAAIABMAAAABAAIAAAAIABIAAAABAAEAAAAIABEAAAAHAAIAAAAIABAAAAAHAAEAAAAHABYAAAACAAUAAAAHABQAAAABAAEAAAAHABMAAAACAAMAAAAHABIAAAABAAEAAAAHABEAAAAHAAIAAAAHABAAAAAHAAEAAAAGABYAAAACAAUAAAAGABQAAAABAAEAAAAGABMAAAABAAEAAAAGABIAAAABAAEAAAAGABEAAAAGAAIAAAAGABAAAAAMAAEAAAAFABYAAAACAAUAAAAFABMAAAABAAEAAAAFABIAAAABAAEAAAAFABEAAAABAAEAAAAFABAAAAAGAAIAAAAEABYAAAACAAUAAAAEABQAAAABAAEAAAAEABMAAAABAAEAAAAEABIAAAABAAEAAAAEABEAAAABAAEAAAAEABAAAAABAAEAAAADABYAAAACAAUAAAADABUAAAABAAEAAAADABQAAAABAAEAAAADABMAAAABAAEAAAADABIAAAABAAEAAAADABEAAAADAAMAAAADABAAAAACAAEAAAADAA8AAAAAAAEAAAADAA4AAAAAAAEAAAADAA0AAAAAAAEAAAADAAwAAAADAAAAAAADAAsAAAAAAAMAAAADAAoAAAABAAEAAAADAAkAAAAGAAIAAAADAAgAAAAMAAQAAAADAAcAAAAGAAAAAAACABYAAAACAAUAAAACABUAAAABAAEAAAACABQAAAABAAEAAAACABMAAAABAAEAAAACABIAAAABAAEAAAACABEAAAABAAEAAAACABAAAAABAAEAAAACAA8AAAABAAEAAAACAA4AAAABAAEAAAACAA0AAAABAAEAAAACAAwAAAABAAEAAAACAAsAAAABAAEAAAACAAoAAAABAAEAAAACAAkAAAABAAEAAAACAAgAAAAGAAMAAAACAAcAAAABAAEAAAABABYAAAACAAUAAAABABUAAAABAAEAAAABABQAAAABAAEAAAABABMAAAABAAEAAAABABIAAAABAAEAAAABABEAAAABAAEAAAABABAAAAABAAEAAAABAA8AAAABAAEAAAABAA4AAAABAAEAAAABAA0AAAABAAEAAAABAAwAAAABAAEAAAABAAsAAAABAAEAAAABAAoAAAABAAEAAAABAAkAAAABAAEAAAABAAgAAAABAAEAAAABAAcAAAABAAEAAAAAABYAAAACAAUAAAAAABUAAAACAAUAAAAAABQAAAACAAUAAAAAABMAAAACAAUAAAAAABIAAAACAAUAAAAAABEAAAACAAUAAAAAABAAAAACAAUAAAAAAA8AAAACAAUAAAAAAA4AAAACAAUAAAAAAA0AAAACAAUAAAAAAAwAAAACAAUAAAAAAAsAAAACAAUAAAAAAAoAAAACAAUAAAAAAAkAAAACAAUAAAAAAAgAAAACAAUAAAAAAAcAAAACAAUAAAANABMAAAAEAAAAAAAMABMAAAABAAAAAAALABQAAAABAAEAAAAJABUAAAABAAEAAAAKABQAAAABAAEAAAAHABUAAAABAAEAAAAIABUAAAABAAEAAAAGABUAAAABAAEAAAAFABUAAAABAAEAAAAEABUAAAABAAEAAAAFABQAAAABAAEAAAA=")
-tile_set = ExtResource("2_8tnvb")
+tile_set = ExtResource("29_8qroj")
 
-[node name="FogOfWar" type="TileMapLayer" parent="Map"]
+[node name="FogOfWar" type="TileMapLayer" parent="Map/Control"]
 tile_set = SubResource("TileSet_4sf5t")
 
-[node name="Stand" type="TileMapLayer" parent="Map"]
+[node name="Stand" type="TileMapLayer" parent="Map/Control"]
 z_index = -99
 tile_map_data = PackedByteArray("AAAIAAUAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_nxf1r")
 
-[node name="LayerItemDropped" type="Node2D" parent="Map"]
+[node name="LayerItemDropped" type="Node2D" parent="Map/Control"]
 z_index = -50
-script = ExtResource("6_q4vul")
-droppedScene = ExtResource("7_gsdxd")
+script = ExtResource("32_1kp8j")
+droppedScene = ExtResource("33_1j847")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 position = Vector2(67, 117)
-script = ExtResource("8_d456v")
+script = ExtResource("34_dxvvt")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 visible = false
 anchor_mode = 0
 
 [node name="HighlightManager" type="Node2D" parent="."]
-script = ExtResource("21_cbrmb")
-highlightBlue = ExtResource("22_rp6l0")
-highlightGreen = ExtResource("23_6pfom")
-highlightRed = ExtResource("24_sumwq")
-highlightYellow = ExtResource("25_h2onj")
+script = ExtResource("35_hrpic")
+highlightBlue = ExtResource("36_8udl4")
+highlightGreen = ExtResource("37_6txxt")
+highlightRed = ExtResource("38_qt77m")
+highlightYellow = ExtResource("39_4tlm7")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 27.0
@@ -857,13 +860,13 @@ offset_bottom = 73.0
 pivot_offset = Vector2(20, 0)
 
 [node name="Fsm" type="Node" parent="." node_paths=PackedStringArray("InventoryBos", "Cab", "Usbb")]
-script = ExtResource("26_7dti5")
+script = ExtResource("40_sbq4v")
 InventoryBos = NodePath("../UI/InventoryBox")
 Cab = NodePath("../UI/CombatAbilityBox")
 Usbb = NodePath("../UI/UaSkillPointBox")
 
 [node name="SpriteManager" type="Node" parent="."]
-script = ExtResource("27_ogw32")
+script = ExtResource("41_2ujow")
 
 [node name="Scene" type="Node" parent="."]
-script = ExtResource("36_5elg3")
+script = ExtResource("42_d56ol")

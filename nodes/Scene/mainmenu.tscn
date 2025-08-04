@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://cslun0ygwlodq"]
 
 [ext_resource type="Script" uid="uid://bwf2ipfqc7iok" path="res://Cscript/UI/Mainmenu.cs" id="1_giku7"]
-[ext_resource type="Texture2D" uid="uid://dkwawkraos6qs" path="res://assets/Sprites/rumia.png" id="2_b8vaj"]
-[ext_resource type="Texture2D" uid="uid://capy2552dcngi" path="res://assets/Sprites/marisa.png" id="3_pbe7u"]
-[ext_resource type="Texture2D" uid="uid://dilke75bhdygu" path="res://assets/Sprites/cirno.png" id="4_vy6a5"]
+[ext_resource type="Texture2D" uid="uid://dkwawkraos6qs" path="res://Assets/Sprites/rumia.png" id="2_b8vaj"]
+[ext_resource type="Texture2D" uid="uid://capy2552dcngi" path="res://Assets/Sprites/marisa.png" id="3_pbe7u"]
+[ext_resource type="Texture2D" uid="uid://dilke75bhdygu" path="res://Assets/Sprites/cirno.png" id="4_vy6a5"]
 
 [node name="Mainmenu" type="Control" node_paths=PackedStringArray("label")]
 layout_mode = 3

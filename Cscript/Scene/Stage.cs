@@ -11,7 +11,7 @@ public partial class Stage : Node
     }
     public static Texture2D L(string name)
     {
-        return GD.Load<Texture2D>($"res://assets/Portraits/{name}.png");
+        return GD.Load<Texture2D>($"res://Assets/Portraits/{name}.png");
     }
     public override void _UnhandledInput(InputEvent @event)
     {

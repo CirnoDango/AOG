@@ -351,6 +351,8 @@ public class Map
             {
                 j++;
                 it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
+                if (it is SkillItem si)
+                    si.RandomSummon();
                 if (v + it.Weight - 1 < value)
                 {
                     c.items.Add(new ItemInstance(it));

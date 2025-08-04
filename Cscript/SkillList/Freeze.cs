@@ -27,7 +27,7 @@ public class Icefall : Skill
         _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 1), 0, 2, 10, "Needle", ColorBullet.Ice);
         _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2, 10, "Needle", ColorBullet.Ice);
         _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0,-1), 0, 2, 10, "Needle", ColorBullet.Ice);
-        Barrage.Test().Activate(sc);
+        Barrage.Test().Execute(sc);
         if(sc.level >= 2)
         {
             _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);

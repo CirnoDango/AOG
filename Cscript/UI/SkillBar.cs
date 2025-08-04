@@ -138,7 +138,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         {
             // 通知技能目标层开始选择目标
             HighlightManager.StartTargeting(si);
-            G.I.Fsm.ChangeState(Fsm.playerSkillTargetState);
+            G.I.Fsm.ChangeState(Fsm.PlayerSkillTargetState);
         } 
     }
 

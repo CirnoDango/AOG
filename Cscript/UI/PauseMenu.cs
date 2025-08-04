@@ -25,14 +25,14 @@ public partial class PauseMenu : ColorRect
             if (key == Key.Escape)
             {
                 Show();
-                G.I.Fsm.ChangeState(Fsm.talkState);
+                G.I.Fsm.ChangeState(Fsm.TalkState);
             }
         }
     }
     private void OnResumePressed()
     {
         Hide();
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
     }
     private void OnRestartPressed()
     {

@@ -85,16 +85,13 @@ public class MagicPotion : SkillItem
 
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
-        if(parameters != null)
+        if (parameters.TryGetValue("MpRecoverPercent", out var val) && val is int mp)
         {
-            if (parameters.TryGetValue("mp", out var val) && val is int mp)
-            {
-                MpRecoverPercent = mp;
-            }
+            MpRecoverPercent = mp;
         }
         Skill = new Instance(this);
     }
-    
+
     private class Instance : Skill, ISkillInstance
     {
         private readonly int _mp;

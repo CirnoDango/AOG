@@ -23,6 +23,7 @@ public partial class Ua : VBoxContainer, IRegisterToG
 
     public override void _Ready()
     {
+        //C:\Users\abcde\Documents\gensokyo-simulator\Cscript\Enemy\Ua.cs
         // 初始化字典
         buttonHints = new Dictionary<Button, string>
         {

@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://ye85afnrc713"]
+
+[ext_resource type="Script" uid="uid://dxxv1k0vjngs0" path="res://Cscript/UI/BarrageSetBox.cs" id="1_jmlgt"]
+
+[node name="Label" type="VBoxContainer" node_paths=PackedStringArray("FBox")]
+offset_right = 8000.0
+offset_bottom = 20.0
+script = ExtResource("1_jmlgt")
+FBox = NodePath("FlowContainer")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_font_sizes/font_size = 360
+text = "Bullet Box 1"
+vertical_alignment = 1
+
+[node name="FlowContainer" type="FlowContainer" parent="."]
+custom_minimum_size = Vector2(8000, 400)
+layout_mode = 2

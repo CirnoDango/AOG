@@ -14,7 +14,7 @@ public partial class CombatAbilityBox : Control
     public Label Info3;
     public void Update(Unit unit)
     {
-        HeadPicture.Texture =(Texture2D)GD.Load($"res://assets/Portraits/Fix/{unit.Name}.png");
+        HeadPicture.Texture =(Texture2D)GD.Load($"res://Assets/Portraits/Fix/{unit.Name}.png");
         string text1 = 
 $@"{(unit.TrName)} 
 HP:{unit.CurrentHp:F0}/{unit.MaxHp:F0}

@@ -23,7 +23,7 @@ public abstract class Status
         {
             var s = new TextureRect
             {
-                Texture = (Texture2D)GD.Load($"res://assets/Status/{Name}.png"),
+                Texture = (Texture2D)GD.Load($"res://Assets/Status/{Name}.png"),
                 CustomMinimumSize = new Vector2(400, 400)
             };
             var b = new TextureRect
@@ -51,7 +51,7 @@ public abstract class Status
             G.I.PlayerStatusBar.StatusRow.AddChild(s);
             G.I.PlayerStatusBar.StatusImages.Add(this, s);
         }
-        var texture = (Texture2D)GD.Load($"res://assets/Status/{Name}Map.png");
+        var texture = (Texture2D)GD.Load($"res://Assets/Status/{Name}Map.png");
         if (texture == null)
             return;
         var sprite = new Sprite2D

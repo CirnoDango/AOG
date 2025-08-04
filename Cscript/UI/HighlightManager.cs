@@ -62,7 +62,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
             }
             else
             {
-                G.I.Fsm.ChangeState(Fsm.playerSkillState);
+                G.I.Fsm.ChangeState(Fsm.PlayerSkillState);
             }
             EndTargeting();
 

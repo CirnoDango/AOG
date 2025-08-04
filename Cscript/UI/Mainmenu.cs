@@ -46,7 +46,7 @@ public partial class Mainmenu : Control
         foreach (Node child in GameRoot.GetChildren())
             child.QueueFree();
 
-        var path = $"res://nodes/{selectedStage}.tscn";
+        var path = $"res://Nodes/{selectedStage}.tscn";
         var packedScene = GD.Load<PackedScene>(path);
         var instance = packedScene.Instantiate();
         GameRoot.AddChild(instance);

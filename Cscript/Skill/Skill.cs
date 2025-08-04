@@ -128,7 +128,7 @@ public abstract class Skill
         else
             RealTimeCost /= (sc.User.Ua.SpeedGlobal * sc.User.Ua.SpeedCombat / 10000);
         GameTime.Update(sc.User, RealTimeCost);
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
     }
     public virtual void Activate(SkillContext sc, SkillInstance si = null)
     {

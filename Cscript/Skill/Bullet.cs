@@ -29,7 +29,7 @@ public class Bullet
         DistanceLeft = maxDistance;
         Shape = shape;
         this.color = color;
-        image = GetImage();
+        image = GetImage(color, shape);
         image.Scale /= 2;
         creator = user;
         skill = skil;
@@ -55,7 +55,7 @@ public class Bullet
     /// </summary>
     public List<Vector2I> UpdateGrid(float deltaTime)
     {
-        List<Vector2I> newGrids = new();
+        List<Vector2I> newGrids = [];
 
         if (DistanceLeft <= 0)
             return newGrids;
@@ -90,9 +90,9 @@ public class Bullet
         Position = newPos;
         return newGrids;
     }
-    public Sprite2D GetImage()
+    public static Sprite2D GetImage(ColorBullet color, string Shape)
     {
-        var atlas = GD.Load<Texture2D>($"res://assets/Bullets/{Shape}.png");
+        var atlas = GD.Load<Texture2D>($"res://Assets/Bullets/{Shape}.png");
         if (atlas == null)
             return null; // 如果图像不存在，直接返回 null
 

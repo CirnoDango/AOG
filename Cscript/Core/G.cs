@@ -11,6 +11,7 @@ public partial class G : Node
     public InventoryBox InventoryBox;
     public MemoryBox MemoryBox;
     public TileMapAllLayer TileMapAllLayer { get;  set; }
+    public BarrageBox BarrageBox {  get; set; }
     public Cave Cave{ get;  set;}
     public DialogBox DialogBox{ get;  set;}
     public HighlightManager HighlightManager{ get;  set;}
@@ -51,6 +52,7 @@ public partial class G : Node
         InventoryBox = null;
         MemoryBox = null;
         TileMapAllLayer = null;
+        BarrageBox = null;
         Cave = null;
         DialogBox = null;
         HighlightManager = null;

@@ -160,7 +160,7 @@ public static class EnemyLoader
     public static List<EnemyData> enemyDatas;
     public static void LoadEnemies()
     {
-        string jsonPath = "Cscript/Enemy/Enemy.json";
+        string jsonPath = "Data/Enemy.json";
         var file = FileAccess.Open(jsonPath, FileAccess.ModeFlags.Read);
         if (file == null)
         {

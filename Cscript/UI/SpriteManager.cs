@@ -13,7 +13,7 @@ public partial class SpriteManager : Node
     public static void LoadEnemy(Unit unit)
     {
         string name = unit.Name;
-        var texture = GD.Load<Texture2D>($"res://assets/Sprites/{name}.png");
+        var texture = GD.Load<Texture2D>($"res://Assets/Sprites/{name}.png");
         var sprite = new Sprite2D { Texture = texture };
         Vector2 originalSize = texture.GetSize(); // 原图尺寸
         Vector2 targetSize = new Vector2(15, 15); // 显示目标尺寸
@@ -37,9 +37,9 @@ public partial class SpriteManager : Node
                 continue;
             Texture2D texture;
             if (skill.SkillGroup == "Item")
-                texture = GD.Load<Texture2D>($"res://assets/Item/{skill.Name}.png");
+                texture = GD.Load<Texture2D>($"res://Assets/Item/{skill.Name}.png");
             else
-                texture = GD.Load<Texture2D>($"res://assets/Skill/{skill.SkillGroup}_{skill.Name}.png");
+                texture = GD.Load<Texture2D>($"res://Assets/Skill/{skill.SkillGroup}_{skill.Name}.png");
             skill.Texture = texture;
         }
     }

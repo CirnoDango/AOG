@@ -42,15 +42,15 @@ public partial class CaveD : Node
             { "dangoWater", 0.5f },
             { "dangoFist", 0.2f },
         };
-        Fsm.startState.OnEnd += Load;
-        G.I.Fsm.ChangeState(Fsm.startState);
+        Fsm.StartState.OnEnd += Load;
+        G.I.Fsm.ChangeState(Fsm.StartState);
         Floor3.AfterEnter += Createboss;
     }
     public void Createboss()
     {
         var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
         boss.inventory.AddItem(Item.GetItemName("DangoLight"));
-        GameEvents.OnEnemyKilled += (Unit enemy) =>
+        GameEvents.OnEnemyKilled += enemy =>
         {
             if (enemy == boss)
             {
@@ -76,16 +76,21 @@ public partial class CaveD : Node
         Floor1.Exit = Floor2;
         Floor2.Exit = Floor3;
         Scene.Enter(Floor1);
-        Floor1.SummonChest(10, 3);
+        Floor1.SummonChest(40, 30);
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "mp", 30 } }));
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "mp", 60 } }));
+        Player.PlayerUnit.inventory.AddItem(
+            Item.GetItemName("BarrageSet", new Dictionary<string, object> { { "barrage", Barrage.Test() } }));
+        Player.PlayerUnit.inventory.AddItem(
+            Item.GetItemName("BarrageSet", new Dictionary<string, object> { { "barrage", Barrage.Test() } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("AddDamage"));
     }
     
     public async void Victory()
     {
-        G.I.Fsm.ChangeState(Fsm.talkState);
+        G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
         G.I.DialogBox.ShowDialog([
             new("露米娅", LoadPortrait("rumia_break_redface_cry"),
@@ -107,7 +112,7 @@ public partial class CaveD : Node
             new("", LoadPortrait("null"),
             "恭喜获得胜利！")
         ]); await Click();
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
 
@@ -118,7 +123,7 @@ public partial class CaveD : Node
     }
     private static Texture2D LoadPortrait(string name)
     {
-        return GD.Load<Texture2D>($"res://assets/Portraits/{name}.png");
+        return GD.Load<Texture2D>($"res://Assets/Portraits/{name}.png");
     }
     public override void _UnhandledInput(InputEvent @event)
     {

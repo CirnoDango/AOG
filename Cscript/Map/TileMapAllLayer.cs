@@ -15,5 +15,6 @@ public partial class TileMapAllLayer : Node, IRegisterToG
     public void RegisterToG(G g)
     {
         g.TileMapAllLayer = this;
+        ((Control)GetNode("Control")).Visible = true;
     }
 }

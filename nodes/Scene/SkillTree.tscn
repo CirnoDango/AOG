@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://bh8gprhtsdnqw"]
 
 [ext_resource type="Script" uid="uid://cwir6u230fcmm" path="res://Cscript/UI/SkillTree.cs" id="1_hql48"]
-[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://assets/UI/skillbox.png" id="2_q2qhn"]
-[ext_resource type="Texture2D" uid="uid://v0kosev3arwp" path="res://assets/Skill/Freeze_Icefall.png" id="3_n6bwm"]
-[ext_resource type="Texture2D" uid="uid://blcs0160y4i8q" path="res://assets/UI/spellbox.png" id="4_72qef"]
+[ext_resource type="Texture2D" uid="uid://b75tmdfv0r5lb" path="res://Assets/UI/skillbox.png" id="2_q2qhn"]
+[ext_resource type="Texture2D" uid="uid://v0kosev3arwp" path="res://Assets/Skill/Freeze_Icefall.png" id="3_n6bwm"]
+[ext_resource type="Texture2D" uid="uid://blcs0160y4i8q" path="res://Assets/UI/spellbox.png" id="4_72qef"]
 
 [node name="SkillTree" type="VBoxContainer" node_paths=PackedStringArray("title", "skillButtons", "levelLabels", "tr")]
 script = ExtResource("1_hql48")

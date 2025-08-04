@@ -20,12 +20,12 @@ public partial class DialogBox : Control, IRegisterToG
     }
     public static void SShow()
     {
-        G.I.Fsm.ChangeState(Fsm.talkState);
+        G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
     }
     public static void SHide()
     {
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
    

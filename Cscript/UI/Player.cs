@@ -11,10 +11,11 @@ public partial class Player : CharacterBody2D, IRegisterToG
     public int SkillPoint = 80;
     public static Dictionary<Key, GameState> BoxEntryKeys => new()
     {
-        {Key.R,Fsm.inventoryBoxState },
-        {Key.T,Fsm.combatAbilityBoxState },
-        {Key.Y,Fsm.uaSkillBoxState },
-        {Key.U,Fsm.memoryBoxState }
+        {Key.R,Fsm.InventoryBoxState },
+        {Key.T,Fsm.CombatAbilityBoxState },
+        {Key.Y,Fsm.UaSkillBoxState },
+        {Key.U,Fsm.MemoryBoxState },
+        {Key.I,Fsm.BarrageBoxState },
     };
     // 按键到方向的映射表
     private readonly Dictionary<Key, Vector2I> MoveDirs = new()
@@ -44,7 +45,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
         if (G.I.Fsm.currentState is PlayerSkillState)
             HandlePlayerSkillInput(@event);
         else if (G.I.Fsm.currentState is InventoryState or CombatAbilityBoxState or UaSkillBoxState
-             or MemoryBoxState)
+             or MemoryBoxState or BarrageBoxState)
             HandleBoxInput(@event);
     }
     public static void Init(string name, float zoom)
@@ -82,7 +83,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
             if(BoxEntryKeys.TryGetValue(key, out var entry))
             {
                 if (BoxEntryKeys[key] == G.I.Fsm.currentState)
-                    G.I.Fsm.ChangeState(Fsm.playerSkillState);
+                    G.I.Fsm.ChangeState(Fsm.PlayerSkillState);
                 else
                     G.I.Fsm.ChangeState(BoxEntryKeys[key]);
             }

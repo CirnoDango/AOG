@@ -55,8 +55,8 @@ public partial class Tutorial : Node
     public override async void _Ready()
     {
         map = G.I.TileMapAllLayer.BaseGround;
-        G.I.Fsm.ChangeState(Fsm.startState);
-        Fsm.startState.OnEnd += Init;
+        G.I.Fsm.ChangeState(Fsm.StartState);
+        Fsm.StartState.OnEnd += Init;
         await ToSignal(GetTree().CreateTimer(0.01), "timeout");
         Scene.CurrentMap.OnUnitDied += UpdateEnemy;
         Scene.CurrentMap.OnMarisaDied += TutorialEnd;
@@ -277,13 +277,13 @@ public partial class Tutorial : Node
         ]); await Click();
         EnemyAutoSummon.Update(7);
         Info.Print("[color=red]1/5波敌人已生成[/color]");
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
     public async void TutorialEnd()
     {
         G.I.DialogBox.Show();
-        G.I.Fsm.ChangeState(Fsm.talkState);
+        G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
             "对于我这个幻想乡最强，真是轻轻松松！")
@@ -301,13 +301,13 @@ public partial class Tutorial : Node
             "教程关卡就到此结束了，不过在这后面我设置了无尽的怪物生成，" +
             "您也可以试试能用琪露诺坚持多久。")
         ]); await Click();
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
     public async void Playerdied()
     {
         G.I.DialogBox.Show();
-        G.I.Fsm  .ChangeState(Fsm.talkState);
+        G.I.Fsm  .ChangeState(Fsm.TalkState);
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_hahaha"),
             "baka果然还是baka呢，不可能学得会战斗的吧")
@@ -317,7 +317,7 @@ public partial class Tutorial : Node
             "没办法，就让你投币复活一次吧")
         ]); await Click();
         Player.PlayerUnit.GetHp(200);
-        G.I.Fsm.ChangeState(Fsm.updateState);
+        G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
     private TaskCompletionSource clickTcs;
@@ -329,7 +329,7 @@ public partial class Tutorial : Node
     }
     private static Texture2D LoadPortrait(string name)
     {
-        return GD.Load<Texture2D>($"res://assets/Portraits/{name}.png");
+        return GD.Load<Texture2D>($"res://Assets/Portraits/{name}.png");
     }
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -339,13 +339,6 @@ public partial class Tutorial : Node
             //clickTcs = null;
         }
     }
-
-    private async Task WaitUntil(Func<bool> condition)
-    {
-        while (!condition())
-            await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
-    }
-
     
     public void UpdateEnemy()
     {
