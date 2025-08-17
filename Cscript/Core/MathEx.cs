@@ -84,5 +84,19 @@ public static class MathEx
         } while (i < 0);
         return i;
     }
+    public static float Logistic(float zero, float x)
+    {
+        if(x > 0)
+            return (float)(2 * (1 - zero) / (1 + Math.Exp(-2 * x / (1 - zero))) + 2 * (zero - 0.5));
+        else
+            return (float)(2 * zero / (1 + Math.Exp(-2 * x / zero)));
+    }
+    public static float HalfLogistic(float x)
+    {
+        if (x > 0)
+            return 1 + x;
+        else
+            return (float)(2 / (1 + Math.Exp(-2 * x)));
+    }
 }
 

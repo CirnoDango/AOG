@@ -41,7 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://Nodes/Ui/yellow_select.tscn" id="39_4tlm7"]
 [ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="40_sbq4v"]
 [ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="41_2ujow"]
-[ext_resource type="Script" uid="uid://d06tg36jdqgng" path="res://Cscript/Scene/CaveD.cs" id="42_d56ol"]
+[ext_resource type="Script" uid="uid://bfhpgvq7eayc0" path="res://Cscript/Scene/MistyLake.cs" id="42_q8ly1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jky6x"]
 texture = ExtResource("30_txq0u")
@@ -79,6 +79,9 @@ texture = ExtResource("31_3h0l3")
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 3
+0:1/0 = 0
+0:1/0/terrain_set = 0
+0:1/0/terrain = 4
 
 [sub_resource type="TileSet" id="TileSet_nxf1r"]
 terrain_set_0/mode = 0
@@ -90,6 +93,8 @@ terrain_set_0/terrain_2/name = "ChestClosed"
 terrain_set_0/terrain_2/color = Color(0.874082, 0, 0.339996, 1)
 terrain_set_0/terrain_3/name = "ChestOpen"
 terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
+terrain_set_0/terrain_4/name = "Forest"
+terrain_set_0/terrain_4/color = Color(0.28125, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_5elg3")
 
 [node name="Node2D" type="Node2D"]
@@ -880,4 +885,4 @@ Usbb = NodePath("../UI/UaSkillPointBox")
 script = ExtResource("41_2ujow")
 
 [node name="Scene" type="Node" parent="."]
-script = ExtResource("42_d56ol")
+script = ExtResource("42_q8ly1")

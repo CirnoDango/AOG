@@ -81,7 +81,7 @@ public partial class InventoryBox : Control, IRegisterToG
 
         foreach (var item in unit.inventory.Items)
         {
-            if (!item.CanEquip || item.Template is Memory)
+            if (!item.CanEquip || item is Memory)
                 continue;
             var entry = ItemEntryScene.Instantiate<ItemEntry>();
             entry.Setup(item, (clickedItem) => {

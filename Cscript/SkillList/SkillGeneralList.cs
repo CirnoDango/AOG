@@ -82,9 +82,9 @@ public class Shoot : Skill
     public override float GetCooldown(int level) => 300;
     protected override void StartActivate(SkillContext sc)
     {
-        _ = new Bullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 1, 8, "Small", ColorBullet.DeepGreen);
-        _ = new Bullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 1.5f, 8, "Small", ColorBullet.DeepGreen);
-        _ = new Bullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 2, 8, "Small", ColorBullet.DeepGreen);
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 1, 8, "Small", ColorBullet.DeepGreen);
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 1.5f, 8, "Small", ColorBullet.DeepGreen);
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position, 2, 8, "Small", ColorBullet.DeepGreen);
     }
 }
 
@@ -110,15 +110,15 @@ public class DiyShoot : Skill
             switch (p.Mode)
             {
                 case BulletParams.ModeType.Basic:
-                    _ = new Bullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
+                    Bullet.CreateBullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
                     break;
 
                 case BulletParams.ModeType.OffsetVector:
-                    _ = new Bullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.PointOffset, p.SpeedOffset, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
+                    Bullet.CreateBullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.PointOffset, p.SpeedOffset, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
                     break;
 
                 case BulletParams.ModeType.OffsetAngle:
-                    _ = new Bullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.PointOffset, p.AngleOffsetDeg, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
+                    Bullet.CreateBullet(sc.User, this, p.Damage, sc.User.Position, sc.GridOne.Position, p.PointOffset, p.AngleOffsetDeg, p.Speed, p.MaxDistance, p.Shape, p.Color, p.Advance);
                     break;
             }
         }

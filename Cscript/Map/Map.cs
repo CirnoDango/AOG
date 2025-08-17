@@ -9,17 +9,20 @@ public class Grid : IInteractable
     public bool IsWalkable;
     public bool IsTransparent;
     public bool IsEmpty => IsWalkable && unit == null && TerrainStand == "";
-    public string TerrainBaseGround;
-    public string TerrainStand = "";
-    public string TerrainFogOfWar;
-    public Grid(Vector2I position, string tBaseGround, string tStand = "", string tFogOfWar = "Fog")
+    private string _terrainBaseGround = "Grass";
+    public string TerrainBaseGround
     {
-        Position = position;
-        TerrainBaseGround = tBaseGround;
-        TerrainStand = tStand;
-        TerrainFogOfWar = tFogOfWar;
-        // 根据地形自动设置逻辑属性（也可以写成配置）
-        switch (tBaseGround)
+        get => _terrainBaseGround;
+        set
+        {
+            _terrainBaseGround = value;
+            RefreshGridVisio();
+        }
+    }
+
+    private void RefreshGridVisio()
+    {
+        switch (_terrainBaseGround)
         {
             case "Road":
             case "Grass":
@@ -38,13 +41,35 @@ public class Grid : IInteractable
                 IsTransparent = true;
                 break;
         }
-        switch (tStand)
+        switch (_terrainStand)
         {
             case "DoorClosed":
+            case "Forest":
                 IsWalkable = false;
                 IsTransparent = false;
                 break;
+            default:
+                break;
         }
+    }
+
+    private string _terrainStand = "";
+    public string TerrainStand
+    {
+        get => _terrainStand;
+        set
+        {
+            _terrainStand = value;
+            RefreshGridVisio();
+        }
+    }
+    public string TerrainFogOfWar = "";
+    public Grid(Vector2I position, string tBaseGround, string tStand = "", string tFogOfWar = "Fog")
+    {
+        Position = position;
+        TerrainBaseGround = tBaseGround;
+        TerrainStand = tStand;
+        TerrainFogOfWar = tFogOfWar;
     }
     public Unit unit;
     public List<IInteractable> InteractableObjects = [];
@@ -111,7 +136,8 @@ public class Map
     public Action AfterEnter;
     public List<Bullet> Bullets = [];
     public Vector2I Entrance;
-    public Map Exit;
+    public Vector2I Exit;
+    public Map MapGoto;
     public Unit ActiveUnit;
     /// <summary>
     /// 权重单位：每100格生成数量
@@ -141,7 +167,10 @@ public class Map
     }
     public bool CheckGrid(Vector2I v)
     {
-        int x = v.X; int y = v.Y;
+        return CheckGrid(v.X, v.Y);
+    }
+    public bool CheckGrid(int x, int y)
+    {
         if (x < 0 || x >= Grid.GetLength(0) || y < 0 || y >= Grid.GetLength(1))
             return false;
         return true;
@@ -210,7 +239,7 @@ public class Map
                 unit.LearnSkill(gskill);
         } 
         // 随机获得Memory
-        for (int i = 0; i < unit.Value; i++)
+        for (int i = 0; i < unit.MemoryValue; i++)
         {
             int j = 0; float v = 0; Item it;
             do
@@ -219,12 +248,12 @@ public class Map
                 List<Item> memories = [.. Item.ItemDeck.OfType<Memory>().Cast<Item>()];
 
                 it = memories[GD.RandRange(0, memories.Count - 1)];
-                if (v + it.Weight - 1 < unit.Value)
+                if (v + it.Weight - 1 < unit.MemoryValue)
                 {
-                    unit.Memorys.TryEquip(new(it), unit);
+                    unit.Memorys.TryEquip(it, unit);
                     v += it.Weight;
                 }
-            } while (j < 40 && v < unit.Value);
+            } while (j < 40 && v < unit.MemoryValue);
         }
         // 随机分配UaPoint
         int[] attributes = new int[6]; // 用来存储分配的值
@@ -293,15 +322,15 @@ public class Map
         OnUnitDied?.Invoke();
         if (unit.Name == "marisa")
             OnMarisaDied?.Invoke();
-        foreach (ItemInstance i in unit.equipment.EquippedItems.ToList())
+        foreach (Item i in unit.equipment.EquippedItems.ToList())
         {
             unit.equipment.Unequip(i, unit);
         }
-        foreach (ItemInstance i in unit.Memorys.EquippedItems.ToList())
+        foreach (Item i in unit.Memorys.EquippedItems.ToList())
         {
             unit.Memorys.Unequip(i, unit);
         }
-        foreach (ItemInstance i in unit.inventory.Items.ToList())
+        foreach (Item i in unit.inventory.Items.ToList())
         {
             if (GD.Randf() < 1f) // 50%几率掉落物品
                 unit.inventory.ThrowItem(i);
@@ -351,15 +380,13 @@ public class Map
             {
                 j++;
                 it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
-                if (it is IParamable si)
-                {
-                    var item = si.RandomSummonParam();
-                    ((IParamable)item).ApplyParameters([]);
-                    it = (Item)item;
-                }
+                it = Item.GetItemName(it.Name);
+                Item item = it.RandomSummonParam();
+                item.ApplyParameters([]);
+                it = item;
                 if (v + it.Weight - 1 < value)
                 {
-                    c.items.Add(new ItemInstance(it));
+                    c.items.Add(it);
                     v += it.Weight;
                 }
             } while (j < 40 && v < value);
@@ -397,7 +424,7 @@ public static class Scene
         CurrentMap.WakeUnits.Clear();
         CurrentMap.Bullets.Clear();
         SpellCard.currentSpellcards.Clear();
-        Enter(CurrentMap.Exit);
+        Enter(CurrentMap.MapGoto);
     }
 }
 

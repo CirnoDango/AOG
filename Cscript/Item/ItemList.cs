@@ -73,7 +73,7 @@ public interface ISkillInstance
 {
     public Skill GetSkill(SkillItem parent);
 }
-public class MagicPotion : SkillItem
+public class MagicPotion : SkillItem<MagicPotion.Instance>
 {
     public int MpRecoverPercent { get; private set; } = 40;
     public MagicPotion()
@@ -83,16 +83,7 @@ public class MagicPotion : SkillItem
         Description = "获得技能：MP恢复";
     }
 
-    public override void ApplyParameters(Dictionary<string, object> parameters)
-    {
-        if (parameters.TryGetValue("MpRecoverPercent", out var val) && val is int mp)
-        {
-            MpRecoverPercent = mp;
-        }
-        Skill = new Instance(this);
-    }
-
-    private class Instance : Skill, ISkillInstance
+    public class Instance : Skill, ISkillInstance
     {
         private readonly int _mp;
         public Instance(MagicPotion parent)

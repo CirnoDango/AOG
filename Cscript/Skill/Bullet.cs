@@ -1,9 +1,6 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 
 public class Bullet
 {
@@ -16,10 +13,37 @@ public class Bullet
     public ColorBullet color;
     public Sprite2D image;
     public Unit creator;
+    public Unit tracing;
     public Skill skill;
     public float damage;
+    public float accuracy;
+    public static Bullet CreateBullet(Unit user, Skill skil, float damag, Vector2 start, Vector2 target,
+        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+    {
+        Bullet b = new(user, skil, damag, start, target,
+        speed, maxDistance, shape, color, advance, trace);
+        GameEvents.CreateBullet(user, b);
+        return b;
+    }
+    //起点偏移+速度偏移生成
+    public static Bullet CreateBullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point, Vector2 speedDir,
+        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+    {
+        return CreateBullet(user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target - start)), start + (point + speedDir).Rotated(Vector2.Right.AngleTo(target - start)),
+        speed, maxDistance, shape, color, advance, trace);
+    }
+    //起点偏移+速度角度生成
+    public static Bullet CreateBullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point,
+        float angle, float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+    {
+        return CreateBullet(user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target - start)),
+        (start + point.Rotated(Vector2.Right.AngleTo(target - start))) +
+        (target - start).Rotated(Mathf.DegToRad(angle)).Normalized() * 1000f,
+        speed, maxDistance, shape, color, advance, trace);
+    }
     //点到点生成
-    public Bullet(Unit user, Skill skil, float damag, Vector2 start, Vector2 target, float speed, float maxDistance, string shape, ColorBullet color, float advance = 0)
+    public Bullet(Unit user, Skill skil, float damag, Vector2 start, Vector2 target, 
+        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
     {
         PositionFloat = start;
         Position = (Vector2I)start.Round();
@@ -34,21 +58,22 @@ public class Bullet
         creator = user;
         skill = skil;
         damage = damag;
+        accuracy = user.Ua.BulletDamageAccuracy;
         Scene.CurrentMap.Bullets.Add(this);
         if (advance != 0)
             Update(advance);
+        if (trace != null)
+        {
+            var unit = trace.unit;
+            if (unit != null)
+            {
+                tracing = unit;
+                if (unit == user && user.RandomEnemyInVision(out Unit u))
+                    tracing = u;
+            }
+        }
     }
-    //起点偏移+速度偏移生成
-    public Bullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point, Vector2 speedDir, float speed, float maxDistance, string shape, ColorBullet color, float advance = 0)
-        : this(user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target-start)), start + (point + speedDir).Rotated(Vector2.Right.AngleTo(target-start)), 
-        speed, maxDistance, shape, color, advance) { }
-    //起点偏移+速度角度生成
-    public Bullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point, float angle, float speed, float maxDistance, string shape, ColorBullet color, float advance = 0)
-        : this(
-        user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target-start)),                        
-        (start + point.Rotated(Vector2.Right.AngleTo(target-start))) +                    
-        (target - start).Rotated(Mathf.DegToRad(angle)).Normalized() * 1000f,               
-        speed, maxDistance, shape, color, advance) { }
+    
 
     /// <summary>
     /// 更新子弹状态，返回本次穿越的新格子列表
@@ -72,6 +97,12 @@ public class Bullet
         PositionFloat += Speed.Normalized() * travelDistance;
         DistanceLeft -= travelDistance;
 
+        // 追踪弹的加速度
+        if (tracing != null && Scene.CurrentMap.Units.Contains(tracing))
+        {
+            Speed = Speed.Length() * (Speed + 1.5f * deltaTime * (Vector2)(tracing.Position - Position))
+                .Normalized();
+        }
         // 用整数格子记录路径
         Vector2I oldPos = lastPosition;
         Vector2I newPos = (Vector2I)PositionFloat.Round();
@@ -117,18 +148,26 @@ public class Bullet
     {
         foreach (Vector2I pos in UpdateGrid(time / 100))
         {
-            if (!Scene.CurrentMap.CheckGrid(pos) || !Scene.CurrentMap.GetGrid(pos).IsTransparent)
+            var grid = Scene.CurrentMap.GetGrid(pos);
+            if (!Scene.CurrentMap.CheckGrid(pos) || !grid.IsTransparent)
             {
                 Destroy();
                 return;
             }
-            else if(Scene.CurrentMap.GetGrid(pos).unit != null && 
-                Scene.CurrentMap.GetGrid(pos).unit.friendness * creator.friendness < 0)
+
+            var target = grid.unit;
+            if (target != null && target.friendness * creator.friendness < 0)
             {
-                Active(Scene.CurrentMap.GetGrid(pos).unit);
-                return;
+                // 命中检定
+                float hitChance = MathEx.Logistic(0.8f, accuracy - target.Ua.DamageEvasion);
+                if (GD.Randf() < hitChance)
+                {
+                    Active(target);
+                    return;
+                }
             }
         }
+
         if (DistanceLeft <= 0 || image == null)
         {
             Destroy();

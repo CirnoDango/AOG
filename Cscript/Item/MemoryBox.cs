@@ -79,7 +79,7 @@ public partial class MemoryBox : Control,IRegisterToG
 
         foreach (var item in unit.inventory.Items)
         {
-            if (item.Template is not Memory)
+            if (item is not Memory)
                 continue;
             var entry = ItemEntryScene.Instantiate<ItemEntry>();
             entry.Setup(item, (clickedItem) => {

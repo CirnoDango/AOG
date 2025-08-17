@@ -11,6 +11,15 @@ public static class MapBuilder
 
     // 单独定义在类中（或作为静态工具函数）
 
+    /// <summary>
+    /// Builds a logical representation of the map based on the tile map layers.
+    /// </summary>
+    /// <remarks>This method processes the base ground and stand layers of the tile map to construct a <see
+    /// cref="Map"/> object. It extracts terrain information from the tiles and populates a grid structure within the
+    /// map. The method assumes that the base ground layer contains mandatory terrain data, while the stand layer
+    /// provides optional terrain data.</remarks>
+    /// <returns>A <see cref="Map"/> object representing the logical structure of the tile map, including terrain information for
+    /// each grid cell.</returns>
     public static Map BuildLogicFromTileMap()
     {
         var tileMapBase = G.I.TileMapAllLayer.BaseGround;
@@ -66,7 +75,13 @@ public static class MapBuilder
         return map;
     }
 
-
+    /// <summary>
+    /// Builds the tile map layers based on the provided map's logic.
+    /// </summary>
+    /// <remarks>This method clears the existing tile map layers and repopulates them using the terrain data
+    /// from the specified map. The method processes each grid cell in the map, setting the base ground and stand layers
+    /// accordingly.</remarks>
+    /// <param name="map">The map containing the grid and terrain data used to populate the tile map layers. Cannot be null.</param>
     public static void BuildTileMapFromLogic(Map map)
     {
         G.I.TileMapAllLayer.BaseGround.Clear();
@@ -82,7 +97,14 @@ public static class MapBuilder
             }
         }
     }
-
+    /// <summary>
+    /// Sets the terrain type for the specified logic map layer at the given grid position.
+    /// </summary>
+    /// <remarks>This method updates both the logical representation of the terrain in the specified grid cell
+    /// and the corresponding visual tile map layer.</remarks>
+    /// <param name="tileMap">The logic map layer to update. Must be one of the defined <see cref="LogicMapLayer"/> values.</param>
+    /// <param name="grid">The grid cell where the terrain type will be set. Cannot be <see langword="null"/>.</param>
+    /// <param name="terrainName">The name of the terrain to assign to the specified layer. Cannot be <see langword="null"/> or empty.</param>
     public static void SetLogicMapTerrain(LogicMapLayer tileMap, Grid grid, string terrainName)
     {
         switch (tileMap)
@@ -101,6 +123,12 @@ public static class MapBuilder
                 break;
         }
     }
+    /// <summary>
+    /// Updates the fog of war for the specified map by marking all tiles as obscured.
+    /// </summary>
+    /// <remarks>This method clears any existing fog of war data and sets all tiles in the map to a default
+    /// "Fog" state. It is typically used to initialize or reset the fog of war layer for a map.</remarks>
+    /// <param name="map">The map to apply the fog of war to. Must not be null.</param>
     public static void BuildFogOfWar(Map map)
     {
         G.I.TileMapAllLayer.FogOfWar.Clear();
@@ -114,6 +142,15 @@ public static class MapBuilder
             }
         }
     }
+    /// <summary>
+    /// Sets the terrain type for a specific tile in the tile map.
+    /// </summary>
+    /// <remarks>This method searches the tile map's tile set for a terrain with the specified name and
+    /// applies it to the tile at the given position. If the terrain name does not exist in the tile set, no changes are
+    /// made.</remarks>
+    /// <param name="tileMap">The tile map layer where the terrain will be set.</param>
+    /// <param name="pos">The position of the tile within the tile map, specified as a <see cref="Vector2I"/>.</param>
+    /// <param name="terrainName">The name of the terrain to assign to the specified tile.</param>
     private static void SetTileMapTerrain(TileMapLayer tileMap, Vector2I pos, string terrainName)
     {
         var tileSet = tileMap.TileSet;
@@ -127,7 +164,16 @@ public static class MapBuilder
             }
         }
     }
-
+    /// <summary>
+    /// Exports the map data as a JSON file containing terrain IDs for each grid cell.
+    /// </summary>
+    /// <remarks>The exported JSON file includes two layers: the base terrain layer and the stand terrain
+    /// layer.  Each layer is represented as a 2D array of integers, where each integer corresponds to a terrain
+    /// ID.</remarks>
+    /// <param name="map">The map to export, containing grid data for terrain layers.</param>
+    /// <param name="terrainToId">A dictionary mapping terrain names to their corresponding integer IDs.  If a terrain name is not found in the
+    /// dictionary, the ID defaults to 0.</param>
+    /// <param name="path">The file path where the JSON export will be saved.</param>
     public static void ExportMapAsIdArray(Map map, Dictionary<string, int> terrainToId, string path)
     {
         int width = map.Width;

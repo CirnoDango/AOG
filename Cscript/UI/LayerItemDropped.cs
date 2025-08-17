@@ -5,7 +5,7 @@ public partial class LayerItemDropped : Node2D, IRegisterToG
 {
     [Export]
     public PackedScene droppedScene;
-    public static void SummonItem(Vector2I position, ItemInstance item)
+    public static void SummonItem(Vector2I position, Item item)
     {
         var instance = G.I.LayerItemDropped.droppedScene.Instantiate<ItemDropped>();
         instance.Position = position * 16;
@@ -15,7 +15,7 @@ public partial class LayerItemDropped : Node2D, IRegisterToG
         G.I.LayerItemDropped.AddChild(instance);
         Scene.CurrentMap.GetGrid(position).InteractableObjects.Add(item);
     }
-    public static void DeleteItem(ItemInstance item)
+    public static void DeleteItem(Item item)
     {
         Scene.CurrentMap.GetGrid(item.Position).InteractableObjects.Remove(item);
         item.Position = Vector2I.Left;

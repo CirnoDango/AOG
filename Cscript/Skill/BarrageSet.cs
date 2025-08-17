@@ -1,3 +1,4 @@
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ public class BarrageSet : SkillItem
     {
         if (parameters.TryGetValue("barrage", out var val))
         {
-            B = (Barrage)val;
+            B = (Barrage)(Dictionary<string, object>)val;
         }
         Skill = new Instance(B);
     }
@@ -38,10 +39,19 @@ public class BarrageSet : SkillItem
             Name = "BarrageSet";
             SkillGroup = "Item";
             Description = "发射弹幕";
-            Cooldown = 2000;
-            Targeting = new TargetType(Target.Grid, 1, 8);
+            Cooldown = 300;
             _BarrageSet = parent;
             Texture = GetTemplate(Name).Texture;
+        }
+        public override TargetType GetTargeting(int level = 0)
+        {
+            float maxD = _BarrageSet.Components.OfType<BulletModule>()      
+                .Where(bm => bm != null)                                    
+                .Select(bm => bm.bulletContext?.MaxDistance ?? 0)           
+                .DefaultIfEmpty(0)                                          
+                .Max();
+
+            return new TargetType(Target.Grid, 1, (int)Mathf.Round(maxD));
         }
 
         public Skill GetSkill(SkillItem parent)

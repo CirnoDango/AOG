@@ -73,14 +73,14 @@ public partial class CaveD : Node
         Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mSkill"));
         Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mUaAny"));
         Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mUaCun"));
-        Floor1.Exit = Floor2;
-        Floor2.Exit = Floor3;
+        Floor1.MapGoto = Floor2;
+        Floor2.MapGoto = Floor3;
         Scene.Enter(Floor1);
         Floor1.SummonChest(200, 1);
         Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "mp", 30 } }));
+            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } }));
         Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "mp", 60 } }));
+            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("BarrageSet", new Dictionary<string, object> { { "barrage", Barrage.Test() } }));
         Player.PlayerUnit.inventory.AddItem(

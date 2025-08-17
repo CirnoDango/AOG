@@ -3,49 +3,41 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public partial class Cave : Node, IRegisterToG
+public partial class MistyLake : Node
 {
-     
-    public Map Floor1 = MapGenerator.GenerateMapByCellularAutomata(
-    60, 60,
-    new Dictionary<string, float>
-    {
-        { "Stone", 0.4f },
-        { "Floor", 0.6f }
-    }, 2);
-    public Map Floor2 = MapGenerator.GenerateMapByCellularAutomata(
-    60, 60,
-    new Dictionary<string, float>
-    {
-        { "Stone", 0.45f },
-        { "Floor", 0.55f }
-    }, 2);
-    public Map Floor3 = MapGenerator.GenerateMapByCellularAutomata(
-    60, 60,
-    new Dictionary<string, float>
-    {
-        { "Stone", 0.45f },
-        { "Floor", 0.55f }
-    }, 2, true);
+    public static Map Floor1 = new(60, 60);
     private TaskCompletionSource clickTcs;
     public static void Init()
     {
-        G.I.Cave.Floor1.MapGoto = G.I.Cave.Floor2;
-        G.I.Cave.Floor2.MapGoto = G.I.Cave.Floor3;
-        Scene.Enter(G.I.Cave.Floor1);
+        MapGenerator.ChangeMapByRegionGrow(Floor1, LogicMapLayer.BaseGround, LogicMapLayer.BaseGround,
+            "Grass", "Water", 15, 1, 100, 15);
+        MapGenerator.ChangeMapByEnvolve(LogicMapLayer.BaseGround, "Grass", Floor1, 1);
+        MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+            new Dictionary<string, float>
+            {
+                { "Forest", 0.4f },
+                { "", 0.6f }
+            }, Floor1);
+        MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "Forest", Floor1, 2);
+        foreach (var grid in Floor1.Grid)
+        {
+            if (grid.TerrainBaseGround == "Water" && grid.TerrainStand == "Forest")
+            {
+                grid.TerrainStand = "";
+            }
+        }
+        MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Road", Floor1, out int y);
+        Floor1.Entrance = new Vector2I(0, y);
+        Scene.Enter(Floor1);
         Unit.OnPlayerdied += Playerdied;
     }
 
-    private async static void Playerdied()
+    private static void Playerdied()
     {
         DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
-            new("???", LoadPortrait("null"),
-            "唔姆姆，团子真好吃～♪")
-        ]); await G.I.Cave.Click();
-        G.I.DialogBox.ShowDialog([
             new("", LoadPortrait("null"),
-            "发光团子被吃掉，游戏失败，如果想再试一次，请直接退出并重启游戏。")
+            "游戏失败。")
         ]);
     }
 
@@ -53,38 +45,32 @@ public partial class Cave : Node, IRegisterToG
     {
         Floor1.EnemySummonValue = new Dictionary<string, float>
         {
-            { "dangoPea", 0.6f },
-            { "dangoWater", 0.3f },
-            { "dangoFist", 0.1f },
-        };
-        Floor2.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea", 0.5f },
-            { "dangoWater", 0.4f },
-            { "dangoFist", 0.15f },
-        };
-        Floor2.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea", 0.5f },
-            { "dangoWater", 0.5f },
-            { "dangoFist", 0.2f },
+            { "dangoPea",       1f },
+            { "dangoWater",     1f },
+            { "dangoFist",      1f },
+            { "dangoDark",      1f },
+            { "dangoIce",       1f },
+            { "dangoTwinpea",   1f },
+            { "dangoRedBean",   1f },
+            { "dangoSpellcard", 1f },
+            { "dangoLight",     1f },
         };
         Fsm.StartState.OnEnd += Load;
         Fsm.StartState.OnEnd += Init;
         G.I.Fsm.ChangeState(Fsm.StartState);
-        Floor3.AfterEnter += Createboss;
+        //Floor3.AfterEnter += Createboss;
     }
     public void Createboss()
     {
-        var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
-        boss.inventory.AddItem(Item.GetItemName("DangoLight"));
-        GameEvents.OnEnemyKilled += enemy =>
-        {
-            if (enemy == boss)
-            {
-                Victory();
-            }
-        };
+        //var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
+        //boss.inventory.AddItem(Item.GetItemName("DangoLight"));
+        //GameEvents.OnEnemyKilled += enemy =>
+        //{
+        //    if (enemy == boss)
+        //    {
+        //        Victory();
+        //    }
+        //};
     }
     public async void Load()
     {
@@ -94,7 +80,7 @@ public partial class Cave : Node, IRegisterToG
         switch (player)
         {
             case "cirno":
-                //Player.PlayerUnit.LearnSkillGroup("Freeze");
+                Player.PlayerUnit.LearnSkillGroup("YinyangBall");
                 break;
             case "marisa":
                 Player.PlayerUnit.LearnSkillGroup("Star");
@@ -104,28 +90,14 @@ public partial class Cave : Node, IRegisterToG
                 break;
         }
         G.I.SkillPanel.Refresh();
+        G.I.SkillPanel.Add("YinyangBall");
         G.I.SkillPanel.Add("Star");
         G.I.SkillPanel.Add("Freeze");
         G.I.SkillPanel.Add("Dark");
+        Player.PlayerUnit.Ua.skillPoint += 99;
         await ToSignal(GetTree().CreateTimer(0.01), "timeout");
         G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
-        G.I.DialogBox.ShowDialog([
-            new("【某日】【雾之湖边某地下洞穴】", LoadPortrait("null"),
-            "最近你听说这附近出现了一个奇妙的会发光的团子。")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("", LoadPortrait("null"),
-            "但是发光团子好像被谁给藏起来据为己有了，你决定进入这个可疑的洞穴一探究竟。")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("", LoadPortrait("null"),
-            "你加快了前进的脚步，毕竟要是在找到之前被人吃掉了就完蛋了。")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("", LoadPortrait("null"),
-            "（地穴一共有3层，前两层要先找到楼梯口，然后按↓方向键进入下一层）")
-        ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("任务目标：", LoadPortrait("null"),
             "找到发光团子。")
@@ -178,10 +150,5 @@ public partial class Cave : Node, IRegisterToG
             clickTcs.TrySetResult();
             //clickTcs = null;
         }
-    }
-
-    public void RegisterToG(G g)
-    {
-        g.Cave = this;
     }
 }

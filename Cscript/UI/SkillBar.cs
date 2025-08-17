@@ -16,6 +16,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     public PackedScene spellButtonScene;
     public Dictionary<string, Color> skillBoxColor = new()
     {
+        { "YinyangBall", new Color(1f, 0.2f, 0.4f) },
         { "Freeze", new Color(0.5f, 0.5f, 0.9f) },
         { "Star", new Color(0.9f, 0.9f, 0.1f) },
         { "Dark", new Color(0.2f, 0.1f, 0.1f) },
@@ -110,24 +111,29 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         var skill = si.Template;
         var skillName = skill.Name;
         var level = si.Level;
-        if (si.CurrentCooldown > 0)
-        {
-            Info.Print("技能正在冷却中！");
-            return;
-        }
-        if (Player.PlayerUnit.CurrentSp < skill.GetSpCost(level) || Player.PlayerUnit.CurrentMp < skill.GetMpCost(level))
+        //if (si.CurrentCooldown > 0)
+        //{
+        //    Info.Print("技能正在冷却中！");
+        //    return;
+        //}
+        //if (Player.PlayerUnit.CurrentSp < skill.GetSpCost(level) || Player.PlayerUnit.CurrentMp < skill.GetMpCost(level))
+        //{
+        //    Info.Print("不满足发动条件！");
+        //    return;
+        //}
+        //if (skill is SpellCard spell && Player.PlayerUnit.CurrentSp < spell.GetSpNeed(level))
+        //{
+        //    Info.Print("不满足发动条件！");
+        //    return;
+        //}
+        //if (skill.EffectType == EffectType.Passive)
+        //{
+        //    Info.Print("这是被动技能");
+        //    return;
+        //}
+        if (!si.CanUse(Player.PlayerUnit))
         {
             Info.Print("不满足发动条件！");
-            return;
-        }
-        if (skill is SpellCard spell && Player.PlayerUnit.CurrentSp < spell.GetSpNeed(level))
-        {
-            Info.Print("不满足发动条件！");
-            return;
-        }
-        if (skill.EffectType == EffectType.Passive)
-        {
-            Info.Print("这是被动技能");
             return;
         }
         if (skill.GetTargeting(level).Type == Target.Self)

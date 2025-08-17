@@ -15,9 +15,7 @@ public static class MapGenerator
     /// <param name="initialWeights"></param>
     /// <param name="iterations"></param>
     /// <returns></returns>
-    public static Map GenerateMapByCellularAutomata(
-        int width,
-        int height,
+    public static Map GenerateMapByCellularAutomata(int width, int height,
         Dictionary<string, float> initialWeights,
         int iterations, bool noExit = false)
     {
@@ -25,31 +23,10 @@ public static class MapGenerator
         var map = new Map(width, height);
 
         // 初始化地图（按权重随机地形）
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                var terrain = GetRandomTerrain(terrainTypes, initialWeights);
-                map.Grid[x, y] = new Grid(new Vector2I(x, y), terrain);
-            }
-        }
+        ChangeMapByWeight(LogicMapLayer.BaseGround, initialWeights, map);
 
         // 进行细胞演化
-        for (int i = 0; i < iterations; i++)
-        {
-            var newGrid = new Grid[width, height];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    string newTerrain = EvolveTerrain(map, x, y, terrainTypes[0]);
-                    newGrid[x, y] = new Grid(new Vector2I(x, y), newTerrain);
-                }
-            }
-
-            map.Grid = newGrid;
-        }
+        ChangeMapByEnvolve(LogicMapLayer.BaseGround, terrainTypes[0], map, iterations);
         // 设置入口出口
         map.Entrance = map.RandomEmptyGrid().Position;
         if (!noExit)
@@ -59,6 +36,8 @@ public static class MapGenerator
         }
         return map;
     }
+
+
     /// <summary>
     /// 生成一个地图,使用BSP算法
     /// </summary>
@@ -69,13 +48,8 @@ public static class MapGenerator
     /// <param name="maxDepth"></param>
     /// <param name="noExit"></param>
     /// <returns></returns>
-    public static Map GenerateMapByBSP(
-    int width,
-    int height,
-    string wall, string floor,
-    int minRoomSize = 6,
-    int maxDepth = 5,
-    bool noExit = false)
+    public static Map GenerateMapByBSP(int width, int height, string wall, string floor,
+        int minRoomSize = 6, int maxDepth = 5, bool noExit = false)
     {
         var map = new Map(width, height);
         // 初始化为全墙
@@ -120,7 +94,7 @@ public static class MapGenerator
             Vector2I b = GetRoomCenter(rooms[i]);
 
             doors.AddRange(ConnectRoomsWithDoor(map, rooms[i - 1], rooms[i], floor));
-            
+
         }
         // 设置入口与出口
         map.Entrance = map.RandomEmptyGrid().Position;
@@ -159,14 +133,19 @@ public static class MapGenerator
         return types[^1]; // 兜底
     }
     /// <summary>
-    /// 对于每个格子，根据周围8个格子的地形类型，演化出新的地形类型   
+    /// Determines the most common terrain type in the 3x3 neighborhood around a specified cell in the map.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="border"></param>
-    /// <returns></returns>
-    private static string EvolveTerrain(Map map, int x, int y, string border)
+    /// <remarks>The method considers the 3x3 neighborhood centered on the cell at (<paramref name="x"/>,
+    /// <paramref name="y"/>), including the cell itself. If the cell is at the edge of the map, the <paramref
+    /// name="border"/> terrain type is used for out-of-bounds neighbors.</remarks>
+    /// <param name="map">The map containing the grid of terrain cells.</param>
+    /// <param name="x">The x-coordinate of the target cell.</param>
+    /// <param name="y">The y-coordinate of the target cell.</param>
+    /// <param name="border">The terrain type to use for cells outside the map boundaries.  This value is treated as the terrain type for
+    /// out-of-bounds cells.</param>
+    /// <returns>The terrain type that appears most frequently in the 3x3 neighborhood around the specified cell. If multiple
+    /// terrain types have the same frequency, the method returns one of them arbitrarily.</returns>
+    private static string EvolveTerrain(LogicMapLayer mapLayer, Map map, int x, int y, string border)
     {
         var counter = new Dictionary<string, int>();
 
@@ -180,7 +159,19 @@ public static class MapGenerator
                 string terrain;
 
                 if (IsInBounds(map, nx, ny))
-                    terrain = map.Grid[nx, ny].TerrainBaseGround;
+                {
+                    switch (mapLayer)
+                    {
+                        case LogicMapLayer.Stand:
+                            terrain = map.Grid[nx, ny].TerrainStand;
+                            break;
+                        case LogicMapLayer.BaseGround:
+                            terrain = map.Grid[nx, ny].TerrainBaseGround;
+                            break;
+                        default:
+                            throw new ArgumentException("Unsupported map layer type");
+                    }
+                }
                 else
                     terrain = border; // 边界外默认是某个类型，例如 Wall
 
@@ -312,7 +303,165 @@ public static class MapGenerator
             Doors = [Doors[0], Doors[^1]];
         return Doors;
     }
+    public static void ChangeMapByRegionGrow
+        (Map map, LogicMapLayer LayerIn, LogicMapLayer LayerOut, string terrainIn, string terrainOut,
+        float numberMean, float numberDev, float sizeMean, float sizeDev)
+    {
+        int number = (int)GD.Randfn(numberMean, numberDev);
+        for (int i = 0; i < number; i++)
+        {
+            int startX = GD.RandRange(1, map.Width - 1);
+            int startY = GD.RandRange(1, map.Height - 1);
+
+            int size = Math.Max(0, (int)GD.Randfn(sizeMean, sizeDev));
+            Queue<(int x, int y)> queue = new();
+            HashSet<(int x, int y)> visited = [];
+
+            queue.Enqueue((startX, startY));
+            visited.Add((startX, startY));
+
+            int count = 0;
+
+            while (queue.Count > 0 && count < size)
+            {
+                var (x, y) = queue.Dequeue();
+                string tr = LayerIn switch
+                {
+                    LogicMapLayer.Stand => map.Grid[x, y].TerrainStand,
+                    LogicMapLayer.BaseGround => map.Grid[x, y].TerrainBaseGround,
+                    _ => throw new ArgumentException("Unsupported LayerIn type"),
+                };
+                if (!map.CheckGrid(x, y) || tr != terrainIn)
+                    continue;
+
+                switch (LayerOut)
+                {
+                    case LogicMapLayer.Stand:
+                        map.Grid[x, y].TerrainStand = terrainOut;
+                        break;
+                    case LogicMapLayer.BaseGround:
+                        map.Grid[x, y].TerrainBaseGround = terrainOut;
+                        break;
+                }
+                count++;
+
+                foreach (var (dx, dy) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+                {
+                    int nx = x + dx, ny = y + dy;
+                    if (map.CheckGrid(nx, ny) && !visited.Contains((nx, ny)))
+                    {
+                        if (GD.Randf() < 0.7f)
+                            queue.Enqueue((nx, ny));
+                        visited.Add((nx, ny));
+                    }
+                }
+            }
+        }
+
+    }
+    public static void ChangeMapByWeight(LogicMapLayer mapLayer,
+        Dictionary<string, float> initialWeights, Map map)
+    {
+        for (int x = 0; x < map.Width; x++)
+        {
+            for (int y = 0; y < map.Height; y++)
+            {
+                var terrain = GetRandomTerrain([.. initialWeights.Keys], initialWeights);
+                switch (mapLayer)
+                {
+                    case LogicMapLayer.Stand:
+                        map.Grid[x, y].TerrainStand = terrain;
+                        break;
+                    case LogicMapLayer.BaseGround:
+                        map.Grid[x, y].TerrainBaseGround = terrain;
+                        break;
+                }
+            }
+        }
+    }
+
+    public static void ChangeMapByEnvolve(LogicMapLayer mapLayer,
+        string terrainBorder, Map map, int iterations)
+    {
+        for (int i = 0; i < iterations; i++)
+        {
+            var newGrid = new Grid[map.Width, map.Height];
+            for (int x = 0; x < map.Width; x++)
+            {
+                for (int y = 0; y < map.Height; y++)
+                {
+                    string terrain = EvolveTerrain(mapLayer, map, x, y, terrainBorder);
+                    newGrid[x, y] = new Grid(new Vector2I(x, y),
+                        map.Grid[x, y].TerrainBaseGround, map.Grid[x, y].TerrainStand);
+                    switch (mapLayer)
+                    {
+                        case LogicMapLayer.Stand:
+                            newGrid[x, y].TerrainStand = terrain;
+                            break;
+                        case LogicMapLayer.BaseGround:
+                            newGrid[x, y].TerrainBaseGround = terrain;
+                            break;
+                    }
+                }
+            }
+            map.Grid = newGrid;
+        }
+    }
+    public static void ChangeMapByRoad(LogicMapLayer mapLayer,
+    string terrain, Map map, out int initY)
+    {
+        initY = GD.RandRange(0, map.Height - 1); // 起点
+        int y = initY;
+        int x = 0;
+
+        int prevDir = 0;
+
+        while (x < map.Width - 1)
+        {
+            map.Grid[x, y].TerrainBaseGround = terrain;
+            map.Grid[x, y].TerrainStand = "";
+            map.Grid[x + 1, y].TerrainBaseGround = terrain;
+            map.Grid[x + 1, y].TerrainStand = "";
+
+            // 根据马尔可夫链决定下一个方向
+            int direction = NextDirection(prevDir);
+
+            // 移动
+            if (direction == 1 && y > 0) y--;                   
+            else if (direction == 2 && y < map.Height - 1) y++; 
+                                                                
+
+            prevDir = direction;
+            x++;
+        }
+        int NextDirection(int prevDir)
+        {
+            double r = GD.Randf();
+
+            switch (prevDir)
+            {
+                case 0: // 直行
+                    if (r < 0.5) return 0; 
+                    if (r < 0.75) return 1;
+                    return 2;              
+
+                case 1: // 上
+                    if (r < 0.6) return 0; 
+                    return 1;              
+
+                case 2: // 下
+                    if (r < 0.6) return 0; 
+                    return 2;              
+            }
+
+            return 0;
+        }
+    }
 }
+
+    
+
+
 public class Rect
 {
     public int Left, Top, Width, Height;
@@ -371,6 +520,9 @@ public class Rect
         return Math.Abs(ax - bx) + Math.Abs(ay - by);
     }
 }
+
+
+
 
 
 

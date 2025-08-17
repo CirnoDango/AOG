@@ -26,24 +26,24 @@ public class NightBird : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        int r = new int[] { 8, 8, 8, 12 }[sc.level - 1];
+        int r = new int[] { 8, 8, 8, 12 }[sc.Level - 1];
         ColorBullet c = (ColorBullet)(new List<int> {4, 7})[GD.RandRange(0, 1)];
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -15, 2.00f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -10, 2.14f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -5, 2.28f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2.43f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 5, 2.57f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 10, 2.71f, r, "Ring", c);
-        _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 15, 2.86f, r, "Ring", c);
-        if(sc.level >= 2)
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -15, 2.00f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -10, 2.14f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -5, 2.28f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2.43f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 5, 2.57f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 10, 2.71f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 15, 2.86f, r, "Ring", c);
+        if(sc.Level >= 2)
         {
-            _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -2.5f, 2.36f, r, "Ring", c);
-            _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 2.5f, 2.50f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -2.5f, 2.36f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 2.5f, 2.50f, r, "Ring", c);
         }
-        if (sc.level >= 3)
+        if (sc.Level >= 3)
         {
-            _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -7.5f, 2.21f, r, "Ring", c);
-            _ = new Bullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 7.5f, 2.64f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -7.5f, 2.21f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 7.5f, 2.64f, r, "Ring", c);
         }
     }
     public override void AwakeBullet(SkillContext sc, Bullet bullet)
@@ -60,19 +60,13 @@ public class MoonlightRay : Skill
     {
         Name = "MoonlightRay";
         SkillGroup = "Dark";
-        Description = "发射一道激光，造成20弹幕伤害，恢复击中伤害的10%HP";
         SpCost = 3;
         MpCost = 5;
         Cooldown = 800;
         Targeting = new TargetType(Target.Ray, 1, 12);
     }
-    int[] t0 = { 50, 75, 100, 100 };
-    string[] t1 = {
-    "",
-    "",
-    "",
-    "，目标眩晕3回合"
-};
+    int[] t0 = [30, 50, 70, 70];
+    string[] t1 = ["", "", "", " sMoonlightRay0 "];
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
@@ -84,8 +78,8 @@ public class MoonlightRay : Skill
         {
             if(g.unit != null)
             {
-                sc.User.BalanceSp(g.unit.TakeBulletDamage(40, sc.User, this)
-                    * new float[] { .50f, .75f, 1, 1 }[sc.level - 1]);
+                sc.User.HealHp(g.unit.TakeBulletDamage(30, sc.User, this)
+                    * t0[sc.Level - 1] / 100f);
             }
         }
     }
@@ -119,7 +113,7 @@ public class DarkSideOfTheMoon : Skill
     {
         int damage = 30;
         if (!sc.UnitOne.GridInVision().Contains(sc.User.CurrentGrid))
-            if (sc.level == 4)
+            if (sc.Level == 4)
                 damage = 60;
             else
                 damage = 45;
@@ -157,7 +151,7 @@ public class MagicDark : Skill
     "",
     "",
     "",
-    "，并对其中单位造成 15 点弹幕伤害"
+    " sMagicDark0 "
 };
     public override string GetDescription(int level)
     {
@@ -166,10 +160,10 @@ public class MagicDark : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        foreach (var grid in sc.GridOne.NearGrids(new int[] { 3, 4, 5, 5 }[sc.level - 1]))
+        foreach (var grid in sc.GridOne.NearGrids(new int[] { 3, 4, 5, 5 }[sc.Level - 1]))
         {
             grid.unit?.GetStatus(new Dark(500));
-            if (sc.level == 4)
+            if (sc.Level == 4)
                 grid.unit?.TakeBulletDamage(15, sc.User, this);
         }
     }
@@ -194,7 +188,7 @@ public class Demarcation : SpellCard
     "",
     "",
     "",
-    "黑暗状态下被击破伤害减半"
+    " sDemarcation0 "
 };
     public override string GetDescription(int level)
     {
@@ -203,20 +197,20 @@ public class Demarcation : SpellCard
 
     protected override void OnSpellStart(SkillContext sc)
     {
-        List<Grid> lg = sc.User.CurrentGrid.NearGrids(new int[] { 6, 8, 10, 10 }[sc.level - 1]);
+        List<Grid> lg = sc.User.CurrentGrid.NearGrids(new int[] { 6, 8, 10, 10 }[sc.Level - 1]);
         lg.Remove(sc.User.CurrentGrid);
         foreach (var g in lg)
         {
-            g.unit?.GetStatus(new Dark(new int[] { 300, 400, 500, 500 }[sc.level - 1]));
+            g.unit?.GetStatus(new Dark(new int[] { 300, 400, 500, 500 }[sc.Level - 1]));
         }
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 周围陷入了黑暗！");
         AddTimedEvent(50, (ctx, advanceTime) =>
         {
             for(float i = 0; i < 360; i += 360 / 20f)
             {
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i,1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i+90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i,1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i+90, 1.5f),
                 2, 8, "Grain", ColorBullet.Blue, advanceTime);
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
                 2, 8, "Grain", ColorBullet.Blue, advanceTime);
             }
         });
@@ -224,9 +218,9 @@ public class Demarcation : SpellCard
         {
             for (float i = 0; i < 360; i += 360 / 20f)
             {
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
                 2, 8, "Grain", ColorBullet.Green, advanceTime);
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
                 2, 8, "Grain", ColorBullet.Green, advanceTime);
             }
         });
@@ -234,9 +228,9 @@ public class Demarcation : SpellCard
         {
             for (float i = 0; i < 360; i += 360 / 20f)
             {
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
                 2, 8, "Grain", ColorBullet.Red, advanceTime);
-                _ = new Bullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
+                Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
                 2, 8, "Grain", ColorBullet.Red, advanceTime);
             }
         });

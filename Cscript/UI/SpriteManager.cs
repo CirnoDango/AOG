@@ -33,7 +33,8 @@ public partial class SpriteManager : Node
     {
         foreach (var skill in Skill.SkillDeck)
         {
-            if (skill.SkillGroup == null || skill.SkillGroup == "" || skill.SkillGroup == "General")
+            if (skill.SkillGroup == null || skill.SkillGroup == "" || skill.SkillGroup == "General"
+                || skill.SkillGroup == "Private")
                 continue;
             Texture2D texture;
             if (skill.SkillGroup == "Item")

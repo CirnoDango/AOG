@@ -138,7 +138,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
             {
                 var targetPos = PlayerUnit.Position + dir;
                 IInteractable grid = Scene.CurrentMap.GetGrid(targetPos);
-                grid.Interact(PlayerUnit);
+                grid?.Interact(PlayerUnit);
             }
         }
     }

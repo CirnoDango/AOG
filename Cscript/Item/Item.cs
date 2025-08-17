@@ -7,31 +7,11 @@ public interface IInteractable
 {
     void Interact(Unit unit);
 }
-public interface IParamable
-{
-    void ApplyParameters(Dictionary<string, object> parameters);
-    Object RandomSummonParam();
-}
-public abstract class Item
+public abstract partial class Item : IInteractable
 {
     public static List<Item> ItemDeck { get; set; } = [];
     //用于查找并复制一个同名的物品
-    public static ItemInstance GetItemName(string name, Dictionary<string, object> parameters = null)
-    {
-        var template = GetTemplate(name).MemberwiseClone();
-        if (template == null) return null;
-        var item = new ItemInstance((Item)template);
-        if (item.Template is SkillItem skillItem)
-        {
-            skillItem.ApplyParameters(parameters ?? []);
-        }
-        return item;
-    }
-
-    public static Item GetTemplate(string name)
-    {
-        return ItemDeck.FirstOrDefault(item => item.Name == name);
-    }
+    
     public string Name { get; set; }
     public string TrName => $"i{Name}";
     public string Description { get; set; }
@@ -39,12 +19,62 @@ public abstract class Item
     public Texture2D Texture { get; set; }
     // 默认可以装备，非装备道具重写为 false
     public virtual bool CanEquip => true;
-
+    // 实例特有属性
+    public Vector2I Position { get; set; }
+    public ItemDropped Sprite { get; set; }
+    public Dictionary<string, float> Params { get; set; }
     // 使用时或装备时的即时效果
     public virtual void OnEquip(Unit unit) { }
     public virtual void OnUnequip(Unit unit) { }
+    public void Interact(Unit unit)
+    {
+        unit.inventory.AddItem(this);
+    }
+    public static void SummonItem(Vector2I position, Item item)
+    {
+        LayerItemDropped.SummonItem(position, item);
+    }
+    public static Item GetItemName(string name, Dictionary<string, object> parameters = null)
+    {
+        var template = GetTemplate(name).MemberwiseClone();
+        if (template == null) return null;
+        var item = template;
+        if (item is SkillItem skillItem)
+        {
+            skillItem.ApplyParameters(parameters ?? []);
+        }
+        return (Item)item;
+    }
+
+    public static Item GetTemplate(string name)
+    {
+        return ItemDeck.FirstOrDefault(item => item.Name == name);
+    }
+    public virtual void ApplyParameters(Dictionary<string, object> parameters)
+    {
+        Params = parameters
+            .Where(x => x.Value is float || x.Value is int || x.Value is double)
+            .ToDictionary(
+                x => x.Key, 
+                x => Convert.ToSingle(x.Value)
+            );
+    }
+
+    public virtual Item RandomSummonParam()
+    {
+        return GetItemName(Name);
+    }
 }
-public abstract class SkillItem : Item, IParamable
+public abstract class SkillItem<TSkillInstance> : SkillItem
+    where TSkillInstance : Skill, ISkillInstance
+{
+    public override void ApplyParameters(Dictionary<string, object> parameters)
+    {
+        Skill = (TSkillInstance)Activator.CreateInstance(typeof(TSkillInstance), this);
+    }
+}
+
+public abstract class SkillItem : Item
 {
     public override void OnEquip(Unit unit)
     {
@@ -52,59 +82,21 @@ public abstract class SkillItem : Item, IParamable
     }
     public override void OnUnequip(Unit unit) { unit.UnLearnSkill(Skill); }
     public Skill Skill { get; set; }
-    public abstract void ApplyParameters(Dictionary<string, object> parameters);
     public void Activate(SkillContext sc)
     {
         Skill.Activate(sc);
     }
-    public virtual object RandomSummonParam()
-    {
-        return GetTemplate(Name);
-    }
 }
-// 实际游戏中用于携带、掉落、使用的物品实体
-public class ItemInstance : IInteractable
-{
-    public ItemInstance(Item template)
-    {
-        Template = template;
-    }
-    public Item Template { get; private set; }
 
-    // 实例特有属性
-    public Vector2I Position 
-    {
-        get;
-        set;
-    } // 掉落在地图上的位置
-
-    public string Name => Template.Name;
-    public string TrName => Template.TrName;
-    public string Description => Template.Description;
-    public Texture2D Texture => Template.Texture;
-    public ItemDropped Sprite { get; set; }
-    public float Weight => Template.Weight;
-    public virtual bool CanEquip => Template.CanEquip;
-    public virtual void OnEquip(Unit unit) => Template.OnEquip(unit);
-    public virtual void OnUnequip(Unit unit) => Template.OnUnequip(unit);
-    public void Interact(Unit unit)
-    {
-        unit.inventory.AddItem(this);
-    }
-    public static void SummonItem(Vector2I position, ItemInstance item)
-    {
-        LayerItemDropped.SummonItem(position, item);
-    }
-}
 public class Inventory(Unit unit)
 {
     public Unit Unit { get; set; } = unit;
-    public List<ItemInstance> Items = [];
+    public List<Item> Items = [];
     public float MaxWeight = 20f;
 
     public float CurrentWeight => Items.Sum(item => item.Weight);
 
-    public bool AddItem(ItemInstance item)
+    public bool AddItem(Item item)
     {
         if (item == null)
             return false;
@@ -124,28 +116,28 @@ public class Inventory(Unit unit)
         return true;
     }
 
-    public void RemoveItem(ItemInstance item)
+    public void RemoveItem(Item item)
     {
         Items.Remove(item);
     }
-    public void ThrowItem(ItemInstance item)
+    public void ThrowItem(Item item)
     {
         Items.Remove(item);
-        ItemInstance.SummonItem(Unit.Position, item);
+        Item.SummonItem(Unit.Position, item);
     }
 }
 
 public class Equipment(Unit unit)
 {
     public Unit Unit { get; set; } = unit;
-    public List<ItemInstance> EquippedItems = [];
+    public List<Item> EquippedItems = [];
     public float MaxEquipWeight = 20f;
 
     public float CurrentEquipWeight => EquippedItems.Sum(e => e.Weight);
 
-    public bool TryEquip(ItemInstance item, Unit unit)
+    public bool TryEquip(Item item, Unit unit)
     {
-        if (item.Template is Memory)
+        if (item is Memory)
             return false;
         if (CurrentEquipWeight + item.Weight > MaxEquipWeight)
             return false;
@@ -156,7 +148,7 @@ public class Equipment(Unit unit)
         return true;
     }
 
-    public void Unequip(ItemInstance item, Unit unit)
+    public void Unequip(Item item, Unit unit)
     {
         if (!EquippedItems.Contains(item))
         {

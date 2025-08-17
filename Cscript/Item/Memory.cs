@@ -14,12 +14,12 @@ public class MemoryBag : Equipment
 {
     public MemoryBag(Unit unit) : base(unit)
     {
-        MaxEquipWeight = unit.Value;
+        MaxEquipWeight = unit.MemoryValue;
     }
 
-    public new bool TryEquip(ItemInstance item, Unit unit)
+    public new bool TryEquip(Item item, Unit unit)
     {
-        if (item.Template is not Memory)
+        if (item is not Memory)
             return false;
         if (CurrentEquipWeight + item.Weight > MaxEquipWeight)
             return false;

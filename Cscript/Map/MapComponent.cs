@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class Chest : IInteractable
 {
-    public List<ItemInstance> items = [];
+    public List<Item> items = [];
     public Grid position;
     public bool open = false;
     public Chest(Grid grid)
@@ -19,9 +19,9 @@ public class Chest : IInteractable
         }
         else
         {
-            foreach (ItemInstance item in items)
+            foreach (Item item in items)
             {
-                ItemInstance.SummonItem(position.Position, item);
+                Item.SummonItem(position.Position, item);
             }
             MapBuilder.SetLogicMapTerrain(LogicMapLayer.Stand, position, "ChestOpen");
             position.InteractableObjects.Remove(this);

@@ -24,15 +24,20 @@ public class Icefall : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 1), 0, 2, 10, "Needle", ColorBullet.Ice);
-        _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2, 10, "Needle", ColorBullet.Ice);
-        _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0,-1), 0, 2, 10, "Needle", ColorBullet.Ice);
-        Barrage.Test().Execute(sc);
-        if(sc.level >= 2)
+        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+            new Vector2(0, 1), 0, 2, 10, "Needle", ColorBullet.Ice);
+        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+            new Vector2(0, 0), 0, 2, 10, "Needle", ColorBullet.Ice);
+        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+            new Vector2(0,-1), 0, 2, 10, "Needle", ColorBullet.Ice);
+        if(sc.Level >= 2)
         {
-            _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
-            _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
-            _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, new Vector2(0, -1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
+            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+                new Vector2(0, 1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
+            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+                new Vector2(0, 0), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
+            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
+                new Vector2(0, -1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
         }
     }
     public override void AwakeBullet(SkillContext sc, Bullet bullet)
@@ -41,7 +46,7 @@ public class Icefall : Skill
         if (s != null)
         {
             bullet.damage *= 10;
-            if(sc.level == 4)
+            if(sc.Level == 4)
             {
                 s.Duration += 200;
                 sc.UnitOne.TimeEnergy -= 200;
@@ -71,7 +76,7 @@ public class MinusK : Skill
     "",
     "",
     "",
-    "，1格内单位冻结3回合"
+    " sMinusK0 "
 };
     public override string GetDescription(int level)
     {
@@ -80,7 +85,7 @@ public class MinusK : Skill
     protected override void StartActivate(SkillContext sc)
     {
         sc.UnitOne.TakeBulletDamage(30, sc.User, this);
-        sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[sc.level - 1]));
+        sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[sc.Level - 1]));
         foreach (var grid in sc.UnitOne.CurrentGrid.NearGrids(1))
         {
             if (grid.unit != null)
@@ -103,7 +108,7 @@ public class DiamondBlizzard : Skill
     "",
     "",
     "",
-    "，并击退4格"
+    " sDiamondBlizzard0 "
 };
     public override string GetDescription(int level)
     {
@@ -111,12 +116,12 @@ public class DiamondBlizzard : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        foreach(Grid g in sc.User.CurrentGrid.NearGrids(new int[] { 2, 3, 4, 4 }[sc.level - 1]))
+        foreach(Grid g in sc.User.CurrentGrid.NearGrids(new int[] { 2, 3, 4, 4 }[sc.Level - 1]))
         {
             if (g.unit != null && g.unit != sc.User)
             {
                 g.unit.CheckBodyHit(30, sc.User, this);
-                if (sc.level == 4)
+                if (sc.Level == 4)
                 {
                     Vector2I Going = (Vector2I)(g.unit.Position
                        + 4 * ((Vector2)(g.unit.Position - sc.User.Position)).Normalized() 
@@ -151,14 +156,14 @@ public class PerfectGlacialist : Skill
         Targeting = new TargetType(Target.Grid, 1, 10);
     }
     int[] t0 = { 18, 36, 54, 54 };
-    string[] t1 = { "，若已冻结则", "，若已冻结则", "，若已冻结则", "并" };
+    string[] t1 = { " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist1 " };
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t1[level - 1], t0[level - 1]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        _ = new Bullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 5, 10, "Needle", ColorBullet.White);
+        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 5, 10, "Needle", ColorBullet.White);
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
@@ -169,9 +174,9 @@ public class PerfectGlacialist : Skill
         }
         else
         {
-            for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.level - 1]; i++)
+            for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.Level - 1]; i++)
             {
-                _ = new Bullet(sc.User, this, 8, sc.UnitOne.Position, sc.UnitOne.Position + RandomV2(), 
+                Bullet.CreateBullet(sc.User, this, 8, sc.UnitOne.Position, sc.UnitOne.Position + RandomV2(), 
                     (float)GD.RandRange(1.5, 3), 6, "Small", ColorBullet.White);
             }
         }
@@ -203,7 +208,7 @@ public class PerfectFreeze : SpellCard
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 冻结的气息弥漫四周……");
         AddTimedEvent(Linspace(20,300,70), (ctx, advanceTime) =>
         {
-            var bullet = new Bullet(sc.User, this, 12, sc.User.Position, sc.User.Position + RandomV2(), 
+            var bullet = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.User.Position + RandomV2(), 
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
                 "Ring",(ColorBullet)(new List<int> { 0, 4, 9, 12, 13 })[GD.RandRange(0,4)] , advanceTime);
         });
@@ -215,7 +220,7 @@ public class PerfectFreeze : SpellCard
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
-        if (GD.Randf() <  new float[] { 0.2f,0.3f,0.4f,0.4f }[sc.level - 1])
-            sc.UnitOne.GetStatus(new Frozen( new int[] { 400,500,600,600}[sc.level - 1] ));
+        if (GD.Randf() <  new float[] { 0.2f,0.3f,0.4f,0.4f }[sc.Level - 1])
+            sc.UnitOne.GetStatus(new Frozen( new int[] { 400,500,600,600}[sc.Level - 1] ));
     }
 }

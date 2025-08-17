@@ -140,10 +140,10 @@ public partial class BarrageBox : Control, IRegisterToG
     {
         // 背包交互
         if (parent.barrage == bag)
-            Player.PlayerUnit.inventory.AddItem(new ItemInstance(draggedItem));
+            Player.PlayerUnit.inventory.AddItem(draggedItem);
         if (draggedParent.barrage == bag)
         {
-            var toremove = Player.PlayerUnit.inventory.Items.FirstOrDefault(x => x.Template == draggedItem);
+            var toremove = Player.PlayerUnit.inventory.Items.FirstOrDefault(x => x == draggedItem);
             Player.PlayerUnit.inventory.RemoveItem(toremove);
         }
         // 设置新位置
@@ -188,14 +188,14 @@ public partial class BarrageBox : Control, IRegisterToG
         bag = new(100);
         foreach (var item in unit.inventory.Items)
         {
-            if (item.Template is not BarrageComponent)
+            if (item is not BarrageComponent)
                 continue;
-            bag.Components[n] = (BarrageComponent)item.Template;
+            bag.Components[n] = (BarrageComponent)item;
             n++;
         }
         foreach(var item in unit.equipment.EquippedItems)
         {
-            if (item.Template is BarrageSet bs)
+            if (item is BarrageSet bs)
             {
                 var entry = barrageSetBox.Instantiate<BarrageSetBox>();
                 entry.Init(bs.B);

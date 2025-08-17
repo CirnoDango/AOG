@@ -3,8 +3,8 @@ using System;
 
 public partial class BcEntry : FlowContainer
 {
-    public ItemInstance RepresentedItem;
-    public Action<ItemInstance> OnClick; // 外部绑定处理逻辑
+    public Item RepresentedItem;
+    public Action<Item> OnClick; // 外部绑定处理逻辑
     private Color _originalModulate = Colors.White; // 初始颜色
 
     public override void _Ready()
@@ -13,7 +13,7 @@ public partial class BcEntry : FlowContainer
         MouseExited += OnMouseExited;
     }
 
-    public void Setup(ItemInstance item, Action<ItemInstance> clickCallback)
+    public void Setup(Item item, Action<Item> clickCallback)
     {
         RepresentedItem = item;
         OnClick = clickCallback;

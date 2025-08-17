@@ -4,7 +4,7 @@ public class BulletModule : BarrageComponent
 {
     public BulletContext bulletContext;
     public readonly static List<string> bulletShapes =
-        ["ArrowBig","Grain","Needle","Ring","Small","Square","Star"];
+        ["ArrowBig", "Grain", "Needle", "Ring", "Small", "Square", "Star", "Yinyang"];
     public BulletModule()
     {
         Name = "BulletModule";
@@ -23,15 +23,15 @@ public class BulletModule : BarrageComponent
     {
         if (parameters.TryGetValue("bulletContext", out var val))
         {
-            bulletContext = (BulletContext)val;
+            bulletContext = (BulletContext)(Dictionary<string, object>)val;
         }
     }
 
-    public override object RandomSummonParam()
+    public override Item RandomSummonParam()
     {
         BulletModule bm = new()
         {
-            bulletContext = new((float)GD.Randfn(10, 2), (float)Mathf.Pow(2, GD.Randfn(1, 1)), GD.RandRange(6, 12),
+            bulletContext = new((float)GD.Randfn(8, 2), (float)Mathf.Pow(2, GD.Randfn(1.2, 0.5)), GD.RandRange(6, 12),
                 bulletShapes[GD.RandRange(0, bulletShapes.Count - 1)],
                 (ColorBullet)GD.RandRange(0, 15))
         };
@@ -51,7 +51,7 @@ public class AddDamage : BarrageComponent, IBarrageComponentEvent
     public void ApplyTo(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
-            bc.Damage += Bonus;
+            bc.damage += Bonus;
     }
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
@@ -60,7 +60,7 @@ public class AddDamage : BarrageComponent, IBarrageComponentEvent
             Bonus = (float)val;
         }
     }
-    public override object RandomSummonParam()
+    public override Item RandomSummonParam()
     {
         Bonus = GD.RandRange(2, 10);
         return this;

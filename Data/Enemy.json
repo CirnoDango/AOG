@@ -1,163 +1,404 @@
 [
-	{
-		"Name": "cirno",
-		"Tags": [ "妖精" ],
-		"HP": 200,
-		"SP": 50,
-		"MP": 10,
-		"Str": 15,
-		"Dex": 12,
-		"Con": 10,
-		"Spi": 12,
-		"Mag": 12,
-		"Cun": 140,
-		"Value": 10,
-		"Skills": {
-		}
-	},
-	{
-		"Name": "marisa",
-		"Tags": [ "人类", "魔法使" ],
-		"HP": 200,
-		"SP": 60,
-		"MP": 50,
-		"Str": 20,
-		"Dex": 12,
-		"Con": 14,
-		"Spi": 18,
-		"Mag": 20,
-		"Cun": 13,
-		"Skills": {
-			"StardustReverie": 8,
-			"StarShoot": 8
-		}
-	},
-	{
-		"Name": "dangoPea",
-		"Tags": [ "团子" ],
-		"HP": 15,
-		"SP": 0,
-		"MP": 0,
-		"Str": 10,
-		"Dex": 10,
-		"Con": 10,
-		"Spi": 10,
-		"Mag": 10,
-		"Cun": 10,
-		"Value": 10,
-		"Skills": {
-			"Shoot": 5
-		},
-		"Equipment": {
-			"PowerBlock": 0.1
-		},
-		"Inventory": {
-			"PowerBlock": 0.1,
-			"DangoTriple": 1
-		},
-		"Memory": {
-		}
-	},
-	{
-		"Name": "dangoWater",
-		"Tags": [ "团子" ],
-		"HP": 15,
-		"SP": 0,
-		"MP": 0,
-		"Str": 10,
-		"Dex": 20,
-		"Con": 10,
-		"Spi": 10,
-		"Mag": 10,
-		"Cun": 10,
-		"Skills": {
-			"WaterShoot": 5
-		}
-	},
-	{
-		"Name": "dangoFist",
-		"Tags": [ "团子" ],
-		"HP": 50,
-		"SP": 0,
-		"MP": 0,
-		"Str": 25,
-		"Dex": 20,
-		"Con": 10,
-		"Spi": 10,
-		"Mag": 10,
-		"Cun": 10,
-		"Skills": {
-		}
-	},
-	{
-		"Name": "dangoDark",
-		"Tags": [ "团子" ],
-		"HP": 30,
-		"SP": 0,
-		"MP": 0,
-		"Str": 10,
-		"Dex": 10,
-		"Con": 10,
-		"Spi": 15,
-		"Mag": 15,
-		"Cun": 10,
-		"Skills": {
-			"NightBird": 3,
-			"DarkSideOfTheMoon": 3
-		}
-	},
-	{
-		"Name": "dangoChest",
-		"Tags": [ "团子" ],
-		"HP": 15,
-		"SP": 0,
-		"MP": 0,
-		"Str": 10,
-		"Dex": 10,
-		"Con": 10,
-		"Spi": 10,
-		"Mag": 10,
-		"Cun": 10,
-		"Skills": {
-		},
-		"Inventory": {
-			"PowerBlock": 1,
-			"Dagger": 1,
-			"DangoLight": 1,
-			"DangoTriple": 1,
-			"MagicPotion": 1
-		}
-	},
-	{
-		"Name": "rumia",
-		"Tags": [ "妖怪" ],
-		"HP": 180,
-		"SP": 50,
-		"MP": 20,
-		"Str": 12,
-		"Dex": 17,
-		"Con": 10,
-		"Spi": 18,
-		"Mag": 16,
-		"Cun": 10,
-		"Skills": {
-			"NightBird": 5,
-			"DarkSideOfTheMoon": 5
-		}
-	},
-	{
-		"Name": "reimu",
-		"Tags": [ "人类", "巫女" ],
-		"HP": 200,
-		"SP": 70,
-		"MP": 10,
-		"Str": 14,
-		"Dex": 22,
-		"Con": 16,
-		"Spi": 28,
-		"Mag": 10,
-		"Cun": 18,
-		"Skills": {
-		}
-	}
+    {
+        "Name": "reimu",
+        "Tags": [
+            "人类",
+            "巫女"
+        ],
+        "HP": 100,
+        "SP": 50,
+        "MP": 10,
+        "Str": 10,
+        "Dex": 12,
+        "Con": 14,
+        "Spi": 18,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        }
+    }, // reimu
+    {
+        "Name": "marisa",
+        "Tags": [
+            "人类",
+            "魔法使"
+        ],
+        "HP": 100,
+        "SP": 40,
+        "MP": 50,
+        "Str": 12,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 18,
+        "Cun": 14,
+        "Skills": {
+            "StardustReverie": 8,
+            "StarShoot": 8
+        }
+    }, // marisa
+    {
+        "Name": "rumia",
+        "Tags": [
+            "妖怪"
+        ],
+        "HP": 80,
+        "SP": 50,
+        "MP": 30,
+        "Str": 10,
+        "Dex": 14,
+        "Con": 12,
+        "Spi": 18,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+            "NightBird": 5,
+            "DarkSideOfTheMoon": 5
+        }
+    }, // rumia
+    {
+        "Name": "cirno",
+        "Tags": [
+            "妖精"
+        ],
+        "HP": 10000,
+        "SP": 50,
+        "MP": 20,
+        "Str": 10,
+        "Dex": 18,
+        "Con": 10,
+        "Spi": 14,
+        "Mag": 12,
+        "Cun": 10,
+        "Value": 10,
+        "Skills": {
+        }
+    }, // cirno
+    {
+        "Name": "dangoPea",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 15,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Value": 10,
+        "Skills": {
+        },
+        "Equipment": [
+            {
+                "Name": "PowerBlock",
+                "Amount": 1
+            },
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 2,
+                        "Components": [
+                            "MultiSpeedFire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 6,
+                                        "speed": 2,
+                                        "maxDistance": 10,
+                                        "shape": "Small",
+                                        "color": "Green"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "Inventory": [
+            {
+                "Name": "PowerBlock",
+                "Amount": 0.1
+            }
+        ],
+        "Memory": {
+        }
+    }, // dangoPea
+    {
+        "Name": "dangoWater",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 15,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 15,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 2,
+                        "Components": [
+                            "CircleFire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 6,
+                                        "speed": 2,
+                                        "maxDistance": 10,
+                                        "shape": "Small",
+                                        "color": "Blue"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }, // dangoWater
+    {
+        "Name": "dangoFist",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 20,
+        "SP": 0,
+        "MP": 0,
+        "Str": 20,
+        "Dex": 15,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        }
+    }, // dangoFist
+    {
+        "Name": "dangoDark",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 30,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 15,
+        "Mag": 15,
+        "Cun": 10,
+        "Skills": {
+            "NightBird": 30,
+            "DarkSideOfTheMoon": 30
+        }
+    }, // dangoDark
+    {
+        "Name": "dangoIce",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 20,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 12,
+        "Con": 12,
+        "Spi": 10,
+        "Mag": 15,
+        "Cun": 10,
+        "Skills": {
+            "Icefall": 30,
+            "DiamondBlizzard": 30
+        }
+    }, // dangoIce
+    {
+        "Name": "dangoTwinpea",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 30,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 6,
+        "Con": 14,
+        "Spi": 14,
+        "Mag": 10,
+        "Cun": 10,
+        "Value": 10,
+        "Skills": {
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 3,
+                        "Components": [
+                            "MultiSpeedFire",
+                            "Way3Fire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 6,
+                                        "speed": 2,
+                                        "maxDistance": 10,
+                                        "shape": "Small",
+                                        "color": "Green"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "Inventory": [
+            {
+                "Name": "PowerBlock",
+                "Amount": 0.1
+            }
+        ],
+        "Memory": {
+        }
+    }, // dangoTwinpea
+    {
+        "Name": "dangoRedBean",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 20,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 14,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 2,
+                        "Components": [
+                            "RandomFire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 6,
+                                        "speed": 2,
+                                        "maxDistance": 10,
+                                        "shape": "Small",
+                                        "color": "DeepRed"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }, // dangoRedBean
+    {
+        "Name": "dangoSpellcard",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 20,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 12,
+        "Con": 10,
+        "Spi": 15,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+            "DreamOrb": 30,
+            "LightToShade": 30
+        }
+    }, // dangoSpellcard
+    {
+        "Name": "dangoLight",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 20,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 15,
+        "Cun": 12,
+        "Skills": {
+            "AsteroidBelt": 30,
+            "BlazingStar": 30
+        }
+    }, // dangoLight
+    {
+        "Name": "dangoChest",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 15,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        },
+        "Inventory": [
+            {
+                "Name": "PowerBlock",
+                "Amount": 1
+            },
+            {
+                "Name": "Dagger",
+                "Amount": 1
+            },
+            {
+                "Name": "DangoLight",
+                "Amount": 1
+            },
+            {
+                "Name": "DangoTriple",
+                "Amount": 1
+            },
+            {
+                "Name": "MagicPotion",
+                "Amount": 1
+            }
+        ]
+    } // dangoChest
 ]

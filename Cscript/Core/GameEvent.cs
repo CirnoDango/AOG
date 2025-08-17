@@ -37,15 +37,25 @@ public class GameEvents
     public static float TakeSpellcardBreakDamage(Unit user, Unit target, float baseDamage)
     {
         float modifiedDamage = baseDamage;
-        foreach (var modifier in OnTakeBodyDamage)
+        foreach (var modifier in OnTakeSpellcardBreakDamage)
         {
             modifiedDamage = modifier(user, target, modifiedDamage);
         }
         return modifiedDamage;
     }
 
-    public static event Action<ItemInstance> OnItemPicked;
-    public static void ItemPicked(ItemInstance item)
+    public static List<Func<Unit, SkillInstance, bool, bool>> OnCheckSkillUsage = [];
+    public static bool CheckSkillUsage(Unit user, SkillInstance si, bool initCheck)
+    {
+        bool modifiedCheck = initCheck;
+        foreach (var modifier in OnCheckSkillUsage)
+        {
+            modifiedCheck = modifier(user, si, initCheck);
+        }
+        return modifiedCheck;
+    }
+    public static event Action<Item> OnItemPicked;
+    public static void ItemPicked(Item item)
     {
         OnItemPicked?.Invoke(item);
     }
@@ -53,6 +63,16 @@ public class GameEvents
     public static void UnitMoved(Unit unit)
     {
         OnUnitMove?.Invoke(unit);
+    }
+    public static event Action<Unit, Bullet> OnCreateBullet;
+    public static void CreateBullet(Unit unit, Bullet bullet)
+    {
+        OnCreateBullet?.Invoke(unit, bullet);
+    }
+    public static event Action<Unit> OnUnitTurnEnd;
+    public static void UnitTurnEnd(Unit unit)
+    {
+        OnUnitTurnEnd?.Invoke(unit);
     }
 }
 

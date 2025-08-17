@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 public class Barrage
@@ -13,7 +14,37 @@ public class Barrage
         for (int i = 0; i < maxComponents; i++)
             Components.Add(null);
     }
-
+    public static explicit operator Barrage(Dictionary<string, object> parameters)
+    {
+        Barrage barrage = new((int)parameters["MaxComponents"]);
+        if (parameters["Components"] is not IEnumerable<object> componentNames || !componentNames.Any())
+            return barrage.RandomSummonParam();
+        int i = 0;
+        foreach (var name in componentNames)
+        {
+            if (i >= barrage.MaxComponents) break;
+            if (name is string s)
+                barrage.Components[i] = (BarrageComponent)Item.GetItemName(s).RandomSummonParam();
+            else if (name is Dictionary<string, object> t)
+            {
+                BarrageComponent bc = (BarrageComponent)Item.GetItemName((string)t["Name"]);
+                bc.ApplyParameters((Dictionary<string, object>)t["Parameters"]);
+                barrage.Components[i] = bc;
+            }
+            i++;
+        }
+        return barrage;
+    }
+    public Barrage RandomSummonParam()
+    {
+        var bcDeck = Item.ItemDeck.Where(x => x is BarrageComponent && x is not BulletModule).ToList();
+        for(int i = 0; i < MaxComponents - 1; i++)
+        {
+            Components[i] = (BarrageComponent)Item.GetItemName(bcDeck[GD.RandRange(0, bcDeck.Count - 1)].Name).RandomSummonParam();
+        }
+        Components[^1] = (BarrageComponent)new BulletModule().RandomSummonParam();
+        return this;
+    }
     public void Execute(SkillContext sc)
     {
         List<BarrageComponent> executeBc = [.. Components.Where(x => x != null)];
@@ -23,11 +54,11 @@ public class Barrage
     public static Barrage Test()
     {
         Barrage barrage = new();
-        barrage.Components[0] = (BarrageComponent)Item.GetTemplate("AddDamage");
-        barrage.Components[1] = (BarrageComponent)Item.GetTemplate("CircleFire");
-        barrage.Components[2] = (BarrageComponent)Item.GetTemplate("Way3Fire");
-        barrage.Components[3] = (BarrageComponent)Item.GetTemplate("MultiSpeedFire");
-        barrage.Components[4] = (BarrageComponent)Item.GetTemplate("RandomFire");
+        barrage.Components[0] = (BarrageComponent)Item.GetItemName("AddDamage");
+        barrage.Components[1] = (BarrageComponent)Item.GetItemName("CircleFire");
+        barrage.Components[2] = (BarrageComponent)Item.GetItemName("Way3Fire");
+        barrage.Components[3] = (BarrageComponent)Item.GetItemName("MultiSpeedFire");
+        barrage.Components[4] = (BarrageComponent)Item.GetItemName("RandomFire");
         barrage.Components[5] = new BulletModule
         {
             bulletContext = new BulletContext(10, 2, 10, "Small", ColorBullet.Red)
@@ -36,11 +67,11 @@ public class Barrage
     }
 }
 
-public abstract class BarrageComponent : Item, IParamable
+public abstract class BarrageComponent : Item
 {
     public override bool CanEquip => false;
 
-    public virtual void ApplyParameters(Dictionary<string, object> parameters) { }
+    public override void ApplyParameters(Dictionary<string, object> parameters) { }
 
     public virtual void Execute(ref List<BulletContext> lbc, Executor executor)
     {
@@ -48,9 +79,9 @@ public abstract class BarrageComponent : Item, IParamable
             executor.Events.Add(ibce);
         executor.Continue(lbc);
     }
-    public virtual object RandomSummonParam()
+    public override Item RandomSummonParam()
     {
-        return GetTemplate(Name);
+        return GetItemName(Name);
     }
 }
 
@@ -84,7 +115,7 @@ public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
             evt.ApplyTo(ref lbc);
         foreach (var bc in lbc)
         {
-            _ = new Bullet(sc.User, Skill.NameSkill["Shoot"], bc.Damage, sc.User.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Position, sc.GridOne.Position,
                 bc.Point, bc.Angle, bc.Speed, bc.MaxDistance, bc.Shape, bc.Color);
         }
     }
@@ -100,7 +131,7 @@ public interface IBarrageComponentEvent
 
 public class BulletContext(float damage, float speed, float maxDistance, string shape, ColorBullet color)
 {
-    public float Damage = damage;
+    public float damage = damage;
     public float Speed = speed;
     public float MaxDistance = maxDistance;
     public string Shape = shape;
@@ -111,10 +142,21 @@ public class BulletContext(float damage, float speed, float maxDistance, string 
 
     internal BulletContext Clone()
     {
-        return new BulletContext(Damage, Speed, MaxDistance, Shape, Color)
+        return new BulletContext(damage, Speed, MaxDistance, Shape, Color)
         {
             Point = Point,
             Angle = Angle,
         };
+    }
+
+    public static explicit operator BulletContext(Dictionary<string, object> dict)
+    {
+        return new BulletContext(
+            Convert.ToSingle(dict["damage"]),
+            Convert.ToSingle(dict["speed"]),
+            Convert.ToSingle(dict["maxDistance"]),
+            (string)dict["shape"],
+            (ColorBullet)Enum.Parse(typeof(ColorBullet), (string)dict["color"])
+        );
     }
 }

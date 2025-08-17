@@ -38,7 +38,7 @@ public static class GameTime
             _currentTurn = TotalTurn;
             //GD.Print($"======Turn {TotalTurn}======");
         }
-        //更新unit(time,skill,status,mp),bullet,spellcard
+        //更新unit(time,skill,status,hp,mp),bullet,spellcard
         foreach (Unit u in CurrentMap.WakeUnits)
         {
             u.TimeEnergy += updateTime;
@@ -49,17 +49,19 @@ public static class GameTime
             foreach(Status status in u.Status.ToList())
             {
                 status.Duration -= updateTime;
-                if(u == Player.PlayerUnit)
+                if (u == Player.PlayerUnit)
                 {
-                    G.I.PlayerStatusBar.StatusImages[status].GetChildren().OfType<Label>().FirstOrDefault()
-                        .Text = $"{status.Duration / 100:F0}";
+                    status.label.Text = $"{status.Duration / 100:F0}";
+                    if (status.Param != -999)
+                        status.param.Text = $"{Mathf.Round(status.Param)}";
                 }
                 if (status.Duration <= 0)
                 {
                     status.OnQuit(u);
                 }
             }
-            u.CurrentMp = Math.Min(u.CurrentMp + updateTime * u.Ua.Mag/1000, u.MaxMp);
+            u.HealHp(updateTime * u.MaxHp / 10000);
+            u.GetMp(updateTime * u.Ua.Mag / 1000);
         }
         foreach (Bullet b in CurrentMap.Bullets.ToList())
         {
