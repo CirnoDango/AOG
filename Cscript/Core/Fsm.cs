@@ -1,11 +1,49 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 public static class Game
 {
     public static bool IsLoaded { get; set; } = false;
+    public static Stopwatch stopwatch = new();
+    public static TimeSpan ElapsedMilliseconds = TimeSpan.Zero;
+    public static void Tic()
+    {
+        ElapsedMilliseconds = TimeSpan.Zero;
+        stopwatch.Restart();
+    }
+    public static void Tec(string info = "")
+    {
+        if(info != "")
+            Logger.Log(info+": ");
+        Logger.Log($"耗时 {stopwatch.Elapsed - ElapsedMilliseconds}, 计 {stopwatch.Elapsed}");
+        ElapsedMilliseconds = stopwatch.Elapsed;
+    }
+    public static void Toc(string info = "")
+    {
+        if (info != "")
+            Logger.Log(info + ": ");
+        stopwatch.Stop();
+        Logger.Log($"耗时 {stopwatch.Elapsed - ElapsedMilliseconds}, 计 {stopwatch.Elapsed}");
+    }
+}
+public static class Logger
+{
+    [DllImport("kernel32.dll")]
+    public static extern void OutputDebugString(string message);
+
+    public static void Log(string message)
+    {
+        OutputDebugString($"{message}\n"); 
+    }
+}
+public static class Setting
+{
+    public static float chaos = 2;
 }
 public partial class Fsm : Node, IRegisterToG
 {
@@ -42,6 +80,7 @@ public partial class Fsm : Node, IRegisterToG
     // 示例：初始化
     public override void _Ready()
     {
+        Engine.MaxFps = 240;
         TranslationServer.SetLocale("zh");
         StartState = new StartState(this);
         PlayerSkillState = new PlayerSkillState(this);
@@ -116,7 +155,6 @@ public class PlayerSkillState(Fsm fsm) : GameState(fsm), IGameState
     public override void Start()
     {
         G.I.SkillBar.UpdateSkillCooldowns();
-        //GD.Print("现在是玩家输入状态");
     }
     public void HandleInput(InputEvent input)
     {
@@ -132,35 +170,32 @@ public class PlayerSkillTargetState(Fsm fsm) : GameState(fsm), IGameState
 }
 public class EnemySkillState(Fsm fsm) : GameState(fsm), IGameState
 {
-    public override void Update()
-    {
-        if (Scene.CurrentMap.ActiveUnit.unitAi != null)
-        {
-            Scene.CurrentMap.ActiveUnit.unitAi.Update();
-        }
-        else
-        {
-            Skill.NameSkill["Rest"].Activate(new SkillContext(Scene.CurrentMap.ActiveUnit));
-        }
-    }
+    
 }
 public class UpdatingState(Fsm fsm) : GameState(fsm), IGameState
 {
+    public static Queue<Unit> activeUnit = new();
     public override void Update()
     {
-        Unit activeUnit = GameTime.Update(null, GameTime.timePerFrame);
-        if (activeUnit == null)
+        if (activeUnit.Count > 0)
         {
-        }
-        else if (activeUnit == Player.PlayerUnit)
-        {
-            G.I.Fsm.ChangeState(Fsm.PlayerSkillState);
+            Unit unit = activeUnit.Dequeue();
+            if (unit.unitAi != null)
+            {
+                unit.unitAi.Update();
+            }
+            else if(unit == Player.PlayerUnit)
+            {
+                G.I.Fsm.ChangeState(Fsm.PlayerSkillState);
+            }
+            else
+            {
+                Skill.NameSkill["Rest"].Activate(new SkillContext(unit));
+            }
         }
         else
         {
-            Scene.CurrentMap.ActiveUnit = activeUnit;
-            G.I.Fsm.ChangeState(Fsm.EnemySkillState);
-            //activeUnit.unitAi?.AttackAi(1, 3);
+            activeUnit = GameTime.Update();
         }
     }
 }

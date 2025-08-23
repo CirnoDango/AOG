@@ -17,7 +17,9 @@ public class Barrage
     public static explicit operator Barrage(Dictionary<string, object> parameters)
     {
         Barrage barrage = new((int)parameters["MaxComponents"]);
-        if (parameters["Components"] is not IEnumerable<object> componentNames || !componentNames.Any())
+        if (!parameters.TryGetValue("Components", out _) || 
+            parameters["Components"] is not IEnumerable<object> componentNames || 
+            !componentNames.Any())
             return barrage.RandomSummonParam();
         int i = 0;
         foreach (var name in componentNames)

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 public enum LogicMapLayer
 {
@@ -174,7 +175,7 @@ public static class MapBuilder
     /// <param name="terrainToId">A dictionary mapping terrain names to their corresponding integer IDs.  If a terrain name is not found in the
     /// dictionary, the ID defaults to 0.</param>
     /// <param name="path">The file path where the JSON export will be saved.</param>
-    public static void ExportMapAsIdArray(Map map, Dictionary<string, int> terrainToId, string path)
+    public static void ExportMapAsIdArray(Map map, Dictionary<string, int> terrainToId, string path, string name)
     {
         int width = map.Width;
         int height = map.Height;
@@ -202,16 +203,36 @@ public static class MapBuilder
             Stand = standLayer
         };
 
-        var json = JsonSerializer.Serialize(export, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        // 按 name 存储
+        Dictionary<string, MapExportData> wrapper;
 
-        using var file = FileAccess.Open("user://map.json", FileAccess.ModeFlags.Write);
-        file.StoreString(json);
+        // 如果文件已存在，先读出来
+        if (FileAccess.FileExists(path))
+        {
+            using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
+            string jsonOld = file.GetAsText();
+            wrapper = JsonSerializer.Deserialize<Dictionary<string, MapExportData>>(jsonOld) ?? [];
+        }
+        else
+            wrapper = [];
+
+        // 覆盖或添加新的 name
+        wrapper[name] = export;
+
+        // 再写回
+        using (var file = FileAccess.Open(path, FileAccess.ModeFlags.Write))
+        {
+            _ = file.StoreString(JsonSerializer.Serialize(wrapper, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
+        }
     }
-    public static Map ImportMapFromJson(string path, Dictionary<int, string> idToTerrain)
+    public static Map ImportMapFromJson(string path, string name,
+        Dictionary<int, string> idToTerrainBase = null, Dictionary<int, string> idToTerrainStand = null)
     {
+        idToTerrainBase ??= BaseToId.ToDictionary(kv => kv.Value, kv => kv.Key);
+        idToTerrainStand ??= StandToId.ToDictionary(kv => kv.Value, kv => kv.Key);
         if (!FileAccess.FileExists(path))
         {
             GD.PrintErr($"地图文件不存在：{path}");
@@ -221,11 +242,12 @@ public static class MapBuilder
         using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
         string json = file.GetAsText();
 
-        var mapData = JsonSerializer.Deserialize<MapExportData>(json);
+        // 读取整个 wrapper
+        var wrapper = JsonSerializer.Deserialize<Dictionary<string, MapExportData>>(json);
 
-        if (mapData == null)
+        if (wrapper == null || !wrapper.TryGetValue(name, out var mapData))
         {
-            GD.PrintErr("解析 JSON 失败！");
+            GD.PrintErr($"JSON 中没有找到名字为 {name} 的地图数据");
             return null;
         }
 
@@ -243,8 +265,8 @@ public static class MapBuilder
                 int baseId = mapData.Base[y][x];
                 int standId = mapData.Stand[y][x];
 
-                string tBase = idToTerrain.TryGetValue(baseId, out var b) ? b : "None";
-                string tStand = idToTerrain.TryGetValue(standId, out var s) ? s : "";
+                string tBase = idToTerrainBase.TryGetValue(baseId, out var b) ? b : "None";
+                string tStand = idToTerrainStand.TryGetValue(standId, out var s) ? s : "";
 
                 map.Grid[x, y] = new Grid(new Vector2I(x, y), tBase, tStand);
             }
@@ -252,7 +274,22 @@ public static class MapBuilder
 
         return map;
     }
-
+    public static Dictionary<string, int> BaseToId = new()
+    {
+        { "Grass",  1 },
+        { "Water",  2 },
+        { "Road",   3 },
+        { "Wall",   4 },
+        { "Stone",  5 },
+        { "Floor",  6 },
+        { "Stair",  7 },
+    };
+    public static Dictionary<string, int> StandToId = new()
+    {
+        { "DoorClosed",  1 },
+        { "DoorOpen",  2 },
+        { "Forest",   3 },
+    };
     public class MapExportData
     {
         public int Width { get; set; }

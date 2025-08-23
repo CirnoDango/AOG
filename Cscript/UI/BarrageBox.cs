@@ -43,23 +43,36 @@ public partial class BarrageBox : Control, IRegisterToG
         EquipButton.MouseEntered += () => { if (!EquipState) EquipLight.Modulate = Colors.Gray; };
         EquipButton.MouseExited += () => { if (!EquipState) EquipLight.Modulate = Colors.Transparent; };
         EquipButton.Pressed += () => {
-            if (draggedItem != null)
+            if (draggedItem == null)
                 EquipState = true; UpdateButtonStates();
         };
 
         ThrowButton.MouseEntered += () => { if (EquipState) ThrowLight.Modulate = Colors.Gray; };
         ThrowButton.MouseExited += () => { if (EquipState) ThrowLight.Modulate = Colors.Transparent; };
         ThrowButton.Pressed += () => {
-            if (draggedItem != null)
+            if (draggedItem == null)
                 EquipState = false; UpdateButtonStates();
         };
     }
     public void OnSlotClicked(BarrageSetBox parent, TextureButton slotButton)
     {
+        
         // 获取按钮下的图标节点
         TextureRect itemIcon = null;
         if (slotButton.GetChildCount() > 0)
             itemIcon = (TextureRect)slotButton.GetChild(0);
+        // 丢弃
+        if (!EquipState && itemIcon != null)
+        {
+            Item toThrow = parent.Buttons[slotButton];
+            if (bag.Components.Contains(toThrow))
+            {
+                Player.PlayerUnit.inventory.ThrowItem(toThrow);
+                slotButton.RemoveChild(itemIcon);
+                slotButton.TooltipText = null;
+            }
+            return;
+        }
         if (draggedItem == null && itemIcon != null)
         {
             // 1. 开始拖动：从原位置取出图标，放到顶层
@@ -122,10 +135,12 @@ public partial class BarrageBox : Control, IRegisterToG
         selectButton.RemoveChild(draggedIcon);
 
         slotButton.AddChild(draggedIcon);
+        slotButton.TooltipText = draggedItem.GetDescription();
         draggedIcon.Position = Vector2.Zero;
         draggedIcon.ZIndex = 0;
 
         selectButton.AddChild(targetIcon);
+        selectButton.TooltipText = targetItem.GetDescription();
         targetIcon.Position = Vector2.Zero;
         targetIcon.ZIndex = 0;
 
@@ -140,7 +155,7 @@ public partial class BarrageBox : Control, IRegisterToG
     {
         // 背包交互
         if (parent.barrage == bag)
-            Player.PlayerUnit.inventory.AddItem(draggedItem);
+            Player.PlayerUnit.inventory.Items.Add(draggedItem);
         if (draggedParent.barrage == bag)
         {
             var toremove = Player.PlayerUnit.inventory.Items.FirstOrDefault(x => x == draggedItem);
@@ -160,7 +175,9 @@ public partial class BarrageBox : Control, IRegisterToG
         selectButton.Modulate = Colors.White;
         TextureRect moveIcon = (TextureRect)selectButton.GetChild(0);
         selectButton.RemoveChild(moveIcon);
+        selectButton.TooltipText = null;
         slotButton.AddChild(moveIcon);
+        slotButton.TooltipText = draggedItem.GetDescription();
         moveIcon.Position = Vector2.Zero;
         moveIcon.ZIndex = 0;
 
@@ -198,7 +215,7 @@ public partial class BarrageBox : Control, IRegisterToG
             if (item is BarrageSet bs)
             {
                 var entry = barrageSetBox.Instantiate<BarrageSetBox>();
-                entry.Init(bs.B);
+                entry.Init(bs);
                 BarrageList.AddChild(entry);
             }
         }

@@ -12,17 +12,35 @@ public partial class Unit
         {
             Color = Colors.DarkGray,
             Size = new Vector2(1 / imageSizeFactor, 16 / imageSizeFactor),
-            Position = new Vector2(6 / imageSizeFactor, -8 / imageSizeFactor) // 靠右
+            Position = new Vector2(6 / imageSizeFactor, -8 / imageSizeFactor),
+            Scale = new Vector2(1, 0.95f)
         };
         sprite.AddChild(hpBarBack);
 
         // HP条前景（红色）
         hpBarAhead = new ColorRect
         {
-            Color = Colors.Red,
             Size = new Vector2(1 / imageSizeFactor, 16 / imageSizeFactor), // 初始满血
             Position = Vector2.Zero
         };
+        switch (Ego)
+        {
+            case UnitEgo.normal:
+                hpBarAhead.Color = Colors.Red;
+                break;
+            case UnitEgo.elite:
+                hpBarAhead.Color = Colors.Green;
+                break;
+            case UnitEgo.great:
+                hpBarAhead.Color = Colors.Blue;
+                break;
+            case UnitEgo.boss:
+                hpBarAhead.Color = Colors.Gold;
+                break;
+            case UnitEgo.eliteBoss:
+                hpBarAhead.Color = Colors.Purple;
+                break;
+        }
         hpBarBack.AddChild(hpBarAhead);
         if (MaxSp == 0)
             return;
@@ -31,8 +49,10 @@ public partial class Unit
         {
             Color = Colors.DarkGray,
             Size = new Vector2(1 / imageSizeFactor, 16 / imageSizeFactor),
-            Position = new Vector2(5 / imageSizeFactor, -8 / imageSizeFactor) // 比 hp 左 1 个单位
+            Position = new Vector2(5 / imageSizeFactor, -8 / imageSizeFactor),
+            Scale = new Vector2(1, 0.95f)
         };
+
         sprite.AddChild(spBarBack);
 
         // SP条前景（黄色）
@@ -217,7 +237,7 @@ public partial class Unit
     {
         List<Grid> oldVisibleGrids = [];
         if (CurrentGrid != null)
-            oldVisibleGrids = CurrentGrid.NearGrids(12);
+            oldVisibleGrids = CurrentGrid.NearGrids(14);
         var newVisibleGrids = GridInVision();
 
         // 半雾处理：原来能看见但现在看不见的变成 HalfFog
@@ -228,11 +248,9 @@ public partial class Unit
                 MapBuilder.SetLogicMapTerrain(LogicMapLayer.FogOfWar, g, "HalfFog");
                 g.unit?.sprite.Visible = false;
             }
-
-
         }
         // 新增清晰视野
-        foreach (var g in CurrentGrid.NearGrids(12))
+        foreach (var g in CurrentGrid.NearGrids(14))
         {
             if (newVisibleGrids.Contains(g))
             {
@@ -321,8 +339,7 @@ public partial class Unit
                 return unit != null ? HighlightType.green : HighlightType.blue;
 
             case Target.Enemy:
-
-                if (unit != null && unit != Player.PlayerUnit)
+                if (unit != null && unit.friendness * friendness < 0)
                     return HighlightType.green;
                 else
                     return HighlightType.blue;
@@ -335,6 +352,8 @@ public partial class Unit
                 List<Grid> gr = RayCheck(grid);
                 if (gr == null || gr.Count == 0)
                     return HighlightType.blue;
+                return HighlightType.green;
+            case Target.Self:
                 return HighlightType.green;
             default:
                 return HighlightType.blue;
@@ -388,7 +407,7 @@ public partial class Unit
                 }
             }
         }
-        return grids;
+        return [.. grids];
     }
     public void GetStatus(Status status)
     {
@@ -400,6 +419,10 @@ public partial class Unit
 HP:{CurrentHp:F0}/{MaxHp:F0}
 SP:{CurrentSp:F0}/{MaxSp:F0}
 MP:{CurrentMp:F0}/{MaxMp:F0}
+力量 :{Ua.Str + 10}  敏捷 :{Ua.Dex + 10}  体质 :{Ua.Con + 10} 
+灵力 :{Ua.Spi + 10}  魔力 :{Ua.Mag + 10}  灵巧 :{Ua.Cun + 10}
+体术命中 :{Ua.BodyDamageAccuracy*100:F1}  弹幕命中 :{Ua.BulletDamageAccuracy * 100:F1}
+闪避 :{Ua.DamageEvasion * 100:F1}  擦弹 :{Ua.BulletGraze * 100:F1}
 当前状态:";
         foreach (Status s in Status)
         {

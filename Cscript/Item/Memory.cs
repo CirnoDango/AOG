@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 public abstract class Memory : Item
 {
     public new string TrName => $"m{Name}";
-    public new bool CanEquip => false;
+    public new static bool CanEquip => false;
+    public string Group { get; set; } = "";
 }
 
 public class MemoryBag : Equipment

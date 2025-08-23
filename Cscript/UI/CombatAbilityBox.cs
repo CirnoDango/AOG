@@ -16,11 +16,11 @@ public partial class CombatAbilityBox : Control
     {
         HeadPicture.Texture =(Texture2D)GD.Load($"res://Assets/Portraits/Fix/{unit.Name}.png");
         string text1 = 
-$@"{(unit.TrName)} 
-HP:{unit.CurrentHp:F0}/{unit.MaxHp:F0}
-SP:{unit.CurrentSp:F0}/{unit.MaxSp:F0}
-MP:{unit.CurrentMp:F0}/{unit.MaxMp:F0}
-当前状态: ";
+        $@"{(unit.TrName)} 
+         HP:{unit.CurrentHp:F0}/{unit.MaxHp:F0}
+         SP:{unit.CurrentSp:F0}/{unit.MaxSp:F0}
+         MP:{unit.CurrentMp:F0}/{unit.MaxMp:F0}
+         当前状态: ";
         foreach (Status s in unit.Status)
         {
             text1 += $"{s.TrName}({(s.Duration / 100):F0} 回合 )；";
@@ -31,14 +31,16 @@ MP:{unit.CurrentMp:F0}/{unit.MaxMp:F0}
         text1 += $"\n 装备容量 ：{unit.equipment.CurrentEquipWeight:F1}/{unit.equipment.MaxEquipWeight:F1}";
         
         string text2 =
-$@" 力量 :{unit.Ua.Str + 10}  敏捷 :{unit.Ua.Dex + 10}  体质 :{unit.Ua.Con + 10} 
- 灵力 :{unit.Ua.Spi + 10}  魔力 :{unit.Ua.Mag + 10}  灵巧 :{unit.Ua.Cun + 10}
- 体术伤害 :{unit.Ua.DamageBody:F1}%
- 弹幕伤害 :{unit.Ua.DamageBullet:F1}%
- 整体速度 :{unit.Ua.SpeedGlobal:F1}%
- 战斗速度 :{unit.Ua.SpeedCombat:F1}%
- 移动速度 :{unit.Ua.SpeedMove:F1}%
-";
+        $@" 力量 :{unit.Ua.Str + 10}  敏捷 :{unit.Ua.Dex + 10}  体质 :{unit.Ua.Con + 10} 
+         灵力 :{unit.Ua.Spi + 10}  魔力 :{unit.Ua.Mag + 10}  灵巧 :{unit.Ua.Cun + 10}
+         体术命中 :{unit.Ua.BodyDamageAccuracy * 100:F1}  弹幕命中 :{unit.Ua.BulletDamageAccuracy * 100:F1}
+         闪避 :{unit.Ua.DamageEvasion * 100:F1}  擦弹 :{unit.Ua.BulletGraze * 100:F1}
+         体术伤害 :{unit.Ua.DamageBody:F1}%
+         弹幕伤害 :{unit.Ua.DamageBullet:F1}%
+         整体速度 :{unit.Ua.SpeedGlobal:F1}%
+         战斗速度 :{unit.Ua.SpeedCombat:F1}%
+         移动速度 :{unit.Ua.SpeedMove:F1}%
+        ";
         string text3 = " 持有技能 ：\n";
         foreach ((SkillInstance si, _) in unit.skills)
         {

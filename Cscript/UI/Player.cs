@@ -1,14 +1,23 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class Player : CharacterBody2D, IRegisterToG
 {
     // 每次移动的格子大小（比如 16 或 32 像素）
     public int TileSize = 16;
     public static Unit PlayerUnit;
-    public int UaPoint = 80;
-    public int SkillPoint = 80;
+    public int UaPoint
+    {
+        get => PlayerUnit.Ua.uaPoint;
+        set => PlayerUnit.Ua.uaPoint = value;
+    }
+    public int SkillPoint
+    {
+        get => PlayerUnit.Ua.skillPoint;
+        set => PlayerUnit.Ua.skillPoint = value;
+    }
     public static Dictionary<Key, GameState> BoxEntryKeys => new()
     {
         {Key.R,Fsm.InventoryBoxState },
@@ -50,7 +59,12 @@ public partial class Player : CharacterBody2D, IRegisterToG
     }
     public static void Init(string name, float zoom)
     {
-        Unit unit = EnemyLoader.LoadEnemy(name);
+        Unit unit = EnemyLoader.LoadEnemy(name, false);
+        PlayerUnit = unit;
+        foreach (var (skill, _) in unit.skills)
+        {
+            G.I.SkillBar.LearnSkill(skill);
+        }
         SpriteManager.LoadEnemy(unit);
         GameLoader.rootnode.AddChild(unit.sprite);
         unit.sprite.Position = 16 * unit.Position;
@@ -71,7 +85,6 @@ public partial class Player : CharacterBody2D, IRegisterToG
         unit.sprite.AddChild(cam);  // 加到角色节点下
         cam.MakeCurrent();  // 设置为当前摄像机
         cam.Position = new Vector2I(8, 8);
-        PlayerUnit = unit;
         PlayerUnit.friendness = 1;
         G.I.PlayerStatusBar.Init();
     }
@@ -119,8 +132,14 @@ public partial class Player : CharacterBody2D, IRegisterToG
             {
                 if(PlayerUnit.CurrentGrid.TerrainBaseGround == "Stair")
                 {
+
                     Scene.Quit();
                 }
+                return;
+            }
+            if (key == Key.Home)
+            {
+                Scene.Quit();
                 return;
             }
             if (BoxEntryKeys.TryGetValue(key, out var entry))

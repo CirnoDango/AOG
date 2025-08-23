@@ -63,6 +63,7 @@ public partial class CaveD : Node
         string player = GameData.SelectedCharacter;
         // 场景资源加载
         Player.Init(player, 3);
+        Player.PlayerUnit.Ua.Cun += 100;
         Player.PlayerUnit.LearnSkillGroup("Freeze");
         Player.PlayerUnit.LearnSkillGroup("Dark");
         Player.PlayerUnit.LearnSkillGroup("Star");
@@ -75,17 +76,30 @@ public partial class CaveD : Node
         Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mUaCun"));
         Floor1.MapGoto = Floor2;
         Floor2.MapGoto = Floor3;
-        Scene.Enter(Floor1);
         Floor1.SummonChest(200, 1);
+        Floor2.SummonChest(20, 100);
+        Scene.Enter(Floor1);
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } }));
         Player.PlayerUnit.inventory.AddItem(
             Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
-        Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("BarrageSet", new Dictionary<string, object> { { "barrage", Barrage.Test() } }));
-        Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("BarrageSet", new Dictionary<string, object> { { "barrage", Barrage.Test() } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("AddDamage"));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("AddDamage").RandomSummonParam());
     }
     
     public async void Victory()

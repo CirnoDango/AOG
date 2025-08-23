@@ -30,7 +30,7 @@ public class Icefall : Skill
             new Vector2(0, 0), 0, 2, 10, "Needle", ColorBullet.Ice);
         Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
             new Vector2(0,-1), 0, 2, 10, "Needle", ColorBullet.Ice);
-        if(sc.Level >= 2)
+        if (sc.Level >= 2)
         {
             Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
                 new Vector2(0, 1), Vector2.Right, 2.5f, 10, "Needle", ColorBullet.Ice);
@@ -104,12 +104,16 @@ public class DiamondBlizzard : Skill
         Targeting = new TargetType(Target.Self);
     }
     int[] t0 = { 2, 3, 4, 4 };
-    string[] extra = {
+    string[] extra = [
     "",
     "",
     "",
     " sDiamondBlizzard0 "
-};
+    ];
+    public override TargetType GetTargeting(int level)
+    {
+        return new TargetType(Target.Self, 1, t0[level]);
+    }
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);

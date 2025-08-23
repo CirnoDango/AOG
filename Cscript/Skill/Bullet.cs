@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -144,6 +145,28 @@ public class Bullet
         GameLoader.rootnode.AddChild(sprite);
         return sprite;
     }
+    public static Sprite2D ReadImage(ColorBullet color, string Shape)
+    {
+        var atlas = GD.Load<Texture2D>($"res://Assets/Bullets/{Shape}.png");
+        if (atlas == null)
+            return null; // 如果图像不存在，直接返回 null
+
+        var atlasTexture = new AtlasTexture
+        {
+            Atlas = atlas
+        };
+        int index = (int)color;
+        int col = index % 4; // 每行4个
+        int row = index / 4;
+
+        atlasTexture.Region = new Rect2(col * 16, row * 16, 16, 16);
+        Sprite2D sprite = new()
+        {
+            Texture = atlasTexture,
+            ZIndex = -10
+        };
+        return sprite;
+    }
     public void Update(float time)
     {
         foreach (Vector2I pos in UpdateGrid(time / 100))
@@ -187,8 +210,10 @@ public class Bullet
         Scene.CurrentMap.Bullets.Remove(this);
         image.QueueFree();
     }
+    public Action<Unit> OnActive;
     public void Active(Unit target)
     {
+        OnActive?.Invoke(target);
         skill.AwakeBullet(new SkillContext(creator, target), this);
         target.TakeBulletDamage(damage, creator, skill);
         skill.ActivateBullet(new SkillContext(creator, target), this);

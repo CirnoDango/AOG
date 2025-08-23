@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using static Godot.TextServer;
 public enum AiState
 {
     Sleep, // 空闲状态
@@ -41,7 +40,11 @@ public class UnitAi(Unit u)
                     State = AiState.Attack; break;
                 }
                 if(unit.Position == Player.PlayerUnit.Position)
+                {
                     unit.unitAi.SleepAi();
+                    Scene.CurrentMap.WakeUnits.Remove(unit);
+                }
+                    
                 break;
         }
         switch (State)
@@ -61,33 +64,7 @@ public class UnitAi(Unit u)
     public void AttackAi(float attackValue, float tacticMoveValue)
     {
         var skills = unit.skills;
-        int bestDistance = 1;
-        double bestScore = double.MinValue;
-
-        // 1. 计算优势距离（1~32）以最大化技能收益
-        for (int dist = 1; dist <= 32; dist++)
-        {
-            double score = 0;
-            foreach (var lvp in skills)
-            {
-                var skill = lvp.skill;
-                if (skill.Template.EffectType == EffectType.Passive || skill.Targeting.Range == -1)
-                    continue;
-                float weight = lvp.weight;
-                int skillDistance = skill.Targeting.Range;
-                if (skillDistance == 0) { continue; }
-                double diff = Math.Abs(dist - skillDistance) + 0.3;
-                score += weight / (diff * diff);
-            }
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestDistance = dist;
-            }
-        }
-        bestDistance /= 2;
-
+        int bestDistance = unit.bestDistance;
         // 2. 构建候选技能列表（技能+普通攻击+战术移动）
         List<(string, float weight)> candidates = new();
 

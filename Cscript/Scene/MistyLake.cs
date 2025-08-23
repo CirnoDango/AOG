@@ -5,33 +5,99 @@ using System.Threading.Tasks;
 
 public partial class MistyLake : Node
 {
-    public static Map Floor1 = new(60, 60);
-    private TaskCompletionSource clickTcs;
-    public static void Init()
+    public static Map Floor1 = new(60, 40);
+    public static Map Floor2 = new(60, 40);
+    public static Map Floor3 = new(60, 40);
+    public static Map diShuiLake = new(34, 34);
+    private static TaskCompletionSource clickTcs;
+    public override void _Ready()
     {
-        MapGenerator.ChangeMapByRegionGrow(Floor1, LogicMapLayer.BaseGround, LogicMapLayer.BaseGround,
-            "Grass", "Water", 15, 1, 100, 15);
-        MapGenerator.ChangeMapByEnvolve(LogicMapLayer.BaseGround, "Grass", Floor1, 1);
-        MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
-            new Dictionary<string, float>
-            {
-                { "Forest", 0.4f },
-                { "", 0.6f }
-            }, Floor1);
-        MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "Forest", Floor1, 2);
-        foreach (var grid in Floor1.Grid)
+        Floor1.EnemySummonValue = new Dictionary<string, float>
         {
-            if (grid.TerrainBaseGround == "Water" && grid.TerrainStand == "Forest")
-            {
-                grid.TerrainStand = "";
-            }
+            { "dangoPea",       0.1f },
+            { "dangoWater",     0.3f },
+            { "dangoFist",      0.1f },
+            { "dangoDark",      0.2f },
+            { "dangoIce",       0.3f },
+            { "dangoTwinpea",   0.1f },
+            { "dangoRedBean",   0.1f },
+            { "dangoSpellcard", 0.1f },
+            { "dangoLight",     0.1f },
+        };
+        Floor2.EnemySummonValue = new Dictionary<string, float>
+        {
+            { "dangoPea",       0.1f },
+            { "dangoWater",     0.3f },
+            { "dangoFist",      0.1f },
+            { "dangoDark",      0.3f },
+            { "dangoIce",       0.3f },
+            { "dangoTwinpea",   0.1f },
+            { "dangoRedBean",   0.1f },
+            { "dangoSpellcard", 0.1f },
+            { "dangoLight",     0.1f },
+        };
+        Floor3.EnemySummonValue = new Dictionary<string, float>
+        {
+            { "dangoPea",       0.1f },
+            { "dangoWater",     0.3f },
+            { "dangoFist",      0.1f },
+            { "dangoDark",      0.1f },
+            { "dangoIce",       0.3f },
+            { "dangoTwinpea",   0.2f },
+            { "dangoRedBean",   0.2f },
+            { "dangoSpellcard", 0.1f },
+            { "dangoLight",     0.1f },
+        };
+        Fsm.StartState.OnEnd += Load;
+        Fsm.StartState.OnEnd += Init;
+        G.I.Fsm.ChangeState(Fsm.StartState);
+        
+    }
+    public static bool inited = false;
+    public void Init()
+    {
+        if (inited)
+        {
+            return;
         }
-        MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Road", Floor1, out int y);
-        Floor1.Entrance = new Vector2I(0, y);
+        inited = true;
+        CreateFloor(Floor1);
+        CreateFloor(Floor2);
+        CreateFloor(Floor3);
+        Floor1.MapGoto = Floor2;
+        Floor2.MapGoto = Floor3;
+        diShuiLake = MapBuilder.ImportMapFromJson("res://map.json", "dishuiLake");
+        Floor3.MapGoto = diShuiLake;
+        MapBuilder.BuildTileMapFromLogic(diShuiLake);
+        diShuiLake.Entrance = new Vector2I(0, 32);
         Scene.Enter(Floor1);
         Unit.OnPlayerdied += Playerdied;
+        Floor2.AfterEnter += CreateMidboss;
+        diShuiLake.AfterEnter += Createboss;
+        static void CreateFloor(Map floor)
+        {
+            MapGenerator.ChangeMapByRegionGrow(floor, LogicMapLayer.BaseGround, LogicMapLayer.BaseGround,
+                        "Grass", "Water", 15, 1, 100, 15);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.BaseGround, "Grass", floor, 1);
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+                new Dictionary<string, float>
+                {
+                { "Forest", 0.4f },
+                { "", 0.6f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "Forest", floor, 2);
+            foreach (var grid in floor.Grid)
+            {
+                if (grid.TerrainBaseGround == "Water" && grid.TerrainStand == "Forest")
+                {
+                    grid.TerrainStand = "";
+                }
+            }
+            MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Road", floor, out int y, out int ey);
+            floor.Entrance = new Vector2I(0, y);
+            floor.SetExit(floor.GetGrid(new Vector2I(59, ey)));
+        }
     }
-
     private static void Playerdied()
     {
         DialogBox.SShow();
@@ -41,100 +107,85 @@ public partial class MistyLake : Node
         ]);
     }
 
-    public override void _Ready()
+    public static void CreateMidboss()
     {
-        Floor1.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea",       1f },
-            { "dangoWater",     1f },
-            { "dangoFist",      1f },
-            { "dangoDark",      1f },
-            { "dangoIce",       1f },
-            { "dangoTwinpea",   1f },
-            { "dangoRedBean",   1f },
-            { "dangoSpellcard", 1f },
-            { "dangoLight",     1f },
-        };
-        Fsm.StartState.OnEnd += Load;
-        Fsm.StartState.OnEnd += Init;
-        G.I.Fsm.ChangeState(Fsm.StartState);
-        //Floor3.AfterEnter += Createboss;
+        Floor2.CreateEnemy(Floor2.Exit, "rumia", UnitEgo.great);
     }
     public void Createboss()
     {
-        //var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
-        //boss.inventory.AddItem(Item.GetItemName("DangoLight"));
-        //GameEvents.OnEnemyKilled += enemy =>
-        //{
-        //    if (enemy == boss)
-        //    {
-        //        Victory();
-        //    }
-        //};
+        var boss = diShuiLake.CreateEnemy(new Vector2I(20, 32), "cirno", UnitEgo.boss);
+        GameEvents.OnEnemyKilled += enemy =>
+        {
+            if (enemy == boss)
+            {
+                Victory();
+            }
+        };
     }
+    public static bool loaded = false;
     public async void Load()
     {
+        if (loaded)
+        {
+            return;
+        }
+        loaded = true;
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 3);
+        Player.Init(player, 3f);
+        G.I.SkillPanel.Refresh();
         switch (player)
         {
-            case "cirno":
-                Player.PlayerUnit.LearnSkillGroup("YinyangBall");
+            case "reimu":
+                G.I.SkillPanel.Add("YinyangBall");
                 break;
             case "marisa":
-                Player.PlayerUnit.LearnSkillGroup("Star");
+                G.I.SkillPanel.Add("Star");
+                break;
+            case "cirno":
+                G.I.SkillPanel.Add("Freeze");
                 break;
             case "rumia":
-                Player.PlayerUnit.LearnSkillGroup("Dark");
+                G.I.SkillPanel.Add("Dark");
                 break;
         }
-        G.I.SkillPanel.Refresh();
-        G.I.SkillPanel.Add("YinyangBall");
-        G.I.SkillPanel.Add("Star");
-        G.I.SkillPanel.Add("Freeze");
-        G.I.SkillPanel.Add("Dark");
-        Player.PlayerUnit.Ua.skillPoint += 99;
-        await ToSignal(GetTree().CreateTimer(0.01), "timeout");
+        Player.PlayerUnit.Ua.skillPoint += 6;
+        Player.PlayerUnit.Ua.uaPoint += 5;
+        Player.PlayerUnit.Memorys.MaxEquipWeight = 5;
+        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("HealPotion"));
+        Floor1.SummonChest(8, 3);
+        Floor2.SummonChest(8, 3);
+        Floor3.SummonChest(8, 3);
+        await ToSignal(GetTree().CreateTimer(0.1), "timeout");
         G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
         G.I.DialogBox.ShowDialog([
             new("任务目标：", LoadPortrait("null"),
-            "找到发光团子。")
+            "查明雾之湖发生的变化。")
         ]); await Click();
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
+        
     }
     
     public async void Victory()
     {
         G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
-        G.I.DialogBox.ShowDialog([
-            new("露米娅", LoadPortrait("rumia_break_redface_cry"),
-            "呜……好不容易才拿到的超级发光团子……")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("露米娅", LoadPortrait("rumia_break_redface_cry"),
-            "唔……我就吃了一口……就一口啊……你要吃就拿去好了……")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("露米娅", LoadPortrait("rumia_break_redface_cry2"),
-            "……不过说真的，那团子是会发光的耶，很难得看到这么香又这么亮的甜点，不吃怎么行嘛！")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("露米娅", LoadPortrait("rumia_break_redface_relax"),
-            "被你打败了也没办法啦。下次再抢到好吃的，我可不会告诉你在哪哟～♪")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("", LoadPortrait("null"),
-            "恭喜获得胜利！")
-        ]); await Click();
+        await ShowDialogSequence(
+            new("琪露诺", L("cirno_fight_cry"),
+                "这儿……不是雾之湖？雾气、青蛙、大酱……都不在……？"),
+            new("我……想回幻想乡……想回到湖边和大酱一起玩……"),
+            new("呐，你知道回去的办法吗？我不想一个人待在这里……"),
+            new("等我回去以后，一定要在湖面上做出更漂亮的冰雕……嗯！一定要……"),
+            new("", L("null"),
+                "恭喜获得游戏胜利!v0.3版本的内容就到此为止了,敬请期待下次更新。")
+        );
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
 
-    public async Task Click()
+    public static async Task Click()
     {
         clickTcs = new TaskCompletionSource();
         await clickTcs.Task;
@@ -149,6 +200,18 @@ public partial class MistyLake : Node
         {
             clickTcs.TrySetResult();
             //clickTcs = null;
+        }
+    }
+    public static Texture2D L(string name)
+    {
+        return GD.Load<Texture2D>($"res://Assets/Portraits/{name}.png");
+    }
+    public async Task ShowDialogSequence(params DialogLine[] lines)
+    {
+        foreach (var line in lines)
+        {
+            G.I.DialogBox.ShowDialog([line]);
+            await Click();
         }
     }
 }

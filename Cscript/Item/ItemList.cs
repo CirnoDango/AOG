@@ -89,12 +89,12 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
         public Instance(MagicPotion parent)
         {
             _mp = parent.MpRecoverPercent;
+            Texture = parent.Texture;
             Name = "MagicPotion";
             SkillGroup = "Item";
             Description = $"恢复{_mp}%MP";
             Cooldown = 2000;
             Targeting = new TargetType(Target.Self);
-            Texture = GetTemplate(Name).Texture;
         }
         public Skill GetSkill(SkillItem parent)
         {
@@ -108,7 +108,40 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
     }
 }
 
+public class HealPotion : SkillItem<HealPotion.Instance>
+{
+    public int HpRecoverPercent { get; private set; } = 60;
+    public HealPotion()
+    {
+        Name = "HealPotion";
+        Weight = 8f;
+        Description = "获得技能：HP恢复";
+    }
 
+    public class Instance : Skill, ISkillInstance
+    {
+        private readonly int _hp;
+        public Instance(HealPotion parent)
+        {
+            _hp = parent.HpRecoverPercent;
+            Texture = parent.Texture;
+            Name = "HealPotion";
+            SkillGroup = "Item";
+            Description = $"恢复{_hp}%HP";
+            Cooldown = 2000;
+            Targeting = new TargetType(Target.Self);
+        }
+        public Skill GetSkill(SkillItem parent)
+        {
+            return new Instance((HealPotion)parent);
+        }
+
+        protected override void StartActivate(SkillContext sc)
+        {
+            sc.User.GetHp(sc.User.MaxHp * _hp / 100f);
+        }
+    }
+}
 
 public class Axe : Item
 {

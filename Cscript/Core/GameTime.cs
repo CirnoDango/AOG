@@ -1,42 +1,22 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static Scene;
 public static class GameTime
 {
-    public static float timePerFrame = 100;
-    public static float totalTime = 0;
-    public static int TotalTurn { get => (int)(totalTime / 100); }
-    private static int _currentTurn = 0;
-    public static Unit Update(Unit unit, float time)
+    public static Queue<Unit> Update()
     {
-        //确定更新时间
-        if (CurrentMap.Bullets.Count > 0 || SpellCard.currentSpellcards.Count > 0)
-        {
-            timePerFrame = 1.2f;
-        }
-        else
-        {
-            timePerFrame = 100;
-        }
-        if (unit != null)
-            unit.TimeEnergy -= time;
-        float updateTime = timePerFrame;
-        Unit activeUnit = null;
+        float updateTime = 1f;
+        if (CurrentMap.Bullets.Count == 0)
+            updateTime = 20;
+        Queue<Unit> activeUnit = new();
         foreach (Unit u in CurrentMap.WakeUnits)
         {
-            if(-u.TimeEnergy < updateTime)
+            if(u.TimeEnergy > -updateTime)
             {
-                updateTime = -u.TimeEnergy;
-                activeUnit = u;
+                activeUnit.Enqueue(u);
             }
-        }
-        //打印确定好的更新时间
-        totalTime += updateTime;
-        if (TotalTurn > _currentTurn)
-        {
-            _currentTurn = TotalTurn;
-            //GD.Print($"======Turn {TotalTurn}======");
         }
         //更新unit(time,skill,status,hp,mp),bullet,spellcard
         foreach (Unit u in CurrentMap.WakeUnits)
@@ -76,8 +56,6 @@ public static class GameTime
     }
     public static void Reset()
     {
-        totalTime = 0;
-        _currentTurn = 0;
     }
 }
 

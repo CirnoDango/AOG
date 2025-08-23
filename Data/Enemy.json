@@ -13,7 +13,8 @@
         "Con": 14,
         "Spi": 18,
         "Mag": 10,
-        "Cun": 10,
+        "Cun": 10, 
+        "SkillGroups": ["YinyangBall"],
         "Skills": {
         }
     }, // reimu
@@ -32,9 +33,8 @@
         "Spi": 10,
         "Mag": 18,
         "Cun": 14,
+        "SkillGroups": [ "Star" ],
         "Skills": {
-            "StardustReverie": 8,
-            "StarShoot": 8
         }
     }, // marisa
     {
@@ -51,9 +51,9 @@
         "Spi": 18,
         "Mag": 10,
         "Cun": 10,
+        "SkillGroups": [ "Dark" ],
         "Skills": {
-            "NightBird": 5,
-            "DarkSideOfTheMoon": 5
+
         }
     }, // rumia
     {
@@ -61,7 +61,7 @@
         "Tags": [
             "妖精"
         ],
-        "HP": 10000,
+        "HP": 100,
         "SP": 50,
         "MP": 20,
         "Str": 10,
@@ -70,7 +70,7 @@
         "Spi": 14,
         "Mag": 12,
         "Cun": 10,
-        "Value": 10,
+        "SkillGroups": [ "Freeze" ],
         "Skills": {
         }
     }, // cirno
@@ -88,7 +88,6 @@
         "Spi": 10,
         "Mag": 10,
         "Cun": 10,
-        "Value": 10,
         "Skills": {
         },
         "Equipment": [
@@ -242,7 +241,6 @@
         "Spi": 14,
         "Mag": 10,
         "Cun": 10,
-        "Value": 10,
         "Skills": {
         },
         "Equipment": [
@@ -400,5 +398,5 @@
                 "Amount": 1
             }
         ]
-    } // dangoChest
+    }  // dangoChest
 ]

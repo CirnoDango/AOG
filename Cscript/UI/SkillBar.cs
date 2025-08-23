@@ -24,7 +24,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     // 学会一个技能，添加按钮
     public void LearnSkill(SkillInstance skill)
     {
-        if (skillButtons.ContainsKey(skill))// || skill.Template.EffectType == EffectType.Passive)
+        if (skillButtons.ContainsKey(skill))
             return;
 
         if (skill == null || skill.Texture == null)
@@ -52,8 +52,8 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             CustomMinimumSize = new Vector2(60, 60),
             StretchMode = TextureButton.StretchModeEnum.Scale,
             TooltipText = Tr(skill.Template.SkillInfo(Player.PlayerUnit.GetSkill(skill.Name).Level)),
-            SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
-            SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter
+            SizeFlagsVertical = SizeFlags.ShrinkCenter,
+            SizeFlagsHorizontal = SizeFlags.ShrinkCenter
         };
         float ratio = 60 / skill.Texture.GetSize().X;
         btn.Scale = new Vector2(ratio, ratio);
@@ -63,9 +63,9 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             Text = "", // 初始不显示
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            SizeFlagsVertical = Control.SizeFlags.ExpandFill,
-            MouseFilter = Control.MouseFilterEnum.Ignore, // 不遮挡按钮点击
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+            SizeFlagsVertical = SizeFlags.ExpandFill,
+            MouseFilter = MouseFilterEnum.Ignore, // 不遮挡按钮点击
         };
         btn.AddChild(cdLabel);
         cdLabel.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); // 占满整个按钮
@@ -108,29 +108,10 @@ public partial class SkillBar : FlowContainer, IRegisterToG
 
     private static void OnSkillButtonPressed(SkillInstance si)
     {
+        if (G.I.Fsm.currentState is not PlayerSkillState)
+            return;
         var skill = si.Template;
-        var skillName = skill.Name;
         var level = si.Level;
-        //if (si.CurrentCooldown > 0)
-        //{
-        //    Info.Print("技能正在冷却中！");
-        //    return;
-        //}
-        //if (Player.PlayerUnit.CurrentSp < skill.GetSpCost(level) || Player.PlayerUnit.CurrentMp < skill.GetMpCost(level))
-        //{
-        //    Info.Print("不满足发动条件！");
-        //    return;
-        //}
-        //if (skill is SpellCard spell && Player.PlayerUnit.CurrentSp < spell.GetSpNeed(level))
-        //{
-        //    Info.Print("不满足发动条件！");
-        //    return;
-        //}
-        //if (skill.EffectType == EffectType.Passive)
-        //{
-        //    Info.Print("这是被动技能");
-        //    return;
-        //}
         if (!si.CanUse(Player.PlayerUnit))
         {
             Info.Print("不满足发动条件！");

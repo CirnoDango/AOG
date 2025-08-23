@@ -15,6 +15,7 @@ public abstract partial class Item : IInteractable
     public string Name { get; set; }
     public string TrName => $"i{Name}";
     public string Description { get; set; }
+    public virtual string GetDescription() {  return Description; }
     public virtual float Weight { get; set; }
     public Texture2D Texture { get; set; }
     // 默认可以装备，非装备道具重写为 false
@@ -38,12 +39,9 @@ public abstract partial class Item : IInteractable
     {
         var template = GetTemplate(name).MemberwiseClone();
         if (template == null) return null;
-        var item = template;
-        if (item is SkillItem skillItem)
-        {
-            skillItem.ApplyParameters(parameters ?? []);
-        }
-        return (Item)item;
+        Item item = (Item)template;
+        item.ApplyParameters(parameters ?? []);
+        return item;
     }
 
     public static Item GetTemplate(string name)
@@ -62,7 +60,7 @@ public abstract partial class Item : IInteractable
 
     public virtual Item RandomSummonParam()
     {
-        return GetItemName(Name);
+        return this;
     }
 }
 public abstract class SkillItem<TSkillInstance> : SkillItem
@@ -95,7 +93,6 @@ public class Inventory(Unit unit)
     public float MaxWeight = 20f;
 
     public float CurrentWeight => Items.Sum(item => item.Weight);
-
     public bool AddItem(Item item)
     {
         if (item == null)
@@ -115,7 +112,6 @@ public class Inventory(Unit unit)
             
         return true;
     }
-
     public void RemoveItem(Item item)
     {
         Items.Remove(item);
@@ -155,6 +151,7 @@ public class Equipment(Unit unit)
             return;
         }
         EquippedItems.Remove(item);
+        unit.inventory.Items.Add(item);
         item.OnUnequip(unit);
     }
 }

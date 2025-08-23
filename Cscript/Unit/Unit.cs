@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-public partial class Unit
+public partial class Unit 
 {
     private Grid _currentPosition;
     public Grid CurrentGrid
@@ -41,6 +41,7 @@ public partial class Unit
     public float TimeEnergy { get; set; } = 0;
     public float imageSizeFactor = 0.16f;
     public string Name;
+    public int bestDistance;
     public string TrName => $"u{Name}";
     public List<(SkillInstance skill, float weight)> skills = [];
     public SkillInstance GetSkill(string name) => skills.FirstOrDefault(x => x.skill.Name == name).skill;
@@ -67,6 +68,10 @@ public partial class Unit
     public MemoryBag Memorys;
     public float MemoryValue = 10;
 
-
+    public UnitEgo Ego { get; set; }
 }
 
+public enum UnitEgo
+{
+    normal, elite, great, boss, eliteBoss, random
+}

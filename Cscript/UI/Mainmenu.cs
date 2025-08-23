@@ -1,44 +1,73 @@
 using Godot;
 using System;
+using System.Xml.Linq;
 
 public partial class Mainmenu : Control
 {
-    [Export]
-    public Node GameRoot;
-    private string selectedStage = "tutorial";  // 默认选中教程关
-    private string selectedCharacter
-    {
-        get => GameData.SelectedCharacter;
-        set
-        {
-            GameData.SelectedCharacter = value;
-            label.Text = "选中自机：" + value; // 更新标签显示
-        }
-    }
-    [Export]
-    public Label label;
+    [Export] public OptionButton OptionPlayer;
+    [Export] public OptionButton OptionScene;
+    [Export] public TextureRect Image;
+    [Export] public Button start;
+    [Export] public Label Info;
+    [Export] public Node GameRoot;
+
+    private string selectedScene;
+    private string selectedPlayer;
 
     public override void _Ready()
     {
-        //Visible = true;
-        GetNode<Button>("tutorial").Pressed += () => { selectedStage = "tutorial"; StartGame(); };
-        GetNode<Button>("cave").Pressed += () => {selectedStage = "cave"; StartGame(); };
-        GetNode<TextureButton>("cirno").Pressed += () => selectedCharacter = "cirno";
-        GetNode<TextureButton>("marisa").Pressed += () => selectedCharacter = "marisa";
-        GetNode<TextureButton>("rumia").Pressed += () => selectedCharacter = "rumia";
-        selectedCharacter = "cirno";
+        // 内部资源加载
+        if (!Game.IsLoaded)
+        {
+            EnemyLoader.LoadEnemies();
+            Skill.LoadSkillDeck();
+            ItemLoader.LoadAllItems();
+            SpriteManager.LoadSkills();
+            Game.IsLoaded = true;
+        }
+        // 给 OptionButton 绑定信号
+        OptionPlayer.ItemSelected += OnPlayerSelected;
+        OptionScene.ItemSelected += OnSceneSelected;
+
+        OnPlayerSelected(0);
+        OnSceneSelected(0);
+
+        // 开始按钮
+        start.Pressed += StartGame;
     }
 
-    private void OnCharacterSelected(long index)
+    private void OnPlayerSelected(long index)
     {
-        selectedCharacter = GetNode<OptionButton>("CharacterSelect").GetItemText((int)index);
+        selectedPlayer = OptionPlayer.GetItemText((int)index);
+        Image.Texture = GD.Load<Texture2D>($"res://Assets/Sprites/{selectedPlayer}.png");
+    }
+
+    private void OnSceneSelected(long index)
+    {
+        var s = OptionScene.GetItemText((int)index);
+        switch (s)
+        {
+            case "教程(1)":
+                OnPlayerSelected(3);
+                OptionPlayer.Selected = 3;
+                selectedScene = "tutorial";
+                break;
+            case "教程(2)":
+                OnPlayerSelected(3);
+                OptionPlayer.Selected = 3;
+                selectedScene = "tutorial2";
+                break;
+            case "雾之湖":
+                selectedScene = "mistylake";
+                break;
+        }
     }
 
     private void StartGame()
     {
-        // 存储选项（可选）
-        GameData.SelectedCharacter = selectedCharacter;
-        GameData.SelectedStage = selectedStage;
+        // 存储选项
+        GameData.SelectedCharacter = selectedPlayer;
+        GameData.SelectedStage = selectedScene;
 
         // 切换场景
         Hide();
@@ -46,7 +75,7 @@ public partial class Mainmenu : Control
         foreach (Node child in GameRoot.GetChildren())
             child.QueueFree();
 
-        var path = $"res://Nodes/{selectedStage}.tscn";
+        var path = $"res://Nodes/Scene/{selectedScene}.tscn";
         var packedScene = GD.Load<PackedScene>(path);
         var instance = packedScene.Instantiate();
         GameRoot.AddChild(instance);

@@ -38,7 +38,7 @@ public partial class SkillTree : Control
                 {
                     1 => TextEx.HighlightChanges(skill.SkillInfo(1), skill.SkillInfo(2)),
                     2 => TextEx.HighlightChanges(skill.SkillInfo(2), skill.SkillInfo(3)),
-                    3 => TextEx.HighlightChanges(skill.SkillInfo(3), skill.SkillInfo(4)),
+                    3 => skill.SkillInfo(3),//TextEx.HighlightChanges(skill.SkillInfo(3), skill.SkillInfo(4)),
                     4 => skill.SkillInfo(4),
                     _ => skill.SkillInfo(1),
                 };
@@ -88,5 +88,6 @@ public partial class SkillTree : Control
             G.I.Player.SkillPoint -= 1;
             (G.I.SkillPanel).Refresh();
         }
+        GameEvents.SkillLearned(Player.PlayerUnit, skillInstance);
     }
 }

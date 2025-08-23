@@ -11,7 +11,12 @@ public class GameEvents
     {
         OnEnemyKilled?.Invoke(enemy);
     }
+    public static event Action<Unit, SkillInstance> OnSkillLearned;
 
+    public static void SkillLearned(Unit enemy, SkillInstance si)
+    {
+        OnSkillLearned?.Invoke(enemy, si);
+    }
     // 可拓展更多
     public static List<Func<Unit, Unit, float, float>> OnTakeBulletDamage = [];
     public static float TakeBulletDamage(Unit user, Unit target, float baseDamage)

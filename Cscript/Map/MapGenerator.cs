@@ -408,7 +408,7 @@ public static class MapGenerator
         }
     }
     public static void ChangeMapByRoad(LogicMapLayer mapLayer,
-    string terrain, Map map, out int initY)
+    string terrain, Map map, out int initY, out int outY)
     {
         initY = GD.RandRange(0, map.Height - 1); // 起点
         int y = initY;
@@ -434,6 +434,7 @@ public static class MapGenerator
             prevDir = direction;
             x++;
         }
+        outY = y;
         int NextDirection(int prevDir)
         {
             double r = GD.Randf();

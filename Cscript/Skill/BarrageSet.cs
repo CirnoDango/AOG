@@ -10,10 +10,7 @@ public class BarrageSet : SkillItem
     {
         get
         {
-            if (B.Components == null || B.Components.Count == 0)
-                return 2f;
-            else
-                return 2f + B.Components.Where(a => a != null).Sum(a => a.Weight);
+            return 10f;
         }
     }
     public BarrageSet()
@@ -28,20 +25,21 @@ public class BarrageSet : SkillItem
         {
             B = (Barrage)(Dictionary<string, object>)val;
         }
-        Skill = new Instance(B);
+        Texture = ImageEx.ColorizeTexture(Texture, new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+        Skill = new Instance(this);
     }
 
     private class Instance : Skill, ISkillInstance
     {
         private readonly Barrage _BarrageSet;
-        public Instance(Barrage parent)
+        public Instance(BarrageSet parent)
         {
             Name = "BarrageSet";
             SkillGroup = "Item";
             Description = "发射弹幕";
-            Cooldown = 300;
-            _BarrageSet = parent;
-            Texture = GetTemplate(Name).Texture;
+            Cooldown = 400;
+            _BarrageSet = parent.B;
+            Texture = parent.Texture;
         }
         public override TargetType GetTargeting(int level = 0)
         {
@@ -56,7 +54,7 @@ public class BarrageSet : SkillItem
 
         public Skill GetSkill(SkillItem parent)
         {
-            return new Instance(_BarrageSet);
+            return new Instance((BarrageSet)parent);
         }
 
         protected override void StartActivate(SkillContext sc)

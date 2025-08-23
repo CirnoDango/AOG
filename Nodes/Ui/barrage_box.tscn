@@ -2,19 +2,27 @@
 
 [ext_resource type="Script" uid="uid://dxxv1k0vjngs0" path="res://Cscript/UI/BarrageSetBox.cs" id="1_jmlgt"]
 
-[node name="Label" type="VBoxContainer" node_paths=PackedStringArray("FBox")]
+[node name="Label" type="VBoxContainer" node_paths=PackedStringArray("FBox", "Image")]
 offset_right = 8000.0
 offset_bottom = 20.0
 script = ExtResource("1_jmlgt")
-FBox = NodePath("FlowContainer")
+FBox = NodePath("HBoxContainer/FlowContainer")
+Image = NodePath("HBoxContainer/TextureRect")
 
-[node name="Label" type="Label" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+expand_mode = 3
+
+[node name="Label" type="Label" parent="HBoxContainer"]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
-text = "Bullet Box 1"
 vertical_alignment = 1
 
-[node name="FlowContainer" type="FlowContainer" parent="."]
+[node name="FlowContainer" type="FlowContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(8000, 400)
 layout_mode = 2

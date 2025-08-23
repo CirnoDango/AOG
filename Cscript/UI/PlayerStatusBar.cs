@@ -27,6 +27,7 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
         spBarBack = GetNode<ColorRect>("SpRow/Bar/BarBack");
         mpBarBack = GetNode<ColorRect>("MpRow/Bar/BarBack");
 
+        Visible = true;
         StatusRow = GetNode("Status"); 
         UpdateStatusUI();
     }

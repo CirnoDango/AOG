@@ -216,15 +216,30 @@ public class Map
         }
         return tiles;
     }
-    public void SetExit()
+    public void SetExit(Grid exit = null)
     {
-        var exit = MapGenerator.FloodFindFarthest(this, Entrance);
-        GetGrid(exit).TerrainBaseGround = "Stair";
+        exit ??= GetGrid(MapGenerator.FloodFindFarthest(this, Entrance));
+        Exit = exit.Position;
+        exit.TerrainBaseGround = "Stair";
+        exit.TerrainStand = "";
     }
-    public Unit CreateEnemy(Vector2I position, string name)
+    public Unit CreateEnemy(Vector2I position, string name, UnitEgo ego = UnitEgo.random, float memoryValue = -1, bool jsonImport = true)
     {
+        Unit unit = EnemyLoader.LoadEnemy(name, jsonImport);
+        // 分配Ego
+        if (ego == UnitEgo.random)
+        {
+            float p = GD.Randf();
+            if (p < 0.95f)
+                unit.Ego = UnitEgo.normal;
+            else if (p < 0.99f)
+                unit.Ego = UnitEgo.elite;
+            else
+                unit.Ego = UnitEgo.great;
+        }
+        else
+            unit.Ego = ego;
         // 初始化数据,图像
-        Unit unit = EnemyLoader.LoadEnemy(name);
         SpriteManager.LoadEnemy(unit);
         unit.CurrentGrid = GetGrid(position);
         unit.CurrentGrid.unit = unit;
@@ -237,24 +252,83 @@ public class Map
         {
             if (gskill.SkillGroup == "")
                 unit.LearnSkill(gskill);
-        } 
-        // 随机获得Memory
-        for (int i = 0; i < unit.MemoryValue; i++)
-        {
-            int j = 0; float v = 0; Item it;
-            do
-            {
-                j++;
-                List<Item> memories = [.. Item.ItemDeck.OfType<Memory>().Cast<Item>()];
-
-                it = memories[GD.RandRange(0, memories.Count - 1)];
-                if (v + it.Weight - 1 < unit.MemoryValue)
-                {
-                    unit.Memorys.TryEquip(it, unit);
-                    v += it.Weight;
-                }
-            } while (j < 40 && v < unit.MemoryValue);
         }
+        // 分配EgoMemory与MemoryValue
+        switch (unit.Ego)
+        {
+            case UnitEgo.normal:
+                unit.MemoryValue += Setting.chaos;
+                break;
+            case UnitEgo.elite:
+                unit.MemoryValue += 2 * Setting.chaos;
+                unit.Memorys.TryEquip(Item.GetItemName("mElite"), unit);
+                break;
+            case UnitEgo.great:
+                unit.MemoryValue += 4 * Setting.chaos;
+                unit.Memorys.TryEquip(Item.GetItemName("mGreat"), unit);
+                break;
+            case UnitEgo.boss:
+            case UnitEgo.eliteBoss:
+                unit.MemoryValue += 6 * Setting.chaos;
+                unit.Memorys.TryEquip(Item.GetItemName("mBoss"), unit);
+                break;
+        }
+        if(memoryValue != -1)
+            unit.MemoryValue = memoryValue;
+        // 随机获得 Memory
+        {
+            unit.Memorys.MaxEquipWeight = unit.MemoryValue;
+            // 总容量
+            float capacity = unit.MemoryValue;
+            float currentWeight = 0;
+            int attempts = 0;
+
+            // 提前构建候选 Memory 列表
+            List<Item> memories = [.. Item.ItemDeck
+        .OfType<Memory>()
+        .Where(x => x.Group != "Ego")
+        .Cast<Item>()];
+
+            // 随机尝试直到满足容量或达到最大尝试次数
+            while (attempts < 40 && currentWeight < capacity)
+            {
+                attempts++;
+                var it = memories[GD.RandRange(0, memories.Count - 1)];
+
+                if (currentWeight + it.Weight <= capacity)
+                {
+                    unit.Memorys.TryEquip(Item.GetItemName(it.Name), unit);
+                    currentWeight += it.Weight;
+                }
+            }
+        }
+
+
+        // 计算优势距离
+        float bestScore = int.MinValue;
+        // 1. 计算优势距离（1~32）以最大化技能收益
+        for (int dist = 1; dist <= 32; dist++)
+        {
+            double score = 0;
+            foreach (var lvp in unit.skills)
+            {
+                var skill = lvp.skill;
+                if (skill.Template.EffectType == EffectType.Passive || skill.Targeting.Range == -1)
+                    continue;
+                float weight = lvp.weight;
+                int skillDistance = skill.Targeting.Range;
+                if (skillDistance == 0) { continue; }
+                double diff = Math.Abs(dist - skillDistance) + 0.3;
+                score += weight / (diff * diff);
+            }
+
+            if (score > bestScore)
+            {
+                bestScore = (float)score;
+                unit.bestDistance = dist;
+            }
+        }
+        unit.bestDistance /= 2;
         // 随机分配UaPoint
         int[] attributes = new int[6]; // 用来存储分配的值
         for (int i = 0; i < unit.Ua.uaPoint; i++)
@@ -273,7 +347,7 @@ public class Map
         unit.CurrentSp = unit.MaxSp;
         unit.CurrentMp = unit.MaxMp;
         unit.InitializeHpSpBar();
-        unit.TimeEnergy = GD.RandRange(-100, 0);
+        unit.TimeEnergy = GD.RandRange(-100, 0) - 20;
         return unit;
     }
     public Unit CreateEnemy(Vector2I position, string name, int zoom)
@@ -302,10 +376,9 @@ public class Map
     
     public void DeleteUnit(Unit unit)
     {
-        if (unit == Player.PlayerUnit)//实际玩家死亡效果由scene脚本负责
+        if (unit == Player.PlayerUnit)
         {
-           //Info.Print("玩家被退治了，游戏结束！");
-           // GameLoader.rootnode.QueueFree(); // 结束游戏
+            // 实际玩家死亡效果由scene脚本负责
             return;
         }
         GameEvents.EnemyKilled(unit);
@@ -322,18 +395,22 @@ public class Map
         OnUnitDied?.Invoke();
         if (unit.Name == "marisa")
             OnMarisaDied?.Invoke();
-        foreach (Item i in unit.equipment.EquippedItems.ToList())
+        if (unit.Ego != UnitEgo.normal)
         {
-            unit.equipment.Unequip(i, unit);
-        }
-        foreach (Item i in unit.Memorys.EquippedItems.ToList())
-        {
-            unit.Memorys.Unequip(i, unit);
+            foreach (Item i in unit.equipment.EquippedItems.ToList())
+            {
+                unit.equipment.Unequip(i, unit);
+            }
+            foreach (Item i in unit.Memorys.EquippedItems.ToList())
+            {
+                if (i is Memory m && m.Group == "Ego")
+                    continue;
+                unit.Memorys.Unequip(i, unit);
+            }
         }
         foreach (Item i in unit.inventory.Items.ToList())
         {
-            if (GD.Randf() < 1f) // 50%几率掉落物品
-                unit.inventory.ThrowItem(i);
+            unit.inventory.ThrowItem(i);
         }
     }
 
@@ -363,7 +440,7 @@ public class Map
             while (GD.Randf() < expectExtraNumber / (expectExtraNumber + 1))
             {
                 var lg = Scene.CurrentMap.NearGrids(GetGrid(position), searchDist);
-                List<Grid> lga = [.. lg.Where(x => x.IsWalkable && x.unit == null)];
+                List<Grid> lga = lg.Where(x => x.IsWalkable && x.unit == null).ToList();
                 if (lga.Count == 0) return; // 没有可用格子了
                 int index = GD.RandRange(0, lga.Count - 1);
                 CreateEnemy(lga[index].Position, name);
@@ -372,25 +449,32 @@ public class Map
     }
     public void SummonChest(float value, int number, Grid grid = null)
     {
-        for(int i = 0; i < number; i++)
+        AfterEnter += Instance;
+        void Instance()
         {
-            Chest c = new(grid ?? RandomEmptyGrid());
-            int j = 0; float v = 0; Item it;
-            do
+            for (int i = 0; i < number; i++)
             {
-                j++;
-                it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
-                it = Item.GetItemName(it.Name);
-                Item item = it.RandomSummonParam();
-                item.ApplyParameters([]);
-                it = item;
-                if (v + it.Weight - 1 < value)
+                Chest c = new(grid ?? RandomEmptyGrid());
+                int j = 0; float v = 0; Item it;
+                do
                 {
-                    c.items.Add(it);
-                    v += it.Weight;
-                }
-            } while (j < 40 && v < value);
+                    j++;
+                    it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
+                    it = Item.GetItemName(it.Name);
+                    Item item = it.RandomSummonParam();
+                    item.ApplyParameters([]);
+                    it = item;
+                    if (v + it.Weight - 1 < value)
+                    {
+                        if (it is Memory m && m.Group != "")
+                            continue;
+                        c.items.Add(it);
+                        v += it.Weight;
+                    }
+                } while (j < 40 && v < value);
+            }
         }
+        
     }
 }
 public static class Scene
@@ -406,13 +490,14 @@ public static class Scene
         map.WakeUnits.Add(Player.PlayerUnit);
         Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));
         MapBuilder.BuildTileMapFromLogic(CurrentMap);
-        MapBuilder.BuildTileMapFromLogic(CurrentMap);
         CurrentMap.SummonEnemy();
         Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();
-        Player.PlayerUnit.HealHp(Player.PlayerUnit.MaxHp / 2); // 恢复玩家血量
-        Info.Print($"进入了地图");
+        Player.PlayerUnit.HealHp(Player.PlayerUnit.MaxHp);
+        Info.Print("进入新地图，记忆已提升");
+        Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
     }
+
     public static void Quit()
     {
         foreach (var child in G.I.LayerItemDropped.GetChildren())
@@ -422,6 +507,8 @@ public static class Scene
                 u.sprite.QueueFree();
         CurrentMap.Units.Clear();
         CurrentMap.WakeUnits.Clear();
+        foreach(var b in CurrentMap.Bullets)
+            b.image.QueueFree();
         CurrentMap.Bullets.Clear();
         SpellCard.currentSpellcards.Clear();
         Enter(CurrentMap.MapGoto);

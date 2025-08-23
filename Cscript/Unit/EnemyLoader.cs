@@ -87,7 +87,7 @@ public static class EnemyLoader
         }
     }
 
-    public static Unit LoadEnemy(string name)
+    public static Unit LoadEnemy(string name, bool jsonImport = true)
     {
         EnemyData ed = enemyDatas.FirstOrDefault(x => x.Name == name);
         Unit unit = new()
@@ -109,56 +109,64 @@ public static class EnemyLoader
         unit.CurrentHp = unit.MaxHp;
         unit.CurrentMp = unit.MaxMp;
         unit.CurrentSp = unit.MaxSp / 2;
-        foreach (var kvp in ed.Skills)
-        {
-            unit.skills.Add((new SkillInstance(Skill.NameSkill[kvp.Key]), kvp.Value));
-        }
-        foreach (var dict in ed.Inventory)
-        {
-            float n = Convert.ToSingle(dict["Amount"]);
-
-            while (GD.Randf() < n)
-            {
-                Item i = Item.GetItemName((string)dict["Name"]);
-
-                if (dict.TryGetValue("Parameters", out object value))
-                {
-                    i.ApplyParameters(value as Dictionary<string, object>);
-                }
-                unit.inventory.AddItem(i);
-                n--;
-            }
-        }
-        foreach (var dict in ed.Equipment)
-        {
-            float n = Convert.ToSingle(dict["Amount"]);
-
-            while (GD.Randf() < n)
-            {
-                Item i = Item.GetItemName((string)dict["Name"]);
-
-                if (dict.TryGetValue("Parameters", out object value))
-                {
-                    i.ApplyParameters(value as Dictionary<string, object>);
-                }
-                unit.inventory.AddItem(i);
-                unit.equipment.TryEquip(i, unit);
-                n--;
-            }
-        }
-
-        foreach (var kvp in ed.Memory)
-        {
-            float n = kvp.Value;
-            while (GD.Randf() < n)
-            {
-                Item i = Item.GetItemName(kvp.Key);
-                unit.inventory.AddItem(i);
-                unit.Memorys.TryEquip(i, unit);
-                n--;
-            }
-        }
+        if (jsonImport)
+            ImportJsonData(ed, unit);
         return unit;
+
+        static void ImportJsonData(EnemyData ed, Unit unit)
+        {
+            foreach (var kvp in ed.Skills)
+            {
+                unit.skills.Add((new SkillInstance(Skill.NameSkill[kvp.Key]), kvp.Value));
+            }
+            foreach (var sg in ed.SkillGroups)
+            {
+                unit.LearnSkillGroup(sg);
+            }
+            foreach (var dict in ed.Inventory)
+            {
+                float n = Convert.ToSingle(dict["Amount"]);
+
+                while (GD.Randf() < n)
+                {
+                    Item i = Item.GetItemName((string)dict["Name"]);
+
+                    if (dict.TryGetValue("Parameters", out object value))
+                    {
+                        i.ApplyParameters(value as Dictionary<string, object>);
+                    }
+                    unit.inventory.AddItem(i);
+                    n--;
+                }
+            }
+            foreach (var dict in ed.Equipment)
+            {
+                float n = Convert.ToSingle(dict["Amount"]);
+
+                while (GD.Randf() < n)
+                {
+                    Item i = Item.GetItemName((string)dict["Name"]);
+
+                    if (dict.TryGetValue("Parameters", out object value))
+                    {
+                        i.ApplyParameters(value as Dictionary<string, object>);
+                    }
+                    unit.equipment.TryEquip(i, unit);
+                    n--;
+                }
+            }
+
+            foreach (var kvp in ed.Memory)
+            {
+                float n = kvp.Value;
+                while (GD.Randf() < n)
+                {
+                    Item i = Item.GetItemName(kvp.Key);
+                    unit.Memorys.TryEquip(i, unit);
+                    n--;
+                }
+            }
+        }
     }
     public static Unit LoadPlayer(string name)
     {
@@ -200,7 +208,7 @@ public class EnemyData
     public int Mag { get; set; }
     public int Cun { get; set; }
     public int Value { get; set; } = 0;
-    // 技能名称 → 权重/概率
+    public List<string> SkillGroups { get; set; } = [];
     public Dictionary<string, float> Skills { get; set; } = [];
     public List<Dictionary<string, object>> Equipment { get; set; } = [];
     public List<Dictionary<string, object>> Inventory { get; set; } = [];

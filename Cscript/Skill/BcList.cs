@@ -2,14 +2,28 @@ using Godot;
 using System.Collections.Generic;
 public class BulletModule : BarrageComponent
 {
-    public BulletContext bulletContext;
+    private BulletContext _bulletContext;
+    public BulletContext bulletContext
+    {
+        get => _bulletContext;
+        set
+        {
+            _bulletContext = value;
+            Texture = Bullet.ReadImage(bulletContext.Color, bulletContext.Shape).Texture;
+        }
+    }
     public readonly static List<string> bulletShapes =
         ["ArrowBig", "Grain", "Needle", "Ring", "Small", "Square", "Star", "Yinyang"];
     public BulletModule()
     {
         Name = "BulletModule";
         Weight = 0.3f;
-        Description = "子弹";
+        Description = $"bullet";
+    }
+    public override string GetDescription()
+    {
+        return $"{bulletContext.Color} {bulletContext.Shape}子弹。" +
+            $"伤害：{bulletContext.damage:F1}, 速度：{bulletContext.Speed:F1}, 范围：{bulletContext.MaxDistance:F1}";
     }
     public override void Execute(ref List<BulletContext> lbc, Executor executor)
     {
@@ -40,13 +54,16 @@ public class BulletModule : BarrageComponent
 }
 public class AddDamage : BarrageComponent, IBarrageComponentEvent
 {
-    public float Bonus = 0;
+    public float Bonus = 999;
 
     public AddDamage()
     {
         Name = "AddDamage";
         Weight = 0.3f;
-        Description = $"+{Bonus}伤害";
+    }
+    public override string GetDescription()
+    {
+        return $"+{Bonus}伤害";
     }
     public void ApplyTo(ref List<BulletContext> lbc)
     {

@@ -4,7 +4,7 @@ public class UnitAttribute
     public Unit unit;
     public float SpeedGlobal = 100;
     public float SpeedCombat = 100;
-    public float SpeedMove = 100;
+    public float SpeedMove = 100; 
     public float DamageBody = 100;
     public float DamageBullet = 100;
     public float HealRatio = 1f;
@@ -58,6 +58,7 @@ public class UnitAttribute
             int now = value;
             unit.MaxSp += (now - old) * 2;
             DamageBullet += (now - old) * 1;
+            BulletGraze += (now - old) * 0.01f;
             _spi = value + 10;
         }
     }
@@ -69,7 +70,7 @@ public class UnitAttribute
             int old = _mag - 10;
             int now = value;
             unit.MaxMp += (now - old) * 1;
-            DamageBullet += (now - old) * 1;
+            DamageBullet += (now - old) * 1.5f;
             _mag = value + 10;
         }
     }
@@ -92,29 +93,8 @@ public class UnitAttribute
         uaPoint = 0;
     }
     private int _skillPoint;
-    public int skillPoint
-    {
-        get { return _skillPoint; }
-        set
-        {
-            if (unit == Player.PlayerUnit)
-                G.I.Player.SkillPoint = value;
-
-            _skillPoint = value;
-        }
-    }
-    private int _uaPoint;
-    public int uaPoint
-    {
-        get { return _uaPoint; }
-        set
-        {
-            if (unit == Player.PlayerUnit)
-                G.I.Player.UaPoint = value;
-
-            _uaPoint = value;
-        }
-    }
+    public int skillPoint { get; set; }
+    public int uaPoint{ get; set; }
     // 可选：一个构造函数初始化所有属性
     public void UnitAtt(int str = 10, int dex = 10, int con = 10, int spi = 10, int mag = 10, int cun = 10)
     {

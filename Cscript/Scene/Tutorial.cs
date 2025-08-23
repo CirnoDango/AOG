@@ -68,7 +68,8 @@ public partial class Tutorial : Node
         string player = GameData.SelectedCharacter;
         // 场景资源加载
         Player.Init("cirno", 3);
-        Map tutorial = MapBuilder.BuildLogicFromTileMap();
+        Map tutorial = MapBuilder.ImportMapFromJson("res://map.json", "tutorial");
+        MapBuilder.BuildLogicFromTileMap();
         tutorial.Entrance = new Vector2I(10, 5);
         Scene.Enter(tutorial);
     }
@@ -141,7 +142,7 @@ public partial class Tutorial : Node
             "试试看吧，移动过去攻击那个团子！")
         ]); await Click(); DialogBox.SHide();
         GameEvents.OnEnemyKilled += OnEnemyKilled;
-        var d = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "dangoPea");
+        var d = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "dangoPea", UnitEgo.normal, 0, false);
         for(int x = 1; x <= 7; x++)
         {
             for (int y = 1; y <= 5; y++)
@@ -149,8 +150,7 @@ public partial class Tutorial : Node
                 //_ = Scene.CurrentMap.CreateEnemy(new Vector2I(x, y), "marisa");
             }
         }
-        d.unitAi = new(d);
-        d.unitAi.Mode = AiMode.Sleep;
+        d.unitAi = new(d){Mode = AiMode.Sleep};
         await dangodie(); DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
@@ -216,10 +216,11 @@ public partial class Tutorial : Node
         ]); await Click();
         DialogBox.SHide();
         GameEvents.OnEnemyKilled += OnEnemyKilled;
-        var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(12, 16), "dangoPea");
-        d2.Ua.Dex = 999;
+        var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(12, 16), "dangoPea", UnitEgo.normal, 0, false);
+        Player.PlayerUnit.Ua.BodyDamageAccuracy -= 10;
         d2.inventory.AddItem(Item.GetItemName("PowerBlock"));
         await dangodie(); DialogBox.SShow();
+        Player.PlayerUnit.Ua.BodyDamageAccuracy += 10;
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
             "轻松轻松！我果然是最强的！")

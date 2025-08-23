@@ -73,7 +73,7 @@ public partial class InventoryBox : Control, IRegisterToG
             var entry = ItemEntryScene.Instantiate<ItemEntry>();
             entry.Setup(item, (clickedItem) => {
                 unit.equipment.Unequip(clickedItem, unit);
-                unit.inventory.AddItem(clickedItem);
+                
                 Refresh(unit);
             });
             EquipList.AddChild(entry);

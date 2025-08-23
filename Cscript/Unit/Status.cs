@@ -1,6 +1,7 @@
 using Godot;
 using System.ComponentModel;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 public abstract class Status
 {
@@ -21,7 +22,7 @@ public abstract class Status
     public virtual void OnQuit(Unit unit) { Quit(unit); }
     public void Get(Unit unit)
     {
-        Info.Print($"{unit.TrName} 施加状态 st{Name}！");
+        Info.Print($"{unit.TrName} 施加状态 st{Name} ！");
         if (unit == Player.PlayerUnit)
         {
             var s = new TextureRect
@@ -66,11 +67,11 @@ public abstract class Status
                 param.AddThemeFontSizeOverride("font_size", 200);
                 s.AddChild(param);
                 param.Position = new Vector2(240, 60);
-                s.AddChild(b);
-                G.I.PlayerStatusBar.StatusRow.AddChild(s);
-                G.I.PlayerStatusBar.StatusImages.Add(this, s);
             }
-            
+            s.AddChild(b);
+            G.I.PlayerStatusBar.StatusRow.AddChild(s);
+            G.I.PlayerStatusBar.StatusImages.Add(this, s);
+
         }
         string path = $"res://Assets/Status/{Name}Map.png";
         Texture2D texture = null;
@@ -183,8 +184,14 @@ public class YinyangBall : Status
     public override void OnTakeBodyDamage(Unit unit, ref float damage)
     {
         Layer--;
-        damage -= Mathf.Min(damage, 12);
-        if(Layer == 0)
+        var (skill, weight) = unit.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
+
+        if (skill != null && skill.Level >= 3)
+            damage -= Mathf.Min(damage, 18);
+        else
+            damage -= Mathf.Min(damage, 12);
+
+        if (Layer == 0)
             Quit(unit);
     }
     public override void OnGet(Unit unit, Status status)
@@ -222,10 +229,14 @@ public class YinyangBall : Status
     }
     public void Activate(Unit unit)
     {
+        var (skill, weight) = unit.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
+        int level = 1;
+        if (skill != null && skill.Level >= 2)
+            level = 2;
         if (!unit.Status.Contains(this)) { return; }
         if (activator == null)
             return;
-        new YinyangBallShoot().Activate(new SkillContext(activator.User, activator.GridOne));
+        new YinyangBallShoot().Activate(new SkillContext(activator.User, activator.GridOne, level));
         Layer--;
         activator = null;
     }

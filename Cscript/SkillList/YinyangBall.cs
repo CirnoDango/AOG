@@ -26,6 +26,11 @@ public class YinyangBallShoot : Skill
         Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.GridOne.Position,
             4, 12, "Yinyang", (ColorBullet)GD.RandRange(0, 15));
     }
+    public override void ActivateBullet(SkillContext sc, Bullet bullet)
+    {
+        if (sc.Level >= 2)
+            sc.UnitOne.GetStatus(new Weak(100));
+    }
 }
 public class DreamOrb : Skill
 {
@@ -66,12 +71,30 @@ public class TreasureOrb : Skill
         SkillGroup = "YinyangBall";
         EffectType = EffectType.Passive;
     }
+    private Action<Unit> OnTurnEnd;
+    private int turnCount = 0;
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), $" sTreasureOrb{level-1} ");
+        return TextEx.Tr($"sTreasureOrb sTreasureOrb{level - 1} ");
+    }
+    public override void OnLearn(Unit unit)
+    {
+        OnTurnEnd = (movingUnit) =>
+        {
+            if (movingUnit != unit) return;
+            if (Scene.CurrentMap.WakeUnits.Count <= 1) return;
+            turnCount++;
+            if (turnCount >= 5)
+            {
+                unit.GetStatus(new YinyangBall(1));
+                turnCount -= 5;
+            }
+        };
+
+        GameEvents.OnUnitTurnEnd += OnTurnEnd;
     }
 }
-public class LightToShade : Skill
+public class LightToShade : Skill 
 {
     public LightToShade()
     {
@@ -109,7 +132,7 @@ public class LightToShade : Skill
     }
     public override void AwakeBullet(SkillContext sc, Bullet bullet)
     {
-        if(bullet.Shape == "Yinyang")
+        if (sc.Level == 4 && bullet.Shape == "Yinyang")
         {
             sc.User.GetStatus(new YinyangBall(1));
         }
@@ -141,7 +164,7 @@ public class YinyangScatter : Skill
         if (sc.User.Status.FirstOrDefault(x => x is YinyangBall yb) is YinyangBall yb)
         {
             l = k[sc.Level - 1] * yb.Layer;
-            yb.OnQuit(sc.User);
+            yb.Quit(sc.User);
         }
         
         for (int i = 0; i < l; i++)

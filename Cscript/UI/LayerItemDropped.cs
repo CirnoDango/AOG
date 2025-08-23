@@ -18,7 +18,7 @@ public partial class LayerItemDropped : Node2D, IRegisterToG
     public static void DeleteItem(Item item)
     {
         Scene.CurrentMap.GetGrid(item.Position).InteractableObjects.Remove(item);
-        item.Position = Vector2I.Left;
+        //item.Position = Vector2I.Left;
         item.Sprite.QueueFree(); // 删除 Sprite
     }
 
