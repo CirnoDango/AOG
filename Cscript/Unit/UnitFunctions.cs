@@ -176,7 +176,7 @@ public partial class Unit
     }
     public bool CheckBodyHit(float amount, Unit user, Skill skill)
     {
-        float dice = MathEx.Logistic(0.5f, user.Ua.BodyDamageAccuracy - Ua.DamageEvasion);
+        float dice = MathEx.Logistic(0.8f, user.Ua.BodyDamageAccuracy - Ua.DamageEvasion);
         if (GD.Randf() < dice)
         {
             TakeBodyDamage(amount, user, skill);

@@ -63,7 +63,7 @@ public class Barrage
         barrage.Components[4] = (BarrageComponent)Item.GetItemName("RandomFire");
         barrage.Components[5] = new BulletModule
         {
-            bulletContext = new BulletContext(10, 2, 10, "Small", ColorBullet.Red)
+            bulletContext = new BulletContext(10, 2, 10, ShapeBullet.Micro, ColorBullet.Red)
         };
         return barrage;
     }
@@ -131,12 +131,12 @@ public interface IBarrageComponentEvent
     public void ApplyTo(ref List<BulletContext> lbc);
 }
 
-public class BulletContext(float damage, float speed, float maxDistance, string shape, ColorBullet color)
+public class BulletContext(float damage, float speed, float maxDistance, ShapeBullet shape, ColorBullet color)
 {
     public float damage = damage;
     public float Speed = speed;
     public float MaxDistance = maxDistance;
-    public string Shape = shape;
+    public ShapeBullet Shape = shape;
     public ColorBullet Color = color;
 
     public Vector2 Point = Vector2.Zero;
@@ -157,7 +157,7 @@ public class BulletContext(float damage, float speed, float maxDistance, string 
             Convert.ToSingle(dict["damage"]),
             Convert.ToSingle(dict["speed"]),
             Convert.ToSingle(dict["maxDistance"]),
-            (string)dict["shape"],
+            (ShapeBullet)Enum.Parse(typeof(ShapeBullet), (string)dict["shape"]),
             (ColorBullet)Enum.Parse(typeof(ColorBullet), (string)dict["color"])
         );
     }

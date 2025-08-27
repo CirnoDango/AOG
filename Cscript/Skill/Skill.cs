@@ -181,33 +181,6 @@ public abstract class Skill
     public static void LoadSkillDeck()
     {
         SkillDeck = SkillLoader.LoadAllSkills();
-        SkillDeck.AddRange([new DiyShoot("WaterShoot",
-[
-    new(4, Vector2.Zero, 0, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 30, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 60, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 90, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 120, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 150, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 180, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 210, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 240, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 270, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 300, 2.5f, 10, "Small", ColorBullet.Blue),
-    new(4, Vector2.Zero, 330, 2.5f, 10, "Small", ColorBullet.Blue),
-]),
-        new DiyShoot("StarShoot",
-[
-    new(8, 4, 10, "Star", ColorBullet.Red),
-    new(8, 3.5f, 10, "Star", ColorBullet.Orange),
-    new(8, 3, 10, "Star", ColorBullet.Yellow),
-    new(6, Vector2.Zero, -20, 2.5f, 10, "Small", ColorBullet.Golden),
-    new(6, Vector2.Zero, -10, 2.5f, 10, "Small", ColorBullet.Golden),
-    new(6, Vector2.Zero, 10, 2.5f, 10, "Small", ColorBullet.Golden),
-    new(6, Vector2.Zero, 20, 2.5f, 10, "Small", ColorBullet.Golden),
-
-])
-        ]);
         foreach (var skill in SkillDeck)
         {
             NameSkill.Add(skill.Name, skill);

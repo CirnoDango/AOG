@@ -12,8 +12,6 @@ public class BulletModule : BarrageComponent
             Texture = Bullet.ReadImage(bulletContext.Color, bulletContext.Shape).Texture;
         }
     }
-    public readonly static List<string> bulletShapes =
-        ["ArrowBig", "Grain", "Needle", "Ring", "Small", "Square", "Star", "Yinyang"];
     public BulletModule()
     {
         Name = "BulletModule";
@@ -46,8 +44,8 @@ public class BulletModule : BarrageComponent
         BulletModule bm = new()
         {
             bulletContext = new((float)GD.Randfn(8, 2), (float)Mathf.Pow(2, GD.Randfn(1.2, 0.5)), GD.RandRange(6, 12),
-                bulletShapes[GD.RandRange(0, bulletShapes.Count - 1)],
-                (ColorBullet)GD.RandRange(0, 15))
+                (ShapeBullet)GD.RandRange(0, 39),
+                (ColorBullet)GD.RandRange(0, 19))
         };
         return bm;
     }

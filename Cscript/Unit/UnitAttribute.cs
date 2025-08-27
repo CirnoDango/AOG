@@ -92,7 +92,6 @@ public class UnitAttribute
         skillPoint = 0;
         uaPoint = 0;
     }
-    private int _skillPoint;
     public int skillPoint { get; set; }
     public int uaPoint{ get; set; }
     // 可选：一个构造函数初始化所有属性

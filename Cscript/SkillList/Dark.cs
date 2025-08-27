@@ -28,22 +28,22 @@ public class NightBird : Skill
     {
         int r = new int[] { 8, 8, 8, 12 }[sc.Level - 1];
         ColorBullet c = (ColorBullet)(new List<int> {4, 7})[GD.RandRange(0, 1)];
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -15, 2.00f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -10, 2.14f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -5, 2.28f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2.43f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 5, 2.57f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 10, 2.71f, r, "Ring", c);
-        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 15, 2.86f, r, "Ring", c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -15, 2.00f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -10, 2.14f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -5, 2.28f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 0, 2.43f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 5, 2.57f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 10, 2.71f, r, ShapeBullet.Ring, c);
+        Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 15, 2.86f, r, ShapeBullet.Ring, c);
         if(sc.Level >= 2)
         {
-            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -2.5f, 2.36f, r, "Ring", c);
-            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 2.5f, 2.50f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -2.5f, 2.36f, r, ShapeBullet.Ring, c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 2.5f, 2.50f, r, ShapeBullet.Ring, c);
         }
         if (sc.Level >= 3)
         {
-            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -7.5f, 2.21f, r, "Ring", c);
-            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 7.5f, 2.64f, r, "Ring", c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), -7.5f, 2.21f, r, ShapeBullet.Ring, c);
+            Bullet.CreateBullet(sc.User, this, 10, sc.User.Position, sc.GridOne.Position, new Vector2(0, 0), 7.5f, 2.64f, r, ShapeBullet.Ring, c);
         }
     }
     public override void AwakeBullet(SkillContext sc, Bullet bullet)
@@ -209,9 +209,9 @@ public class Demarcation : SpellCard
             for(float i = 0; i < 360; i += 360 / 20f)
             {
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i,1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i+90, 1.5f),
-                2, 8, "Grain", ColorBullet.Blue, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Blue, advanceTime);
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
-                2, 8, "Grain", ColorBullet.Blue, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Blue, advanceTime);
             }
         });
         AddTimedEvent(150, (ctx, advanceTime) =>
@@ -219,9 +219,9 @@ public class Demarcation : SpellCard
             for (float i = 0; i < 360; i += 360 / 20f)
             {
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
-                2, 8, "Grain", ColorBullet.Green, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Green, advanceTime);
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
-                2, 8, "Grain", ColorBullet.Green, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Green, advanceTime);
             }
         });
         AddTimedEvent(250, (ctx, advanceTime) =>
@@ -229,9 +229,9 @@ public class Demarcation : SpellCard
             for (float i = 0; i < 360; i += 360 / 20f)
             {
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + 90, 1.5f),
-                2, 8, "Grain", ColorBullet.Red, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Red, advanceTime);
                 Bullet.CreateBullet(sc.User, this, 15, sc.User.Position + AngleV2(i, 1.5f), sc.User.Position + AngleV2(i, 1.5f) + AngleV2(i + -90, 1.5f),
-                2, 8, "Grain", ColorBullet.Red, advanceTime);
+                2, 8, ShapeBullet.Grain, ColorBullet.Red, advanceTime);
             }
         });
         GameEvents.OnTakeSpellcardBreakDamage.Add(OnBreak);

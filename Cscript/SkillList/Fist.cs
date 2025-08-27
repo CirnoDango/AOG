@@ -4,62 +4,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using static MathEx;
-public class Icefall : Skill
+public class Multistrike : Skill
 {
-    public Icefall()
+    public Multistrike()
     {
-        Name = "Icefall";
-        SkillGroup = "Freeze";
+        Name = "Multistrike";
+        SkillGroup = "Fist";
         SpCost = 3;
-        Targeting = new TargetType(Target.Grid, 1, 10);
+        Cooldown = 700;
+        Targeting = new TargetType(Target.Unit, 1, 1);
     }
-    int[] t0 = { 3, 6, 6, 6 };
+    int[] t0 = { 2, 3, 4, 4 };
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t0[level - 1]);
     }
-    public override float GetCooldown(int level)
-    {
-        return new float[] { 300, 300, 200, 200 }[level - 1];
-    }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-            new Vector2(0, 1), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-            new Vector2(0, 0), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-            new Vector2(0,-1), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        if (sc.Level >= 2)
-        {
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-                new Vector2(0, 1), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-                new Vector2(0, 0), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 
-                new Vector2(0, -1), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        }
-    }
-    public override void AwakeBullet(SkillContext sc, Bullet bullet)
-    {
-        var s = sc.UnitOne.Status.FirstOrDefault(x => x is Frozen);
-        if (s != null)
-        {
-            bullet.damage *= 10;
-            if(sc.Level == 4)
-            {
-                s.Duration += 200;
-                sc.UnitOne.TimeEnergy -= 200;
-            }
-        }
+        int number = t0[sc.Level - 1] + Math.Max(0, (sc.User.Ua.Dex - sc.UnitOne.Ua.Dex) / 5);
+        if (sc.Level == 4)
+            number += Math.Max(0, (sc.User.Ua.Str - sc.UnitOne.Ua.Str) / 5);
+        for (int i = 0; i < number; i++)
+            sc.UnitOne.CheckBodyHit(8, sc.User, this);
     }
 }
-public class MinusK : Skill
+public class SpiralLightSteps : Skill
 {
-    public MinusK()
+    public SpiralLightSteps()
     {
-        Name = "MinusK";
-        SkillGroup = "Freeze";
+        Name = "SpiralLightSteps";
+        SkillGroup = "Fist";
         SpCost = 5;
         MpCost = 5;
         Cooldown = 800;
@@ -93,12 +67,12 @@ public class MinusK : Skill
         }
     }
 }
-public class DiamondBlizzard : Skill
+public class CrimsonEnergyRelease : Skill
 {
-    public DiamondBlizzard()
+    public CrimsonEnergyRelease()
     {
-        Name = "DiamondBlizzard";
-        SkillGroup = "Freeze";
+        Name = "CrimsonEnergyRelease";
+        SkillGroup = "Fist";
         SpCost = 5;
         Cooldown = 800;
         Targeting = new TargetType(Target.Self);
@@ -148,12 +122,12 @@ public class DiamondBlizzard : Skill
     }
     
 }
-public class PerfectGlacialist : Skill
+public class IntenseRainbowFist : Skill
 {
-    public PerfectGlacialist()
+    public IntenseRainbowFist()
     {
-        Name = "PerfectGlacialist";
-        SkillGroup = "Freeze";
+        Name = "IntenseRainbowFist";
+        SkillGroup = "Fist";
         SpCost = 5;
         MpCost = 5;
         Cooldown = 800;
@@ -186,12 +160,12 @@ public class PerfectGlacialist : Skill
         }
     }
 }
-public class PerfectFreeze : SpellCard
+public class DapengFellingFist : SpellCard
 {
-    public PerfectFreeze()
+    public DapengFellingFist()
     {
-        Name = "PerfectFreeze";
-        SkillGroup = "Freeze";
+        Name = "DapengFellingFist";
+        SkillGroup = "Fist";
         SpNeed = 40;
         SpCost = 10;
         Duration = 300;

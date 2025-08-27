@@ -223,7 +223,7 @@ public class YinyangBall : Status
     }
     public void AddActivator(Unit unit, Bullet bullet)
     {
-        if (!unit.Status.Contains(this) || bullet.Shape == "YinYang") { return; }
+        if (!unit.Status.Contains(this) || bullet.Shape == ShapeBullet.Yinyang) { return; }
         if (unit.RandomEnemyInVision(out Unit target))
             activator = new SkillContext(unit, target.CurrentGrid);
     }
@@ -304,5 +304,63 @@ public class MagicSeal : Status
         if (unit.Status.Contains(this))
             return init && si.Template.GetMpCost(si.Level) <= 0;
         return init;
+    }
+}
+public class SSpiralLightSteps : Status
+{
+    private Skill Parent;
+    public float Speed
+    {
+        get => (float)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public SSpiralLightSteps(float speed, float duration, Skill parent)
+    {
+        Name = "SpiralLightSteps";
+        Duration = duration;
+        Speed = speed;
+        Parent = parent;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        GameEvents.OnUnitMove += MoveDamage;
+    }
+    public override void OnQuit(Unit unit)
+    {
+        GameEvents.OnUnitMove -= MoveDamage;
+        Quit(unit);
+    }
+    public void MoveDamage(Unit unit)
+    {
+        foreach(Unit target in unit.CurrentGrid.NearGrids(2).Select(g => g.unit))
+        {
+            unit?.TakeBulletDamage(15, unit, Parent);
+            unit?.GetStatus(new Daze(300));
+        }
+    }
+}
+
+public class Daze : Status
+{
+    public Daze(float duration)
+    {
+        Name = "Daze";
+        Duration = duration;
+    }
+    public override void OnGet(Unit unit, Status status) 
+    {
+        unit.Ua.SpeedGlobal -= 50;
+        unit.Ua.BodyDamageAccuracy -= 0.5f;
+        unit.Ua.BulletDamageAccuracy -= 0.5f;
+        CombineTime(unit, status);
+    }
+    public override void OnQuit(Unit unit)
+    {
+        unit.Ua.SpeedGlobal += 50;
+        unit.Ua.BodyDamageAccuracy += 0.5f;
+        unit.Ua.BulletDamageAccuracy += 0.5f;
     }
 }

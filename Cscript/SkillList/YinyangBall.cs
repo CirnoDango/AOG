@@ -24,7 +24,7 @@ public class YinyangBallShoot : Skill
     protected override void StartActivate(SkillContext sc)
     {
         Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.GridOne.Position,
-            4, 12, "Yinyang", (ColorBullet)GD.RandRange(0, 15));
+            4, 12, ShapeBullet.Yinyang, (ColorBullet)GD.RandRange(0, 15));
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
@@ -58,7 +58,7 @@ public class DreamOrb : Skill
         {
             Bullet.CreateBullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position,
                 Vector2.Right.Rotated(a / 57.3f), 0, (float)GD.RandRange(2f, 3f)
-                ,t0[sc.Level - 1], "Small", ColorBullet.Red, 0, sc.GridOne);
+                ,t0[sc.Level - 1], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
         }
         sc.User.GetStatus(new YinyangBall(t2[sc.Level - 1]));
     }
@@ -117,13 +117,13 @@ public class LightToShade : Skill
             for (float a = -15; a <= 15; a += 15)
             {
                 Bullet.CreateBullet(sc.User, this, 8, sc.User.Position, sc.GridOne.Position,
-                    Vector2.Zero, a, v, 8, "Square", ColorBullet.Red);
+                    Vector2.Zero, a, v, 8, ShapeBullet.Square, ColorBullet.Red);
             }
         }
         for(int i = 0; i < t0[sc.Level - 1]; i++)
         {
             Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.GridOne.Position,
-                    Vector2.Zero, GD.RandRange(-10, 10), 4, 12, "Yinyang", ColorBullet.Red);
+                    Vector2.Zero, GD.RandRange(-10, 10), 4, 12, ShapeBullet.Yinyang, ColorBullet.Red);
             if (sc.User != Player.PlayerUnit)
                 b.image.Visible = false;
             else
@@ -132,7 +132,7 @@ public class LightToShade : Skill
     }
     public override void AwakeBullet(SkillContext sc, Bullet bullet)
     {
-        if (sc.Level == 4 && bullet.Shape == "Yinyang")
+        if (sc.Level == 4 && bullet.Shape == ShapeBullet.Yinyang)
         {
             sc.User.GetStatus(new YinyangBall(1));
         }
@@ -170,7 +170,7 @@ public class YinyangScatter : Skill
         for (int i = 0; i < l; i++)
         {
             Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.User.Position + Vector2I.Left,
-                    Vector2.Zero, GD.RandRange(0, 360), 4, 12, "Yinyang", ColorBullet.Red);
+                    Vector2.Zero, GD.RandRange(0, 360), 4, 12, ShapeBullet.Yinyang, ColorBullet.Red);
         }
     }
 }
@@ -205,7 +205,7 @@ public class DreamSeal : SpellCard
         {
             var bullet = Bullet.CreateBullet(sc.User, this, 22, sc.User.Position, sc.User.Position + RandomV2(), 
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
-                "Ring", 0 , advanceTime, sc.User.CurrentGrid);
+                ShapeBullet.Ring, 0 , advanceTime, sc.User.CurrentGrid);
         });
         AddTimedEvent(Linspace(0, GetDuration(sc.Level) - 100, (int)GetDuration(sc.Level)/100), (ctx, advanceTime) =>
         {

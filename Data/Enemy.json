@@ -110,7 +110,7 @@
                                         "damage": 6,
                                         "speed": 2,
                                         "maxDistance": 10,
-                                        "shape": "Small",
+                                        "shape": "Micro",
                                         "color": "Green"
                                     }
                                 }
@@ -161,7 +161,7 @@
                                         "damage": 6,
                                         "speed": 2,
                                         "maxDistance": 10,
-                                        "shape": "Small",
+                                        "shape": "Micro",
                                         "color": "Blue"
                                     }
                                 }
@@ -260,7 +260,7 @@
                                         "damage": 6,
                                         "speed": 2,
                                         "maxDistance": 10,
-                                        "shape": "Small",
+                                        "shape": "Micro",
                                         "color": "Green"
                                     }
                                 }
@@ -311,8 +311,8 @@
                                         "damage": 6,
                                         "speed": 2,
                                         "maxDistance": 10,
-                                        "shape": "Small",
-                                        "color": "DeepRed"
+                                        "shape": "Micro",
+                                        "color": "Red"
                                     }
                                 }
                             }

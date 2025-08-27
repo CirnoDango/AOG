@@ -10,7 +10,7 @@ public class Bullet
     public Vector2 Speed { get; set; }
     public float DistanceLeft { get; set; }
     private Vector2I lastPosition; // 上一次的浮点坐标
-    public string Shape;
+    public ShapeBullet Shape;
     public ColorBullet color;
     public Sprite2D image;
     public Unit creator;
@@ -19,7 +19,7 @@ public class Bullet
     public float damage;
     public float accuracy;
     public static Bullet CreateBullet(Unit user, Skill skil, float damag, Vector2 start, Vector2 target,
-        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+        float speed, float maxDistance, ShapeBullet shape, ColorBullet color, float advance = 0, Grid trace = null)
     {
         Bullet b = new(user, skil, damag, start, target,
         speed, maxDistance, shape, color, advance, trace);
@@ -28,14 +28,14 @@ public class Bullet
     }
     //起点偏移+速度偏移生成
     public static Bullet CreateBullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point, Vector2 speedDir,
-        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+        float speed, float maxDistance, ShapeBullet shape, ColorBullet color, float advance = 0, Grid trace = null)
     {
         return CreateBullet(user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target - start)), start + (point + speedDir).Rotated(Vector2.Right.AngleTo(target - start)),
         speed, maxDistance, shape, color, advance, trace);
     }
     //起点偏移+速度角度生成
     public static Bullet CreateBullet(Unit user, Skill skil, float damage, Vector2 start, Vector2 target, Vector2 point,
-        float angle, float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+        float angle, float speed, float maxDistance, ShapeBullet shape, ColorBullet color, float advance = 0, Grid trace = null)
     {
         return CreateBullet(user, skil, damage, start + point.Rotated(Vector2.Right.AngleTo(target - start)),
         (start + point.Rotated(Vector2.Right.AngleTo(target - start))) +
@@ -44,7 +44,7 @@ public class Bullet
     }
     //点到点生成
     public Bullet(Unit user, Skill skil, float damag, Vector2 start, Vector2 target, 
-        float speed, float maxDistance, string shape, ColorBullet color, float advance = 0, Grid trace = null)
+        float speed, float maxDistance, ShapeBullet shape, ColorBullet color, float advance = 0, Grid trace = null)
     {
         PositionFloat = start;
         Position = (Vector2I)start.Round();
@@ -122,32 +122,16 @@ public class Bullet
         Position = newPos;
         return newGrids;
     }
-    public static Sprite2D GetImage(ColorBullet color, string Shape)
+    public static Sprite2D GetImage(ColorBullet color, ShapeBullet shape)
     {
-        var atlas = GD.Load<Texture2D>($"res://Assets/Bullets/{Shape}.png");
-        if (atlas == null)
-            return null; // 如果图像不存在，直接返回 null
-
-        var atlasTexture = new AtlasTexture
-        {
-            Atlas = atlas
-        };
-        int index = (int)color;
-        int col = index % 4; // 每行4个
-        int row = index / 4;
-
-        atlasTexture.Region = new Rect2(col * 16, row * 16, 16, 16);
-        Sprite2D sprite = new()
-        {
-            Texture = atlasTexture,
-            ZIndex = -10
-        };
+        var sprite = ReadImage(color, shape);
         GameLoader.rootnode.AddChild(sprite);
         return sprite;
+        
     }
-    public static Sprite2D ReadImage(ColorBullet color, string Shape)
+    public static Sprite2D ReadImage(ColorBullet color, ShapeBullet shape)
     {
-        var atlas = GD.Load<Texture2D>($"res://Assets/Bullets/{Shape}.png");
+        var atlas = GD.Load<Texture2D>($"res://Assets/Bullets/{color}.png");
         if (atlas == null)
             return null; // 如果图像不存在，直接返回 null
 
@@ -155,11 +139,11 @@ public class Bullet
         {
             Atlas = atlas
         };
-        int index = (int)color;
-        int col = index % 4; // 每行4个
-        int row = index / 4;
+        int index = (int)shape;
+        int col = index % 10; // 每行4个
+        int row = index / 10;
 
-        atlasTexture.Region = new Rect2(col * 16, row * 16, 16, 16);
+        atlasTexture.Region = new Rect2(col * 32, row * 32, 32, 32);
         Sprite2D sprite = new()
         {
             Texture = atlasTexture,
@@ -222,8 +206,18 @@ public class Bullet
 }
 public enum ColorBullet
 {
-    Red, DeepRed, Purple, DeepPurple,
-    Blue, DeepBlue, GreenBlue, Ice,
-    DeepGreen, Green, YellowGreen, Golden,
-    Yellow, Orange, Black, White
+    Red, Orange, Brown, Gold, Yellow,
+    Olive, Lime, Green, Teal, Turquoise,
+    Cyan, Ice, Azure, Blue, Indigo, 
+    Violet, Magenta, Rose, Pink, White
+}
+
+public enum ShapeBullet
+{
+    Micro, Small, Medium, Ring, Big, Knife, ArrowSmall, Laser, LaserSide, Square,
+    Butterfly, ArrowBig, Grain, ArrowMedium, GrainBlack, GrainBig, Bullet, Star, StarBig, Coin,
+    Water, MicroBlack, Heart, Drop, S, ArrowBow, Light, Music, StopNote, Bubble,
+    Branch, Yinyang, e2, e3, e4, e5, Line, LineDouble, Cross, Curse,
+    Human, Dog, Bird, Frog, Turtle, Fish, e6, e7, e8, e9,
+    LaserBlack, CoinDark, ArrowKnife, Cloud, e10, e11, e12, e13, e14, e15
 }
