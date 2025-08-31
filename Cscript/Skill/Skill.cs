@@ -93,6 +93,11 @@ public abstract class Skill
     public static Dictionary<string, Skill> NameSkill { get; set; } = [];
     public static SkillInstance CurrentSkill { get; set; }
     public string Name;
+    public string[] Extra(string index = "0")
+    {
+        string[] d = ["","","",$"s{Name}{index}"];
+        return d;
+    }
     public string TrName => $"sn{Name}";
     public string SkillGroup = "";
     public string TrSkillGroup => $"sg{SkillGroup}";
@@ -132,15 +137,15 @@ public abstract class Skill
             RealTimeCost /= (sc.User.Ua.SpeedGlobal * sc.User.Ua.SpeedMove / 10000);
         else
             RealTimeCost /= (sc.User.Ua.SpeedGlobal * sc.User.Ua.SpeedCombat / 10000);
-        GameEvents.UnitTurnEnd(sc.User);
+        sc.User.Ue.UnitTurnEnd();
         sc.User.TimeEnergy -= RealTimeCost;
         if (G.I.Fsm.currentState is not UpdatingState)
             G.I.Fsm.ChangeState(new UpdatingState(G.I.Fsm));
     }
     public virtual void Activate(SkillContext sc, SkillInstance si = null)
     {
-        sc.User.GetSp(-GetSpCost(sc.Level));
-        sc.User.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
+        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
@@ -149,7 +154,7 @@ public abstract class Skill
     public string SkillInfo(int level = -1)
     {
         if (level == -1)
-            level = Player.PlayerUnit.GetSkill(Name).Level;
+            level = Player.PlayerUnit.Us.GetSkill(Name).Level;
         string text = "";
         if (IsSpellCard())
             text += "【 符卡 】";
@@ -234,12 +239,15 @@ public class SkillInstance
     public virtual bool CanUse(Unit user)
     {
         bool canuse;
-        if (CurrentCooldown <= 0 && user.CurrentSp >= Template.GetSpNeed(user.GetSkill(Name).Level) && user.CurrentMp >= Template.GetMpCost(user.GetSkill(Name).Level) &&
-            Template.SkillGroup != "" && Template.EffectType == EffectType.Activate)
+        if (CurrentCooldown <= 0 && 
+            user.Ua.CurrentSp >= Template.GetSpNeed(user.Us.GetSkill(Name).Level) && 
+            user.Ua.CurrentMp >= Template.GetMpCost(user.Us.GetSkill(Name).Level) &&
+            Template.SkillGroup != "" && 
+            Template.EffectType == EffectType.Activate)
             canuse = true;
         else
             canuse = false;
-        return GameEvents.CheckSkillUsage(user, this, canuse);
+        return user.Ue.CheckSkillUsage(this, canuse);
     }
 
     public void Use(SkillContext sc)
@@ -288,13 +296,13 @@ public abstract class SpellCard : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        SkillInstance si = sc.User.GetSkill(Name);
+        SkillInstance si = sc.User.Us.GetSkill(Name);
         si.IsActive = true;
         si.TimeElapsed = 0;
         si.User = sc.User;
         currentSpellcards.Add(si);
-        sc.User.currentSpellcard = this;
-        sc.User.UpdateSpBar();
+        sc.User.Us.currentSpellcard = this;
+        sc.User.Ua.UpdateSpBar();
         if (sc.User == Player.PlayerUnit)
             G.I.PlayerStatusBar.UpdateStatusUI();
         OnSpellStart(sc);
@@ -307,12 +315,12 @@ public abstract class SpellCard : Skill
 
     public void Update(SkillContext sc, float delta)
     {
-        SkillInstance si = sc.User.GetSkill(Name);
+        SkillInstance si = sc.User.Us.GetSkill(Name);
         if (!si.IsActive)
             return;
         float previousTime = si.TimeElapsed;
         si.TimeElapsed += delta;
-        sc.User.GetSp(-GetSpCost(sc.Level) * delta / 100);
+        sc.User.Ua.GetSp(-GetSpCost(sc.Level) * delta / 100);
         // 触发事件，传入 advanceTime
         while (si.eventIndex < timedEvents.Count && si.TimeElapsed >= timedEvents[si.eventIndex].triggerTime)
         {
@@ -332,13 +340,13 @@ public abstract class SpellCard : Skill
     protected virtual void OnSpellUpdate(SkillContext sc, float delta) { }
     public virtual void OnSpellEnd(SkillContext sc)
     {
-        SkillInstance si = sc.User.GetSkill(Name);
+        SkillInstance si = sc.User.Us.GetSkill(Name);
         timedEvents.Clear();
         si.eventIndex = 0;
         currentSpellcards.Remove(si);
         si.IsActive = false;
-        sc.User.currentSpellcard = null;
-        sc.User.UpdateSpBar();
+        sc.User.Us.currentSpellcard = null;
+        sc.User.Ua.UpdateSpBar();
         if (sc.User == Player.PlayerUnit)
             G.I.PlayerStatusBar.UpdateStatusUI();
     }

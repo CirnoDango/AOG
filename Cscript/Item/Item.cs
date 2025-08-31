@@ -7,15 +7,27 @@ public interface IInteractable
 {
     void Interact(Unit unit);
 }
+public interface IEquipable
+{
+    void OnEquip(Unit unit);
+    void OnUnequip(Unit unit);
+}
 public abstract partial class Item : IInteractable
 {
+    protected Item()
+    {
+        if (this is IEquipable equipable)
+        {
+            EquipEvent += equipable.OnEquip;
+            UnequipEvent += equipable.OnUnequip; 
+        }
+    }
     public static List<Item> ItemDeck { get; set; } = [];
     //用于查找并复制一个同名的物品
-    
     public string Name { get; set; }
     public string TrName => $"i{Name}";
     public string Description { get; set; }
-    public virtual string GetDescription() {  return Description; }
+    public virtual string GetDescription() { return Description; }
     public virtual float Weight { get; set; }
     public Texture2D Texture { get; set; }
     // 默认可以装备，非装备道具重写为 false
@@ -24,18 +36,27 @@ public abstract partial class Item : IInteractable
     public Vector2I Position { get; set; }
     public ItemDropped Sprite { get; set; }
     public Dictionary<string, float> Params { get; set; }
+    
     // 使用时或装备时的即时效果
-    public virtual void OnEquip(Unit unit) { }
-    public virtual void OnUnequip(Unit unit) { }
+    public event Action<Unit> EquipEvent;
+    public void Equip(Unit unit)
+    {
+        EquipEvent?.Invoke(unit);
+    }
+    public event Action<Unit> UnequipEvent;
+    public void Unequip(Unit unit)
+    {
+        UnequipEvent?.Invoke(unit);
+    }
     public void Interact(Unit unit)
     {
-        unit.inventory.AddItem(this);
+        unit.Inventory.AddItem(this);
     }
     public static void SummonItem(Vector2I position, Item item)
     {
         LayerItemDropped.SummonItem(position, item);
     }
-    public static Item GetItemName(string name, Dictionary<string, object> parameters = null)
+    public static Item CreateItem(string name, Dictionary<string, object> parameters = null)
     {
         var template = GetTemplate(name).MemberwiseClone();
         if (template == null) return null;
@@ -72,13 +93,13 @@ public abstract class SkillItem<TSkillInstance> : SkillItem
     }
 }
 
-public abstract class SkillItem : Item
+public abstract class SkillItem : Item, IEquipable
 {
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
-        unit.LearnSkill(Skill);
+        unit.Us.LearnSkill(Skill);
     }
-    public override void OnUnequip(Unit unit) { unit.UnLearnSkill(Skill); }
+    public void OnUnequip(Unit unit) { unit.Us.UnLearnSkill(Skill); }
     public Skill Skill { get; set; }
     public void Activate(SkillContext sc)
     {
@@ -119,7 +140,7 @@ public class Inventory(Unit unit)
     public void ThrowItem(Item item)
     {
         Items.Remove(item);
-        Item.SummonItem(Unit.Position, item);
+        Item.SummonItem(Unit.Up.Position, item);
     }
 }
 
@@ -140,7 +161,7 @@ public class Equipment(Unit unit)
 
         EquippedItems.Add(item);
         GameEvents.ItemPicked(item);
-        item.OnEquip(unit);
+        ((IEquipable)item).OnEquip(unit);
         return true;
     }
 
@@ -151,8 +172,8 @@ public class Equipment(Unit unit)
             return;
         }
         EquippedItems.Remove(item);
-        unit.inventory.Items.Add(item);
-        item.OnUnequip(unit);
+        unit.Inventory.Items.Add(item);
+        ((IEquipable)item).OnUnequip(unit);
     }
 }
 
@@ -160,7 +181,7 @@ public static class ItemLoader
 {
     public static void LoadAllItems()
     {
-        var ItemType = typeof(Item); // 或 typeof(SpellCard) 如果你只要 spellcard
+        var ItemType = typeof(Item);
         var Items = new List<Item>();
 
         // 获取当前程序集下所有 Item 的非抽象子类

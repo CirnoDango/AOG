@@ -59,8 +59,8 @@ public partial class InventoryBox : Control, IRegisterToG
     }
     public void Refresh(Unit unit)
     {
-        equipnumber.Text = $"Equip: {unit.equipment.CurrentEquipWeight:F1}/{unit.equipment.MaxEquipWeight:F1}";
-        bagnumber.Text = $"Bag: {unit.inventory.CurrentWeight:F1}/{unit.inventory.MaxWeight:F1}";
+        equipnumber.Text = $"Equip: {unit.Equipment.CurrentEquipWeight:F1}/{unit.Equipment.MaxEquipWeight:F1}";
+        bagnumber.Text = $"Bag: {unit.Inventory.CurrentWeight:F1}/{unit.Inventory.MaxWeight:F1}";
         foreach (var child in EquipList.GetChildren())
             child.QueueFree();
 
@@ -68,18 +68,18 @@ public partial class InventoryBox : Control, IRegisterToG
             child.QueueFree();
 
 
-        foreach (var item in unit.equipment.EquippedItems)
+        foreach (var item in unit.Equipment.EquippedItems)
         {
             var entry = ItemEntryScene.Instantiate<ItemEntry>();
             entry.Setup(item, (clickedItem) => {
-                unit.equipment.Unequip(clickedItem, unit);
+                unit.Equipment.Unequip(clickedItem, unit);
                 
                 Refresh(unit);
             });
             EquipList.AddChild(entry);
         }
 
-        foreach (var item in unit.inventory.Items)
+        foreach (var item in unit.Inventory.Items)
         {
             if (!item.CanEquip || item is Memory)
                 continue;
@@ -89,16 +89,16 @@ public partial class InventoryBox : Control, IRegisterToG
                 {
                     if (item.CanEquip)
                     {
-                        if (unit.equipment.TryEquip(item, unit))
+                        if (unit.Equipment.TryEquip(item, unit))
                         {
-                            unit.inventory.RemoveItem(clickedItem);
+                            unit.Inventory.RemoveItem(clickedItem);
                             Refresh(unit);
                         }
                     }
                 }
                 else
                 {
-                    unit.inventory.ThrowItem(clickedItem);
+                    unit.Inventory.ThrowItem(clickedItem);
                     Refresh(unit);
                 }
                 

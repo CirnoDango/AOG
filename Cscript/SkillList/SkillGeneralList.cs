@@ -27,7 +27,7 @@ public class Move : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.MoveTo(sc.GridOne);
+        sc.User.Up.MoveTo(sc.GridOne);
     }
 }
 public class Interact : Skill
@@ -66,6 +66,26 @@ public class Attack : Skill
     protected override void StartActivate(SkillContext sc)
     {
         float damage = 10 + sc.User.Ua.Str - sc.UnitOne.Ua.Dex;
-        sc.UnitOne.CheckBodyHit(damage, sc.User, this);
+        sc.UnitOne.Ua.CheckBodyHit(damage, sc.User, this);
+        sc.User.Ue.Attack(sc);
+    }
+}
+
+public class Shoot : Skill
+{
+    public Shoot()
+    {
+        Name = "Shoot";
+        SkillGroup = "General";
+        Description = "发射弹幕！";
+        Targeting = new TargetType(Target.Grid, 1, 8);
+    }
+    public override float GetSpCost(int level) => 0;
+    public override float GetCooldown(int level) => 300;
+    protected override void StartActivate(SkillContext sc)
+    {
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 1, 8, ShapeBullet.Micro, ColorBullet.Green);
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 1.5f, 8, ShapeBullet.Micro, ColorBullet.Green);
+        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 2, 8, ShapeBullet.Micro, ColorBullet.Green);
     }
 }

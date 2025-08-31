@@ -14,8 +14,8 @@ public class YinyangBallShoot : Skill
     }
     public override void Activate(SkillContext sc, SkillInstance si = null)
     {
-        sc.User.GetSp(-GetSpCost(sc.Level));
-        sc.User.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
+        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
@@ -23,7 +23,7 @@ public class YinyangBallShoot : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.GridOne.Position,
+        Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.GridOne.Position,
             4, 12, ShapeBullet.Yinyang, (ColorBullet)GD.RandRange(0, 15));
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
@@ -56,7 +56,7 @@ public class DreamOrb : Skill
     {
         for(float a = 0; a < 360 ; a += 360 / t1[sc.Level - 1])
         {
-            Bullet.CreateBullet(sc.User, this, 6, sc.User.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position,
                 Vector2.Right.Rotated(a / 57.3f), 0, (float)GD.RandRange(2f, 3f)
                 ,t0[sc.Level - 1], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
         }
@@ -81,7 +81,6 @@ public class TreasureOrb : Skill
     {
         OnTurnEnd = (movingUnit) =>
         {
-            if (movingUnit != unit) return;
             if (Scene.CurrentMap.WakeUnits.Count <= 1) return;
             turnCount++;
             if (turnCount >= 5)
@@ -91,7 +90,7 @@ public class TreasureOrb : Skill
             }
         };
 
-        GameEvents.OnUnitTurnEnd += OnTurnEnd;
+        unit.Ue.OnUnitTurnEnd += OnTurnEnd;
     }
 }
 public class LightToShade : Skill 
@@ -116,13 +115,13 @@ public class LightToShade : Skill
         {
             for (float a = -15; a <= 15; a += 15)
             {
-                Bullet.CreateBullet(sc.User, this, 8, sc.User.Position, sc.GridOne.Position,
+                Bullet.CreateBullet(sc.User, this, 8, sc.User.Up.Position, sc.GridOne.Position,
                     Vector2.Zero, a, v, 8, ShapeBullet.Square, ColorBullet.Red);
             }
         }
         for(int i = 0; i < t0[sc.Level - 1]; i++)
         {
-            Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.GridOne.Position,
+            Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.GridOne.Position,
                     Vector2.Zero, GD.RandRange(-10, 10), 4, 12, ShapeBullet.Yinyang, ColorBullet.Red);
             if (sc.User != Player.PlayerUnit)
                 b.image.Visible = false;
@@ -169,7 +168,7 @@ public class YinyangScatter : Skill
         
         for (int i = 0; i < l; i++)
         {
-            Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.User.Position + Vector2I.Left,
+            Bullet b = Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.User.Up.Position + Vector2I.Left,
                     Vector2.Zero, GD.RandRange(0, 360), 4, 12, ShapeBullet.Yinyang, ColorBullet.Red);
         }
     }
@@ -203,9 +202,9 @@ public class DreamSeal : SpellCard
         sc.User.GetStatus(new YinyangBall(2));
         AddTimedEvent(Linspace(20, GetDuration(sc.Level), t0[sc.Level - 1]), (ctx, advanceTime) =>
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, 22, sc.User.Position, sc.User.Position + RandomV2(), 
+            var bullet = Bullet.CreateBullet(sc.User, this, 22, sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
-                ShapeBullet.Ring, 0 , advanceTime, sc.User.CurrentGrid);
+                ShapeBullet.Ring, 0 , advanceTime, sc.User.Up.CurrentGrid);
         });
         AddTimedEvent(Linspace(0, GetDuration(sc.Level) - 100, (int)GetDuration(sc.Level)/100), (ctx, advanceTime) =>
         {

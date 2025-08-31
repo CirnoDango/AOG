@@ -8,7 +8,7 @@ public partial class LayerItemDropped : Node2D, IRegisterToG
     public static void SummonItem(Vector2I position, Item item)
     {
         var instance = G.I.LayerItemDropped.droppedScene.Instantiate<ItemDropped>();
-        instance.Position = position * 16;
+        instance.Position = position * Setting.imagePx;
         item.Sprite = instance; // 关联 Sprite
         item.Position = position; // 设置位置
         instance.SetItem(item); // 设置 Sprite + 数据

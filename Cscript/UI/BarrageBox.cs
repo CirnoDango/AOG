@@ -67,7 +67,7 @@ public partial class BarrageBox : Control, IRegisterToG
             Item toThrow = parent.Buttons[slotButton];
             if (bag.Components.Contains(toThrow))
             {
-                Player.PlayerUnit.inventory.ThrowItem(toThrow);
+                Player.PlayerUnit.Inventory.ThrowItem(toThrow);
                 slotButton.RemoveChild(itemIcon);
                 slotButton.TooltipText = null;
             }
@@ -155,11 +155,11 @@ public partial class BarrageBox : Control, IRegisterToG
     {
         // 背包交互
         if (parent.barrage == bag)
-            Player.PlayerUnit.inventory.Items.Add(draggedItem);
+            Player.PlayerUnit.Inventory.Items.Add(draggedItem);
         if (draggedParent.barrage == bag)
         {
-            var toremove = Player.PlayerUnit.inventory.Items.FirstOrDefault(x => x == draggedItem);
-            Player.PlayerUnit.inventory.RemoveItem(toremove);
+            var toremove = Player.PlayerUnit.Inventory.Items.FirstOrDefault(x => x == draggedItem);
+            Player.PlayerUnit.Inventory.RemoveItem(toremove);
         }
         // 设置新位置
         parent.Buttons[slotButton] = draggedItem;
@@ -195,22 +195,22 @@ public partial class BarrageBox : Control, IRegisterToG
     public void Refresh()
     {
         var unit = Player.PlayerUnit;
-        equipNumber.Text = $"Equip: {unit.equipment.CurrentEquipWeight:F1}/{unit.equipment.MaxEquipWeight:F1}";
-        bagNumber.Text = $"Bag: {unit.inventory.CurrentWeight:F1}/{unit.inventory.MaxWeight:F1}";
+        equipNumber.Text = $"Equip: {unit.Equipment.CurrentEquipWeight:F1}/{unit.Equipment.MaxEquipWeight:F1}";
+        bagNumber.Text = $"Bag: {unit.Inventory.CurrentWeight:F1}/{unit.Inventory.MaxWeight:F1}";
         foreach (var child in BagList.GetChildren())
             child.QueueFree();
         foreach (var child in BarrageList.GetChildren())
             child.QueueFree();
         int n = 0;
         bag = new(100);
-        foreach (var item in unit.inventory.Items)
+        foreach (var item in unit.Inventory.Items)
         {
             if (item is not BarrageComponent)
                 continue;
             bag.Components[n] = (BarrageComponent)item;
             n++;
         }
-        foreach(var item in unit.equipment.EquippedItems)
+        foreach(var item in unit.Equipment.EquippedItems)
         {
             if (item is BarrageSet bs)
             {

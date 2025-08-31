@@ -28,8 +28,8 @@ public partial class HighlightManager : Node2D, IRegisterToG
         if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
             Vector2 clickPos = GetGlobalMousePosition();
-            var si = Player.PlayerUnit.GetSkill(Skill.CurrentSkill.Name);
-            if (Player.PlayerUnit.CheckSkillTarget(si, MapToGrid(clickPos)) == HighlightType.green)
+            var si = Player.PlayerUnit.Us.GetSkill(Skill.CurrentSkill.Name);
+            if (Player.PlayerUnit.Up.CheckSkillTarget(si, MapToGrid(clickPos)) == HighlightType.green)
             {
                 
                 switch (si.Targeting.Type)
@@ -37,7 +37,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
                     case Target.Dash:
                         Skill.CurrentSkill.Activate(new SkillContext(
                             Player.PlayerUnit, 
-                            Player.PlayerUnit.DashCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos)))[^1].unit,
+                            Player.PlayerUnit.Up.DashCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos)))[^1].unit,
                             si.Level));
                         break;
                     case Target.Grid:
@@ -49,7 +49,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
                     case Target.Ray:
                         Skill.CurrentSkill.Activate(new SkillContext(
                             Player.PlayerUnit, 
-                            Player.PlayerUnit.RayCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos))),
+                            Player.PlayerUnit.Up.RayCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos))),
                             si.Level));
                         break;
                     default:
@@ -77,12 +77,12 @@ public partial class HighlightManager : Node2D, IRegisterToG
         if (showingTileWorldPos == tileWorldPos)
             return;
         showingTileWorldPos = tileWorldPos;
-        ShowHighlights(MathEx.GetLine(Player.PlayerUnit.Position, tileWorldPos), Player.PlayerUnit.CheckSkillTarget(Skill.CurrentSkill, tileWorldPos), Skill.CurrentSkill.Targeting.BombRange);
+        ShowHighlights(MathEx.GetLine(Player.PlayerUnit.Up.Position, tileWorldPos), Player.PlayerUnit.Up.CheckSkillTarget(Skill.CurrentSkill, tileWorldPos), Skill.CurrentSkill.Targeting.BombRange);
     }
     public static Vector2I MapToGrid(Vector2 screenPosf)
     {
-        Vector2I screenPos = new((int)screenPosf.X + 8, (int)screenPosf.Y + 8);
-        Vector2I gridPos = screenPos / 16;
+        Vector2I screenPos = new((int)(screenPosf.X + 8*Setting.rootnodeScale), (int)(screenPosf.Y + 8 * Setting.rootnodeScale));
+        Vector2I gridPos = screenPos / (int)(16 * Setting.rootnodeScale);
         return gridPos;
     }
     public void ShowHighlights(List<Vector2I> tilePositions, HighlightType color, int yellowRange = 0)
@@ -93,7 +93,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
             case HighlightType.red:
                 foreach (var pos in tilePositions)
                 {
-                    if(Player.PlayerUnit.CheckSkillTarget(Skill.CurrentSkill, pos) == HighlightType.red)
+                    if(Player.PlayerUnit.Up.CheckSkillTarget(Skill.CurrentSkill, pos) == HighlightType.red)
                     {
                         GridHighlight(pos, HighlightType.red);
                     }
@@ -148,7 +148,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
                 break;
         }
 
-		instance.Position = pos * 16; // 假设 tile 是 16x16
+		instance.Position = pos * Setting.imagePx; // 假设 tile 是 16x16
 		AddChild(instance);
         activeHighlights.Add(instance);
     }

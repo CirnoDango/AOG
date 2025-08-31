@@ -17,9 +17,9 @@ public partial class CombatAbilityBox : Control
         HeadPicture.Texture =(Texture2D)GD.Load($"res://Assets/Portraits/Fix/{unit.Name}.png");
         string text1 = 
         $@"{(unit.TrName)} 
-         HP:{unit.CurrentHp:F0}/{unit.MaxHp:F0}
-         SP:{unit.CurrentSp:F0}/{unit.MaxSp:F0}
-         MP:{unit.CurrentMp:F0}/{unit.MaxMp:F0}
+         HP:{unit.Ua.CurrentHp:F0}/{unit.Ua.MaxHp:F0}
+         SP:{unit.Ua.CurrentSp:F0}/{unit.Ua.MaxSp:F0}
+         MP:{unit.Ua.CurrentMp:F0}/{unit.Ua.MaxMp:F0}
          当前状态: ";
         foreach (Status s in unit.Status)
         {
@@ -27,8 +27,8 @@ public partial class CombatAbilityBox : Control
         }
         if (unit.Status.Count == 0)
             text1 += " 无 ";
-        text1 += $"\n 背包容量 ：{unit.inventory.CurrentWeight:F1}/{unit.inventory.MaxWeight:F1}";
-        text1 += $"\n 装备容量 ：{unit.equipment.CurrentEquipWeight:F1}/{unit.equipment.MaxEquipWeight:F1}";
+        text1 += $"\n 背包容量 ：{unit.Inventory.CurrentWeight:F1}/{unit.Inventory.MaxWeight:F1}";
+        text1 += $"\n 装备容量 ：{unit.Equipment.CurrentEquipWeight:F1}/{unit.Equipment.MaxEquipWeight:F1}";
         
         string text2 =
         $@" 力量 :{unit.Ua.Str + 10}  敏捷 :{unit.Ua.Dex + 10}  体质 :{unit.Ua.Con + 10} 
@@ -42,7 +42,7 @@ public partial class CombatAbilityBox : Control
          移动速度 :{unit.Ua.SpeedMove:F1}%
         ";
         string text3 = " 持有技能 ：\n";
-        foreach ((SkillInstance si, _) in unit.skills)
+        foreach ((SkillInstance si, _) in unit.Us.skills)
         {
             if (si.Template.SkillGroup != "")
                 text3 += $" {si.Template.TrName} \n";

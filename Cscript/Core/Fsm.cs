@@ -41,10 +41,6 @@ public static class Logger
         OutputDebugString($"{message}\n"); 
     }
 }
-public static class Setting
-{
-    public static float chaos = 2;
-}
 public partial class Fsm : Node, IRegisterToG
 {
     public GameState currentState;
@@ -140,11 +136,11 @@ public class StartState(Fsm fsm) : GameState(fsm), IGameState
             EnemyLoader.LoadEnemies();
             Skill.LoadSkillDeck();
             ItemLoader.LoadAllItems();
+            ItemEffect.LoadAllItemEffects();
             SpriteManager.LoadSkills();
             Game.IsLoaded = true;
         }
         ItemLoader.LoadItemPng();
-        
         // 跳转到更新状态
         fsm.ChangeState(Fsm.UpdateState);
     }
@@ -180,9 +176,9 @@ public class UpdatingState(Fsm fsm) : GameState(fsm), IGameState
         if (activeUnit.Count > 0)
         {
             Unit unit = activeUnit.Dequeue();
-            if (unit.unitAi != null)
+            if (unit.UnitAi != null)
             {
-                unit.unitAi.Update();
+                unit.UnitAi.Update();
             }
             else if(unit == Player.PlayerUnit)
             {

@@ -55,7 +55,7 @@ text = "选择自机："
 layout_mode = 2
 theme_override_font_sizes/font_size = 80
 selected = 0
-item_count = 4
+item_count = 5
 popup/item_0/text = "reimu"
 popup/item_0/id = 0
 popup/item_1/text = "marisa"
@@ -64,6 +64,8 @@ popup/item_2/text = "rumia"
 popup/item_2/id = 2
 popup/item_3/text = "cirno"
 popup/item_3/id = 3
+popup/item_4/text = "meilin"
+popup/item_4/id = 4
 script = ExtResource("2_bf03f")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]

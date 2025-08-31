@@ -11,12 +11,12 @@ public class mElite : Memory
         Group = "Ego";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
-        unit.MaxHp += 20 * Setting.chaos;
+        unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(2 * Setting.chaos);
         unit.Ua.skillPoint += 3;
-        unit.equipment.TryEquip(GetItemName("BarrageSet",
+        unit.Equipment.TryEquip(CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }), unit);
     }
 }
@@ -30,15 +30,15 @@ public class mGreat : Memory
         Group = "Ego";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
-        unit.MaxHp += 20 * Setting.chaos;
+        unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(6 * Setting.chaos);
-        unit.MaxHp *= 1 + (0.2f * Setting.chaos);
-        unit.MaxSp *= 1 + (0.1f * Setting.chaos);
-        unit.MaxMp *= 1 + (0.1f * Setting.chaos);
+        unit.Ua.MaxHp *= 1 + (0.2f * Setting.chaos);
+        unit.Ua.MaxSp *= 1 + (0.1f * Setting.chaos);
+        unit.Ua.MaxMp *= 1 + (0.1f * Setting.chaos);
         unit.Ua.skillPoint += 6;
-        unit.equipment.TryEquip(GetItemName("BarrageSet",
+        unit.Equipment.TryEquip(CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }), unit);
     }
 }
@@ -52,17 +52,17 @@ public class mBoss : Memory
         Group = "Ego";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
-        unit.MaxHp += 20 * Setting.chaos;
+        unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(12 * Setting.chaos);
-        unit.MaxHp *= 1 + (0.6f * Setting.chaos);
-        unit.MaxSp *= 1 + (0.2f * Setting.chaos);
-        unit.MaxMp *= 1 + (0.2f * Setting.chaos);
+        unit.Ua.MaxHp *= 1 + (0.6f * Setting.chaos);
+        unit.Ua.MaxSp *= 1 + (0.2f * Setting.chaos);
+        unit.Ua.MaxMp *= 1 + (0.2f * Setting.chaos);
         unit.Ua.skillPoint += 10;
-        unit.equipment.TryEquip(GetItemName("BarrageSet",
+        unit.Equipment.TryEquip(CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }), unit);
-        unit.equipment.TryEquip(GetItemName("BarrageSet",
+        unit.Equipment.TryEquip(CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }), unit);
     }
 }

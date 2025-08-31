@@ -14,9 +14,11 @@ public enum AiMode
 }
 public class UnitAi(Unit u)
 {
-    public Unit unit = u;
+    public int friendness = -1;
+    public int bestDistance;
+    private Unit _parent = u;
     public Dictionary<string, float> Skills { get; set; } = [];
-    public int PlayerDist => (int)Math.Round((unit.Position - Player.PlayerUnit.Position).Length());
+    public int PlayerDist => (int)Math.Round((_parent.Up.Position - Player.PlayerUnit.Up.Position).Length());
     public AiState State { get; set; } = AiState.Sleep;
     public AiMode Mode { get; set; } = AiMode.Attack;
     public Vector2I PlayerPosition;
@@ -31,18 +33,18 @@ public class UnitAi(Unit u)
             case AiState.Sleep:
                 break;
             case AiState.Attack:
-                if (!unit.GridInVision().Contains(Player.PlayerUnit.CurrentGrid))
+                if (!_parent.Up.GridInVision().Contains(Player.PlayerUnit.Up.CurrentGrid))
                     State = AiState.Track;
                 break;
             case AiState.Track:
-                if (unit.GridInVision().Contains(Player.PlayerUnit.CurrentGrid))
+                if (_parent.Up.GridInVision().Contains(Player.PlayerUnit.Up.CurrentGrid))
                 {
                     State = AiState.Attack; break;
                 }
-                if(unit.Position == Player.PlayerUnit.Position)
+                if(_parent.Up.Position == Player.PlayerUnit.Up.Position)
                 {
-                    unit.unitAi.SleepAi();
-                    Scene.CurrentMap.WakeUnits.Remove(unit);
+                    _parent.UnitAi.SleepAi();
+                    Scene.CurrentMap.WakeUnits.Remove(_parent);
                 }
                     
                 break;
@@ -53,7 +55,7 @@ public class UnitAi(Unit u)
                 SleepAi();
                 break;
             case AiState.Attack:
-                PlayerPosition = Player.PlayerUnit.Position;
+                PlayerPosition = Player.PlayerUnit.Up.Position;
                 AttackAi(1, 3);
                 break;
             case AiState.Track:
@@ -63,8 +65,8 @@ public class UnitAi(Unit u)
     }
     public void AttackAi(float attackValue, float tacticMoveValue)
     {
-        var skills = unit.skills;
-        int bestDistance = unit.bestDistance;
+        var skills = _parent.Us.skills;
+        int bestDistance = _parent.UnitAi.bestDistance;
         // 2. 构建候选技能列表（技能+普通攻击+战术移动）
         List<(string, float weight)> candidates = new();
 
@@ -98,28 +100,28 @@ public class UnitAi(Unit u)
                 if (choice <= cumulative)
                 {
                     if (use == "TacticMove") { TacticMove(); return; } 
-                    unit.GetSkill(use).Use(SelectTarget(unit.GetSkill(use)));
+                    _parent.Us.GetSkill(use).Use(SelectTarget(_parent.Us.GetSkill(use)));
                     return;
                 }
             }
         }
-        unit.unitAi.SleepAi();
+        _parent.UnitAi.SleepAi();
 
         void TacticMove()
         {
             List<Vector2I> moves = [];
             foreach (var dir in Directions)
             {
-                if (Math.Abs((int)Math.Round((unit.Position + dir - Player.PlayerUnit.Position).Length())
+                if (Math.Abs((int)Math.Round((_parent.Up.Position + dir - Player.PlayerUnit.Up.Position).Length())
                     - bestDistance) < Math.Abs(PlayerDist - bestDistance))
                 {
-                    var gd = Scene.CurrentMap.GetGrid(unit.Position + dir);
+                    var gd = Scene.CurrentMap.GetGrid(_parent.Up.Position + dir);
                     if (gd != null && gd.IsWalkable && gd.unit == null)
                         moves.Add(dir);
                 }
             }
-            var grid = Scene.CurrentMap.GetGrid(unit.Position + moves[GD.RandRange(0, moves.Count - 1)]);
-            Skill.NameSkill["Move"].Activate(new SkillContext(unit, grid));
+            var grid = Scene.CurrentMap.GetGrid(_parent.Up.Position + moves[GD.RandRange(0, moves.Count - 1)]);
+            Skill.NameSkill["Move"].Activate(new SkillContext(_parent, grid));
         }
     }
     public bool CanUse(string name, int bestDistance = 0)
@@ -133,17 +135,18 @@ public class UnitAi(Unit u)
             case "TacticMove":
                 foreach (var dir in Directions)
                 {
-                    if(Math.Abs((int)Math.Round((unit.Position + dir - Player.PlayerUnit.Position)
+                    if(Math.Abs((int)Math.Round((_parent.Up.Position + dir - Player.PlayerUnit.Up.Position)
                         .Length()) - bestDistance) < Math.Abs(PlayerDist - bestDistance))
                     {
-                        var grid = Scene.CurrentMap.GetGrid(unit.Position + dir);
+                        var grid = Scene.CurrentMap.GetGrid(_parent.Up.Position + dir);
                         if (grid != null && grid.IsWalkable && grid.unit == null)
                             return true;
                     }
                 }
                 break;
             default:
-                return unit.GetSkill(name).CanUse(unit) && unit.CheckSkillTarget(unit.GetSkill(name), Player.PlayerUnit.Position) == HighlightType.green;
+                return _parent.Us.GetSkill(name).CanUse(_parent) && 
+                       _parent.Up.CheckSkillTarget(_parent.Us.GetSkill(name), Player.PlayerUnit.Up.Position) == HighlightType.green;
         }
         return false;
     }
@@ -151,15 +154,15 @@ public class UnitAi(Unit u)
     {
         return skill.Template.GetTargeting(skill.Level).Type switch
         {
-            Target.Enemy or Target.Unit or Target.Dash => new SkillContext(unit, Player.PlayerUnit),
-            Target.Grid => new SkillContext(unit, Player.PlayerUnit.CurrentGrid),
-            _ => new SkillContext(unit),
+            Target.Enemy or Target.Unit or Target.Dash => new SkillContext(_parent, Player.PlayerUnit),
+            Target.Grid => new SkillContext(_parent, Player.PlayerUnit.Up.CurrentGrid),
+            _ => new SkillContext(_parent),
         };
     }
     
     public void SleepAi()
     {
-        Sleep().Activate(new SkillContext(unit));
+        Sleep().Activate(new SkillContext(_parent));
     }
     public static Skill Sleep()
     {
@@ -178,12 +181,12 @@ public class UnitAi(Unit u)
     ];
     public void TrackAi()
     {
-        if (unit.Position == PlayerPosition) { State = AiState.Sleep; SleepAi(); return; }
-        float playerDist = (unit.Position - PlayerPosition).Length();
+        if (_parent.Up.Position == PlayerPosition) { State = AiState.Sleep; SleepAi(); return; }
+        float playerDist = (_parent.Up.Position - PlayerPosition).Length();
         Vector2I direction = Vector2I.Zero;
         foreach (var dir in Directions)
         {
-            Vector2I nextPosition = unit.Position + dir;
+            Vector2I nextPosition = _parent.Up.Position + dir;
             Grid nextGrid = Scene.CurrentMap.GetGrid(nextPosition);
             if (nextGrid != null && nextGrid.IsWalkable && nextGrid.unit == null)
             {
@@ -197,7 +200,7 @@ public class UnitAi(Unit u)
         }
         if (direction != Vector2I.Zero)
         {
-            Skill.NameSkill["Move"].Activate(new SkillContext(unit, Scene.CurrentMap.GetGrid(unit.Position + direction)));
+            Skill.NameSkill["Move"].Activate(new SkillContext(_parent, Scene.CurrentMap.GetGrid(_parent.Up.Position + direction)));
         }
             
         else

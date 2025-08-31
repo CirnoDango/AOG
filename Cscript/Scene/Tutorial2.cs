@@ -41,8 +41,8 @@ public partial class Tutorial2 : Stage
         tutorial.CreateEnemy(new Vector2I(10, 3), "reimu");
         tutorial.SummonChest(6, 1, tutorial.GetGrid(new Vector2I(3, 2)));
         G.I.SkillPanel.Add("Freeze");
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mSkill"));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mSkill"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Player.PlayerUnit.Memorys.MaxEquipWeight += 15;
     }
 
@@ -89,11 +89,11 @@ public partial class Tutorial2 : Stage
         G.I.Fsm.ChangeState(Fsm.UpdateState); 
         G.I.DialogBox.Hide();
         Player.PlayerUnit.Ua.Cun += 100;
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
     }
 }

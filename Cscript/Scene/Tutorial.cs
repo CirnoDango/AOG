@@ -26,7 +26,7 @@ public partial class Tutorial : Node
 
     public override void _ExitTree()
     {
-        GameEvents.OnEnemyKilled -= OnEnemyKilled;
+        //GameEvents.OnEnemyKilled -= OnEnemyKilled;
     }
     public async Task<Item> WaitForItemPickup(string itemName)
     {
@@ -141,7 +141,7 @@ public partial class Tutorial : Node
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
             "试试看吧，移动过去攻击那个团子！")
         ]); await Click(); DialogBox.SHide();
-        GameEvents.OnEnemyKilled += OnEnemyKilled;
+        //GameEvents.OnEnemyKilled += OnEnemyKilled;
         var d = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "dangoPea", UnitEgo.normal, 0, false);
         for(int x = 1; x <= 7; x++)
         {
@@ -150,7 +150,7 @@ public partial class Tutorial : Node
                 //_ = Scene.CurrentMap.CreateEnemy(new Vector2I(x, y), "marisa");
             }
         }
-        d.unitAi = new(d){Mode = AiMode.Sleep};
+        d.UnitAi = new(d){Mode = AiMode.Sleep};
         await dangodie(); DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
@@ -184,7 +184,7 @@ public partial class Tutorial : Node
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
             "当你受到弹幕伤害时，会自动进行擦弹，并提升对应的SP值！获得的SP值可以用于发动招式。")
         ]); await Click();
-        Player.PlayerUnit.LearnSkill("Icefall");
+        Player.PlayerUnit.Us.LearnSkill("Icefall");
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
             "看到画面左侧那个冰晶图标了吗？这是你的技能Icefall！点击就可以使用啦！")
@@ -215,10 +215,10 @@ public partial class Tutorial : Node
             "来吧，用技能干掉这个团子！")
         ]); await Click();
         DialogBox.SHide();
-        GameEvents.OnEnemyKilled += OnEnemyKilled;
+        //GameEvents.OnEnemyKilled += OnEnemyKilled;
         var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(12, 16), "dangoPea", UnitEgo.normal, 0, false);
         Player.PlayerUnit.Ua.BodyDamageAccuracy -= 10;
-        d2.inventory.AddItem(Item.GetItemName("PowerBlock"));
+        d2.Inventory.AddItem(Item.CreateItem("PowerBlock"));
         await dangodie(); DialogBox.SShow();
         Player.PlayerUnit.Ua.BodyDamageAccuracy += 10;
         G.I.DialogBox.ShowDialog([
@@ -241,8 +241,8 @@ public partial class Tutorial : Node
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
             "好耶！")
         ]); await Click(); 
-        Player.PlayerUnit.LearnSkill("MinusK");
-        Player.PlayerUnit.LearnSkill("PerfectFreeze");
+        Player.PlayerUnit.Us.LearnSkill("MinusK");
+        Player.PlayerUnit.Us.LearnSkill("PerfectFreeze");
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
             "看到技能栏中那个边框特别的图标了吗？这是你的符卡【Perfect Freeze】！")
@@ -317,7 +317,7 @@ public partial class Tutorial : Node
             new("魔理沙", LoadPortrait("marisa_fight_hahaha"),
             "没办法，就让你投币复活一次吧")
         ]); await Click();
-        Player.PlayerUnit.GetHp(200);
+        Player.PlayerUnit.Ua.GetHp(200);
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }

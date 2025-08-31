@@ -8,7 +8,7 @@ public class mUaAny : Memory
         Description = "+1属性点";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.uaPoint += 1;
     }
@@ -22,7 +22,7 @@ public class mSkill : Memory
         Description = "+2技能点";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.skillPoint += 2;
     }
@@ -36,7 +36,7 @@ public class mUaStr : Memory
         Description = "+4力量";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Str += 4;
     }
@@ -51,7 +51,7 @@ public class mUaDex : Memory
         Description = "+4敏捷";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Dex += 4;
     }
@@ -66,7 +66,7 @@ public class mUaCon : Memory
         Description = "+4体质";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Con += 4;
     }
@@ -81,7 +81,7 @@ public class mUaSpi : Memory
         Description = "+4灵力";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Spi += 4;
     }
@@ -96,7 +96,7 @@ public class mUaMag : Memory
         Description = "+4魔力";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Mag += 4;
     }
@@ -111,7 +111,7 @@ public class mUaCun : Memory
         Description = "+4灵巧";
     }
 
-    public override void OnEquip(Unit unit)
+    public void OnEquip(Unit unit)
     {
         unit.Ua.Cun += 4;
     }

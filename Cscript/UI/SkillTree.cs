@@ -32,8 +32,8 @@ public partial class SkillTree : Control
             skillButtons[index].MouseEntered += () =>
             {
                 int level = 0;
-                if(Player.PlayerUnit.GetSkill(skillName) != null)
-                    level = Player.PlayerUnit.GetSkill(skillName).Level;
+                if(Player.PlayerUnit.Us.GetSkill(skillName) != null)
+                    level = Player.PlayerUnit.Us.GetSkill(skillName).Level;
                 G.I.Ua.info.Text = level switch
                 {
                     1 => TextEx.HighlightChanges(skill.SkillInfo(1), skill.SkillInfo(2)),
@@ -51,7 +51,7 @@ public partial class SkillTree : Control
 
     private int VLevel(string skillName)
     {
-        var skillInstance = Player.PlayerUnit.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+        var skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
         if (skillInstance != null)
         {
             return skillInstance.Level;
@@ -64,13 +64,13 @@ public partial class SkillTree : Control
     {
         if (G.I.Player.SkillPoint <= 0)
             return;
-        var si = Player.PlayerUnit.GetSkill(skillName);
+        var si = Player.PlayerUnit.Us.GetSkill(skillName);
         if (si != null && si.Template is SpellCard sc && si.IsActive)
         {
             Info.Print(TextEx.TrN("激活中的符卡不允许升级！"));
             return;
         }
-        var skillInstance = Player.PlayerUnit.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+        var skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
         if (skillInstance != null)
         {
             if (skillInstance.Level >= 3)
@@ -82,8 +82,8 @@ public partial class SkillTree : Control
         }
         else
         {
-            Player.PlayerUnit.LearnSkill(Skill.SkillDeck.FirstOrDefault(s => s.Name == skillName));
-            skillInstance = Player.PlayerUnit.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+            Player.PlayerUnit.Us.LearnSkill(Skill.SkillDeck.FirstOrDefault(s => s.Name == skillName));
+            skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
             label.Text = $"{skillInstance.Level}/3";
             G.I.Player.SkillPoint -= 1;
             (G.I.SkillPanel).Refresh();

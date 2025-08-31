@@ -51,7 +51,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             IgnoreTextureSize = true,
             CustomMinimumSize = new Vector2(60, 60),
             StretchMode = TextureButton.StretchModeEnum.Scale,
-            TooltipText = Tr(skill.Template.SkillInfo(Player.PlayerUnit.GetSkill(skill.Name).Level)),
+            TooltipText = Tr(skill.Template.SkillInfo(Player.PlayerUnit.Us.GetSkill(skill.Name).Level)),
             SizeFlagsVertical = SizeFlags.ShrinkCenter,
             SizeFlagsHorizontal = SizeFlags.ShrinkCenter
         };
@@ -119,7 +119,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         }
         if (skill.GetTargeting(level).Type == Target.Self)
         {
-            skill.Activate(new SkillContext(Player.PlayerUnit, Player.PlayerUnit.GetSkill(skill.Name).Level), si);
+            skill.Activate(new SkillContext(Player.PlayerUnit, Player.PlayerUnit.Us.GetSkill(skill.Name).Level), si);
         }
         else
         {

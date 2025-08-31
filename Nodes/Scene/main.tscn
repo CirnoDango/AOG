@@ -1,6 +1,6 @@
 [gd_scene load_steps=47 format=4 uid="uid://b0mqdj26pycpr"]
 
-[ext_resource type="Script" uid="uid://bqj7vjv1wu0wj" path="res://Cscript/Core/GameLoader.cs" id="1_dr5cr"]
+[ext_resource type="Script" uid="uid://c257ow2x8tw8" path="res://Cscript/Core/Root.cs" id="1_dr5cr"]
 [ext_resource type="Script" uid="uid://bvi1fgh3td4rw" path="res://Cscript/UI/SkillBar.cs" id="2_1ocm2"]
 [ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://Nodes/Ui/skillbox.tscn" id="3_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://Nodes/Ui/spellbox.tscn" id="4_cnqvw"]

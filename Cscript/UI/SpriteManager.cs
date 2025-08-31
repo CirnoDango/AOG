@@ -17,17 +17,17 @@ public partial class SpriteManager : Node
         var sprite = new Sprite2D { Texture = texture };
         Vector2 originalSize = texture.GetSize(); // 原图尺寸
         Vector2 targetSize = new Vector2(15, 15); // 显示目标尺寸
-        sprite.Scale = targetSize / originalSize;
-        unit.imageSizeFactor = sprite.Scale.Y;
+        sprite.Scale = targetSize * Setting.imagePx / 16 / originalSize;
+        unit.Ua.imageSizeFactor = sprite.Scale.Y;
         var tip_area = new DynamicTooltipPanel
         {
-            TooltipSource = unit.Description,
+            TooltipSource = unit.Ua.Description,
             Size = sprite.Texture.GetSize(), // sprite.Scale,
             Modulate = new Color(1, 1, 1, 0)
         };
         sprite.AddChild(tip_area);
         tip_area.GlobalPosition += new Vector2I(-8, -8)/sprite.Scale;
-        unit.sprite = sprite;
+        unit.Up.sprite = sprite;
     }
     public static void LoadSkills()
     {

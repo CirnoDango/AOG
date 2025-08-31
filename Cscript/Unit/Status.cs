@@ -16,8 +16,7 @@ public abstract class Status
     public virtual void OnTakeBulletDamage(Unit unit, Skill skill, ref float damage){; }
     public virtual void OnTakeBodyDamage(Unit unit, ref float damage){; }
     public virtual void OnDealDamage(Unit unit, ref float damage){; }
-    //public virtual void OnMove(Unit unit, ref Vector2I newPos) { }
-    //public virtual void OnSkillUse(Unit unit, Skill skill) { }
+    public virtual void OnDealBodyDamage(Unit unit, ref float damage) {; }
     public virtual void OnGet(Unit unit, Status status) { Get(unit); }
     public virtual void OnQuit(Unit unit) { Quit(unit); }
     public void Get(Unit unit)
@@ -84,9 +83,9 @@ public abstract class Status
         var sprite = new Sprite2D
         {
             Texture = texture,
-            Scale = new Vector2(1 / unit.imageSizeFactor, 1 / unit.imageSizeFactor)
+            Scale = new Vector2(1 / unit.Ua.imageSizeFactor, 1 / unit.Ua.imageSizeFactor)
         };
-        unit.sprite.AddChild(sprite);
+        unit.Up.sprite.AddChild(sprite);
         unit.StatusImages.Add(this, sprite);
         
     }
@@ -97,7 +96,7 @@ public abstract class Status
         var node = unit.StatusImages.FirstOrDefault(x => x.Key == status).Value;
         if (node != null)
         {
-            unit.sprite.RemoveChild(node);
+            unit.Up.sprite.RemoveChild(node);
             unit.StatusImages.Remove(unit.StatusImages.FirstOrDefault(x => x.Key.Name == Name).Key);
         }
         unit.Status.Remove(unit.Status.FirstOrDefault(x => x.Name == Name));
@@ -156,11 +155,11 @@ public class Dark : Status
     public override void OnGet(Unit unit, Status status)
     {
         if (CombineTime(unit, status))
-            unit.Vision -= 8;
+            unit.Up.Vision -= 8;
     }
     public override void OnQuit(Unit unit)
     {
-        unit.Vision += 8;
+        unit.Up.Vision += 8;
         Quit(unit);
     }
 }
@@ -184,7 +183,7 @@ public class YinyangBall : Status
     public override void OnTakeBodyDamage(Unit unit, ref float damage)
     {
         Layer--;
-        var (skill, weight) = unit.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
+        var (skill, weight) = unit.Us.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
 
         if (skill != null && skill.Level >= 3)
             damage -= Mathf.Min(damage, 18);
@@ -206,8 +205,8 @@ public class YinyangBall : Status
         }
         Get(unit);
         unit.Status.Add(status);
-        GameEvents.OnCreateBullet += AddActivator;
-        GameEvents.OnUnitTurnEnd += Activate;
+        unit.Ue.OnCreateBullet += AddActivator;
+        unit.Ue.OnUnitTurnEnd += Activate;
     }
     public override void OnQuit(Unit unit)
     {
@@ -218,18 +217,18 @@ public class YinyangBall : Status
         }
         else
             Quit(unit);
-        GameEvents.OnCreateBullet -= AddActivator;
-        GameEvents.OnUnitTurnEnd -= Activate;
+        unit.Ue.OnCreateBullet -= AddActivator;
+        unit.Ue.OnUnitTurnEnd -= Activate;
     }
     public void AddActivator(Unit unit, Bullet bullet)
     {
-        if (!unit.Status.Contains(this) || bullet.Shape == ShapeBullet.Yinyang) { return; }
-        if (unit.RandomEnemyInVision(out Unit target))
-            activator = new SkillContext(unit, target.CurrentGrid);
+        if (bullet.Shape == ShapeBullet.Yinyang) { return; }
+        if (unit.Up.RandomEnemyInVision(out Unit target))
+            activator = new SkillContext(unit, target.Up.CurrentGrid);
     }
     public void Activate(Unit unit)
     {
-        var (skill, weight) = unit.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
+        var (skill, weight) = unit.Us.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
         int level = 1;
         if (skill != null && skill.Level >= 2)
             level = 2;
@@ -260,6 +259,7 @@ public class Weak : Status
     public override void OnQuit(Unit unit)
     {
         unit.Ua.Str += 6;
+        Quit(unit);
     }
 }
 public class SpiritSeal : Status
@@ -271,17 +271,17 @@ public class SpiritSeal : Status
     }
     public override void OnGet(Unit unit, Status status)
     {
-        GameEvents.OnCheckSkillUsage.Add(OnCheckSkillUsage);
+        unit.Ue.OnCheckSkillUsage.Add(OnCheckSkillUsage);
+        CombineTime(unit, status);
     }
     public override void OnQuit(Unit unit)
     {
-        GameEvents.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
+        unit.Ue.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
+        Quit(unit);
     }
     public bool OnCheckSkillUsage(Unit unit, SkillInstance si, bool init)
     {
-        if (unit.Status.Contains(this))
-            return init && si.Template.GetSpCost(si.Level) <= 0;
-        return init;
+        return init && si.Template.GetSpCost(si.Level) <= 0;
     }
 }
 public class MagicSeal : Status
@@ -293,17 +293,17 @@ public class MagicSeal : Status
     }
     public override void OnGet(Unit unit, Status status)
     {
-        GameEvents.OnCheckSkillUsage.Add(OnCheckSkillUsage);
+        unit.Ue.OnCheckSkillUsage.Add(OnCheckSkillUsage);
+        CombineTime(unit, status);
     }
     public override void OnQuit(Unit unit)
     {
-        GameEvents.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
+        unit.Ue.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
+        Quit(unit);
     }
     public bool OnCheckSkillUsage(Unit unit, SkillInstance si, bool init)
     {
-        if (unit.Status.Contains(this))
-            return init && si.Template.GetMpCost(si.Level) <= 0;
-        return init;
+        return init && si.Template.GetMpCost(si.Level) <= 0;
     }
 }
 public class SSpiralLightSteps : Status
@@ -326,19 +326,20 @@ public class SSpiralLightSteps : Status
     }
     public override void OnGet(Unit unit, Status status)
     {
-        GameEvents.OnUnitMove += MoveDamage;
+        unit.Ue.OnUnitMove += MoveDamage;
+        CombineTime(unit, status);
     }
     public override void OnQuit(Unit unit)
     {
-        GameEvents.OnUnitMove -= MoveDamage;
+        unit.Ue.OnUnitMove -= MoveDamage;
         Quit(unit);
     }
     public void MoveDamage(Unit unit)
     {
-        foreach(Unit target in unit.CurrentGrid.NearGrids(2).Select(g => g.unit))
+        foreach(Unit target in unit.Up.CurrentGrid.NearGrids(2).Where(x => x != unit.Up.CurrentGrid).Select(g => g.unit))
         {
-            unit?.TakeBulletDamage(15, unit, Parent);
-            unit?.GetStatus(new Daze(300));
+            target?.Ua.TakeBulletDamage(15, unit, Parent);
+            target?.GetStatus(new Daze(300));
         }
     }
 }
@@ -362,5 +363,80 @@ public class Daze : Status
         unit.Ua.SpeedGlobal += 50;
         unit.Ua.BodyDamageAccuracy += 0.5f;
         unit.Ua.BulletDamageAccuracy += 0.5f;
+        Quit(unit);
+    }
+}
+public class Stun : Status
+{
+    public Stun(float duration)
+    {
+        Name = "Stun";
+        Duration = duration;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        unit.Ua.SpeedGlobal -= 50;
+        unit.Ua.BodyDamageAccuracy -= 0.5f;
+        unit.Ua.BulletDamageAccuracy -= 0.5f;
+        CombineTime(unit, status);
+    }
+    public override void OnQuit(Unit unit)
+    {
+        unit.Ua.SpeedGlobal += 50;
+        unit.Ua.BodyDamageAccuracy += 0.5f;
+        unit.Ua.BulletDamageAccuracy += 0.5f;
+        Quit(unit);
+    }
+}
+public class SCrimsonEnergyRelease : Status
+{
+    private int level;
+    int[] t0 = { 8, 12, 16, 16 };
+    public int Layer
+    {
+        get => (int)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public SCrimsonEnergyRelease(int l = 1)
+    {
+        Name = "CrimsonEnergyRelease";
+        Duration = 100;
+        Layer = l;
+    }
+    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref float damage)
+    {
+        damage -= damage * t0[level - 1] / 100f;
+    }
+    public override void OnDealBodyDamage(Unit unit, ref float damage)
+    {
+        damage += damage * t0[level - 1] / 100f;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        foreach (var s in unit.Status)
+        {
+            if (s.Name == Name)
+            {
+                s.Param += ((SCrimsonEnergyRelease)status).Layer;
+                return;
+            }
+        }
+        Get(unit);
+        unit.Status.Add(status);
+        ((SCrimsonEnergyRelease)status).level = 
+            unit.Us.skills.FirstOrDefault(x => x.skill.Name == "CrimsonEnergyRelease").skill.Level;
+    }
+    public override void OnQuit(Unit unit)
+    {
+        if (Layer > 1)
+        {
+            Layer--;
+            Duration += 500;
+        }
+        else
+            Quit(unit);
     }
 }

@@ -26,10 +26,10 @@ public class Barrage
         {
             if (i >= barrage.MaxComponents) break;
             if (name is string s)
-                barrage.Components[i] = (BarrageComponent)Item.GetItemName(s).RandomSummonParam();
+                barrage.Components[i] = (BarrageComponent)Item.CreateItem(s).RandomSummonParam();
             else if (name is Dictionary<string, object> t)
             {
-                BarrageComponent bc = (BarrageComponent)Item.GetItemName((string)t["Name"]);
+                BarrageComponent bc = (BarrageComponent)Item.CreateItem((string)t["Name"]);
                 bc.ApplyParameters((Dictionary<string, object>)t["Parameters"]);
                 barrage.Components[i] = bc;
             }
@@ -42,7 +42,7 @@ public class Barrage
         var bcDeck = Item.ItemDeck.Where(x => x is BarrageComponent && x is not BulletModule).ToList();
         for(int i = 0; i < MaxComponents - 1; i++)
         {
-            Components[i] = (BarrageComponent)Item.GetItemName(bcDeck[GD.RandRange(0, bcDeck.Count - 1)].Name).RandomSummonParam();
+            Components[i] = (BarrageComponent)Item.CreateItem(bcDeck[GD.RandRange(0, bcDeck.Count - 1)].Name).RandomSummonParam();
         }
         Components[^1] = (BarrageComponent)new BulletModule().RandomSummonParam();
         return this;
@@ -56,11 +56,11 @@ public class Barrage
     public static Barrage Test()
     {
         Barrage barrage = new();
-        barrage.Components[0] = (BarrageComponent)Item.GetItemName("AddDamage");
-        barrage.Components[1] = (BarrageComponent)Item.GetItemName("CircleFire");
-        barrage.Components[2] = (BarrageComponent)Item.GetItemName("Way3Fire");
-        barrage.Components[3] = (BarrageComponent)Item.GetItemName("MultiSpeedFire");
-        barrage.Components[4] = (BarrageComponent)Item.GetItemName("RandomFire");
+        barrage.Components[0] = (BarrageComponent)Item.CreateItem("AddDamage");
+        barrage.Components[1] = (BarrageComponent)Item.CreateItem("CircleFire");
+        barrage.Components[2] = (BarrageComponent)Item.CreateItem("Way3Fire");
+        barrage.Components[3] = (BarrageComponent)Item.CreateItem("MultiSpeedFire");
+        barrage.Components[4] = (BarrageComponent)Item.CreateItem("RandomFire");
         barrage.Components[5] = new BulletModule
         {
             bulletContext = new BulletContext(10, 2, 10, ShapeBullet.Micro, ColorBullet.Red)
@@ -83,7 +83,7 @@ public abstract class BarrageComponent : Item
     }
     public override Item RandomSummonParam()
     {
-        return GetItemName(Name);
+        return CreateItem(Name);
     }
 }
 
@@ -117,7 +117,7 @@ public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
             evt.ApplyTo(ref lbc);
         foreach (var bc in lbc)
         {
-            Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Up.Position, sc.GridOne.Position,
                 bc.Point, bc.Angle, bc.Speed, bc.MaxDistance, bc.Shape, bc.Color);
         }
     }

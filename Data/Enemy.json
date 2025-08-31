@@ -13,8 +13,8 @@
         "Con": 14,
         "Spi": 18,
         "Mag": 10,
-        "Cun": 10, 
-        "SkillGroups": ["YinyangBall"],
+        "Cun": 10,
+        "SkillGroups": [ "YinyangBall" ],
         "Skills": {
         }
     }, // reimu
@@ -74,6 +74,24 @@
         "Skills": {
         }
     }, // cirno
+    {
+        "Name": "meilin",
+        "Tags": [
+            "妖怪"
+        ],
+        "HP": 150,
+        "SP": 40,
+        "MP": 10,
+        "Str": 18,
+        "Dex": 14,
+        "Con": 12,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "SkillGroups": [ "Fist" ],
+        "Skills": {
+        }
+    }, // meilin
     {
         "Name": "dangoPea",
         "Tags": [
@@ -398,5 +416,5 @@
                 "Amount": 1
             }
         ]
-    }  // dangoChest
+    } // dangoChest
 ]

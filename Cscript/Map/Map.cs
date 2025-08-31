@@ -117,7 +117,7 @@ public class Grid : IInteractable
                 MapBuilder.SetLogicMapTerrain(LogicMapLayer.Stand, this, "DoorOpen");
                 IsWalkable = true;
                 IsTransparent = true;
-                Player.PlayerUnit.RefreshVision();
+                Player.PlayerUnit.Up.RefreshVision();
             }
         }
     }
@@ -241,17 +241,17 @@ public class Map
             unit.Ego = ego;
         // 初始化数据,图像
         SpriteManager.LoadEnemy(unit);
-        unit.CurrentGrid = GetGrid(position);
-        unit.CurrentGrid.unit = unit;
-        GameLoader.rootnode.AddChild(unit.sprite);
-        unit.sprite.Position = 16 * unit.Position;
+        unit.Up.CurrentGrid = GetGrid(position);
+        unit.Up.CurrentGrid.unit = unit;
+        Root.rootnode.AddChild(unit.Up.sprite);
+        unit.Up.sprite.Position = Setting.imagePx * unit.Up.Position;
         Units.Add(unit);
         // 初始化技能,Ai
-        unit.unitAi = new UnitAi(unit);
+        unit.UnitAi = new UnitAi(unit);
         foreach (var gskill in Skill.SkillDeck)
         {
             if (gskill.SkillGroup == "")
-                unit.LearnSkill(gskill);
+                unit.Us.LearnSkill(gskill);
         }
         // 分配EgoMemory与MemoryValue
         switch (unit.Ego)
@@ -261,16 +261,16 @@ public class Map
                 break;
             case UnitEgo.elite:
                 unit.MemoryValue += 2 * Setting.chaos;
-                unit.Memorys.TryEquip(Item.GetItemName("mElite"), unit);
+                unit.Memorys.TryEquip(Item.CreateItem("mElite"), unit);
                 break;
             case UnitEgo.great:
                 unit.MemoryValue += 4 * Setting.chaos;
-                unit.Memorys.TryEquip(Item.GetItemName("mGreat"), unit);
+                unit.Memorys.TryEquip(Item.CreateItem("mGreat"), unit);
                 break;
             case UnitEgo.boss:
             case UnitEgo.eliteBoss:
                 unit.MemoryValue += 6 * Setting.chaos;
-                unit.Memorys.TryEquip(Item.GetItemName("mBoss"), unit);
+                unit.Memorys.TryEquip(Item.CreateItem("mBoss"), unit);
                 break;
         }
         if(memoryValue != -1)
@@ -297,7 +297,7 @@ public class Map
 
                 if (currentWeight + it.Weight <= capacity)
                 {
-                    unit.Memorys.TryEquip(Item.GetItemName(it.Name), unit);
+                    unit.Memorys.TryEquip(Item.CreateItem(it.Name), unit);
                     currentWeight += it.Weight;
                 }
             }
@@ -310,7 +310,7 @@ public class Map
         for (int dist = 1; dist <= 32; dist++)
         {
             double score = 0;
-            foreach (var lvp in unit.skills)
+            foreach (var lvp in unit.Us.skills)
             {
                 var skill = lvp.skill;
                 if (skill.Template.EffectType == EffectType.Passive || skill.Targeting.Range == -1)
@@ -325,10 +325,10 @@ public class Map
             if (score > bestScore)
             {
                 bestScore = (float)score;
-                unit.bestDistance = dist;
+                unit.UnitAi.bestDistance = dist;
             }
         }
-        unit.bestDistance /= 2;
+        unit.UnitAi.bestDistance /= 2;
         // 随机分配UaPoint
         int[] attributes = new int[6]; // 用来存储分配的值
         for (int i = 0; i < unit.Ua.uaPoint; i++)
@@ -343,10 +343,10 @@ public class Map
         unit.Ua.Mag += attributes[4];
         unit.Ua.Cun += attributes[5];
         // 回满hpspmp
-        unit.CurrentHp = unit.MaxHp;
-        unit.CurrentSp = unit.MaxSp;
-        unit.CurrentMp = unit.MaxMp;
-        unit.InitializeHpSpBar();
+        unit.Ua.CurrentHp = unit.Ua.MaxHp;
+        unit.Ua.CurrentSp = unit.Ua.MaxSp;
+        unit.Ua.CurrentMp = unit.Ua.MaxMp;
+        unit.Ua.InitializeHpSpBar();
         unit.TimeEnergy = GD.RandRange(-100, 0) - 20;
         return unit;
     }
@@ -354,15 +354,15 @@ public class Map
     {
         Unit unit = CreateEnemy(position, name);
         unit.TimeEnergy = 0;
-        unit.unitAi = null;
+        unit.UnitAi = null;
         var cam = new Camera2D
         {
             Position = Vector2.Zero,
             Zoom = new Vector2(zoom, zoom)
         };
-        unit.sprite.AddChild(cam);  // 加到角色节点下
+        unit.Up.sprite.AddChild(cam);  // 加到角色节点下
         cam.MakeCurrent();  // 设置为当前摄像机
-        cam.Position = new Vector2I(8, 8);
+        cam.Position = new Vector2I(Setting.imagePx / 2, Setting.imagePx / 2);
         return unit;
     }
     public Unit CreateEnemy(string name, int zoom)
@@ -381,10 +381,10 @@ public class Map
             // 实际玩家死亡效果由scene脚本负责
             return;
         }
-        GameEvents.EnemyKilled(unit);
-        unit.CurrentGrid.unit = null;
+        unit.Ue.EnemyKilled();
+        unit.Up.CurrentGrid.unit = null;
         Info.Print($"{unit.TrName} 被退治了");
-        unit.sprite.QueueFree();
+        unit.Up.sprite.QueueFree();
         Units.Remove(unit);
         WakeUnits.Remove(unit);
         foreach (var si in SpellCard.currentSpellcards.Where(x => x.User == unit).ToList())
@@ -397,9 +397,9 @@ public class Map
             OnMarisaDied?.Invoke();
         if (unit.Ego != UnitEgo.normal)
         {
-            foreach (Item i in unit.equipment.EquippedItems.ToList())
+            foreach (Item i in unit.Equipment.EquippedItems.ToList())
             {
-                unit.equipment.Unequip(i, unit);
+                unit.Equipment.Unequip(i, unit);
             }
             foreach (Item i in unit.Memorys.EquippedItems.ToList())
             {
@@ -408,9 +408,9 @@ public class Map
                 unit.Memorys.Unequip(i, unit);
             }
         }
-        foreach (Item i in unit.inventory.Items.ToList())
+        foreach (Item i in unit.Inventory.Items.ToList())
         {
-            unit.inventory.ThrowItem(i);
+            unit.Inventory.ThrowItem(i);
         }
     }
 
@@ -460,7 +460,7 @@ public class Map
                 {
                     j++;
                     it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
-                    it = Item.GetItemName(it.Name);
+                    it = Item.CreateItem(it.Name);
                     Item item = it.RandomSummonParam();
                     item.ApplyParameters([]);
                     it = item;
@@ -488,12 +488,12 @@ public static class Scene
         MapBuilder.BuildFogOfWar(map);
         map.Units.Add(Player.PlayerUnit);
         map.WakeUnits.Add(Player.PlayerUnit);
-        Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));
+        Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));
         MapBuilder.BuildTileMapFromLogic(CurrentMap);
         CurrentMap.SummonEnemy();
-        Player.PlayerUnit.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
+        Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();
-        Player.PlayerUnit.HealHp(Player.PlayerUnit.MaxHp);
+        Player.PlayerUnit.Ua.HealHp(Player.PlayerUnit.Ua.MaxHp);
         Info.Print("进入新地图，记忆已提升");
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
     }
@@ -504,7 +504,7 @@ public static class Scene
             child?.QueueFree();
         foreach (var u in CurrentMap.Units)
             if (u != Player.PlayerUnit)
-                u.sprite.QueueFree();
+                u.Up.sprite.QueueFree();
         CurrentMap.Units.Clear();
         CurrentMap.WakeUnits.Clear();
         foreach(var b in CurrentMap.Bullets)

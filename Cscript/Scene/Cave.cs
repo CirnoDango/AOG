@@ -77,8 +77,8 @@ public partial class Cave : Node, IRegisterToG
     public void Createboss()
     {
         var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
-        boss.inventory.AddItem(Item.GetItemName("DangoLight"));
-        GameEvents.OnEnemyKilled += enemy =>
+        boss.Inventory.AddItem(Item.CreateItem("DangoLight"));
+        boss.Ue.OnEnemyKilled += enemy =>
         {
             if (enemy == boss)
             {
@@ -97,10 +97,10 @@ public partial class Cave : Node, IRegisterToG
                 //Player.PlayerUnit.LearnSkillGroup("Freeze");
                 break;
             case "marisa":
-                Player.PlayerUnit.LearnSkillGroup("Star");
+                Player.PlayerUnit.Us.LearnSkillGroup("Star");
                 break;
             case "rumia":
-                Player.PlayerUnit.LearnSkillGroup("Dark");
+                Player.PlayerUnit.Us.LearnSkillGroup("Dark");
                 break;
         }
         G.I.SkillPanel.Refresh();

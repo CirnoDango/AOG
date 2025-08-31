@@ -22,7 +22,7 @@ public static class GameTime
         foreach (Unit u in CurrentMap.WakeUnits)
         {
             u.TimeEnergy += updateTime;
-            foreach(SkillInstance skill in u.skills.Select(x => x.skill))
+            foreach(SkillInstance skill in u.Us.skills.Select(x => x.skill))
             {
                 skill.CurrentCooldown = Math.Max(skill.CurrentCooldown - updateTime, 0);
             }
@@ -40,8 +40,8 @@ public static class GameTime
                     status.OnQuit(u);
                 }
             }
-            u.HealHp(updateTime * u.MaxHp / 10000);
-            u.GetMp(updateTime * u.Ua.Mag / 1000);
+            u.Ua.HealHp(updateTime * u.Ua.MaxHp / 10000);
+            u.Ua.GetMp(updateTime * u.Ua.Mag / 1000);
         }
         foreach (Bullet b in CurrentMap.Bullets.ToList())
         {

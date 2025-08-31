@@ -49,8 +49,8 @@ public partial class CaveD : Node
     public void Createboss()
     {
         var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
-        boss.inventory.AddItem(Item.GetItemName("DangoLight"));
-        GameEvents.OnEnemyKilled += enemy =>
+        boss.Inventory.AddItem(Item.CreateItem("DangoLight"));
+        boss.Ue.OnEnemyKilled += enemy =>
         {
             if (enemy == boss)
             {
@@ -64,42 +64,41 @@ public partial class CaveD : Node
         // 场景资源加载
         Player.Init(player, 3);
         Player.PlayerUnit.Ua.Cun += 100;
-        Player.PlayerUnit.LearnSkillGroup("Freeze");
-        Player.PlayerUnit.LearnSkillGroup("Dark");
-        Player.PlayerUnit.LearnSkillGroup("Star");
+        Player.PlayerUnit.Us.LearnSkillGroup("Freeze");
+        Player.PlayerUnit.Us.LearnSkillGroup("Dark");
+        Player.PlayerUnit.Us.LearnSkillGroup("Star");
         G.I.SkillPanel.Refresh();
         G.I.SkillPanel.Add("Star");
         G.I.SkillPanel.Add("Freeze");
         G.I.SkillPanel.Add("Dark");
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mSkill"));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mUaAny"));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("mUaCun"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mUaAny"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mUaCun"));
         Floor1.MapGoto = Floor2;
         Floor2.MapGoto = Floor3;
         Floor1.SummonChest(200, 1);
         Floor2.SummonChest(20, 100);
         Scene.Enter(Floor1);
-        Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } }));
-        Player.PlayerUnit.inventory.AddItem(
-            Item.GetItemName("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        
+        Player.PlayerUnit.Inventory.AddItem(
+            Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("BarrageSet",
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("AddDamage").RandomSummonParam());
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("AddDamage").RandomSummonParam());
     }
     
     public async void Victory()

@@ -23,7 +23,7 @@ public class Bullet
     {
         Bullet b = new(user, skil, damag, start, target,
         speed, maxDistance, shape, color, advance, trace);
-        GameEvents.CreateBullet(user, b);
+        user.Ue.CreateBullet(b);
         return b;
     }
     //起点偏移+速度偏移生成
@@ -55,7 +55,7 @@ public class Bullet
         Shape = shape;
         this.color = color;
         image = GetImage(color, shape);
-        image.Scale /= 2;
+        image.Scale *= Setting.bulletScale;
         creator = user;
         skill = skil;
         damage = damag;
@@ -69,7 +69,7 @@ public class Bullet
             if (unit != null)
             {
                 tracing = unit;
-                if (unit == user && user.RandomEnemyInVision(out Unit u))
+                if (unit == user && user.Up.RandomEnemyInVision(out Unit u))
                     tracing = u;
             }
         }
@@ -101,7 +101,7 @@ public class Bullet
         // 追踪弹的加速度
         if (tracing != null && Scene.CurrentMap.Units.Contains(tracing))
         {
-            Speed = Speed.Length() * (Speed + 1.5f * deltaTime * (Vector2)(tracing.Position - Position))
+            Speed = Speed.Length() * (Speed + 1.5f * deltaTime * (Vector2)(tracing.Up.Position - Position))
                 .Normalized();
         }
         // 用整数格子记录路径
@@ -125,7 +125,7 @@ public class Bullet
     public static Sprite2D GetImage(ColorBullet color, ShapeBullet shape)
     {
         var sprite = ReadImage(color, shape);
-        GameLoader.rootnode.AddChild(sprite);
+        Root.rootnode.AddChild(sprite);
         return sprite;
         
     }
@@ -137,20 +137,25 @@ public class Bullet
 
         var atlasTexture = new AtlasTexture
         {
-            Atlas = atlas
+            Atlas = atlas,
         };
+
         int index = (int)shape;
-        int col = index % 10; // 每行4个
+        int col = index % 10;
         int row = index / 10;
 
         atlasTexture.Region = new Rect2(col * 32, row * 32, 32, 32);
+
         Sprite2D sprite = new()
         {
             Texture = atlasTexture,
-            ZIndex = -10
+            ZIndex = -10,
+            Scale = new Vector2(Setting.imagePx / 16, Setting.imagePx / 16),
         };
+
         return sprite;
     }
+
     public void Update(float time)
     {
         foreach (Vector2I pos in UpdateGrid(time / 100))
@@ -163,7 +168,7 @@ public class Bullet
             }
 
             var target = grid.unit;
-            if (target != null && target.friendness * creator.friendness < 0)
+            if (target != null && target.Friendness * creator.Friendness < 0)
             {
                 // 命中检定
                 float hitChance = MathEx.Logistic(0.8f, accuracy - target.Ua.DamageEvasion);
@@ -181,11 +186,11 @@ public class Bullet
             return;
         }
         // 设置位置
-        image.Position = PositionFloat * 16;
+        image.Position = PositionFloat * Setting.imagePx;
         // 设置朝向：因为默认朝上（0°），所以旋转方向就是速度向量的角度
         if (Speed.LengthSquared() > 0) // 避免除0
         {
-            image.Rotation = Mathf.Atan2(Speed.Y, Speed.X) + Mathf.Pi / 2;
+            image.Rotation = Mathf.Atan2(Speed.Y, Speed.X) + Mathf.Pi / 2 - Mathf.Pi * AngleOfShapeBullet() / 180;
         }
     
 }
@@ -199,9 +204,20 @@ public class Bullet
     {
         OnActive?.Invoke(target);
         skill.AwakeBullet(new SkillContext(creator, target), this);
-        target.TakeBulletDamage(damage, creator, skill);
+        target.Ua.TakeBulletDamage(damage, creator, skill);
         skill.ActivateBullet(new SkillContext(creator, target), this);
         Destroy();
+    }
+    public float AngleOfShapeBullet()
+    {
+        float[] angles = [
+            0   ,0  ,0  ,0  ,0  ,225,225,225,225,30 ,
+            0   ,90 ,225,225,225,225,90 ,0  ,0  ,0  ,
+            45  ,0  ,180,180,0  ,45 ,0  ,180,180,180,
+            45  ,0  ,0  ,0  ,0  ,0  ,45 ,45 ,0  ,0  ,
+            0   ,0  ,180,0  ,0  ,0  ,0  ,0  ,0  ,0,
+            45  ,0  ,90 ,0  ,0  ,0  ,0  ,0  ,0  ,0];
+        return angles[(int)Shape];
     }
 }
 public enum ColorBullet

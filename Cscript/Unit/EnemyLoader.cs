@@ -92,23 +92,22 @@ public static class EnemyLoader
         EnemyData ed = enemyDatas.FirstOrDefault(x => x.Name == name);
         Unit unit = new()
         {
-            MaxHp = ed.HP,
-            MaxMp = ed.MP,
-            MaxSp = ed.SP,
             Name = name,
             MemoryValue = ed.Value,
         };
-        unit.Ua = new UnitAttribute
+        unit.Ua = new UnitAttribute(unit)
         {
-            unit = unit
+            MaxHp = ed.HP, 
+            MaxMp = ed.MP,
+            MaxSp = ed.SP,
         };
-        unit.equipment = new Equipment(unit);
+        unit.Equipment = new Equipment(unit);
         unit.Memorys = new MemoryBag(unit);
-        unit.inventory = new Inventory(unit);
+        unit.Inventory = new Inventory(unit);
         unit.Ua.UnitAtt(ed.Str, ed.Dex, ed.Con, ed.Spi, ed.Mag, ed.Cun);
-        unit.CurrentHp = unit.MaxHp;
-        unit.CurrentMp = unit.MaxMp;
-        unit.CurrentSp = unit.MaxSp / 2;
+        unit.Ua.CurrentHp = unit.Ua.MaxHp;
+        unit.Ua.CurrentMp = unit.Ua.MaxMp;
+        unit.Ua.CurrentSp = unit.Ua.MaxSp / 2;
         if (jsonImport)
             ImportJsonData(ed, unit);
         return unit;
@@ -117,11 +116,11 @@ public static class EnemyLoader
         {
             foreach (var kvp in ed.Skills)
             {
-                unit.skills.Add((new SkillInstance(Skill.NameSkill[kvp.Key]), kvp.Value));
+                unit.Us.skills.Add((new SkillInstance(Skill.NameSkill[kvp.Key]), kvp.Value));
             }
             foreach (var sg in ed.SkillGroups)
             {
-                unit.LearnSkillGroup(sg);
+                unit.Us.LearnSkillGroup(sg);
             }
             foreach (var dict in ed.Inventory)
             {
@@ -129,13 +128,13 @@ public static class EnemyLoader
 
                 while (GD.Randf() < n)
                 {
-                    Item i = Item.GetItemName((string)dict["Name"]);
+                    Item i = Item.CreateItem((string)dict["Name"]);
 
                     if (dict.TryGetValue("Parameters", out object value))
                     {
                         i.ApplyParameters(value as Dictionary<string, object>);
                     }
-                    unit.inventory.AddItem(i);
+                    unit.Inventory.AddItem(i);
                     n--;
                 }
             }
@@ -145,13 +144,13 @@ public static class EnemyLoader
 
                 while (GD.Randf() < n)
                 {
-                    Item i = Item.GetItemName((string)dict["Name"]);
+                    Item i = Item.CreateItem((string)dict["Name"]);
 
                     if (dict.TryGetValue("Parameters", out object value))
                     {
                         i.ApplyParameters(value as Dictionary<string, object>);
                     }
-                    unit.equipment.TryEquip(i, unit);
+                    unit.Equipment.TryEquip(i, unit);
                     n--;
                 }
             }
@@ -161,7 +160,7 @@ public static class EnemyLoader
                 float n = kvp.Value;
                 while (GD.Randf() < n)
                 {
-                    Item i = Item.GetItemName(kvp.Key);
+                    Item i = Item.CreateItem(kvp.Key);
                     unit.Memorys.TryEquip(i, unit);
                     n--;
                 }
@@ -173,23 +172,22 @@ public static class EnemyLoader
         EnemyData ed = enemyDatas.FirstOrDefault(x => x.Name == name);
         Unit unit = new()
         {
-            MaxHp = ed.HP,
-            MaxMp = ed.MP,
-            MaxSp = ed.SP,
             Name = name,
             MemoryValue = ed.Value,
         };
-        unit.Ua = new UnitAttribute
+        unit.Ua = new UnitAttribute(unit)
         {
-            unit = unit
+            MaxHp = ed.HP,
+            MaxMp = ed.MP,
+            MaxSp = ed.SP,
         };
-        unit.equipment = new Equipment(unit);
+        unit.Equipment = new Equipment(unit);
         unit.Memorys = new MemoryBag(unit);
-        unit.inventory = new Inventory(unit);
+        unit.Inventory = new Inventory(unit);
         unit.Ua.UnitAtt(ed.Str, ed.Dex, ed.Con, ed.Spi, ed.Mag, ed.Cun);
-        unit.CurrentHp = unit.MaxHp;
-        unit.CurrentMp = unit.MaxMp;
-        unit.CurrentSp = unit.MaxSp / 2;
+        unit.Ua.CurrentHp = unit.Ua.MaxHp;
+        unit.Ua.CurrentMp = unit.Ua.MaxMp;
+        unit.Ua.CurrentSp = unit.Ua.MaxSp / 2;
         return unit;
     }
 }

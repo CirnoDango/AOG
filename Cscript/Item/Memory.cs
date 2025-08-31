@@ -26,7 +26,7 @@ public class MemoryBag : Equipment
             return false;
         EquippedItems.Add(item);
         //GameEvents.ItemPicked(item);
-        item.OnEquip(unit);
+        item.Equip(unit);
         return true;
     }
 }

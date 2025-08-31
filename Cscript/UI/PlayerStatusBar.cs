@@ -33,21 +33,21 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
     }
     public void UpdateStatusUI()
     {
-        float hpRatio = Player.PlayerUnit.CurrentHp / Player.PlayerUnit.MaxHp;
-        float spRatio = Player.PlayerUnit.CurrentSp / Player.PlayerUnit.MaxSp;
-        float mpRatio = Player.PlayerUnit.CurrentMp / Player.PlayerUnit.MaxMp;
+        float hpRatio = Player.PlayerUnit.Ua.CurrentHp / Player.PlayerUnit.Ua.MaxHp;
+        float spRatio = Player.PlayerUnit.Ua.CurrentSp / Player.PlayerUnit.Ua.MaxSp;
+        float mpRatio = Player.PlayerUnit.Ua.CurrentMp / Player.PlayerUnit.Ua.MaxMp;
 
         hpBar.CustomMinimumSize = new Vector2(barMaxWidth * hpRatio, barHeight);
         spBar.CustomMinimumSize = new Vector2(barMaxWidth * spRatio, barHeight);
         mpBar.CustomMinimumSize = new Vector2(barMaxWidth * mpRatio, barHeight);
-        if (Player.PlayerUnit.currentSpellcard != null)
+        if (Player.PlayerUnit.Us.currentSpellcard != null)
             spBar.Color = new Color(1, 0.5f, 0);
         else
             spBar.Color = new Color(1, 1, 0);
 
-        hpLabel.Text = $"{(int)Player.PlayerUnit.CurrentHp}/{(int)Player.PlayerUnit.MaxHp}";
-        spLabel.Text = $"{(int)Player.PlayerUnit.CurrentSp}/{(int)Player.PlayerUnit.MaxSp}";
-        mpLabel.Text = $"{(int)Player.PlayerUnit.CurrentMp}/{(int)Player.PlayerUnit.MaxMp}";
+        hpLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentHp}/{(int)Player.PlayerUnit.Ua.MaxHp}";
+        spLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentSp}/{(int)Player.PlayerUnit.Ua.MaxSp}";
+        mpLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentMp}/{(int)Player.PlayerUnit.Ua.MaxMp}";
     }
 
     public void RegisterToG(G g)

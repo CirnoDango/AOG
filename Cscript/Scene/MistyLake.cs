@@ -71,6 +71,9 @@ public partial class MistyLake : Node
         MapBuilder.BuildTileMapFromLogic(diShuiLake);
         diShuiLake.Entrance = new Vector2I(0, 32);
         Scene.Enter(Floor1);
+        var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
+        new Healthy().ApplyItemEffect(i);
+        Player.PlayerUnit.Inventory.AddItem(i);
         Unit.OnPlayerdied += Playerdied;
         Floor2.AfterEnter += CreateMidboss;
         diShuiLake.AfterEnter += Createboss;
@@ -114,12 +117,9 @@ public partial class MistyLake : Node
     public void Createboss()
     {
         var boss = diShuiLake.CreateEnemy(new Vector2I(20, 32), "cirno", UnitEgo.boss);
-        GameEvents.OnEnemyKilled += enemy =>
+        boss.Ue.OnEnemyKilled += enemy =>
         {
-            if (enemy == boss)
-            {
-                Victory();
-            }
+            Victory();
         };
     }
     public static bool loaded = false;
@@ -132,7 +132,7 @@ public partial class MistyLake : Node
         loaded = true;
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 3f);
+        Player.Init(player, 1f);
         G.I.SkillPanel.Refresh();
         switch (player)
         {
@@ -142,17 +142,20 @@ public partial class MistyLake : Node
             case "marisa":
                 G.I.SkillPanel.Add("Star");
                 break;
+            case "rumia":
+                G.I.SkillPanel.Add("Dark");
+                break;
             case "cirno":
                 G.I.SkillPanel.Add("Freeze");
                 break;
-            case "rumia":
-                G.I.SkillPanel.Add("Dark");
+            case "meilin":
+                G.I.SkillPanel.Add("Fist");
                 break;
         }
         Player.PlayerUnit.Ua.skillPoint += 6;
         Player.PlayerUnit.Ua.uaPoint += 5;
         Player.PlayerUnit.Memorys.MaxEquipWeight = 5;
-        Player.PlayerUnit.inventory.AddItem(Item.GetItemName("HealPotion"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("HealPotion"));
         Floor1.SummonChest(8, 3);
         Floor2.SummonChest(8, 3);
         Floor3.SummonChest(8, 3);

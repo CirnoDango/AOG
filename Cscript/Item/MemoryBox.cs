@@ -62,7 +62,7 @@ public partial class MemoryBox : Control,IRegisterToG
     public void Refresh(Unit unit)
     {
         equipnumber.Text = $"Memory: {unit.Memorys.CurrentEquipWeight:F1}/{unit.Memorys.MaxEquipWeight:F1}";
-        bagnumber.Text = $"Bag: {unit.inventory.CurrentWeight:F1}/{unit.inventory.MaxWeight:F1}";
+        bagnumber.Text = $"Bag: {unit.Inventory.CurrentWeight:F1}/{unit.Inventory.MaxWeight:F1}";
         foreach (var child in EquipList.GetChildren())
             child.QueueFree();
 
@@ -77,7 +77,7 @@ public partial class MemoryBox : Control,IRegisterToG
             EquipList.AddChild(entry);
         }
 
-        foreach (var item in unit.inventory.Items)
+        foreach (var item in unit.Inventory.Items)
         {
             if (item is not Memory)
                 continue;
@@ -91,14 +91,14 @@ public partial class MemoryBox : Control,IRegisterToG
                         {
                             if (unit.Memorys.TryEquip(item, unit))
                             {
-                                unit.inventory.RemoveItem(clickedItem);
+                                unit.Inventory.RemoveItem(clickedItem);
                                 Refresh(unit);
                             }
                         }
                     }
                     else
                     {
-                        unit.inventory.ThrowItem(clickedItem);
+                        unit.Inventory.ThrowItem(clickedItem);
 						Refresh(unit);
 					}
                 }

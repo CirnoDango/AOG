@@ -1,76 +1,49 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
-public partial class Unit 
+public class Unit 
 {
-    private Grid _currentPosition;
-    public Grid CurrentGrid
+    public Unit()
     {
-        get => _currentPosition;
-        set
-        {
-            _currentPosition = value;
-            if (_currentPosition != null && sprite != null)
-            {
-                sprite.Position = _currentPosition.Position * 16; // 16是格子大小
-            }
-        }
+        Up = new(this);
+        Ua = new(this);
+        Us = new(this);
+        Ue = new(this);
+        UnitAi = new(this);
     }
-    public Vector2I Position
-    {
-        get => CurrentGrid != null ? CurrentGrid.Position : new Vector2I(-1, -1);
-    }
-    public Sprite2D sprite;
-    private ColorRect hpBarAhead;
-    private ColorRect spBarAhead;
-
-    public float MaxHp = 100;
-    public float CurrentHp = 100;
-    private float _maxSp = 40;
-    public float MaxSp
-    {
-        get => _maxSp;
-        set { if (_maxSp != 0) { _maxSp = value; } }
-    }
-    public float CurrentSp = 0;
-    public float MaxMp = 10;
-    public float CurrentMp = 10;
-    public float TimeEnergy { get; set; } = 0;
-    public float imageSizeFactor = 0.16f;
-    public string Name;
-    public int bestDistance;
-    public string TrName => $"u{Name}";
-    public List<(SkillInstance skill, float weight)> skills = [];
-    public SkillInstance GetSkill(string name) => skills.FirstOrDefault(x => x.skill.Name == name).skill;
-    public UnitAi unitAi;
+    public UnitPosition Up { get; set; }
     public UnitAttribute Ua { get; set; }
-    public int friendness = -1;
-    public SpellCard currentSpellcard;
-    public List<Status> Status = [];
-    public Dictionary<Status, Node> StatusImages = [];
-    public static Action OnPlayerdied;
-    private int _vision = 12;
-    public int Vision
+    public UnitSkill Us { get; set; }
+    public UnitEvent Ue { get; set; }
+    public float TimeEnergy { get; set; } = 0;
+    public string Name { get; set; }
+    public string TrName => $"u{Name}";
+    public UnitAi UnitAi { get; set; }
+    public int Friendness
     {
-        get => _vision;
-        set
+        get
         {
-            _vision = value;
-            if (this == Player.PlayerUnit)
-                RefreshVision();
+            if (UnitAi != null)
+                return UnitAi.friendness;
+            else
+                return 1;
         }
     }
-    public Inventory inventory;
-    public Equipment equipment;
-    public MemoryBag Memorys;
-    public float MemoryValue = 10;
-
+    public List<Status> Status { get; set; } = [];
+    public Dictionary<Status, Node> StatusImages { get; set; } = [];
+    public Inventory Inventory { get; set; }
+    public Equipment Equipment { get; set; }
+    public MemoryBag Memorys { get; set; }
+    public float MemoryValue { get; set; } = 10;
     public UnitEgo Ego { get; set; }
+    public void GetStatus(Status status)
+    {
+        status.OnGet(this, status); // 👈 自动触发获得效果
+    }
+    public static Action OnPlayerdied;
 }
-
 public enum UnitEgo
 {
     normal, elite, great, boss, eliteBoss, random

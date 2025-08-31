@@ -61,31 +61,31 @@ public partial class Player : CharacterBody2D, IRegisterToG
     {
         Unit unit = EnemyLoader.LoadEnemy(name, false);
         PlayerUnit = unit;
-        foreach (var (skill, _) in unit.skills)
+        foreach (var (skill, _) in unit.Us.skills)
         {
             G.I.SkillBar.LearnSkill(skill);
         }
         SpriteManager.LoadEnemy(unit);
-        GameLoader.rootnode.AddChild(unit.sprite);
-        unit.sprite.Position = 16 * unit.Position;
-        unit.InitializeHpSpBar();
-        unit.unitAi = new UnitAi(unit);
+        Root.rootnode.AddChild(unit.Up.sprite);
+        unit.Up.sprite.Position = Setting.imagePx * unit.Up.Position;
+        unit.Ua.InitializeHpSpBar();
+        unit.UnitAi = new UnitAi(unit);
         foreach (var gskill in Skill.SkillDeck)
         {
             if (gskill.SkillGroup == "")
-                unit.LearnSkill(gskill);
+                unit.Us.LearnSkill(gskill);
         }
         unit.TimeEnergy = 0;
-        unit.unitAi = null;
+        unit.UnitAi = null;
+        zoom /= (Setting.imagePx / 16);
         var cam = new Camera2D
         {
             Position = Vector2.Zero,
             Zoom = new Vector2(zoom, zoom)
         };
-        unit.sprite.AddChild(cam);  // 加到角色节点下
+        unit.Up.sprite.AddChild(cam);  // 加到角色节点下
         cam.MakeCurrent();  // 设置为当前摄像机
-        cam.Position = new Vector2I(8, 8);
-        PlayerUnit.friendness = 1;
+        cam.Position = new Vector2I(Setting.imagePx/2, Setting.imagePx/2);
         G.I.PlayerStatusBar.Init();
     }
     private void HandleBoxInput(InputEvent @event)
@@ -113,9 +113,9 @@ public partial class Player : CharacterBody2D, IRegisterToG
             {
                 if (Skill.NameSkill.TryGetValue("Rest", out var restSkill))
                 {
-                    if (PlayerUnit.currentSpellcard == null)
-                        PlayerUnit.GetSp(-5);
-                    restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.CurrentGrid));
+                    if (PlayerUnit.Us.currentSpellcard == null)
+                        PlayerUnit.Ua.GetSp(-5);
+                    restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.Up.CurrentGrid));
                 }
                 return;
             }
@@ -123,14 +123,14 @@ public partial class Player : CharacterBody2D, IRegisterToG
             {
                 if (Skill.NameSkill.TryGetValue("Rest", out var restSkill))
                 {
-                    PlayerUnit.GetSp(10);
-                    restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.CurrentGrid));
+                    PlayerUnit.Ua.GetSp(10);
+                    restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.Up.CurrentGrid));
                 }
                 return;
             }
             if (key == Key.Down)
             {
-                if(PlayerUnit.CurrentGrid.TerrainBaseGround == "Stair")
+                if(PlayerUnit.Up.CurrentGrid.TerrainBaseGround == "Stair")
                 {
 
                     Scene.Quit();
@@ -148,14 +148,14 @@ public partial class Player : CharacterBody2D, IRegisterToG
             }
             if (key == Key.G)
             {
-                Skill.NameSkill["Interact"].Activate(new SkillContext(PlayerUnit, PlayerUnit.CurrentGrid));
+                Skill.NameSkill["Interact"].Activate(new SkillContext(PlayerUnit, PlayerUnit.Up.CurrentGrid));
                 return;
             }
 
             // 处理方向输入
             if (MoveDirs.TryGetValue(key, out Vector2I dir) || MoveDirs2.TryGetValue(key, out dir))
             {
-                var targetPos = PlayerUnit.Position + dir;
+                var targetPos = PlayerUnit.Up.Position + dir;
                 IInteractable grid = Scene.CurrentMap.GetGrid(targetPos);
                 grid?.Interact(PlayerUnit);
             }

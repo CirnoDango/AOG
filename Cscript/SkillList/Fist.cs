@@ -17,7 +17,7 @@ public class Multistrike : Skill
     int[] t0 = { 2, 3, 4, 4 };
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], Extra()[level - 1]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -25,7 +25,7 @@ public class Multistrike : Skill
         if (sc.Level == 4)
             number += Math.Max(0, (sc.User.Ua.Str - sc.UnitOne.Ua.Str) / 5);
         for (int i = 0; i < number; i++)
-            sc.UnitOne.CheckBodyHit(8, sc.User, this);
+            sc.UnitOne.Ua.CheckBodyHit(8, sc.User, this);
     }
 }
 public class SpiralLightSteps : Skill
@@ -35,36 +35,19 @@ public class SpiralLightSteps : Skill
         Name = "SpiralLightSteps";
         SkillGroup = "Fist";
         SpCost = 5;
-        MpCost = 5;
-        Cooldown = 800;
+        Cooldown = 1600;
+        Targeting = new TargetType(Target.Self);
     }
-    public override TargetType GetTargeting(int level)
-    {
-        if (level == 4)
-            return Targeting = new TargetType(Target.Enemy, 1, 10, 1);
-        else
-            return new TargetType(Target.Enemy, 1, 10);
-    }
-    int[] t0 = { 3, 5, 7, 7 };
-    string[] extra = {
-    "",
-    "",
-    "",
-    " sMinusK0 "
-};
+    int[] t0 = [3, 4, 5, 5];
+    int[] t1 = [66, 88, 108, 108];
+
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], Extra()[level - 1]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.UnitOne.TakeBulletDamage(30, sc.User, this);
-        sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[sc.Level - 1]));
-        foreach (var grid in sc.UnitOne.CurrentGrid.NearGrids(1))
-        {
-            if (grid.unit != null)
-                sc.UnitOne.GetStatus(new Frozen(300));
-        }
+        sc.User.GetStatus(new SSpiralLightSteps(t1[sc.Level - 1], 100*t0[sc.Level - 1], this));
     }
 }
 public class CrimsonEnergyRelease : Skill
@@ -73,54 +56,30 @@ public class CrimsonEnergyRelease : Skill
     {
         Name = "CrimsonEnergyRelease";
         SkillGroup = "Fist";
-        SpCost = 5;
-        Cooldown = 800;
-        Targeting = new TargetType(Target.Self);
+        EffectType = EffectType.Passive;
     }
-    int[] t0 = { 2, 3, 4, 4 };
+    private Func<Unit, Unit, float, float> _event;
+    int[] t0 = { 8,12,16,16 };
     string[] extra = [
-    "",
-    "",
-    "",
-    " sDiamondBlizzard0 "
+    " sCrimsonEnergyRelease0 ",
+    " sCrimsonEnergyRelease0 ",
+    " sCrimsonEnergyRelease0 ",
+    " sCrimsonEnergyRelease1 ",
     ];
-    public override TargetType GetTargeting(int level)
-    {
-        return new TargetType(Target.Self, 1, t0[level]);
-    }
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
     }
-    protected override void StartActivate(SkillContext sc)
+    public override void OnLearn(Unit unit)
     {
-        foreach(Grid g in sc.User.CurrentGrid.NearGrids(new int[] { 2, 3, 4, 4 }[sc.Level - 1]))
+        _event = (user, target, initDmg) =>
         {
-            if (g.unit != null && g.unit != sc.User)
-            {
-                g.unit.CheckBodyHit(30, sc.User, this);
-                if (sc.Level == 4)
-                {
-                    Vector2I Going = (Vector2I)(g.unit.Position
-                       + 4 * ((Vector2)(g.unit.Position - sc.User.Position)).Normalized() 
-                       + new Vector2(0.5f, 0.5f));
-                    List<Vector2I> gs = GetLine(sc.User.Position, Going);
-                    foreach (var grid in gs)
-                    {
-                        if (Scene.CurrentMap.CheckWalkable(grid))
-                        {
-                            g.unit.MoveTo(Scene.CurrentMap.GetGrid(grid));
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+            unit.GetStatus(new SCrimsonEnergyRelease(1));
+            return initDmg;
+        };
+
+        unit.Ue.OnTakeBulletDamage.Add(_event);
     }
-    
 }
 public class IntenseRainbowFist : Skill
 {
@@ -128,20 +87,31 @@ public class IntenseRainbowFist : Skill
     {
         Name = "IntenseRainbowFist";
         SkillGroup = "Fist";
-        SpCost = 5;
         MpCost = 5;
-        Cooldown = 800;
-        Targeting = new TargetType(Target.Grid, 1, 10);
+        Cooldown = 1400;
+        Targeting = new TargetType(Target.Unit, 1, 1);
     }
-    int[] t0 = { 18, 36, 54, 54 };
-    string[] t1 = { " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist1 " };
+    int[] t0 = { 1,2,3,3 };
+    public override float GetSpCost(int level)
+    {
+        if (level == 4) return 30;
+        return 5;
+    }
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t1[level - 1], t0[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Position, sc.GridOne.Position, 5, 10, ShapeBullet.Bullet, ColorBullet.White);
+        float dmg = sc.UnitOne.Ua.TakeBodyDamage(20, sc.User, this);
+        foreach(Unit unit in sc.UnitOne.Up.CurrentGrid.NearGrids(t0[sc.Level - 1])
+            .Where(x => x.unit != null)
+            .Select(x => x.unit)
+            .Where(x => x.Friendness * sc.User.Friendness < 0))
+        {
+            unit.Ua.TakeBulletDamage(dmg / 2, sc.User, this);
+        }
+        
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
@@ -154,7 +124,7 @@ public class IntenseRainbowFist : Skill
         {
             for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.Level - 1]; i++)
             {
-                Bullet.CreateBullet(sc.User, this, 8, sc.UnitOne.Position, sc.UnitOne.Position + RandomV2(), 
+                Bullet.CreateBullet(sc.User, this, 8, sc.UnitOne.Up.Position, sc.UnitOne.Up.Position + RandomV2(), 
                     (float)GD.RandRange(1.5, 3), 6, ShapeBullet.Micro, ColorBullet.White);
             }
         }
@@ -167,38 +137,31 @@ public class DapengFellingFist : SpellCard
         Name = "DapengFellingFist";
         SkillGroup = "Fist";
         SpNeed = 40;
-        SpCost = 10;
-        Duration = 300;
-        Targeting = new TargetType(Target.Self, 1, 12);
+        SpCost = 6;
+        Duration = 600;
+        Cooldown = 36;
+        Targeting = new TargetType(Target.Self);
     }
-    int[] t0 = { 20, 30, 40, 40 };
-    int[] t1 = { 4, 5, 6, 6 };
+    int[] t0 = [26, 36, 46, 46];
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
-    }
-    public override float GetCooldown(int level)
-    {
-        return new int[] { 2800, 2800, 2800, 2400 }[level - 1];
+        return string.Format(EffectTr(), t0[level - 1], Extra()[level - 1]);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
-        Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 冻结的气息弥漫四周……");
-        AddTimedEvent(Linspace(20,300,70), (ctx, advanceTime) =>
-        {
-            var bullet = Bullet.CreateBullet(sc.User, this, 12, sc.User.Position, sc.User.Position + RandomV2(), 
-                new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
-                ShapeBullet.Ring,(ColorBullet)(new List<int> { 0, 4, 9, 12, 13 })[GD.RandRange(0,4)] , advanceTime);
-        });
+        Info.Print($"{sc.User.TrName} 展开了 {TrName} ");
+        sc.User.Ue.OnAttack += Attack;
     }
-
-    protected override void OnSpellUpdate(SkillContext sc, float delta)
+    public override void OnSpellEnd(SkillContext sc)
     {
-        
+        sc.User.Ue.OnAttack -= Attack;
+        base.OnSpellEnd(sc);
     }
-    public override void ActivateBullet(SkillContext sc, Bullet bullet)
+    private void Attack(SkillContext sc)
     {
-        if (GD.Randf() <  new float[] { 0.2f,0.3f,0.4f,0.4f }[sc.Level - 1])
-            sc.UnitOne.GetStatus(new Frozen( new int[] { 400,500,600,600}[sc.Level - 1] ));
+        sc.UnitOne.Ua.TakeBodyDamage(t0[sc.Level - 1], sc.User, this);
+        sc.UnitOne.GetStatus(new Stun(500));
+        sc.UnitOne.Up.KnockBack(5, sc);
+        OnSpellEnd(sc);
     }
 }
