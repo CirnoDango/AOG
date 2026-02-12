@@ -7,12 +7,17 @@ public partial class PauseMenu : ColorRect
     [Export]
     public Button ResumeButton;
     [Export]
+    public Button DebugButton;
+    [Export]
     public Button RestartButton;
     [Export]
     public Button ExitButton;
+    [Export]
+    public Control DebugMenu;
     public override void _Ready()
     {
         ResumeButton.Pressed += OnResumePressed;
+        DebugButton.Pressed += OnDebugPressed;
         RestartButton.Pressed += OnRestartPressed;
         ExitButton.Pressed += OnExitPressed;
         Hide();
@@ -34,8 +39,13 @@ public partial class PauseMenu : ColorRect
         Hide();
         G.I.Fsm.ChangeState(Fsm.UpdateState);
     }
+    private void OnDebugPressed()
+    {
+        DebugMenu.Visible = !DebugMenu.Visible;
+    }
     private void OnRestartPressed()
     {
+        Scene.Quit();
         G.I.Reset();
         var scenePath = GetTree().CurrentScene.SceneFilePath;
         GetTree().ChangeSceneToFile(scenePath);

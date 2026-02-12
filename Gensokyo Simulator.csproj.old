@@ -1,0 +1,20 @@
+<Project Sdk="Godot.NET.Sdk/4.4.1">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>GensokyoSimulator</RootNamespace>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Cscript\Enemy\**" />
+    <EmbeddedResource Remove="Cscript\Enemy\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Enemy.json" />
+    <Content Include="Data\Lore.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>

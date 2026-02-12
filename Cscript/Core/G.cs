@@ -22,6 +22,8 @@ public partial class G : Node
     public SkillBar SkillBar{ get;  set;}
     public SkillPanel SkillPanel { get; set; }
     public Ua Ua { get; set; }
+    public SkillTreeBox SkillTreeBox { get; set; }
+    public AnimationManager AnimationManager { get; set; }
     public override void _Ready()
     {
         I = this;
@@ -63,7 +65,9 @@ public partial class G : Node
         SkillBar = null;
         SkillPanel = null;
         Ua = null;
-        Scene.CurrentMap = null;
+        SkillTreeBox = null;
+        AnimationManager = null;
+        //Scene.CurrentMap = null;
         GameTime.Reset();
     }
 }

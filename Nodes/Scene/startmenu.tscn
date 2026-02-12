@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://c2wxbyn6yu4oo"]
+
+[ext_resource type="Texture2D" uid="uid://c73u0cre8bgpm" path="res://Assets/UI/AoG.png" id="1_jh13a"]
+[ext_resource type="Script" uid="uid://cjxrng5g1ui1f" path="res://Cscript/UI/Startmenu.cs" id="1_tvphj"]
+
+[node name="StartMenu" type="Control" unique_id=1738170210 node_paths=PackedStringArray("start", "quit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(10, 10)
+script = ExtResource("1_tvphj")
+start = NodePath("Button")
+quit = NodePath("Button2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=217560080]
+z_index = -1
+layout_mode = 0
+offset_left = -3.05176e-05
+offset_top = -6.10352e-05
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.1285, 0.151714, 0.272247, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1518260548]
+layout_mode = 0
+offset_left = 359.0
+offset_top = 58.0
+offset_right = 1639.0
+offset_bottom = 570.0
+texture = ExtResource("1_jh13a")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="." unique_id=868075789]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 600.0
+offset_right = 1400.0
+offset_bottom = 714.0
+theme_override_font_sizes/font_size = 80
+text = "开始游戏"
+
+[node name="Button2" type="Button" parent="." unique_id=423083669]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 800.0
+offset_right = 1400.0
+offset_bottom = 914.0
+theme_override_font_sizes/font_size = 80
+text = "退出游戏"

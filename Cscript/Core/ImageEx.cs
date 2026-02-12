@@ -29,4 +29,14 @@ public static class ImageEx
         ImageTexture newTex = ImageTexture.CreateFromImage(img);
         return newTex;
     }
+    public static Sprite2D CreateGridImage(Vector2I position, string path)
+    {
+        Sprite2D rect = new()
+        {
+            Texture = GD.Load<Texture2D>(path),
+            Position = position * Setting.imagePx,
+        };
+        Root.rootnode.AddChild(rect);
+        return rect;
+    }
 }

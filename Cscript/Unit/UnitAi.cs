@@ -68,7 +68,7 @@ public class UnitAi(Unit u)
         var skills = _parent.Us.skills;
         int bestDistance = _parent.UnitAi.bestDistance;
         // 2. 构建候选技能列表（技能+普通攻击+战术移动）
-        List<(string, float weight)> candidates = new();
+        List<(object, float weight)> candidates = new();
 
         foreach (var lvp in skills)
         {
@@ -76,12 +76,12 @@ public class UnitAi(Unit u)
             float weight = lvp.weight;
             if (CanUse(skill.Name))
             {
-                candidates.Add((skill.Name, weight));
+                candidates.Add((skill, weight));
             }
         }
         if (CanUse("Attack"))
             candidates.Add(("Attack", attackValue));
-        if (CanUse("TacticMove", bestDistance))
+        if (CanUse("TacticMove", bestDistance) && _parent.Ue.CheckMoveUsage(true))
             candidates.Add(("TacticMove", tacticMoveValue));
         // 3. 按权重随机选择一个使用
         if (candidates.Count > 0)
@@ -99,8 +99,13 @@ public class UnitAi(Unit u)
                 cumulative += weight;
                 if (choice <= cumulative)
                 {
-                    if (use == "TacticMove") { TacticMove(); return; } 
-                    _parent.Us.GetSkill(use).Use(SelectTarget(_parent.Us.GetSkill(use)));
+                    if (use is string s)
+                    {
+                        if ((string)use == "TacticMove") { TacticMove(); return; }
+                        if ((string)use == "Attack") { _parent.Us.GetSkill("Attack").Use(SelectTarget(_parent.Us.GetSkill("Attack"))); return; }
+                    }
+                    else if(use is SkillInstance si)
+                        si.Use(SelectTarget(si));
                     return;
                 }
             }
@@ -154,8 +159,8 @@ public class UnitAi(Unit u)
     {
         return skill.Template.GetTargeting(skill.Level).Type switch
         {
-            Target.Enemy or Target.Unit or Target.Dash => new SkillContext(_parent, Player.PlayerUnit),
-            Target.Grid => new SkillContext(_parent, Player.PlayerUnit.Up.CurrentGrid),
+            Target.Enemy or Target.Unit or Target.Dash => new SkillContext(_parent, Player.PlayerUnit, skill.Level),
+            Target.Grid or Target.Ray => new SkillContext(_parent, Player.PlayerUnit.Up.CurrentGrid, skill.Level),
             _ => new SkillContext(_parent),
         };
     }

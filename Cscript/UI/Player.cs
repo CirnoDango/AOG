@@ -8,6 +8,8 @@ public partial class Player : CharacterBody2D, IRegisterToG
     // 每次移动的格子大小（比如 16 或 32 像素）
     public int TileSize = 16;
     public static Unit PlayerUnit;
+    public static Dictionary<string, HexStatus> skillTrees = [];
+    public static Camera2D playerCamera;
     public int UaPoint
     {
         get => PlayerUnit.Ua.uaPoint;
@@ -18,13 +20,19 @@ public partial class Player : CharacterBody2D, IRegisterToG
         get => PlayerUnit.Ua.skillPoint;
         set => PlayerUnit.Ua.skillPoint = value;
     }
+    public int TalentPoint
+    {
+        get => PlayerUnit.Ua.talentPoint;
+        set => PlayerUnit.Ua.talentPoint = value;
+    }
     public static Dictionary<Key, GameState> BoxEntryKeys => new()
     {
-        {Key.R,Fsm.InventoryBoxState },
-        {Key.T,Fsm.CombatAbilityBoxState },
-        {Key.Y,Fsm.UaSkillBoxState },
-        {Key.U,Fsm.MemoryBoxState },
-        {Key.I,Fsm.BarrageBoxState },
+        {Key.I,Fsm.InventoryBoxState },
+        {Key.B,Fsm.CombatAbilityBoxState },
+        {Key.K,Fsm.UaSkillBoxState },
+        {Key.M,Fsm.MemoryBoxState },
+        {Key.O,Fsm.BarrageBoxState },
+        {Key.T,Fsm.SkillTreeState },
     };
     // 按键到方向的映射表
     private readonly Dictionary<Key, Vector2I> MoveDirs = new()
@@ -53,8 +61,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
     {
         if (G.I.Fsm.currentState is PlayerSkillState)
             HandlePlayerSkillInput(@event);
-        else if (G.I.Fsm.currentState is InventoryState or CombatAbilityBoxState or UaSkillBoxState
-             or MemoryBoxState or BarrageBoxState)
+        else if (G.I.Fsm.currentState is IBoxState)
             HandleBoxInput(@event);
     }
     public static void Init(string name, float zoom)
@@ -69,6 +76,9 @@ public partial class Player : CharacterBody2D, IRegisterToG
         Root.rootnode.AddChild(unit.Up.sprite);
         unit.Up.sprite.Position = Setting.imagePx * unit.Up.Position;
         unit.Ua.InitializeHpSpBar();
+        // 初始化事件：Ue
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.HealHp(updateTime * unit.Ua.MaxHp / 10000);
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         unit.UnitAi = new UnitAi(unit);
         foreach (var gskill in Skill.SkillDeck)
         {
@@ -78,14 +88,14 @@ public partial class Player : CharacterBody2D, IRegisterToG
         unit.TimeEnergy = 0;
         unit.UnitAi = null;
         zoom /= (Setting.imagePx / 16);
-        var cam = new Camera2D
+        playerCamera = new Camera2D
         {
             Position = Vector2.Zero,
             Zoom = new Vector2(zoom, zoom)
         };
-        unit.Up.sprite.AddChild(cam);  // 加到角色节点下
-        cam.MakeCurrent();  // 设置为当前摄像机
-        cam.Position = new Vector2I(Setting.imagePx/2, Setting.imagePx/2);
+        unit.Up.sprite.AddChild(playerCamera);  // 加到角色节点下
+        playerCamera.MakeCurrent();  // 设置为当前摄像机
+        playerCamera.Position = new Vector2I(Setting.imagePx/2, Setting.imagePx/2);
         G.I.PlayerStatusBar.Init();
     }
     private void HandleBoxInput(InputEvent @event)
@@ -109,7 +119,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
             var key = keyEvent.Keycode;
 
             // 特判数字键盘5
-            if (key == Key.Kp5 || key == Key.F)
+            if (key == Key.Kp5 || key == Key.R)
             {
                 if (Skill.NameSkill.TryGetValue("Rest", out var restSkill))
                 {
@@ -132,14 +142,8 @@ public partial class Player : CharacterBody2D, IRegisterToG
             {
                 if(PlayerUnit.Up.CurrentGrid.TerrainBaseGround == "Stair")
                 {
-
-                    Scene.Quit();
+                    Scene.LeaveAndGo();
                 }
-                return;
-            }
-            if (key == Key.Home)
-            {
-                Scene.Quit();
                 return;
             }
             if (BoxEntryKeys.TryGetValue(key, out var entry))

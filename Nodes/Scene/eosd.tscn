@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bn814mmvm451i"]
+
+[ext_resource type="Script" uid="uid://disx6syppqf0g" path="res://Cscript/Scene/Eosd.cs" id="1_gjkrh"]
+
+[node name="Eosd" type="Node"]
+script = ExtResource("1_gjkrh")

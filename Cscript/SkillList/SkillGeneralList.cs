@@ -66,11 +66,10 @@ public class Attack : Skill
     protected override void StartActivate(SkillContext sc)
     {
         float damage = 10 + sc.User.Ua.Str - sc.UnitOne.Ua.Dex;
-        sc.UnitOne.Ua.CheckBodyHit(damage, sc.User, this);
+        sc.UnitOne.Ua.CheckBodyHit(new Damage(damage, DamageType.strike), sc.User, this);
         sc.User.Ue.Attack(sc);
     }
 }
-
 public class Shoot : Skill
 {
     public Shoot()
@@ -84,8 +83,8 @@ public class Shoot : Skill
     public override float GetCooldown(int level) => 300;
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 1, 8, ShapeBullet.Micro, ColorBullet.Green);
-        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 1.5f, 8, ShapeBullet.Micro, ColorBullet.Green);
-        Bullet.CreateBullet(sc.User, this, 6, sc.User.Up.Position, sc.GridOne.Position, 2, 8, ShapeBullet.Micro, ColorBullet.Green);
+        Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 1, 8, ShapeBullet.Micro, ColorBullet.Green);
+        Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 1.5f, 8, ShapeBullet.Micro, ColorBullet.Green);
+        Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 2, 8, ShapeBullet.Micro, ColorBullet.Green);
     }
 }

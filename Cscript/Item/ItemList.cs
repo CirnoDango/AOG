@@ -3,25 +3,24 @@ using System;
 using System.Collections.Generic;
 public class PowerBlock : Item, IEquipable
 {
-    private Func<Unit, Unit, float, float> _modifierCallback;
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
 
     public PowerBlock()
     {
         Name = "PowerBlock";
         Weight = 2f;
-        Description = "所有弹幕+1伤害。";
     }
 
-    public void OnEquip(Unit unit)
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) => dmg + 1;
-        unit.Ue.OnTakeBulletDamage.Add(_modifierCallback);
+        unit.Ue.OnDealBulletDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
-            unit.Ue.OnTakeBulletDamage.Remove(_modifierCallback);
+            unit.Ue.OnDealBulletDamage.Remove(_modifierCallback);
     }
 }
 
@@ -31,15 +30,14 @@ public class DangoLight : Item, IEquipable
     {
         Name = "DangoLight";
         Weight = 4f;
-        Description = "+2视野";
     }
 
-    public void OnEquip(Unit unit)
+    public override void OnEquip(Unit unit)
     {
         unit.Up.Vision += 2;
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         unit.Up.Vision -= 2;
     }
@@ -51,15 +49,14 @@ public class DangoTriple : Item, IEquipable
     {
         Name = "DangoTriple";
         Weight = 3f;
-        Description = "+2力量";
     }
 
-    public void OnEquip(Unit unit)
+    public override void OnEquip(Unit unit)
     {
         unit.Ua.Str += 2;
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         unit.Ua.Str -= 2;
     }
@@ -75,7 +72,19 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
     {
         Name = "MagicPotion";
         Weight = 2f;
-        Description = "获得技能：MP恢复";
+    }
+    public override void ApplyParameters(Dictionary<string, object> parameters)
+    {
+        if (parameters.TryGetValue("MpRecoverPercent", out var val))
+        {
+            MpRecoverPercent = (int)val;
+        }
+        base.ApplyParameters(parameters);
+    }
+    public override Item RandomSummonParam()
+    {
+        MpRecoverPercent = GD.RandRange(20, 50);
+        return this;
     }
     public class Instance : Skill, ISkillInstance
     {
@@ -109,7 +118,6 @@ public class HealPotion : SkillItem<HealPotion.Instance>
     {
         Name = "HealPotion";
         Weight = 8f;
-        Description = "获得技能：HP恢复";
     }
 
     public class Instance : Skill, ISkillInstance
@@ -143,10 +151,9 @@ public class Axe : Item, IEquipable
     {
         Name = "Axe";
         Weight = 4f;
-        Description = "体术伤害+力量*20%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -156,7 +163,7 @@ public class Axe : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
@@ -168,10 +175,9 @@ public class Dagger : Item, IEquipable
     {
         Name = "Dagger";
         Weight = 4f;
-        Description = "体术伤害+敏捷*30%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -181,7 +187,7 @@ public class Dagger : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
@@ -193,10 +199,9 @@ public class Club : Item, IEquipable
     {
         Name = "Club";
         Weight = 4f;
-        Description = "体术伤害+体质*30%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -206,7 +211,7 @@ public class Club : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
@@ -218,10 +223,9 @@ public class Rapier : Item, IEquipable
     {
         Name = "Rapier";
         Weight = 4f;
-        Description = "体术伤害+灵力*30%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -231,7 +235,7 @@ public class Rapier : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
@@ -243,10 +247,9 @@ public class QuarterStaff : Item, IEquipable
     {
         Name = "QuarterStaff";
         Weight = 4f;
-        Description = "体术伤害+魔力*30%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -256,7 +259,7 @@ public class QuarterStaff : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
@@ -268,10 +271,9 @@ public class BullWhip : Item, IEquipable
     {
         Name = "BullWhip";
         Weight = 4f;
-        Description = "体术伤害+灵巧*30%";
     }
-    private Func<Unit, Unit, float, float> _modifierCallback;
-    public void OnEquip(Unit unit)
+    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
+    public override void OnEquip(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -281,11 +283,9 @@ public class BullWhip : Item, IEquipable
         unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
     }
 
-    public void OnUnequip(Unit unit)
+    public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
             unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
     }
 }
-
-

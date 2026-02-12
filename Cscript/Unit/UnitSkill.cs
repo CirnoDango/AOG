@@ -34,7 +34,8 @@ public class UnitSkill(Unit unit)
     }
     public void UnLearnSkill(Skill skill)
     {
-        var index = skills.FindIndex(entry => entry.skill.Name == skill.Name);
+        var s = skills.Select(x => x.skill.Template).Where(x => x == skill).FirstOrDefault();
+        var index = skills.FindIndex(entry => entry.skill.Template == s);
         if (index >= 0)
         {
             if (Player.PlayerUnit == _parent)
@@ -51,11 +52,7 @@ public class UnitSkill(Unit unit)
     }
     public void AddSkill(SkillInstance newSkill, float weight = 10)
     {
-        var index = skills.FindIndex(entry => entry.skill.Name == newSkill.Name);
-        if (index >= 0 && _parent != Player.PlayerUnit)
-            skills[index] = (newSkill, weight);  // 替换
-        else
-            skills.Add((newSkill, weight));      // 添加
+        skills.Add((newSkill, weight));
     }
     public void LearnSkillGroup(string groupName)
     {
@@ -64,5 +61,4 @@ public class UnitSkill(Unit unit)
             LearnSkill(skill);
         }
     }
-    
 }

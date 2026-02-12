@@ -40,14 +40,16 @@ public static class GameTime
                     status.OnQuit(u);
                 }
             }
-            u.Ua.HealHp(updateTime * u.Ua.MaxHp / 10000);
-            u.Ua.GetMp(updateTime * u.Ua.Mag / 1000);
+            u.Ue.UnitUpdate(updateTime);
         }
         foreach (Bullet b in CurrentMap.Bullets.ToList())
         {
             b.Update(updateTime);
         }
-        
+        foreach (SkillInstance si in Skill.ContinueSkills.ToList())
+        {
+            si.Update(new SkillContext(si.User), updateTime);
+        }
         foreach (SkillInstance si in SpellCard.currentSpellcards.ToList())
         {
             si.Update(new SkillContext(si.User), updateTime);

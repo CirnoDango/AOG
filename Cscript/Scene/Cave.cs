@@ -90,7 +90,7 @@ public partial class Cave : Node, IRegisterToG
     {
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 3);
+        Player.Init(player, 1);
         switch (player)
         {
             case "cirno":

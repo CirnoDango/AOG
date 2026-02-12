@@ -75,7 +75,7 @@
         }
     }, // cirno
     {
-        "Name": "meilin",
+        "Name": "meiling",
         "Tags": [
             "妖怪"
         ],
@@ -91,7 +91,79 @@
         "SkillGroups": [ "Fist" ],
         "Skills": {
         }
-    }, // meilin
+    }, // meiling
+    {
+        "Name": "patchouli",
+        "Tags": [
+            "魔法使"
+        ],
+        "HP": 80,
+        "SP": 40,
+        "MP": 60,
+        "Str": 8,
+        "Dex": 10,
+        "Con": 8,
+        "Spi": 14,
+        "Mag": 22,
+        "Cun": 12,
+        "SkillGroups": [ "FireElement" ],
+        "Skills": {
+        }
+    }, // patchouli
+    {
+        "Name": "sakuya",
+        "Tags": [
+            "人类"
+        ],
+        "HP": 100,
+        "SP": 50,
+        "MP": 50,
+        "Str": 10,
+        "Dex": 18,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 12,
+        "Cun": 14,
+        "SkillGroups": ["Time"],
+        "Skills": {
+        }
+    }, // sakuya
+    {
+        "Name": "remilia",
+        "Tags": [
+            "吸血鬼"
+        ],
+        "HP": 120,
+        "SP": 60,
+        "MP": 40,
+        "Str": 10,
+        "Dex": 14,
+        "Con": 10,
+        "Spi": 12,
+        "Mag": 18,
+        "Cun": 10,
+        "SkillGroups": ["Blood"],
+        "Skills": {
+        }
+    }, // remilia
+    {
+        "Name": "flandre",
+        "Tags": [
+            "吸血鬼"
+        ],
+        "HP": 90,
+        "SP": 60,
+        "MP": 60,
+        "Str": 10,
+        "Dex": 12,
+        "Con": 10,
+        "Spi": 14,
+        "Mag": 18,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // flandre
     {
         "Name": "dangoPea",
         "Tags": [
@@ -110,25 +182,22 @@
         },
         "Equipment": [
             {
-                "Name": "PowerBlock",
-                "Amount": 1
-            },
-            {
                 "Name": "BarrageSet",
                 "Amount": 1,
                 "Parameters": {
                     "barrage": {
                         "MaxComponents": 2,
                         "Components": [
-                            "MultiSpeedFire",
+                            "MultiSpeedClone",
                             {
                                 "Name": "BulletModule",
                                 "Parameters": {
                                     "bulletContext": {
-                                        "damage": 6,
+                                        "damage": 12,
                                         "speed": 2,
                                         "maxDistance": 10,
                                         "shape": "Micro",
+                                        "type": "nature",
                                         "color": "Green"
                                     }
                                 }
@@ -180,6 +249,7 @@
                                         "speed": 2,
                                         "maxDistance": 10,
                                         "shape": "Micro",
+                                        "type": "cold",
                                         "color": "Blue"
                                     }
                                 }
@@ -267,9 +337,8 @@
                 "Amount": 1,
                 "Parameters": {
                     "barrage": {
-                        "MaxComponents": 3,
+                        "MaxComponents": 2,
                         "Components": [
-                            "MultiSpeedFire",
                             "Way3Fire",
                             {
                                 "Name": "BulletModule",
@@ -279,6 +348,7 @@
                                         "speed": 2,
                                         "maxDistance": 10,
                                         "shape": "Micro",
+                                        "type": "nature",
                                         "color": "Green"
                                     }
                                 }
@@ -330,6 +400,7 @@
                                         "speed": 2,
                                         "maxDistance": 10,
                                         "shape": "Micro",
+                                        "type": "nature",
                                         "color": "Red"
                                     }
                                 }
@@ -378,6 +449,159 @@
             "BlazingStar": 30
         }
     }, // dangoLight
+    {
+        "Name": "dangoFire",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 40,
+        "SP": 0,
+        "MP": 60,
+        "Str": 4,
+        "Dex": 15,
+        "Con": 10,
+        "Spi": 15,
+        "Mag": 15,
+        "Cun": 10,
+        "Skills": {
+            "SummerRed": 30,
+            "AgniShine": 30
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 3,
+                        "Components": [
+                            "RandomFire",
+                            "ChaosRoute",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 10,
+                                        "speed": 4,
+                                        "maxDistance": 10,
+                                        "shape": "Medium",
+                                        "type": "fire",
+                                        "color": "Orange"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }, // dangoFire
+    {
+        "Name": "dangoClock",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 40,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 15,
+        "Con": 10,
+        "Spi": 15,
+        "Mag": 20,
+        "Cun": 10,
+        "Skills": {
+            "MesmerizingMisdirection": 30
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 3,
+                        "Components": [
+                            "MultiSpeedClone",
+                            "CircleFire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 10,
+                                        "speed": 3,
+                                        "maxDistance": 12,
+                                        "shape": "Ring",
+                                        "type": "timespace",
+                                        "color": "Blue"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }, // dangoClock
+    {
+        "Name": "dangoRedwine",
+        "Tags": [
+            "团子"
+        ],
+        "HP": 30,
+        "SP": 0,
+        "MP": 30,
+        "Str": 14,
+        "Dex": 14,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 14,
+        "Cun": 10,
+        "Skills": {
+            "ScarletShoot": 30
+        },
+        "Equipment": [
+            {
+                "Name": "BarrageSet",
+                "Amount": 1,
+                "Parameters": {
+                    "barrage": {
+                        "MaxComponents": 5,
+                        "Components": [
+                            "Draw2",
+                            "Way3Fire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 12,
+                                        "speed": 3.5,
+                                        "maxDistance": 10,
+                                        "shape": "Big",
+                                        "type": "wither",
+                                        "color": "Red"
+                                    }
+                                }
+                            },
+                            "RandomFire",
+                            {
+                                "Name": "BulletModule",
+                                "Parameters": {
+                                    "bulletContext": {
+                                        "damage": 8,
+                                        "speed": 2.5,
+                                        "maxDistance": 8,
+                                        "shape": "Ring",
+                                        "type": "wither",
+                                        "color": "Cyan"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }, // dangoRedwine
     {
         "Name": "dangoChest",
         "Tags": [

@@ -93,6 +93,7 @@ public static class EnemyLoader
         Unit unit = new()
         {
             Name = name,
+            symbol = ed.Tags,
             MemoryValue = ed.Value,
         };
         unit.Ua = new UnitAttribute(unit)

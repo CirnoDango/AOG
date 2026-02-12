@@ -75,14 +75,9 @@ public static class MathEx
             new Vector2I(-1, 0), new Vector2I(1, 0),
             new Vector2I(-1, 1), new Vector2I(0, 1), new Vector2I(1, 1)
         ];
-    public static float Randn(double mean, double variance)
+    public static float Randfna(double mean, double variance)
     {
-        float i;
-        do
-        {
-            i = (float)GD.Randfn(mean, Math.Pow(variance, 2));
-        } while (i < 0);
-        return i;
+        return (float)(mean + Math.Abs(GD.Randfn(0, variance)));
     }
     public static float Logistic(float zero, float x)
     {
@@ -97,6 +92,10 @@ public static class MathEx
             return 1 + x;
         else
             return (float)(2 / (1 + Math.Exp(-2 * x)));
+    }
+    public static bool Contain(float t, float dt, float et)
+    {
+        return et >= t && et < t + dt;
     }
 }
 

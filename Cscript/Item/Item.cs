@@ -11,23 +11,14 @@ public interface IEquipable
 {
     void OnEquip(Unit unit);
     void OnUnequip(Unit unit);
+    string GetDescription();
 }
-public abstract partial class Item : IInteractable
+public abstract partial class Item : IInteractable, IEquipable
 {
-    protected Item()
-    {
-        if (this is IEquipable equipable)
-        {
-            EquipEvent += equipable.OnEquip;
-            UnequipEvent += equipable.OnUnequip; 
-        }
-    }
     public static List<Item> ItemDeck { get; set; } = [];
     //用于查找并复制一个同名的物品
     public string Name { get; set; }
     public string TrName => $"i{Name}";
-    public string Description { get; set; }
-    public virtual string GetDescription() { return Description; }
     public virtual float Weight { get; set; }
     public Texture2D Texture { get; set; }
     // 默认可以装备，非装备道具重写为 false
@@ -39,14 +30,42 @@ public abstract partial class Item : IInteractable
     
     // 使用时或装备时的即时效果
     public event Action<Unit> EquipEvent;
+    public event Action<Unit> UnequipEvent;
+    // 存储ItemEffect
+    public List<IEquipable> egos = [];
+    // 掉落概率
+    public float salvage = 0;
+    // 宝箱权重
+    public float chestValue = 1;
+    // 附魔等级
+    public int effectLevel = 0;
     public void Equip(Unit unit)
     {
         EquipEvent?.Invoke(unit);
     }
-    public event Action<Unit> UnequipEvent;
     public void Unequip(Unit unit)
     {
         UnequipEvent?.Invoke(unit);
+    }
+    public virtual void OnEquip(Unit unit) { }
+    public virtual void OnUnequip(Unit unit) { }
+    public virtual string GetDescription()
+    {
+        string s = TextEx.Tr($"id{Name}") + "\n";
+        foreach(var e in egos)
+        {
+            s += e.GetDescription() + "\n";
+        }
+        if(this is BarrageComponent bc)
+        {
+            if (bc.SpCost > 0)
+                s += $"SP花费：{bc.SpCost}\n";
+            if (bc.CoolDown > 0)
+                s += $"冷却：{bc.CoolDown / 100}\n";
+            if (bc.draw > 0)
+                s += $"抽取：{bc.draw}\n";
+        }
+        return s;
     }
     public void Interact(Unit unit)
     {
@@ -61,14 +80,44 @@ public abstract partial class Item : IInteractable
         var template = GetTemplate(name).MemberwiseClone();
         if (template == null) return null;
         Item item = (Item)template;
+        item.egos = [];
+        item.EquipEvent += item.OnEquip;
+        item.UnequipEvent += item.OnUnequip;
         item.ApplyParameters(parameters ?? []);
         return item;
     }
-
+    public static Item CreateItem(string name, float salvage, Dictionary<string, object> parameters = null)
+    {
+        Item item = CreateItem(name, parameters);
+        item.salvage = salvage;
+        return item;
+    }
     public static Item GetTemplate(string name)
     {
         return ItemDeck.FirstOrDefault(item => item.Name == name);
     }
+    public static Item GetWeightedRandomItem(List<Item> items)
+    {
+        float totalWeight = 0f;
+        foreach (var it in items)
+            totalWeight += Mathf.Max(0f, it.chestValue);
+
+        if (totalWeight <= 0f)
+            return null;
+
+        float r = (float)GD.Randf() * totalWeight;
+        float acc = 0f;
+
+        foreach (var it in items)
+        {
+            acc += Mathf.Max(0f, it.chestValue);
+            if (r <= acc)
+                return it;
+        }
+
+        return items[^1];
+    }
+
     public virtual void ApplyParameters(Dictionary<string, object> parameters)
     {
         Params = parameters
@@ -78,10 +127,28 @@ public abstract partial class Item : IInteractable
                 x => Convert.ToSingle(x.Value)
             );
     }
-
     public virtual Item RandomSummonParam()
     {
         return this;
+    }
+    public void AddRandomEgo(int value)
+    {
+        if (this is Memory || this is BarrageComponent)
+            return;
+        int number = 0;
+        List<string> egos = [];
+        do
+        {
+            ItemEffect ie = ItemEffect.ItemEffectDeck[GD.RandRange(0, ItemEffect.ItemEffectDeck.Count - 1)];
+            string ien = ie.Name;
+            if (!egos.Contains(ien) && ie.Value <= value)
+            {
+                egos.Add(ien);
+                value -= ie.Value;
+                ItemEffect.CreateItemEffect(ien).ApplyItemEffect(this);
+            }
+            
+        } while (number < 40 && value > 0);
     }
 }
 public abstract class SkillItem<TSkillInstance> : SkillItem
@@ -95,11 +162,14 @@ public abstract class SkillItem<TSkillInstance> : SkillItem
 
 public abstract class SkillItem : Item, IEquipable
 {
-    public void OnEquip(Unit unit)
+    public override void OnEquip(Unit unit)
     {
         unit.Us.LearnSkill(Skill);
     }
-    public void OnUnequip(Unit unit) { unit.Us.UnLearnSkill(Skill); }
+    public override void OnUnequip(Unit unit)
+    {
+        unit.Us.UnLearnSkill(Skill);
+    }
     public Skill Skill { get; set; }
     public void Activate(SkillContext sc)
     {
@@ -120,13 +190,13 @@ public class Inventory(Unit unit)
             return false;
         if (CurrentWeight + item.Weight > MaxWeight)
         {
-            Info.Print($"超重了，无法添加物品 {item.TrName}！");
+            Info.Print($"超重了，无法添加物品 {TranslationServer.Translate(item.TrName)}！");
             return false;
         }
         Items.Add(item);
         if (Unit == Player.PlayerUnit)
         {
-            Info.Print($"已捡起物品 {item.TrName}");
+            Info.Print($"已捡起物品 {TranslationServer.Translate(item.TrName)}");
             if (item.Sprite != null)
                 LayerItemDropped.DeleteItem(item);
         }
@@ -161,7 +231,7 @@ public class Equipment(Unit unit)
 
         EquippedItems.Add(item);
         GameEvents.ItemPicked(item);
-        ((IEquipable)item).OnEquip(unit);
+        item.Equip(unit);
         return true;
     }
 
@@ -173,7 +243,7 @@ public class Equipment(Unit unit)
         }
         EquippedItems.Remove(item);
         unit.Inventory.Items.Add(item);
-        ((IEquipable)item).OnUnequip(unit);
+        item.Unequip(unit);
     }
 }
 

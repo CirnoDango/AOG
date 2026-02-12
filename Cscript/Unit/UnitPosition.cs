@@ -37,10 +37,13 @@ public class UnitPosition(Unit unit)
 
     public void MoveTo(Grid grid)
     {
+        if (_parent.dead)
+            return;
         CurrentGrid?.unit = null;
         CurrentGrid = grid;
         grid.unit = _parent;
-        _parent.Ue.UnitMoved();
+        _parent.Ue.UnitMove();
+        GameEvents.UnitMove(_parent);
         if (_parent == Player.PlayerUnit)
         {
             RefreshVision();
@@ -198,7 +201,7 @@ public class UnitPosition(Unit unit)
             return HighlightType.blue;
 
         // Step 2: 距离检查
-        if (Position.DistanceTo(target) > skill.Targeting.Range)
+        if (Position.DistanceTo(target) > (skill.Targeting.Range+0.5f))
             return HighlightType.red;
 
         // Step 3: 获取目标格子和单位（缓存）
@@ -243,9 +246,11 @@ public class UnitPosition(Unit unit)
                        + distance * ((Vector2)(Position - sc.User.Up.Position)).Normalized()
                        + new Vector2(0.5f, 0.5f));
         List<Vector2I> gs = MathEx.GetLine(sc.User.Up.Position, Going);
+        gs.RemoveAt(0);
         foreach (var grid in gs)
         {
-            if (Scene.CurrentMap.CheckWalkable(grid))
+            if (Scene.CurrentMap.GetGrid(grid) != null &&
+                Scene.CurrentMap.GetGrid(grid).IsWalkable)
             {
                 MoveTo(Scene.CurrentMap.GetGrid(grid));
             }

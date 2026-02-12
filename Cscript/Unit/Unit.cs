@@ -17,8 +17,10 @@ public class Unit
     public UnitAttribute Ua { get; set; }
     public UnitSkill Us { get; set; }
     public UnitEvent Ue { get; set; }
+    public bool dead = false;
     public float TimeEnergy { get; set; } = 0;
     public string Name { get; set; }
+    public List<string> symbol { get; set; }
     public string TrName => $"u{Name}";
     public UnitAi UnitAi { get; set; }
     public int Friendness
@@ -40,7 +42,7 @@ public class Unit
     public UnitEgo Ego { get; set; }
     public void GetStatus(Status status)
     {
-        status.OnGet(this, status); // 👈 自动触发获得效果
+        status.OnGet(this, status);
     }
     public static Action OnPlayerdied;
 }

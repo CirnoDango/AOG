@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+interface IBoxState { }
 public static class Game
 {
     public static bool IsLoaded { get; set; } = false;
@@ -55,6 +56,7 @@ public partial class Fsm : Node, IRegisterToG
     public static GameState UaSkillBoxState        { get; set; }
     public static GameState MemoryBoxState         { get; set; }
     public static GameState BarrageBoxState        { get; set; }
+    public static GameState SkillTreeState         { get; set; }
     [Export]
     public Control InventoryBos;
     [Export]
@@ -89,6 +91,7 @@ public partial class Fsm : Node, IRegisterToG
         UaSkillBoxState = new UaSkillBoxState(this);
         MemoryBoxState = new MemoryBoxState(this);
         BarrageBoxState = new BarrageBoxState(this);
+        SkillTreeState = new SkillTreeState(this);
         ChangeState(TalkState);
     }
 
@@ -200,7 +203,7 @@ public class TalkState(Fsm fsm) : GameState(fsm), IGameState
 {
 
 }
-public class InventoryState(Fsm fsm) : GameState(fsm), IGameState
+public class InventoryState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
 {
     public override void Start()
     {
@@ -213,7 +216,7 @@ public class InventoryState(Fsm fsm) : GameState(fsm), IGameState
         fsm.InventoryBos.Visible = false;
     }
 }
-public class CombatAbilityBoxState(Fsm fsm) : GameState(fsm), IGameState
+public class CombatAbilityBoxState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
 {
     public override void Start()
     {
@@ -225,7 +228,7 @@ public class CombatAbilityBoxState(Fsm fsm) : GameState(fsm), IGameState
         fsm.Cab.Visible = false;
     }
 }
-public class UaSkillBoxState(Fsm fsm) : GameState(fsm), IGameState
+public class UaSkillBoxState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
 {
     public override void Start()
     {
@@ -238,7 +241,7 @@ public class UaSkillBoxState(Fsm fsm) : GameState(fsm), IGameState
         fsm.Usbb.Visible = false;
     }
 }
-public class MemoryBoxState(Fsm fsm) : GameState(fsm), IGameState
+public class MemoryBoxState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
 {
     public override void Start()
     {
@@ -252,7 +255,7 @@ public class MemoryBoxState(Fsm fsm) : GameState(fsm), IGameState
     }
 }
 
-public class BarrageBoxState(Fsm fsm) : GameState(fsm), IGameState
+public class BarrageBoxState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
 {
     public override void Start()
     {
@@ -264,5 +267,18 @@ public class BarrageBoxState(Fsm fsm) : GameState(fsm), IGameState
     {
         G.I.BarrageBox.ReturnItem();
         G.I.BarrageBox.Visible = false;
+    }
+}
+
+public class SkillTreeState(Fsm fsm) : GameState(fsm), IGameState, IBoxState
+{
+    public override void Start()
+    {
+        G.I.SkillTreeBox.Refresh();
+        G.I.SkillTreeBox.Visible = true;
+    }
+    public override void End()
+    {
+        G.I.SkillTreeBox.Visible = false;
     }
 }

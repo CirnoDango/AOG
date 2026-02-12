@@ -14,6 +14,30 @@ public class GameEvents
     {
         OnItemPicked?.Invoke(item);
     }
-    
+    public static event Action<Unit, SkillContext, SkillInstance> OnUseSkill;
+    public static void UseSkill(Unit user, SkillContext sc, SkillInstance si)
+    {
+        OnUseSkill?.Invoke(user, sc, si);
+    }
+    public static event Action<Unit> OnUnitMove;
+    public static void UnitMove(Unit user)
+    {
+        OnUnitMove?.Invoke(user);
+    }
+    public static event Action<Bullet> OnBulletMove;//Into New Hex
+    public static void BulletMove(Bullet bullet)
+    {
+        OnBulletMove?.Invoke(bullet);
+    }
+    public static event Action OnSceneQuit;
+    public static void SceneQuit()
+    {
+        OnSceneQuit?.Invoke();
+    }
+    public static event Action<Unit> OnEnemyKilled;
+    public static void EnemyKilled(Unit unit)
+    {
+        OnEnemyKilled?.Invoke(unit);
+    }
 }
 

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://kxxxmftaiexe"]
+
+[ext_resource type="Script" uid="uid://b2dctrwxp4kxb" path="res://Cscript/Scene/ScarletLibrary.cs" id="1_h56p6"]
+
+[node name="ScarletLibrary" type="Node2D"]
+script = ExtResource("1_h56p6")

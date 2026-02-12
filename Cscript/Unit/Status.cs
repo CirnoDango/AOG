@@ -1,7 +1,6 @@
 using Godot;
-using System.ComponentModel;
+using System;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 public abstract class Status
 {
@@ -13,10 +12,10 @@ public abstract class Status
     public Label param;
     public virtual void OnTurnStart(Unit unit) { }
     public virtual void OnTurnEnd(Unit unit) { }
-    public virtual void OnTakeBulletDamage(Unit unit, Skill skill, ref float damage){; }
-    public virtual void OnTakeBodyDamage(Unit unit, ref float damage){; }
-    public virtual void OnDealDamage(Unit unit, ref float damage){; }
-    public virtual void OnDealBodyDamage(Unit unit, ref float damage) {; }
+    public virtual void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage){; }
+    public virtual void OnTakeBodyDamage(Unit unit, ref Damage damage){; }
+    public virtual void OnDealDamage(Unit unit, ref Damage damage){; }
+    public virtual void OnDealBodyDamage(Unit unit, ref Damage damage) {; }
     public virtual void OnGet(Unit unit, Status status) { Get(unit); }
     public virtual void OnQuit(Unit unit) { Quit(unit); }
     public void Get(Unit unit)
@@ -61,8 +60,8 @@ public abstract class Status
                     AnchorBottom = 1.0f,
                     PivotOffset = new Vector2(200, 200),
                     Position = new Vector2(-200, -200),
+                    Modulate = new Color(1, 1, 0)
                 };
-                param.Modulate = new Color(1, 1, 0);
                 param.AddThemeFontSizeOverride("font_size", 200);
                 s.AddChild(param);
                 param.Position = new Vector2(240, 60);
@@ -130,12 +129,12 @@ public class Frozen : Status
         Name = "Frozen";
         Duration = duration;
     }
-    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref float damage)
+    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
     {
         damage *= 0.1f;
     }
 
-    public override void OnTakeBodyDamage(Unit unit, ref float damage)
+    public override void OnTakeBodyDamage(Unit unit, ref Damage damage)
     {
         damage *= 0.1f;
     }
@@ -177,18 +176,18 @@ public class YinyangBall : Status
     public YinyangBall(int l = 1)
     {
         Name = "YinyangBall";
-        Duration = 500;
+        Duration = 300;
         Layer = l;
     }
-    public override void OnTakeBodyDamage(Unit unit, ref float damage)
+    public override void OnTakeBodyDamage(Unit unit, ref Damage damage)
     {
         Layer--;
         var (skill, weight) = unit.Us.skills.FirstOrDefault(x => x.skill.Name == "TreasureOrb");
 
         if (skill != null && skill.Level >= 3)
-            damage -= Mathf.Min(damage, 18);
+            damage -= Mathf.Min(damage.Value, 18);
         else
-            damage -= Mathf.Min(damage, 12);
+            damage -= Mathf.Min(damage.Value, 12);
 
         if (Layer == 0)
             Quit(unit);
@@ -213,7 +212,7 @@ public class YinyangBall : Status
         if (Layer > 1)
         {
             Layer--;
-            Duration += 500;
+            Duration += 300;
         }
         else
             Quit(unit);
@@ -247,7 +246,7 @@ public class Weak : Status
         Name = "Weak";
         Duration = duration;
     }
-    public override void OnDealDamage(Unit unit, ref float damage)
+    public override void OnDealDamage(Unit unit, ref Damage damage)
     {
         damage *= 0.7f;
     }
@@ -306,43 +305,7 @@ public class MagicSeal : Status
         return init && si.Template.GetMpCost(si.Level) <= 0;
     }
 }
-public class SSpiralLightSteps : Status
-{
-    private Skill Parent;
-    public float Speed
-    {
-        get => (float)Param;
-        set
-        {
-            Param = value;
-        }
-    }
-    public SSpiralLightSteps(float speed, float duration, Skill parent)
-    {
-        Name = "SpiralLightSteps";
-        Duration = duration;
-        Speed = speed;
-        Parent = parent;
-    }
-    public override void OnGet(Unit unit, Status status)
-    {
-        unit.Ue.OnUnitMove += MoveDamage;
-        CombineTime(unit, status);
-    }
-    public override void OnQuit(Unit unit)
-    {
-        unit.Ue.OnUnitMove -= MoveDamage;
-        Quit(unit);
-    }
-    public void MoveDamage(Unit unit)
-    {
-        foreach(Unit target in unit.Up.CurrentGrid.NearGrids(2).Where(x => x != unit.Up.CurrentGrid).Select(g => g.unit))
-        {
-            target?.Ua.TakeBulletDamage(15, unit, Parent);
-            target?.GetStatus(new Daze(300));
-        }
-    }
-}
+
 
 public class Daze : Status
 {
@@ -353,14 +316,14 @@ public class Daze : Status
     }
     public override void OnGet(Unit unit, Status status) 
     {
-        unit.Ua.SpeedGlobal -= 50;
+        unit.Ua.SpeedCombat -= 50;
         unit.Ua.BodyDamageAccuracy -= 0.5f;
         unit.Ua.BulletDamageAccuracy -= 0.5f;
         CombineTime(unit, status);
     }
     public override void OnQuit(Unit unit)
     {
-        unit.Ua.SpeedGlobal += 50;
+        unit.Ua.SpeedCombat += 50;
         unit.Ua.BodyDamageAccuracy += 0.5f;
         unit.Ua.BulletDamageAccuracy += 0.5f;
         Quit(unit);
@@ -375,23 +338,47 @@ public class Stun : Status
     }
     public override void OnGet(Unit unit, Status status)
     {
-        unit.Ua.SpeedGlobal -= 50;
-        unit.Ua.BodyDamageAccuracy -= 0.5f;
-        unit.Ua.BulletDamageAccuracy -= 0.5f;
+        unit.Ua.SpeedCombat -= 50;
         CombineTime(unit, status);
     }
     public override void OnQuit(Unit unit)
     {
-        unit.Ua.SpeedGlobal += 50;
-        unit.Ua.BodyDamageAccuracy += 0.5f;
-        unit.Ua.BulletDamageAccuracy += 0.5f;
+        unit.Ua.SpeedCombat += 50;
         Quit(unit);
     }
+    public override void OnDealDamage(Unit unit, ref Damage damage)
+    {
+        damage *= 0.5f;
+    }
 }
-public class SCrimsonEnergyRelease : Status
+
+public class Pinned : Status
 {
-    private int level;
-    int[] t0 = { 8, 12, 16, 16 };
+    public Pinned(float duration)
+    {
+        Name = "Pinned";
+        Duration = duration;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        unit.Ua.DamageEvasion -= 0.2f;
+        unit.Ue.OnCheckMoveUsage.Add(Pin);
+        CombineTime(unit, status);
+    }
+    public override void OnQuit(Unit unit)
+    {
+        unit.Ua.DamageEvasion += 0.2f;
+        unit.Ue.OnCheckMoveUsage.Remove(Pin);
+        Quit(unit);
+    }
+    private bool Pin(Unit unit, bool init)
+    {
+        return false;
+    }
+}
+
+public class Burned : Status
+{
     public int Layer
     {
         get => (int)Param;
@@ -400,19 +387,15 @@ public class SCrimsonEnergyRelease : Status
             Param = value;
         }
     }
-    public SCrimsonEnergyRelease(int l = 1)
+    public Burned(int layer, float duration)
     {
-        Name = "CrimsonEnergyRelease";
-        Duration = 100;
-        Layer = l;
+        Name = "Burned";
+        Duration = duration;
+        Layer = layer;
     }
-    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref float damage)
+    public override void OnDealBodyDamage(Unit unit, ref Damage damage)
     {
-        damage -= damage * t0[level - 1] / 100f;
-    }
-    public override void OnDealBodyDamage(Unit unit, ref float damage)
-    {
-        damage += damage * t0[level - 1] / 100f;
+        damage *= 0.5f;
     }
     public override void OnGet(Unit unit, Status status)
     {
@@ -420,23 +403,20 @@ public class SCrimsonEnergyRelease : Status
         {
             if (s.Name == Name)
             {
-                s.Param += ((SCrimsonEnergyRelease)status).Layer;
+                Duration = Math.Max(Duration, status.Duration);
+                Layer = Math.Max(Layer, ((Burned)status).Layer);
                 return;
             }
         }
         Get(unit);
         unit.Status.Add(status);
-        ((SCrimsonEnergyRelease)status).level = 
-            unit.Us.skills.FirstOrDefault(x => x.skill.Name == "CrimsonEnergyRelease").skill.Level;
     }
     public override void OnQuit(Unit unit)
     {
-        if (Layer > 1)
-        {
-            Layer--;
-            Duration += 500;
-        }
-        else
-            Quit(unit);
+        Quit(unit);
+    }
+    public override void OnTurnEnd(Unit unit)
+    {
+        unit.Ua.GetHp(-Layer);
     }
 }

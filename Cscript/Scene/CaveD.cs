@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 public partial class CaveD : Node
 {
 
-    public Map Floor1 = MapGenerator.GenerateMapByBSP(
-    10, 10, "Stone", "Floor");
+    public Map Floor1 = MapGenerator.GenerateMapByCellularAutomata(
+    30, 30,
+    new Dictionary<string, float>
+    {
+        { "Stone", 0.05f },
+        { "Floor", 0.95f }
+    }, 2);
     public Map Floor2 = MapGenerator.GenerateMapByCellularAutomata(
     60, 60,
     new Dictionary<string, float>
@@ -36,7 +41,7 @@ public partial class CaveD : Node
             { "dangoWater", 0.4f },
             { "dangoFist", 0.15f },
         };
-        Floor2.EnemySummonValue = new Dictionary<string, float>
+        Floor3.EnemySummonValue = new Dictionary<string, float>
         {
             { "dangoPea", 0.5f },
             { "dangoWater", 0.5f },
@@ -62,43 +67,38 @@ public partial class CaveD : Node
     {
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 3);
-        Player.PlayerUnit.Ua.Cun += 100;
-        Player.PlayerUnit.Us.LearnSkillGroup("Freeze");
+        Player.Init(player, 1);
+        G.I.Player.TalentPoint = 3;
+        Player.PlayerUnit.Us.LearnSkillGroup("Yinyangball");
         Player.PlayerUnit.Us.LearnSkillGroup("Dark");
         Player.PlayerUnit.Us.LearnSkillGroup("Star");
+        Player.PlayerUnit.Us.LearnSkillGroup("Freeze");
+        Player.PlayerUnit.Us.LearnSkillGroup("Fist");
+        Player.PlayerUnit.Us.LearnSkillGroup("Circle");
+        Player.PlayerUnit.Us.LearnSkillGroup("FireElement");
+        Player.PlayerUnit.Us.LearnSkillGroup("Time");
+        Player.PlayerUnit.Us.LearnSkillGroup("Blood");
         G.I.SkillPanel.Refresh();
-        G.I.SkillPanel.Add("Star");
-        G.I.SkillPanel.Add("Freeze");
-        G.I.SkillPanel.Add("Dark");
+        G.I.SkillTreeBox.Expert(0, 0);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mUaAny"));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mUaCun"));
-        Floor1.MapGoto = Floor2;
+        Floor1.MapGoto = Floor3;
         Floor2.MapGoto = Floor3;
         Floor1.SummonChest(200, 1);
         Floor2.SummonChest(20, 100);
         Scene.Enter(Floor1);
-        
         Player.PlayerUnit.Inventory.AddItem(
             Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
+        Player.PlayerUnit.Ua.Cun += 10;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 3 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 5 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("AddDamage").RandomSummonParam());
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
+        var r = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "remilia", UnitEgo.eliteBoss);
+        r.Ua.MaxSp = 9999; r.Ua.CurrentSp = 9999;
     }
     
     public async void Victory()

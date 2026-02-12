@@ -13,14 +13,16 @@ public partial class Stage : Node
     {
         return GD.Load<Texture2D>($"res://Assets/Portraits/{name}.png");
     }
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _Input(InputEvent @event)
     {
-        if (clickTcs != null && @event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        if (clickTcs != null &&
+            @event is InputEventMouseButton mouseEvent &&
+            mouseEvent.Pressed)
         {
             clickTcs.TrySetResult();
-            //clickTcs = null;
         }
     }
+
     public async Task ShowDialogSequence(params DialogLine[] lines)
     {
         foreach (var line in lines)

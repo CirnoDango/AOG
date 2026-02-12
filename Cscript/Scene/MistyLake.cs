@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading.Tasks;
 
 public partial class MistyLake : Node
@@ -8,7 +9,7 @@ public partial class MistyLake : Node
     public static Map Floor1 = new(60, 40);
     public static Map Floor2 = new(60, 40);
     public static Map Floor3 = new(60, 40);
-    public static Map diShuiLake = new(34, 34);
+    public static Map diShuiLake = new("diShuiLake");
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
@@ -58,7 +59,7 @@ public partial class MistyLake : Node
     {
         if (inited)
         {
-            return;
+            //return;
         }
         inited = true;
         CreateFloor(Floor1);
@@ -66,13 +67,11 @@ public partial class MistyLake : Node
         CreateFloor(Floor3);
         Floor1.MapGoto = Floor2;
         Floor2.MapGoto = Floor3;
-        diShuiLake = MapBuilder.ImportMapFromJson("res://map.json", "dishuiLake");
         Floor3.MapGoto = diShuiLake;
-        MapBuilder.BuildTileMapFromLogic(diShuiLake);
         diShuiLake.Entrance = new Vector2I(0, 32);
         Scene.Enter(Floor1);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
-        new Healthy().ApplyItemEffect(i);
+        ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
         Unit.OnPlayerdied += Playerdied;
         Floor2.AfterEnter += CreateMidboss;
@@ -127,7 +126,7 @@ public partial class MistyLake : Node
     {
         if (loaded)
         {
-            return;
+            //return;
         }
         loaded = true;
         string player = GameData.SelectedCharacter;

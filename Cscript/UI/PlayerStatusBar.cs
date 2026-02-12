@@ -6,26 +6,27 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
 {
     [Export] public CanvasLayer uilayer;
 
-    private Label hpLabel, spLabel, mpLabel;
+    private Label hpLabel, spLabel, grazeLabel, mpLabel;
     private ColorRect hpBarBack, spBarBack, mpBarBack;
     private ColorRect hpBar, spBar, mpBar;
     public Node StatusRow;
-    private const float barMaxWidth = 4000; // 对应编辑器中背景条宽度
+    private const float barMaxWidth = 4000;
     private const float barHeight = 400;
     public Dictionary<Status, Node> StatusImages = [];
     public void Init()
     {
-        hpLabel = GetNode<Label>("HpRow/Value");
-        spLabel = GetNode<Label>("SpRow/Value");
-        mpLabel = GetNode<Label>("MpRow/Value");
+        hpLabel = GetNode<Label>("HpRow/HpValue");
+        spLabel = GetNode<Label>("SpRow/SpValue");
+        mpLabel = GetNode<Label>("MpRow/MpValue");
+        grazeLabel = GetNode<Label>("SpRow/SpValue/GrazePercent");
 
-        hpBar = GetNode<ColorRect>("HpRow/Bar");
-        spBar = GetNode<ColorRect>("SpRow/Bar");
-        mpBar = GetNode<ColorRect>("MpRow/Bar");
+        hpBar = GetNode<ColorRect>("HpRow/BarBack/Bar");
+        spBar = GetNode<ColorRect>("SpRow/BarBack/Bar");
+        mpBar = GetNode<ColorRect>("MpRow/BarBack/Bar");
 
-        hpBarBack = GetNode<ColorRect>("HpRow/Bar/BarBack");
-        spBarBack = GetNode<ColorRect>("SpRow/Bar/BarBack");
-        mpBarBack = GetNode<ColorRect>("MpRow/Bar/BarBack");
+        hpBarBack = GetNode<ColorRect>("HpRow/BarBack");
+        spBarBack = GetNode<ColorRect>("SpRow/BarBack");
+        mpBarBack = GetNode<ColorRect>("MpRow/BarBack");
 
         Visible = true;
         StatusRow = GetNode("Status"); 
@@ -37,17 +38,18 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
         float spRatio = Player.PlayerUnit.Ua.CurrentSp / Player.PlayerUnit.Ua.MaxSp;
         float mpRatio = Player.PlayerUnit.Ua.CurrentMp / Player.PlayerUnit.Ua.MaxMp;
 
-        hpBar.CustomMinimumSize = new Vector2(barMaxWidth * hpRatio, barHeight);
-        spBar.CustomMinimumSize = new Vector2(barMaxWidth * spRatio, barHeight);
-        mpBar.CustomMinimumSize = new Vector2(barMaxWidth * mpRatio, barHeight);
+        hpBar.Size = new Vector2(barMaxWidth * hpRatio, barHeight);
+        spBar.Size = new Vector2(barMaxWidth * spRatio, barHeight);
+        mpBar.Size = new Vector2(barMaxWidth * mpRatio, barHeight);
         if (Player.PlayerUnit.Us.currentSpellcard != null)
             spBar.Color = new Color(1, 0.5f, 0);
         else
-            spBar.Color = new Color(1, 1, 0);
+            spBar.Color = new Color(120f/255, 200f/255, 0);
 
         hpLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentHp}/{(int)Player.PlayerUnit.Ua.MaxHp}";
         spLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentSp}/{(int)Player.PlayerUnit.Ua.MaxSp}";
         mpLabel.Text = $"{(int)Player.PlayerUnit.Ua.CurrentMp}/{(int)Player.PlayerUnit.Ua.MaxMp}";
+        grazeLabel.Text = $"{(int)(100*UnitAttribute.GrazePercent(Player.PlayerUnit.Ua))}%";
     }
 
     public void RegisterToG(G g)

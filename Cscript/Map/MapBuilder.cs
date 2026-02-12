@@ -21,7 +21,7 @@ public static class MapBuilder
     /// provides optional terrain data.</remarks>
     /// <returns>A <see cref="Map"/> object representing the logical structure of the tile map, including terrain information for
     /// each grid cell.</returns>
-    public static Map BuildLogicFromTileMap()
+    public static Map BuildLogicFromTileMap(Map map)
     {
         var tileMapBase = G.I.TileMapAllLayer.BaseGround;
         TileMapLayer tileMapStand = G.I.TileMapAllLayer.Stand;
@@ -34,12 +34,9 @@ public static class MapBuilder
         int width = bounds.Size.X;
         int height = bounds.Size.Y;
 
-        var map = new Map(width, height)
-        {
-            Width = width,
-            Height = height,
-            Grid = new Grid[width, height]
-        };
+        map.Width = width;
+        map.Height = height;
+        map.Grid = new Grid[width, height];
 
         foreach (var cell in usedCells)
         {
@@ -152,7 +149,7 @@ public static class MapBuilder
     /// <param name="tileMap">The tile map layer where the terrain will be set.</param>
     /// <param name="pos">The position of the tile within the tile map, specified as a <see cref="Vector2I"/>.</param>
     /// <param name="terrainName">The name of the terrain to assign to the specified tile.</param>
-    private static void SetTileMapTerrain(TileMapLayer tileMap, Vector2I pos, string terrainName)
+    public static void SetTileMapTerrain(TileMapLayer tileMap, Vector2I pos, string terrainName)
     {
         var tileSet = tileMap.TileSet;
 
@@ -165,137 +162,4 @@ public static class MapBuilder
             }
         }
     }
-    /// <summary>
-    /// Exports the map data as a JSON file containing terrain IDs for each grid cell.
-    /// </summary>
-    /// <remarks>The exported JSON file includes two layers: the base terrain layer and the stand terrain
-    /// layer.  Each layer is represented as a 2D array of integers, where each integer corresponds to a terrain
-    /// ID.</remarks>
-    /// <param name="map">The map to export, containing grid data for terrain layers.</param>
-    /// <param name="terrainToId">A dictionary mapping terrain names to their corresponding integer IDs.  If a terrain name is not found in the
-    /// dictionary, the ID defaults to 0.</param>
-    /// <param name="path">The file path where the JSON export will be saved.</param>
-    public static void ExportMapAsIdArray(Map map, Dictionary<string, int> terrainToId, string path, string name)
-    {
-        int width = map.Width;
-        int height = map.Height;
-
-        int[][] baseLayer = new int[height][];
-        int[][] standLayer = new int[height][];
-
-        for (int y = 0; y < height; y++)
-        {
-            baseLayer[y] = new int[width];
-            standLayer[y] = new int[width];
-            for (int x = 0; x < width; x++)
-            {
-                var g = map.Grid[x, y];
-                baseLayer[y][x] = terrainToId.TryGetValue(g.TerrainBaseGround, out var baseId) ? baseId : 0;
-                standLayer[y][x] = terrainToId.TryGetValue(g.TerrainStand, out var standId) ? standId : 0;
-            }
-        }
-
-        var export = new MapExportData
-        {
-            Width = width,
-            Height = height,
-            Base = baseLayer,
-            Stand = standLayer
-        };
-
-        // 按 name 存储
-        Dictionary<string, MapExportData> wrapper;
-
-        // 如果文件已存在，先读出来
-        if (FileAccess.FileExists(path))
-        {
-            using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
-            string jsonOld = file.GetAsText();
-            wrapper = JsonSerializer.Deserialize<Dictionary<string, MapExportData>>(jsonOld) ?? [];
-        }
-        else
-            wrapper = [];
-
-        // 覆盖或添加新的 name
-        wrapper[name] = export;
-
-        // 再写回
-        using (var file = FileAccess.Open(path, FileAccess.ModeFlags.Write))
-        {
-            _ = file.StoreString(JsonSerializer.Serialize(wrapper, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            }));
-        }
-    }
-    public static Map ImportMapFromJson(string path, string name,
-        Dictionary<int, string> idToTerrainBase = null, Dictionary<int, string> idToTerrainStand = null)
-    {
-        idToTerrainBase ??= BaseToId.ToDictionary(kv => kv.Value, kv => kv.Key);
-        idToTerrainStand ??= StandToId.ToDictionary(kv => kv.Value, kv => kv.Key);
-        if (!FileAccess.FileExists(path))
-        {
-            GD.PrintErr($"地图文件不存在：{path}");
-            return null;
-        }
-
-        using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
-        string json = file.GetAsText();
-
-        // 读取整个 wrapper
-        var wrapper = JsonSerializer.Deserialize<Dictionary<string, MapExportData>>(json);
-
-        if (wrapper == null || !wrapper.TryGetValue(name, out var mapData))
-        {
-            GD.PrintErr($"JSON 中没有找到名字为 {name} 的地图数据");
-            return null;
-        }
-
-        var map = new Map(mapData.Width, mapData.Height)
-        {
-            Width = mapData.Width,
-            Height = mapData.Height,
-            Grid = new Grid[mapData.Width, mapData.Height]
-        };
-
-        for (int y = 0; y < mapData.Height; y++)
-        {
-            for (int x = 0; x < mapData.Width; x++)
-            {
-                int baseId = mapData.Base[y][x];
-                int standId = mapData.Stand[y][x];
-
-                string tBase = idToTerrainBase.TryGetValue(baseId, out var b) ? b : "None";
-                string tStand = idToTerrainStand.TryGetValue(standId, out var s) ? s : "";
-
-                map.Grid[x, y] = new Grid(new Vector2I(x, y), tBase, tStand);
-            }
-        }
-
-        return map;
-    }
-    public static Dictionary<string, int> BaseToId = new()
-    {
-        { "Grass",  1 },
-        { "Water",  2 },
-        { "Road",   3 },
-        { "Wall",   4 },
-        { "Stone",  5 },
-        { "Floor",  6 },
-        { "Stair",  7 },
-    };
-    public static Dictionary<string, int> StandToId = new()
-    {
-        { "DoorClosed",  1 },
-        { "DoorOpen",  2 },
-        { "Forest",   3 },
-    };
-    public class MapExportData
-    {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int[][] Base { get; set; }
-        public int[][] Stand { get; set; }
-    }
-
 }

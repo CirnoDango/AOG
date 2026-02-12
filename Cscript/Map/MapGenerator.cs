@@ -36,8 +36,6 @@ public static class MapGenerator
         }
         return map;
     }
-
-
     /// <summary>
     /// 生成一个地图,使用BSP算法
     /// </summary>
@@ -106,102 +104,47 @@ public static class MapGenerator
         foreach (var door in doors)
             map.Grid[door.X, door.Y] = new Grid(door, floor, "DoorClosed");
         return map;
-    }
-
-    /// <summary>
-    /// 得到一个随机地形类型，按照给定的权重分布
-    /// </summary>
-    /// <param name="types"></param>
-    /// <param name="weights"></param>
-    /// <returns></returns>
-    private static string GetRandomTerrain(string[] types, Dictionary<string, float> weights)
+    static List<Vector2I> ConnectRoomsWithDoor(Map map, Rect ra, Rect rb, string floor, string door = "DoorClosed")
     {
-        float total = 0;
-        foreach (var type in types)
-            total += weights[type];
+        List<Vector2I> Doors = [];
+        List<Vector2I> path = new();
+        Vector2I a = GetRoomCenter(ra);
+        Vector2I b = GetRoomCenter(rb);
+        // L型路径
+        bool horizontalFirst = Random.Shared.Next(2) == 0;
 
-        float r = (float)(GD.Randf() * total);
-        float current = 0;
-
-        foreach (var type in types)
+        if (horizontalFirst)
         {
-            current += weights[type];
-            if (r <= current)
-                return type;
+            for (int x = Math.Min(a.X, b.X); x <= Math.Max(a.X, b.X); x++)
+                path.Add(new Vector2I(x, a.Y));
+            for (int y = Math.Min(a.Y, b.Y); y <= Math.Max(a.Y, b.Y); y++)
+                path.Add(new Vector2I(b.X, y));
+        }
+        else
+        {
+            for (int y = Math.Min(a.Y, b.Y); y <= Math.Max(a.Y, b.Y); y++)
+                path.Add(new Vector2I(a.X, y));
+            for (int x = Math.Min(a.X, b.X); x <= Math.Max(a.X, b.X); x++)
+                path.Add(new Vector2I(x, b.Y));
         }
 
-        return types[^1]; // 兜底
-    }
-    /// <summary>
-    /// Determines the most common terrain type in the 3x3 neighborhood around a specified cell in the map.
-    /// </summary>
-    /// <remarks>The method considers the 3x3 neighborhood centered on the cell at (<paramref name="x"/>,
-    /// <paramref name="y"/>), including the cell itself. If the cell is at the edge of the map, the <paramref
-    /// name="border"/> terrain type is used for out-of-bounds neighbors.</remarks>
-    /// <param name="map">The map containing the grid of terrain cells.</param>
-    /// <param name="x">The x-coordinate of the target cell.</param>
-    /// <param name="y">The y-coordinate of the target cell.</param>
-    /// <param name="border">The terrain type to use for cells outside the map boundaries.  This value is treated as the terrain type for
-    /// out-of-bounds cells.</param>
-    /// <returns>The terrain type that appears most frequently in the 3x3 neighborhood around the specified cell. If multiple
-    /// terrain types have the same frequency, the method returns one of them arbitrarily.</returns>
-    private static string EvolveTerrain(LogicMapLayer mapLayer, Map map, int x, int y, string border)
-    {
-        var counter = new Dictionary<string, int>();
-
-        for (int dx = -1; dx <= 1; dx++)
+        // 开始填充地板
+        for (int i = 0; i < path.Count; i++)
         {
-            for (int dy = -1; dy <= 1; dy++)
+            var pos = path[i];
+            int air = map.NearGrids(map.GetGrid(pos), 1).Where(x => x.IsWalkable).ToList().Count;
+            // 只在开头和结尾考虑放门（且前面是墙，后面是地板）
+            if ((ra.IsAdjacentOutside(pos) || rb.IsAdjacentOutside(pos)) && air < 7 && Random.Shared.NextDouble() < 1)
             {
-                int nx = x + dx;
-                int ny = y + dy;
-
-                string terrain;
-
-                if (IsInBounds(map, nx, ny))
-                {
-                    switch (mapLayer)
-                    {
-                        case LogicMapLayer.Stand:
-                            terrain = map.Grid[nx, ny].TerrainStand;
-                            break;
-                        case LogicMapLayer.BaseGround:
-                            terrain = map.Grid[nx, ny].TerrainBaseGround;
-                            break;
-                        default:
-                            throw new ArgumentException("Unsupported map layer type");
-                    }
-                }
-                else
-                    terrain = border; // 边界外默认是某个类型，例如 Wall
-
-                if (!counter.ContainsKey(terrain))
-                    counter[terrain] = 0;
-
-                counter[terrain]++;
+                Doors.Add(new Vector2I(pos.X, pos.Y));
             }
+            map.Grid[pos.X, pos.Y] = new Grid(pos, floor);
         }
-
-        // 找到出现次数最多的地形
-        string mostCommon = "Grass";
-        int maxCount = -1;
-
-        foreach (var kvp in counter)
-        {
-            if (kvp.Value > maxCount)
-            {
-                maxCount = kvp.Value;
-                mostCommon = kvp.Key;
-            }
-        }
-
-        return mostCommon;
+        if (Doors.Count > 2)
+            Doors = [Doors[0], Doors[^1]];
+        return Doors;
     }
-
-    private static bool IsInBounds(Map map, int x, int y)
-    {
-        return x >= 0 && y >= 0 && x < map.Width && y < map.Height;
-    }
+}
     public static Vector2I FloodFindFarthest(Map map, Vector2I start)
     {
         var visited = new bool[map.Width, map.Height];
@@ -258,50 +201,9 @@ public static class MapGenerator
             SplitRegion(new Rect(splitX, region.Top, region.Right - splitX, region.Height), depth - 1, minSize, output);
         }
     }
-
     public static Vector2I GetRoomCenter(Rect room)
     {
         return new Vector2I(room.Left + room.Width / 2, room.Top + room.Height / 2);
-    }
-    public static List<Vector2I> ConnectRoomsWithDoor(Map map, Rect ra, Rect rb, string floor, string door = "DoorClosed")
-    {
-        List<Vector2I> Doors = [];
-        List<Vector2I> path = new();
-        Vector2I a = GetRoomCenter(ra);
-        Vector2I b = GetRoomCenter(rb);
-        // L型路径
-        bool horizontalFirst = Random.Shared.Next(2) == 0;
-
-        if (horizontalFirst)
-        {
-            for (int x = Math.Min(a.X, b.X); x <= Math.Max(a.X, b.X); x++)
-                path.Add(new Vector2I(x, a.Y));
-            for (int y = Math.Min(a.Y, b.Y); y <= Math.Max(a.Y, b.Y); y++)
-                path.Add(new Vector2I(b.X, y));
-        }
-        else
-        {
-            for (int y = Math.Min(a.Y, b.Y); y <= Math.Max(a.Y, b.Y); y++)
-                path.Add(new Vector2I(a.X, y));
-            for (int x = Math.Min(a.X, b.X); x <= Math.Max(a.X, b.X); x++)
-                path.Add(new Vector2I(x, b.Y));
-        }
-
-        // 开始填充地板
-        for (int i = 0; i < path.Count; i++)
-        {
-            var pos = path[i];
-            int air = map.NearGrids(map.GetGrid(pos), 1).Where(x => x.IsWalkable).ToList().Count;
-            // 只在开头和结尾考虑放门（且前面是墙，后面是地板）
-            if ((ra.IsAdjacentOutside(pos) || rb.IsAdjacentOutside(pos)) && air < 7 && Random.Shared.NextDouble() < 1)
-            {
-                Doors.Add(new Vector2I(pos.X, pos.Y));
-            }
-            map.Grid[pos.X, pos.Y] = new Grid(pos, floor);
-        }
-        if (Doors.Count > 2)
-            Doors = [Doors[0], Doors[^1]];
-        return Doors;
     }
     public static void ChangeMapByRegionGrow
         (Map map, LogicMapLayer LayerIn, LogicMapLayer LayerOut, string terrainIn, string terrainOut,
@@ -378,8 +280,25 @@ public static class MapGenerator
                 }
             }
         }
-    }
+    static string GetRandomTerrain(string[] types, Dictionary<string, float> weights)
+    {
+        float total = 0;
+        foreach (var type in types)
+            total += weights[type];
 
+        float r = (float)(GD.Randf() * total);
+        float current = 0;
+
+        foreach (var type in types)
+        {
+            current += weights[type];
+            if (r <= current)
+                return type;
+        }
+
+        return types[^1]; // 兜底
+    }
+}
     public static void ChangeMapByEnvolve(LogicMapLayer mapLayer,
         string terrainBorder, Map map, int iterations)
     {
@@ -406,9 +325,67 @@ public static class MapGenerator
             }
             map.Grid = newGrid;
         }
+
+    static string EvolveTerrain(LogicMapLayer mapLayer, Map map, int x, int y, string border)
+    {
+        var counter = new Dictionary<string, int>();
+
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                int nx = x + dx;
+                int ny = y + dy;
+
+                string terrain;
+
+                if (IsInBounds(map, nx, ny))
+                {
+                    switch (mapLayer)
+                    {
+                        case LogicMapLayer.Stand:
+                            terrain = map.Grid[nx, ny].TerrainStand;
+                            break;
+                        case LogicMapLayer.BaseGround:
+                            terrain = map.Grid[nx, ny].TerrainBaseGround;
+                            break;
+                        default:
+                            throw new ArgumentException("Unsupported map layer type");
+                    }
+                }
+                else
+                    terrain = border; // 边界外默认是某个类型，例如 Wall
+
+                if (!counter.ContainsKey(terrain))
+                    counter[terrain] = 0;
+
+                counter[terrain]++;
+            }
+        }
+
+        // 找到出现次数最多的地形
+        string mostCommon = "Grass";
+        int maxCount = -1;
+
+        foreach (var kvp in counter)
+        {
+            if (kvp.Value > maxCount)
+            {
+                maxCount = kvp.Value;
+                mostCommon = kvp.Key;
+            }
+        }
+
+        return mostCommon;
     }
+    static bool IsInBounds(Map map, int x, int y)
+    {
+        return x >= 0 && y >= 0 && x < map.Width && y < map.Height;
+    }
+
+}
     public static void ChangeMapByRoad(LogicMapLayer mapLayer,
-    string terrain, Map map, out int initY, out int outY)
+        string terrain, Map map, out int initY, out int outY)
     {
         initY = GD.RandRange(0, map.Height - 1); // 起点
         int y = initY;
@@ -458,6 +435,104 @@ public static class MapGenerator
             return 0;
         }
     }
+    public static void ChangeMapByPutRect(LogicMapLayer mapLayer, Map map,
+        int number, int size, string wall, string floor)
+    {
+        List<Vector2I> wallCoords = [];
+        List<Vector2I> roomCoords = [];
+        List<Vector2I> doorCoords = [];
+        bool[,] outMap = new bool[map.Width, map.Height];
+        var rooms = new List<Rect>();
+        int minSize = Math.Max(3, size - 5);
+        int maxSize = size + 5;
+        for (int r = 0; r < number; r++)
+        {
+            for (int attempt = 0; attempt < 50; attempt++)
+            {
+                int w = GD.RandRange(minSize, maxSize + 1);
+                int h = GD.RandRange(minSize, maxSize + 1);
+
+                int maxX = map.Width - 1 - w;
+                int maxY = map.Height - 1 - h;
+                if (maxX < 1 || maxY < 1)
+                {
+                    continue;
+                }
+                int x = GD.RandRange(1, maxX + 1);
+                int y = GD.RandRange(1, maxY + 1);
+
+                // 检查扩展区域（房间外扩 1 格）是否与已有房间冲突或越界
+                int exMinX = x - 1;
+                int exMinY = y - 1;
+                int exMaxX = x + w;
+                int exMaxY = y + h;
+
+                // exMinX/exMinY >= 0 已保证（因为 x >= 1）， exMaxX <= mapWidth-1? 
+                // 由于我们保证 x + w - 1 <= mapWidth - 2 => x + w <= mapWidth - 1 => exMaxX <= mapWidth - 1
+                // 所以扩展区域不会越界。仍可做安全检查（可选）
+                if (exMinX < 0 || exMinY < 0 || exMaxX > map.Width - 1 || exMaxY > map.Height - 1)
+                {
+                    // 越界（理论上不应发生），当作失败
+                    continue;
+                }
+
+                // 检查扩展区域内是否已有占用
+                bool conflict = false;
+                for (int xx = exMinX; xx <= exMaxX && !conflict; xx++)
+                {
+                    for (int yy = exMinY; yy <= exMaxY; yy++)
+                    {
+                        if (outMap[xx, yy])
+                        {
+                            conflict = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (conflict) continue;
+
+                // 没有冲突，放置房间（标记实际占用区域，不标记扩展区域）
+                var room = new Rect(x, y, w, h);
+                rooms.Add(room);
+                List<Vector2I> toDoor = [];
+                for (int xx = x; xx < x + w; xx++)
+                    for (int yy = y; yy < y + h; yy++)
+                    {
+                        outMap[xx, yy] = true;
+                        wallCoords.Add(new Vector2I(xx, yy));
+                        toDoor.Add(new Vector2I(xx, yy));
+                    }
+                for (int xx = x + 1; xx < x + w - 1; xx++)
+                    for (int yy = y + 1; yy < y + h - 1; yy++)
+                    {
+                        wallCoords.Remove(new Vector2I(xx, yy));
+                        roomCoords.Add(new Vector2I(xx, yy));
+                        toDoor.Remove(new Vector2I(xx, yy));
+                    }
+                Vector2I door = toDoor[GD.RandRange(0, toDoor.Count - 1)];
+                doorCoords.Add(door);
+                break;
+            }
+        }
+        foreach(var wal in wallCoords)
+        {
+            map.Grid[wal.X, wal.Y].TerrainBaseGround = wall;
+            map.Grid[wal.X, wal.Y].TerrainStand = "";
+        }
+        foreach (var wal in roomCoords)
+        {
+            map.Grid[wal.X, wal.Y].TerrainBaseGround = floor;
+            map.Grid[wal.X, wal.Y].TerrainStand = "";
+        }
+        foreach (var wal in doorCoords)
+        {
+            map.Grid[wal.X, wal.Y].TerrainBaseGround = floor;
+            map.Grid[wal.X, wal.Y].TerrainStand = "DoorClosed";
+        }
+            
+
+    }
 }
 
     
@@ -468,7 +543,6 @@ public class Rect
     public int Left, Top, Width, Height;
     public int Right => Left + Width - 1;
     public int Bottom => Top + Height - 1;
-
     public Rect(int left, int top, int width, int height)
     {
         Left = left; Top = top; Width = width; Height = height;
@@ -510,8 +584,6 @@ public class Rect
 
         return sorted;
     }
-
-    // 使用中心点之间的曼哈顿距离作为估计路径距离
     private static int Distance(Rect a, Rect b)
     {
         int ax = a.Left + a.Width / 2;

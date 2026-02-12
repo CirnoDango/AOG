@@ -28,10 +28,10 @@ public class AsteroidBelt : Skill
     {
         for (int i = 0; i < new int[] { 18, 24, 30, 30 }[sc.Level - 1]; i++)
         {
-            Bullet.CreateBullet(sc.User, this, 4, sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
+            Bullet.CreateBullet(sc.User, this, new Damage(4, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
                 (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[sc.Level - 1],
                 ShapeBullet.Star, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)]);
-            Bullet.CreateBullet(sc.User, this, 4, sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
+            Bullet.CreateBullet(sc.User, this, new Damage(4, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
                 (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[sc.Level - 1],
                 ShapeBullet.Micro, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)]);
         }
@@ -53,7 +53,7 @@ public class MilkyWay : Skill
     int[] t0 = [12, 18, 24, 24];
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     public override void OnLearn(Unit unit)
     {
@@ -63,11 +63,11 @@ public class MilkyWay : Skill
             {
                 if(unit.Up.RandomEnemyInVision(out Unit u))
                 {
-                    Bullet.CreateBullet(unit, this, 10, unit.Up.Position, u.Up.Position, Vector2I.Zero, -10,
+                    Bullet.CreateBullet(unit, this, new Damage(10, DamageType.celestial), unit.Up.Position, u.Up.Position, Vector2I.Zero, -10,
                         3, 12, ShapeBullet.Star, ColorBullet.Yellow);
-                    Bullet.CreateBullet(unit, this, 10, unit.Up.Position, u.Up.Position, Vector2I.Zero, 0,
+                    Bullet.CreateBullet(unit, this, new Damage(10, DamageType.celestial), unit.Up.Position, u.Up.Position, Vector2I.Zero, 0,
                         3, 12, ShapeBullet.Star, ColorBullet.Yellow);
-                    Bullet.CreateBullet(unit, this, 10, unit.Up.Position, u.Up.Position, Vector2I.Zero, 10,
+                    Bullet.CreateBullet(unit, this, new Damage(10, DamageType.celestial), unit.Up.Position, u.Up.Position, Vector2I.Zero, 10,
                         3, 12, ShapeBullet.Star, ColorBullet.Yellow);
                     return;
                 }
@@ -101,7 +101,7 @@ public class BlazingStar : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.UnitOne.Ua.CheckBodyHit(30, sc.User, this);
+        sc.UnitOne.Ua.CheckBodyHit(new Damage(30, DamageType.strike), sc.User, this);
         List<Grid> grids = sc.User.Up.DashCheck(sc.UnitOne.Up.CurrentGrid);
         grids.RemoveAt(grids.Count - 1);
         foreach (var grid in grids)
@@ -110,7 +110,7 @@ public class BlazingStar : Skill
         }
         for (int i = 0; i < 20; i++)
         {
-            Bullet.CreateBullet(sc.User, this, 8, sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
+            Bullet.CreateBullet(sc.User, this, new Damage(8, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
                 (float)GD.RandRange(1.5f, 3.0f), 6,
                 ShapeBullet.Star, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)]);
         }
@@ -130,7 +130,7 @@ public class DragonMeteor: Skill
     int[] t0 = [2,3,4,4];
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     public override TargetType GetTargeting(int level)
     {
@@ -141,7 +141,7 @@ public class DragonMeteor: Skill
         foreach(var grid in sc.GridOne.NearGrids(new int[] { 2, 3, 4, 4 }[sc.Level - 1]))
         {
             if(grid.unit != null)
-                grid.unit.Ua.TakeBulletDamage(40, sc.User, this);
+                grid.unit.Ua.TakeBulletDamage(new Damage(40, DamageType.celestial), sc.User, this);
         }
     }
 }
@@ -169,7 +169,7 @@ public class StardustReverie : SpellCard
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
         AddTimedEvent(Linspace(20, 500, new int[] { 70,110,150,150 }[sc.Level - 1]), (ctx, advanceTime) =>
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
+            var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(2.0, 6.0), 12,
                 ShapeBullet.Star, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)], advanceTime);
         });
@@ -177,7 +177,7 @@ public class StardustReverie : SpellCard
         {
             for(float a = 0; a<360; a += 360 / 16f)
             {
-                var bullet = Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.UnitOne.Up.Position,
+                var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.celestial), sc.User.Up.Position, sc.UnitOne.Up.Position,
                 new Vector2(0, 0), a, 3, 12,
                 ShapeBullet.Star, ColorBullet.Yellow, advanceTime);
             }
@@ -190,5 +190,3 @@ public class StardustReverie : SpellCard
         base.OnSpellEnd(sc);
     }
 }
-
-

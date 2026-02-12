@@ -22,6 +22,10 @@ public partial class Tutorial : Node
         {
             _dangoDieTcs?.TrySetResult();
         }
+        if (enemy.Name == "marisa")
+        {
+            TutorialEnd();
+        }
     }
 
     public override void _ExitTree()
@@ -43,7 +47,7 @@ public partial class Tutorial : Node
 
     private void OnItemPicked(Item item)
     {
-        if (item.Name == "PowerBlock") // 你可以替换成任何道具名或条件
+        if (item.Name == "PowerBlock")
         {
             _itemPickedTcs?.TrySetResult(item);
         }
@@ -58,8 +62,7 @@ public partial class Tutorial : Node
         G.I.Fsm.ChangeState(Fsm.StartState);
         Fsm.StartState.OnEnd += Init;
         await ToSignal(GetTree().CreateTimer(0.01), "timeout");
-        Scene.CurrentMap.OnUnitDied += UpdateEnemy;
-        Scene.CurrentMap.OnMarisaDied += TutorialEnd;
+        GameEvents.OnEnemyKilled += OnEnemyKilled;
         Unit.OnPlayerdied += Playerdied;
         Run();
     }
@@ -67,10 +70,11 @@ public partial class Tutorial : Node
     {
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init("cirno", 3);
-        Map tutorial = MapBuilder.ImportMapFromJson("res://map.json", "tutorial");
-        MapBuilder.BuildLogicFromTileMap();
-        tutorial.Entrance = new Vector2I(10, 5);
+        Player.Init("cirno", 1);
+        Map tutorial = new("tutorial")
+        {
+            Entrance = new Vector2I(10, 5)
+        };
         Scene.Enter(tutorial);
     }
 
@@ -141,15 +145,8 @@ public partial class Tutorial : Node
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
             "试试看吧，移动过去攻击那个团子！")
         ]); await Click(); DialogBox.SHide();
-        //GameEvents.OnEnemyKilled += OnEnemyKilled;
+        GameEvents.OnEnemyKilled += OnEnemyKilled;
         var d = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "dangoPea", UnitEgo.normal, 0, false);
-        for(int x = 1; x <= 7; x++)
-        {
-            for (int y = 1; y <= 5; y++)
-            {
-                //_ = Scene.CurrentMap.CreateEnemy(new Vector2I(x, y), "marisa");
-            }
-        }
         d.UnitAi = new(d){Mode = AiMode.Sleep};
         await dangodie(); DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
@@ -195,7 +192,7 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident_black"),
-            "当然不是！如果你擦弹太多使得SP值满了，又没有及时用出去，就会导致被击中，扣减HP值。")
+            "当然不是！擦弹并非一定成功的。灵力条左边的数字就是擦弹成功率，SP越高擦弹就越难成功，或者SP值已经满了，就会被弹幕击中，扣减HP值。")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_unhappy"),
@@ -203,7 +200,11 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "先通过擦弹积累SP值，然后发动技能将对手干掉！或者原地休息一回合也可以降低SP值")
+            "先通过擦弹积累SP值，然后发动技能将对手干掉！或者原地休息一回合也可以调整SP值")
+        ]); await Click();
+        G.I.DialogBox.ShowDialog([
+            new("魔理沙", LoadPortrait("marisa_fight_confident"),
+            "具体来说，按5或F的休息是使灵力消散，减少SP。而按0或者空格的休息则是聚集灵力，增加SP！")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
@@ -215,10 +216,10 @@ public partial class Tutorial : Node
             "来吧，用技能干掉这个团子！")
         ]); await Click();
         DialogBox.SHide();
-        //GameEvents.OnEnemyKilled += OnEnemyKilled;
+        GameEvents.OnEnemyKilled += OnEnemyKilled;
         var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(12, 16), "dangoPea", UnitEgo.normal, 0, false);
         Player.PlayerUnit.Ua.BodyDamageAccuracy -= 10;
-        d2.Inventory.AddItem(Item.CreateItem("PowerBlock"));
+        d2.Inventory.AddItem(Item.CreateItem("PowerBlock", 1));
         await dangodie(); DialogBox.SShow();
         Player.PlayerUnit.Ua.BodyDamageAccuracy += 10;
         G.I.DialogBox.ShowDialog([
@@ -235,7 +236,7 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "然后按R打开你的背包栏和装备栏，再点击背包中的道具，就可以将道具装备上了！来试试把P点捡起来然后装备上吧！")
+            "然后按I打开你的背包栏和装备栏，再点击背包中的道具，就可以将道具装备上了！来试试把P点捡起来然后装备上吧！")
         ]); await Click(); DialogBox.SHide(); await WaitForItemPickup("PowerBlock"); DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_hahaha"),
@@ -270,14 +271,13 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "接下来就进入实战试试看吧！")
+            "接下来和我打打看吧！")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("教程任务目标：", LoadPortrait("null"),
             "击败魔理沙。")
         ]); await Click();
-        EnemyAutoSummon.Update(7);
-        Info.Print("[color=red]1/5波敌人已生成[/color]");
+        Scene.CurrentMap.CreateEnemy(new Vector2I(5, 5), "marisa", UnitEgo.normal);
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
@@ -299,8 +299,7 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("感谢游玩！", LoadPortrait("null"),
-            "教程关卡就到此结束了，不过在这后面我设置了无尽的怪物生成，" +
-            "您也可以试试能用琪露诺坚持多久。")
+            "教程关卡就到此结束了，现在去挑战完整关卡吧！")
         ]); await Click();
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
@@ -337,53 +336,6 @@ public partial class Tutorial : Node
         if (clickTcs != null && @event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
             clickTcs.TrySetResult();
-            //clickTcs = null;
-        }
-    }
-    
-    public void UpdateEnemy()
-    {
-        if (enemydead >= (6 + wavepass) * wavepass)
-        {
-            wavepass++;
-            if (wavepass % 5 == 0)
-            {
-                for (int i = 0; i < wavepass / 5; i++)
-                {
-                    Scene.CurrentMap.CreateEnemy(new Vector2I(10 + i, 10), "marisa");
-                }
-                EnemyAutoSummon.Update(5 + 2 * wavepass - wavepass / 5);
-            }
-                
-
-            else 
-                EnemyAutoSummon.Update(5 + 2 * wavepass);
-            Info.Print($"[color=red]{wavepass}/5波敌人已生成[/color]");
-        }
-    }
-}
-public static class EnemyAutoSummon
-{
-
-    public static void Update(int time)
-    {
-        for (int i = 0; i < time; i++)
-        {
-            Grid g;
-            do
-            {
-                int x = GD.RandRange(0, Scene.CurrentMap.Width - 1);
-                int y = GD.RandRange(0, Scene.CurrentMap.Height - 1);
-                g = Scene.CurrentMap.Grid[x, y];
-            }
-            while (g == null || !g.IsWalkable || g.unit != null);
-            float type = GD.Randf();
-            if (type < 0.6)
-                Scene.CurrentMap.CreateEnemy(g.Position, "dangoPea");
-            else if (type < 1)
-                Scene.CurrentMap.CreateEnemy(g.Position, "dangoWater");
-            else
-                Scene.CurrentMap.CreateEnemy(g.Position, "dangoFist");
         }
     }
 }

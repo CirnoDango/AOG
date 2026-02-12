@@ -3,20 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class BarrageSet : SkillItem
+public class BarrageSet : SkillItem<BarrageSet.Instance>
 {
     public Barrage B = new();
     public override float Weight
     {
         get
         {
-            return 10f;
+            return 8f;
         }
     }
     public BarrageSet()
     {
         Name = "BarrageSet";
-        Description = "弹幕盒子";
+        chestValue = 0;
     }
 
     public override void ApplyParameters(Dictionary<string, object> parameters)
@@ -29,7 +29,7 @@ public class BarrageSet : SkillItem
         Skill = new Instance(this);
     }
 
-    private class Instance : Skill, ISkillInstance
+    public class Instance : Skill, ISkillInstance
     {
         private readonly Barrage _BarrageSet;
         public Instance(BarrageSet parent)
@@ -37,16 +37,27 @@ public class BarrageSet : SkillItem
             Name = "BarrageSet";
             SkillGroup = "Item";
             Description = "发射弹幕";
-            Cooldown = 400;
             _BarrageSet = parent.B;
             Texture = parent.Texture;
+        }
+        public override float GetCooldown(int level)
+        {
+            if (_BarrageSet.Components.Count > 0)
+                return _BarrageSet.Components.Where(bc => bc != null).Select(bc => bc.CoolDown).Sum();
+            else return 0;
+        }
+        public override float GetSpCost(int level)
+        {
+            if (_BarrageSet.Components.Count > 0)
+                return _BarrageSet.Components.Where(bc => bc != null).Select(bc => bc.SpCost).Sum();
+            else return 0;
         }
         public override TargetType GetTargeting(int level = 0)
         {
             float maxD = _BarrageSet.Components.OfType<BulletModule>()      
                 .Where(bm => bm != null)                                    
                 .Select(bm => bm.bulletContext?.MaxDistance ?? 0)           
-                .DefaultIfEmpty(0)                                          
+                .DefaultIfEmpty(0)
                 .Max();
 
             return new TargetType(Target.Grid, 1, (int)Mathf.Round(maxD));

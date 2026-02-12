@@ -1,7 +1,8 @@
-[gd_scene load_steps=47 format=4 uid="uid://b0mqdj26pycpr"]
+[gd_scene format=3 uid="uid://b0mqdj26pycpr"]
 
 [ext_resource type="Script" uid="uid://c257ow2x8tw8" path="res://Cscript/Core/Root.cs" id="1_dr5cr"]
 [ext_resource type="Script" uid="uid://bvi1fgh3td4rw" path="res://Cscript/UI/SkillBar.cs" id="2_1ocm2"]
+[ext_resource type="Script" uid="uid://duiokn4iivi5c" path="res://Nodes/Scene/UiRoot.cs" id="2_cnqvw"]
 [ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://Nodes/Ui/skillbox.tscn" id="3_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://Nodes/Ui/spellbox.tscn" id="4_cnqvw"]
 [ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://Assets/Font/TjfPastaRegular-3lRDz.ttf" id="5_6k5eg"]
@@ -12,7 +13,9 @@
 [ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
 [ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
 [ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xcvs3"]
+[ext_resource type="Texture2D" uid="uid://bbs3tfde7aewc" path="res://Assets/UI/close.png" id="13_7yoxt"]
 [ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
+[ext_resource type="Script" uid="uid://v7xido03yjql" path="res://Cscript/UI/CloseButton.cs" id="14_tkdt8"]
 [ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://Assets/UI/equip.png" id="14_urhty"]
 [ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
 [ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://Assets/UI/throw.png" id="16_68pdb"]
@@ -26,54 +29,28 @@
 [ext_resource type="Script" uid="uid://1o0nxihbplfl" path="res://Cscript/UI/PauseMenu.cs" id="24_esfxh"]
 [ext_resource type="Script" uid="uid://b18bcsghqg41i" path="res://Cscript/UI/BarrageBox.cs" id="25_v0yyt"]
 [ext_resource type="PackedScene" uid="uid://ye85afnrc713" path="res://Nodes/Ui/barrage_box.tscn" id="26_bhrns"]
+[ext_resource type="Script" uid="uid://bqs1v8whnuwr5" path="res://Cscript/UI/DebugMenu.cs" id="26_ofgj4"]
 [ext_resource type="PackedScene" uid="uid://d4cn04077ikll" path="res://Nodes/Ui/bc_entry.tscn" id="27_a3p61"]
+[ext_resource type="PackedScene" uid="uid://c2wxbyn6yu4oo" path="res://Nodes/Scene/startmenu.tscn" id="27_mdtu7"]
+[ext_resource type="PackedScene" uid="uid://b6hs4jiqkgfp5" path="res://Cscript/UI/skill_tree_entry.tscn" id="28_1ocm2"]
+[ext_resource type="Script" uid="uid://ixn26ady8a3r" path="res://Cscript/UI/SkillTreeBox.cs" id="28_c2j4f"]
 [ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="28_nc36h"]
 [ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="29_ol46v"]
-[ext_resource type="Texture2D" uid="uid://bf8btdv0nsysx" path="res://Assets/tiles/stand.png" id="30_s8q2q"]
 [ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
 [ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="32_1gorf"]
+[ext_resource type="TileSet" uid="uid://sd4of61ejnal" path="res://Other/Resource/tileResource.tres" id="33_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://Nodes/Ui/ItemDropped.tscn" id="33_giel3"]
 [ext_resource type="Script" uid="uid://mgbju6wq5qdr" path="res://Cscript/UI/Player.cs" id="34_ktiqe"]
 [ext_resource type="Script" uid="uid://d3ab0k3gxv2nm" path="res://Cscript/UI/HighlightManager.cs" id="35_700qy"]
 [ext_resource type="PackedScene" uid="uid://bg318vxlkr5tm" path="res://Nodes/Ui/blue_select.tscn" id="36_7nmk8"]
+[ext_resource type="TileSet" uid="uid://bk5yqay6li22q" path="res://Other/Resource/tileExit.tres" id="37_cnqvw"]
 [ext_resource type="PackedScene" uid="uid://c1q3i2jujapps" path="res://Nodes/Ui/green_select.tscn" id="37_w6faq"]
 [ext_resource type="PackedScene" uid="uid://0edv3xem63n5" path="res://Nodes/Ui/red_select.tscn" id="38_roil7"]
 [ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://Nodes/Ui/yellow_select.tscn" id="39_fasdi"]
 [ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="40_m2rxn"]
 [ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="41_es6mh"]
-[ext_resource type="Script" uid="uid://dktwbkgra5m1w" path="res://Cscript/Map/MapExporterNode.cs" id="42_22g5y"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5elg3"]
-texture = ExtResource("30_s8q2q")
-0:0/0 = 0
-0:0/0/terrain_set = 0
-0:0/0/terrain = 0
-1:0/0 = 0
-1:0/0/terrain_set = 0
-1:0/0/terrain = 1
-2:0/0 = 0
-2:0/0/terrain_set = 0
-2:0/0/terrain = 2
-3:0/0 = 0
-3:0/0/terrain_set = 0
-3:0/0/terrain = 3
-0:1/0 = 0
-0:1/0/terrain_set = 0
-0:1/0/terrain = 4
-
-[sub_resource type="TileSet" id="TileSet_nxf1r"]
-terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "DoorClosed"
-terrain_set_0/terrain_0/color = Color(0.0539745, 0.00589687, 0, 1)
-terrain_set_0/terrain_1/name = "DoorOpen"
-terrain_set_0/terrain_1/color = Color(0.950757, 0.921025, 0.832535, 1)
-terrain_set_0/terrain_2/name = "ChestClosed"
-terrain_set_0/terrain_2/color = Color(0.874082, 0, 0.339996, 1)
-terrain_set_0/terrain_3/name = "ChestOpen"
-terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
-terrain_set_0/terrain_4/name = "Forest"
-terrain_set_0/terrain_4/color = Color(0.28125, 0.5, 0.25, 1)
-sources/0 = SubResource("TileSetAtlasSource_5elg3")
+[ext_resource type="Script" uid="uid://5xpegnyoyaks" path="res://Nodes/Scene/AnimationManager.cs" id="46_dgtui"]
+[ext_resource type="PackedScene" uid="uid://c3em06b0kpfhq" path="res://Nodes/Animation/laser.tscn" id="47_ofgj4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jky6x"]
 texture = ExtResource("31_jj7f0")
@@ -97,15 +74,23 @@ terrain_set_0/terrain_2/name = "Clear"
 terrain_set_0/terrain_2/color = Color(0, 0.501961, 1, 1)
 sources/0 = SubResource("TileSetAtlasSource_jky6x")
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=1948837847]
 script = ExtResource("1_dr5cr")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=781238998]
 scale = Vector2(0.1, 0.1)
 transform = Transform2D(0.1, 0, 0, 0.1, 0, 0)
 
-[node name="SkillBar" type="HFlowContainer" parent="UI" node_paths=PackedStringArray("skillContainer")]
+[node name="UiRoot" type="Control" parent="UI" unique_id=1549186812]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_cnqvw")
+
+[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
 custom_minimum_size = Vector2(660, 600)
+layout_mode = 0
 offset_left = 90.0
 offset_top = 4830.0
 offset_right = 750.0
@@ -116,23 +101,22 @@ skillContainer = NodePath(".")
 skillButtonScene = ExtResource("3_c2j4f")
 spellButtonScene = ExtResource("4_cnqvw")
 
-[node name="Control" type="Control" parent="UI"]
-layout_mode = 3
+[node name="Control" type="Control" parent="UI/UiRoot" unique_id=1784127797]
 anchors_preset = 0
 offset_right = 4000.0
 offset_bottom = 4000.0
 
-[node name="Label" type="Label" parent="UI/Control"]
+[node name="Label" type="Label" parent="UI/UiRoot/Control" unique_id=1877071645]
 visible = false
 texture_filter = 2
-layout_mode = 2
+layout_mode = 0
 offset_right = 259.0
 offset_bottom = 300.0
 theme_override_fonts/font = ExtResource("5_6k5eg")
 theme_override_font_sizes/font_size = 300
 text = "12"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/Control"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/UiRoot/Control" unique_id=2065021963]
 texture_filter = 4
 layout_mode = 0
 offset_left = 11930.0
@@ -140,17 +124,18 @@ offset_top = 6660.0
 offset_right = 18930.0
 offset_bottom = 10660.0
 theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/normal_font_size = 240
+theme_override_font_sizes/bold_font_size = 240
 theme_override_font_sizes/bold_italics_font_size = 240
 theme_override_font_sizes/italics_font_size = 240
 theme_override_font_sizes/mono_font_size = 240
-theme_override_font_sizes/normal_font_size = 240
-theme_override_font_sizes/bold_font_size = 240
 bbcode_enabled = true
 scroll_following = true
 vertical_alignment = 2
 script = ExtResource("6_dgtui")
 
-[node name="fps" type="Label" parent="UI"]
+[node name="fps" type="Label" parent="UI/UiRoot" unique_id=1730787130]
+layout_mode = 0
 offset_left = 14000.0
 offset_top = 130.0
 offset_right = 19000.0
@@ -160,80 +145,95 @@ text = "1"
 horizontal_alignment = 2
 script = ExtResource("7_ofgj4")
 
-[node name="PlayerStatusBar" type="VBoxContainer" parent="UI" node_paths=PackedStringArray("uilayer")]
+[node name="PlayerStatusBar" type="VBoxContainer" parent="UI/UiRoot" unique_id=402618475 node_paths=PackedStringArray("uilayer")]
 visible = false
-offset_right = 4000.0
+layout_mode = 0
+offset_right = 4564.0
 offset_bottom = 4000.0
 script = ExtResource("8_7yoxt")
-uilayer = NodePath("..")
+uilayer = NodePath("../..")
 
-[node name="HpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+[node name="HpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=1338597966]
 layout_mode = 2
 
-[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/HpRow"]
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/HpRow" unique_id=1047661770]
+z_index = -1
 custom_minimum_size = Vector2(4000, 400)
 layout_mode = 2
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/HpRow/BarBack" unique_id=1860986849]
+layout_mode = 0
+offset_left = 0.00048828125
+offset_right = 4000.0005
+offset_bottom = 400.0
 color = Color(0.721569, 0, 0, 1)
 
-[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/HpRow/Bar"]
-z_index = -1
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 0
-color = Color(0.176419, 0.176419, 0.176419, 1)
-
-[node name="Value" type="Label" parent="UI/PlayerStatusBar/HpRow"]
+[node name="HpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/HpRow" unique_id=1287877790]
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
 text = "100"
 
-[node name="SpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+[node name="SpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=972236240]
 layout_mode = 2
 
-[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/SpRow"]
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 2
-color = Color(1, 1, 0, 1)
-
-[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/SpRow/Bar"]
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/SpRow" unique_id=1229508022]
 z_index = -1
 custom_minimum_size = Vector2(4000, 400)
-layout_mode = 0
+layout_mode = 2
 color = Color(0.176419, 0.176419, 0.176419, 1)
 
-[node name="Value" type="Label" parent="UI/PlayerStatusBar/SpRow"]
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/SpRow/BarBack" unique_id=1831628522]
+layout_mode = 0
+offset_right = 4000.0
+offset_bottom = 400.0
+color = Color(0.47058824, 0.78431374, 0, 1)
+
+[node name="SpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/SpRow" unique_id=355243260]
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
 text = "100"
 
-[node name="MpRow" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+[node name="GrazePercent" type="Label" parent="UI/UiRoot/PlayerStatusBar/SpRow/SpValue" unique_id=728360145]
+layout_mode = 0
+offset_left = -1143.9999
+offset_top = -4.0000153
+offset_right = -12.999878
+offset_bottom = 356.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 360
+text = "10%"
+horizontal_alignment = 2
+
+[node name="MpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=1584128997]
 layout_mode = 2
 
-[node name="Bar" type="ColorRect" parent="UI/PlayerStatusBar/MpRow"]
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/MpRow" unique_id=1951119699]
+z_index = -1
 custom_minimum_size = Vector2(4000, 400)
 layout_mode = 2
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/MpRow/BarBack" unique_id=1487635019]
+layout_mode = 0
+offset_right = 4000.0
+offset_bottom = 400.0
 color = Color(0.0836337, 0.350465, 0.769215, 1)
 
-[node name="BarBack" type="ColorRect" parent="UI/PlayerStatusBar/MpRow/Bar"]
-z_index = -1
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 0
-color = Color(0.176419, 0.176419, 0.176419, 1)
-
-[node name="Value" type="Label" parent="UI/PlayerStatusBar/MpRow"]
+[node name="MpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/MpRow" unique_id=834387578]
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
 text = "100"
 
-[node name="Status" type="HBoxContainer" parent="UI/PlayerStatusBar"]
+[node name="Status" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=139083883]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="UI/PlayerStatusBar/Status"]
+[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/PlayerStatusBar/Status" unique_id=1096087119]
 layout_mode = 2
 
-[node name="CombatAbilityBox" type="Control" parent="UI" node_paths=PackedStringArray("HeadPicture", "Info1", "Info2", "Info3")]
+[node name="CombatAbilityBox" type="Control" parent="UI/UiRoot" unique_id=703309021 node_paths=PackedStringArray("HeadPicture", "Info1", "Info2", "Info3")]
 visible = false
 z_index = 100
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -243,13 +243,13 @@ Info1 = NodePath("HBoxContainer/VBoxContainer/Label")
 Info2 = NodePath("HBoxContainer/VBoxContainer2/Label")
 Info3 = NodePath("HBoxContainer/VBoxContainer3/Label")
 
-[node name="Sprite2D" type="Sprite2D" parent="UI/CombatAbilityBox"]
+[node name="Sprite2D" type="Sprite2D" parent="UI/UiRoot/CombatAbilityBox" unique_id=707783782]
 modulate = Color(0.592157, 1, 1, 1)
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
 texture = ExtResource("10_gx5ry")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/CombatAbilityBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UiRoot/CombatAbilityBox" unique_id=1527713511]
 custom_minimum_size = Vector2(17000, 8500)
 layout_mode = 0
 offset_left = 1000.0
@@ -258,49 +258,55 @@ offset_right = 18000.0
 offset_bottom = 9560.0
 theme_override_constants/separation = 100
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer" unique_id=269416867]
 custom_minimum_size = Vector2(5500, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer" unique_id=218554995]
 custom_minimum_size = Vector2(5500, 3000)
 layout_mode = 2
 texture = ExtResource("11_mdtu7")
 expand_mode = 5
 
-[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer" unique_id=718823479]
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "535
 543
 543"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer" unique_id=855741428]
 custom_minimum_size = Vector2(5500, 0)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer2"]
+[node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer2" unique_id=1963808869]
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
-text = "535
-543
-543"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="UI/CombatAbilityBox/HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer" unique_id=779671524]
 custom_minimum_size = Vector2(5500, 0)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/CombatAbilityBox/HBoxContainer/VBoxContainer3"]
+[node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer3" unique_id=172204978]
 layout_mode = 2
-theme_override_font_sizes/font_size = 300
+theme_override_font_sizes/font_size = 150
 text = "535
 543
 543"
 
-[node name="InventoryBox" type="Control" parent="UI" node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/CombatAbilityBox" unique_id=1559509896]
+layout_mode = 0
+offset_left = 17210.0
+offset_top = 760.0
+offset_right = 18410.0
+offset_bottom = 1960.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
+
+[node name="InventoryBox" type="Control" parent="UI/UiRoot" unique_id=2135069489 node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
 visible = false
 z_index = 100
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -310,8 +316,8 @@ BagList = NodePath("ScrollContainer2/BagBox")
 equipnumber = NodePath("Label")
 bagnumber = NodePath("Label2")
 
-[node name="Label" type="Label" parent="UI/InventoryBox"]
-layout_mode = 2
+[node name="Label" type="Label" parent="UI/UiRoot/InventoryBox" unique_id=687947885]
+layout_mode = 0
 offset_left = 2780.0
 offset_top = 960.0
 offset_right = 6725.0
@@ -320,8 +326,8 @@ theme_override_font_sizes/font_size = 300
 text = "Equip: 0/0"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="UI/InventoryBox"]
-layout_mode = 2
+[node name="Label2" type="Label" parent="UI/UiRoot/InventoryBox" unique_id=1367821726]
+layout_mode = 0
 offset_left = 11970.0
 offset_top = 990.0
 offset_right = 15928.0
@@ -330,35 +336,35 @@ theme_override_font_sizes/font_size = 300
 text = "Bag: 0/0"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/InventoryBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/UiRoot/InventoryBox" unique_id=978919688]
 custom_minimum_size = Vector2(4000, 8000)
-layout_mode = 2
+layout_mode = 0
 offset_left = 800.0
 offset_top = 1600.0
 offset_right = 8800.0
 offset_bottom = 9600.0
 
-[node name="EquipBox" type="VBoxContainer" parent="UI/InventoryBox/ScrollContainer"]
+[node name="EquipBox" type="VBoxContainer" parent="UI/UiRoot/InventoryBox/ScrollContainer" unique_id=1184224055]
 layout_mode = 2
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="UI/InventoryBox"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="UI/UiRoot/InventoryBox" unique_id=502835946]
 custom_minimum_size = Vector2(4000, 8000)
-layout_mode = 2
+layout_mode = 0
 offset_left = 9920.0
 offset_top = 1600.0
 offset_right = 17920.0
 offset_bottom = 9600.0
 
-[node name="BagBox" type="VBoxContainer" parent="UI/InventoryBox/ScrollContainer2"]
+[node name="BagBox" type="VBoxContainer" parent="UI/UiRoot/InventoryBox/ScrollContainer2" unique_id=372032947]
 layout_mode = 2
 
-[node name="Inventory" type="Sprite2D" parent="UI/InventoryBox"]
+[node name="Inventory" type="Sprite2D" parent="UI/UiRoot/InventoryBox" unique_id=1210465116]
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
 texture = ExtResource("13_dlj3q")
 
-[node name="EquipButton" type="TextureButton" parent="UI/InventoryBox"]
+[node name="EquipButton" type="TextureButton" parent="UI/UiRoot/InventoryBox" unique_id=301937283]
 layout_mode = 0
 offset_left = 9600.0
 offset_top = 1000.0
@@ -367,13 +373,13 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("14_urhty")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/InventoryBox/EquipButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/InventoryBox/EquipButton" unique_id=1493610557]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="ThrowButton" type="TextureButton" parent="UI/InventoryBox"]
+[node name="ThrowButton" type="TextureButton" parent="UI/UiRoot/InventoryBox" unique_id=452608628]
 layout_mode = 0
 offset_left = 10100.0
 offset_top = 1000.0
@@ -382,16 +388,25 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("16_68pdb")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/InventoryBox/ThrowButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/InventoryBox/ThrowButton" unique_id=1387444310]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="MemoryBox" type="Control" parent="UI" node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/InventoryBox" unique_id=297582267]
+layout_mode = 0
+offset_left = 17210.0
+offset_top = 760.0
+offset_right = 18410.0
+offset_bottom = 1960.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
+
+[node name="MemoryBox" type="Control" parent="UI/UiRoot" unique_id=506284192 node_paths=PackedStringArray("EquipList", "BagList", "equipnumber", "bagnumber")]
 visible = false
 z_index = 100
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -401,8 +416,8 @@ BagList = NodePath("ScrollContainer2/BagBox")
 equipnumber = NodePath("Label")
 bagnumber = NodePath("Label2")
 
-[node name="Label" type="Label" parent="UI/MemoryBox"]
-layout_mode = 2
+[node name="Label" type="Label" parent="UI/UiRoot/MemoryBox" unique_id=368755182]
+layout_mode = 0
 offset_left = 2780.0
 offset_top = 960.0
 offset_right = 6725.0
@@ -411,8 +426,8 @@ theme_override_font_sizes/font_size = 300
 text = "Memory: 0/0"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="UI/MemoryBox"]
-layout_mode = 2
+[node name="Label2" type="Label" parent="UI/UiRoot/MemoryBox" unique_id=2062719056]
+layout_mode = 0
 offset_left = 11970.0
 offset_top = 990.0
 offset_right = 15928.0
@@ -421,36 +436,36 @@ theme_override_font_sizes/font_size = 300
 text = "Bag: 0/0"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/MemoryBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/UiRoot/MemoryBox" unique_id=279734015]
 custom_minimum_size = Vector2(4000, 8000)
-layout_mode = 2
+layout_mode = 0
 offset_left = 800.0
 offset_top = 1600.0
 offset_right = 8800.0
 offset_bottom = 9600.0
 
-[node name="EquipBox" type="VBoxContainer" parent="UI/MemoryBox/ScrollContainer"]
+[node name="EquipBox" type="VBoxContainer" parent="UI/UiRoot/MemoryBox/ScrollContainer" unique_id=922298898]
 layout_mode = 2
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="UI/MemoryBox"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="UI/UiRoot/MemoryBox" unique_id=292813142]
 custom_minimum_size = Vector2(4000, 8000)
-layout_mode = 2
+layout_mode = 0
 offset_left = 9920.0
 offset_top = 1600.0
 offset_right = 17920.0
 offset_bottom = 9600.0
 
-[node name="BagBox" type="VBoxContainer" parent="UI/MemoryBox/ScrollContainer2"]
+[node name="BagBox" type="VBoxContainer" parent="UI/UiRoot/MemoryBox/ScrollContainer2" unique_id=1316092267]
 layout_mode = 2
 
-[node name="Inventory" type="Sprite2D" parent="UI/MemoryBox"]
+[node name="Inventory" type="Sprite2D" parent="UI/UiRoot/MemoryBox" unique_id=846606330]
 modulate = Color(0.796078, 0.298039, 0.792157, 1)
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
 texture = ExtResource("13_dlj3q")
 
-[node name="EquipButton" type="TextureButton" parent="UI/MemoryBox"]
+[node name="EquipButton" type="TextureButton" parent="UI/UiRoot/MemoryBox" unique_id=94915878]
 layout_mode = 0
 offset_left = 9600.0
 offset_top = 1000.0
@@ -459,13 +474,13 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("14_urhty")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/MemoryBox/EquipButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/MemoryBox/EquipButton" unique_id=354293361]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="ThrowButton" type="TextureButton" parent="UI/MemoryBox"]
+[node name="ThrowButton" type="TextureButton" parent="UI/UiRoot/MemoryBox" unique_id=1605864171]
 layout_mode = 0
 offset_left = 10100.0
 offset_top = 1000.0
@@ -474,15 +489,25 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("16_68pdb")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/MemoryBox/ThrowButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/MemoryBox/ThrowButton" unique_id=1135918026]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="DialogBox" type="Control" parent="UI" node_paths=PackedStringArray("Portrait", "NameLabel", "DialogText", "ContinueHint")]
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/MemoryBox" unique_id=1554724620]
+layout_mode = 0
+offset_left = 17210.0
+offset_top = 760.0
+offset_right = 18410.0
+offset_bottom = 1960.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
+
+[node name="DialogBox" type="Control" parent="UI/UiRoot" unique_id=1564355440 node_paths=PackedStringArray("Portrait", "NameLabel", "DialogText", "ContinueHint")]
 visible = false
-layout_mode = 3
+z_index = 110
 anchors_preset = 0
 offset_left = 5810.0
 offset_top = 80.0
@@ -494,7 +519,7 @@ NameLabel = NodePath("Name")
 DialogText = NodePath("Dialog")
 ContinueHint = NodePath("Hint")
 
-[node name="Name" type="Label" parent="UI/DialogBox"]
+[node name="Name" type="Label" parent="UI/UiRoot/DialogBox" unique_id=1044619406]
 layout_mode = 0
 offset_left = 2240.0
 offset_top = 7490.0
@@ -503,7 +528,7 @@ offset_bottom = 11490.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 400
 
-[node name="Image" type="TextureRect" parent="UI/DialogBox"]
+[node name="Image" type="TextureRect" parent="UI/UiRoot/DialogBox" unique_id=1595871113]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -516,7 +541,7 @@ grow_vertical = 2
 scale = Vector2(6, 6)
 stretch_mode = 6
 
-[node name="Hint" type="Label" parent="UI/DialogBox"]
+[node name="Hint" type="Label" parent="UI/UiRoot/DialogBox" unique_id=365936500]
 layout_mode = 0
 offset_left = 1138.1
 offset_top = 872.0
@@ -524,7 +549,7 @@ offset_right = 1538.1
 offset_bottom = 1172.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 
-[node name="Dialog" type="RichTextLabel" parent="UI/DialogBox"]
+[node name="Dialog" type="RichTextLabel" parent="UI/UiRoot/DialogBox" unique_id=1938991979]
 layout_mode = 0
 offset_left = 2210.0
 offset_top = 7970.0
@@ -534,27 +559,25 @@ scale = Vector2(1.9, 1.9)
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 240
 
-[node name="BoxSign" type="Sprite2D" parent="UI/DialogBox"]
-z_index = -4096
-z_as_relative = false
+[node name="BoxSign" type="Sprite2D" parent="UI/UiRoot/DialogBox" unique_id=562208948]
+z_index = -1
 position = Vector2(6120, 8940)
 scale = Vector2(42, 33.812)
 texture = ExtResource("19_dkl0p")
 
-[node name="UaSkillPointBox" type="Control" parent="UI"]
+[node name="UaSkillPointBox" type="Control" parent="UI/UiRoot" unique_id=1573500282]
 visible = false
 z_index = 100
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Sprite2D" type="Sprite2D" parent="UI/UaSkillPointBox"]
+[node name="Sprite2D" type="Sprite2D" parent="UI/UiRoot/UaSkillPointBox" unique_id=684750736]
 position = Vector2(9504, 5312)
 scale = Vector2(100, 100)
 texture = ExtResource("10_gx5ry")
 
-[node name="Ua" type="VBoxContainer" parent="UI/UaSkillPointBox" node_paths=PackedStringArray("Point", "str", "dex", "con", "spi", "mag", "cun", "info")]
+[node name="Ua" type="VBoxContainer" parent="UI/UiRoot/UaSkillPointBox" unique_id=1046809426 node_paths=PackedStringArray("Point", "str", "dex", "con", "spi", "mag", "cun", "info")]
 layout_mode = 0
 offset_left = 750.0
 offset_top = 1050.0
@@ -571,83 +594,101 @@ mag = NodePath("Button5")
 cun = NodePath("Button6")
 info = NodePath("../RichTextLabel")
 
-[node name="Label" type="Label" parent="UI/UaSkillPointBox/Ua"]
+[node name="Label" type="Label" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=1498880634]
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "剩余属性点:99"
 
-[node name="Button" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Label2" type="Label" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=1246800548]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "剩余技能点:99"
+
+[node name="Button" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=806341055]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="Button2" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Button2" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=928954000]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="Button3" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Button3" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=1586950040]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="Button4" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Button4" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=1206659552]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="Button5" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Button5" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=1525732442]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="Button6" type="Button" parent="UI/UaSkillPointBox/Ua"]
+[node name="Button6" type="Button" parent="UI/UiRoot/UaSkillPointBox/Ua" unique_id=336033110]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 theme_override_font_sizes/font_size = 300
 text = "力量:8"
 
-[node name="SkillPanel" type="VFlowContainer" parent="UI/UaSkillPointBox" node_paths=PackedStringArray("Point")]
+[node name="SkillPanel" type="VFlowContainer" parent="UI/UiRoot/UaSkillPointBox" unique_id=176268385 node_paths=PackedStringArray("Point")]
 custom_minimum_size = Vector2(15000, 0)
 layout_mode = 0
 offset_left = 2860.0
 offset_top = 1060.0
 offset_right = 17860.0
-offset_bottom = 8260.0
+offset_bottom = 5629.9995
 theme_override_constants/h_separation = 300
 theme_override_constants/v_separation = -50
 script = ExtResource("21_hxw1y")
-Point = NodePath("Label2")
+Point = NodePath("../Ua/Label2")
 SkillTree = ExtResource("22_r3qqj")
 
-[node name="Label2" type="Label" parent="UI/UaSkillPointBox/SkillPanel"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 300
-text = "剩余技能点:99"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/UaSkillPointBox"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/UiRoot/UaSkillPointBox" unique_id=1330227390]
 layout_mode = 0
 offset_left = 770.0
-offset_top = 5120.0
-offset_right = 6770.0
+offset_top = 5800.0
+offset_right = 18230.0
 offset_bottom = 9620.0
-theme_override_font_sizes/normal_font_size = 300
+theme_override_font_sizes/normal_font_size = 200
 bbcode_enabled = true
 text = "+1"
 
-[node name="Mainmenu" parent="UI" node_paths=PackedStringArray("GameRoot") instance=ExtResource("23_uyorq")]
-z_index = 1000
-scale = Vector2(10, 10)
-GameRoot = NodePath("../../Scene")
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/UaSkillPointBox" unique_id=1313247451]
+layout_mode = 0
+offset_left = 17300.0
+offset_top = 810.0
+offset_right = 18500.0
+offset_bottom = 2010.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
 
-[node name="PauseMenu" type="ColorRect" parent="UI" node_paths=PackedStringArray("ResumeButton", "RestartButton", "ExitButton")]
+[node name="Mainmenu" parent="UI/UiRoot" unique_id=1965705655 node_paths=PackedStringArray("GameRoot") instance=ExtResource("23_uyorq")]
+visible = false
+z_index = 1000
+layout_mode = 1
+scale = Vector2(10, 10)
+GameRoot = NodePath("../../../Scene")
+
+[node name="StartMenu" parent="UI/UiRoot" unique_id=1738170210 instance=ExtResource("27_mdtu7")]
+visible = false
+z_index = 1001
+layout_mode = 1
+
+[node name="PauseMenu" type="ColorRect" parent="UI/UiRoot" unique_id=833250350 node_paths=PackedStringArray("ResumeButton", "DebugButton", "RestartButton", "ExitButton", "DebugMenu")]
 visible = false
 z_index = 2000
+layout_mode = 0
 offset_left = 4540.0
 offset_top = 2540.0
 offset_right = 14540.0
@@ -655,10 +696,12 @@ offset_bottom = 8540.0
 color = Color(0.310617, 0.310617, 0.310617, 1)
 script = ExtResource("24_esfxh")
 ResumeButton = NodePath("VBoxContainer/Button")
+DebugButton = NodePath("VBoxContainer/Button2")
 RestartButton = NodePath("VBoxContainer/Button3")
 ExitButton = NodePath("VBoxContainer/Button4")
+DebugMenu = NodePath("DebugMenu")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/PauseMenu" unique_id=119241442]
 custom_minimum_size = Vector2(3000, 6000)
 layout_mode = 0
 offset_left = 3180.0
@@ -667,11 +710,11 @@ offset_right = 6180.0
 offset_bottom = 7130.0
 theme_override_constants/separation = 200
 
-[node name="Button" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+[node name="Button" type="Button" parent="UI/UiRoot/PauseMenu/VBoxContainer" unique_id=97826873]
 custom_minimum_size = Vector2(1500, 1000)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button"]
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/VBoxContainer/Button" unique_id=296524246]
 custom_minimum_size = Vector2(3000, 1000)
 layout_mode = 0
 offset_left = 0.000610352
@@ -683,11 +726,11 @@ text = "继续游戏"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button2" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+[node name="Button2" type="Button" parent="UI/UiRoot/PauseMenu/VBoxContainer" unique_id=388216496]
 custom_minimum_size = Vector2(1500, 1000)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button2"]
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/VBoxContainer/Button2" unique_id=1533562408]
 custom_minimum_size = Vector2(3000, 1000)
 layout_mode = 0
 offset_left = 0.000610352
@@ -699,11 +742,11 @@ text = "选项"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button3" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+[node name="Button3" type="Button" parent="UI/UiRoot/PauseMenu/VBoxContainer" unique_id=866732412]
 custom_minimum_size = Vector2(1500, 1000)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button3"]
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/VBoxContainer/Button3" unique_id=589996186]
 custom_minimum_size = Vector2(3000, 1000)
 layout_mode = 0
 offset_left = 0.000610352
@@ -715,11 +758,11 @@ text = "重新开始"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button4" type="Button" parent="UI/PauseMenu/VBoxContainer"]
+[node name="Button4" type="Button" parent="UI/UiRoot/PauseMenu/VBoxContainer" unique_id=2046197790]
 custom_minimum_size = Vector2(1500, 1000)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/PauseMenu/VBoxContainer/Button4"]
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/VBoxContainer/Button4" unique_id=103777036]
 custom_minimum_size = Vector2(3000, 1000)
 layout_mode = 0
 offset_left = 0.000610352
@@ -731,10 +774,166 @@ text = "退出游戏"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BarrageBox" type="Control" parent="UI" node_paths=PackedStringArray("BarrageList", "BagList", "equipNumber", "bagNumber")]
+[node name="DebugMenu" type="ColorRect" parent="UI/UiRoot/PauseMenu" unique_id=1716580616 node_paths=PackedStringArray("Debug1", "Debug2", "Debug3", "Debug4")]
+visible = false
+z_index = 2000
+layout_mode = 0
+offset_left = 6340.0
+offset_top = -10.0
+offset_right = 12650.0
+offset_bottom = 5990.0
+color = Color(0.155279, 0.251569, 0.559394, 1)
+script = ExtResource("26_ofgj4")
+Debug1 = NodePath("VBoxContainer/Button")
+Debug2 = NodePath("VBoxContainer/Button2")
+Debug3 = NodePath("VBoxContainer/Button3")
+Debug4 = NodePath("VBoxContainer/Button4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/PauseMenu/DebugMenu" unique_id=529411443]
+custom_minimum_size = Vector2(3000, 6000)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 300.0
+offset_right = 3040.0
+offset_bottom = 6300.0
+theme_override_constants/separation = 200
+
+[node name="Button" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer" unique_id=767009120]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer/Button" unique_id=1115617924]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "开迷雾+放大"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button2" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer" unique_id=1369254257]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer/Button2" unique_id=1945322267]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "无敌"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button3" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer" unique_id=1907947531]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer/Button3" unique_id=675309507]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "技能点"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button4" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer" unique_id=984985853]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer/Button4" unique_id=963200611]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "去下一层"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/UiRoot/PauseMenu/DebugMenu" unique_id=1231653634]
+custom_minimum_size = Vector2(3000, 6000)
+layout_mode = 0
+offset_left = 3210.0
+offset_top = 300.0
+offset_right = 6210.0
+offset_bottom = 6300.0
+theme_override_constants/separation = 200
+
+[node name="Button" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2" unique_id=1411328639]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2/Button" unique_id=721575484]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button2" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2" unique_id=934681742]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2/Button2" unique_id=1627492359]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button3" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2" unique_id=274322092]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2/Button3" unique_id=329100802]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button4" type="Button" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2" unique_id=1722952561]
+custom_minimum_size = Vector2(1500, 1000)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/DebugMenu/VBoxContainer2/Button4" unique_id=214199970]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BarrageBox" type="Control" parent="UI/UiRoot" unique_id=954789483 node_paths=PackedStringArray("BarrageList", "BagList", "equipNumber", "bagNumber")]
 visible = false
 z_index = 100
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -746,8 +945,8 @@ equipNumber = NodePath("Label3")
 bagNumber = NodePath("Label2")
 BcEntryScene = ExtResource("27_a3p61")
 
-[node name="Label3" type="Label" parent="UI/BarrageBox"]
-layout_mode = 2
+[node name="Label3" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1918580281]
+layout_mode = 0
 offset_left = 750.0
 offset_top = 1090.0
 offset_right = 8750.0
@@ -756,15 +955,15 @@ theme_override_font_sizes/font_size = 300
 text = "Equip: 0/0"
 horizontal_alignment = 1
 
-[node name="FlowContainer2" type="FlowContainer" parent="UI/BarrageBox"]
+[node name="FlowContainer2" type="FlowContainer" parent="UI/UiRoot/BarrageBox" unique_id=1547943774]
 layout_mode = 0
 offset_left = 9750.0
 offset_top = 1600.0
 offset_right = 17750.0
 offset_bottom = 9600.0
 
-[node name="Label2" type="Label" parent="UI/BarrageBox"]
-layout_mode = 2
+[node name="Label2" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1101187645]
+layout_mode = 0
 offset_left = 11970.0
 offset_top = 990.0
 offset_right = 15928.0
@@ -773,14 +972,14 @@ theme_override_font_sizes/font_size = 300
 text = "Bag: 0/0"
 horizontal_alignment = 1
 
-[node name="Inventory" type="Sprite2D" parent="UI/BarrageBox"]
+[node name="Inventory" type="Sprite2D" parent="UI/UiRoot/BarrageBox" unique_id=2000875269]
 modulate = Color(0.730027, 0.85426, 0.986022, 1)
 z_index = -1
 position = Vector2(9410, 5260)
 scale = Vector2(100, 100)
 texture = ExtResource("13_dlj3q")
 
-[node name="EquipButton" type="TextureButton" parent="UI/BarrageBox"]
+[node name="EquipButton" type="TextureButton" parent="UI/UiRoot/BarrageBox" unique_id=2055338693]
 layout_mode = 0
 offset_left = 9600.0
 offset_top = 1000.0
@@ -789,13 +988,13 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("14_urhty")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/BarrageBox/EquipButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/BarrageBox/EquipButton" unique_id=74166225]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="ThrowButton" type="TextureButton" parent="UI/BarrageBox"]
+[node name="ThrowButton" type="TextureButton" parent="UI/UiRoot/BarrageBox" unique_id=1491344596]
 layout_mode = 0
 offset_left = 10100.0
 offset_top = 1000.0
@@ -804,13 +1003,13 @@ offset_bottom = 1400.0
 texture_normal = ExtResource("16_68pdb")
 stretch_mode = 0
 
-[node name="Light" type="TextureRect" parent="UI/BarrageBox/ThrowButton"]
+[node name="Light" type="TextureRect" parent="UI/UiRoot/BarrageBox/ThrowButton" unique_id=1365394710]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
 texture = ExtResource("15_jpgjn")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/BarrageBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/BarrageBox" unique_id=2033915366]
 custom_minimum_size = Vector2(8000, 8000)
 layout_mode = 0
 offset_left = 750.0
@@ -819,74 +1018,121 @@ offset_right = 8750.0
 offset_bottom = 9480.0
 theme_override_constants/separation = 100
 
-[node name="Main" type="Node2D" parent="."]
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/BarrageBox" unique_id=2019362032]
+layout_mode = 0
+offset_left = 17210.0
+offset_top = 760.0
+offset_right = 18410.0
+offset_bottom = 1960.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
 
-[node name="Map" type="Node2D" parent="." node_paths=PackedStringArray("BaseGround", "Stand", "FogOfWar")]
+[node name="SkillTreeBox" type="Control" parent="UI/UiRoot" unique_id=1117870751 node_paths=PackedStringArray("pointText")]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("28_c2j4f")
+st = ExtResource("28_1ocm2")
+pointText = NodePath("Label")
+
+[node name="background" type="ColorRect" parent="UI/UiRoot/SkillTreeBox" unique_id=1846265661]
+layout_mode = 0
+offset_right = 19200.0
+offset_bottom = 10800.0
+color = Color(0.0978047, 0.0358482, 0.137022, 1)
+
+[node name="Label" type="Label" parent="UI/UiRoot/SkillTreeBox" unique_id=136461069]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 170.0
+offset_right = 2109.0
+offset_bottom = 567.0
+theme_override_font_sizes/font_size = 300
+text = "剩余天赋点:99"
+
+[node name="CloseButton" type="TextureButton" parent="UI/UiRoot/SkillTreeBox" unique_id=1998380815]
+layout_mode = 0
+offset_left = 18000.0
+offset_top = 6.1035156e-05
+offset_right = 19200.0
+offset_bottom = 1200.0
+texture_normal = ExtResource("13_7yoxt")
+stretch_mode = 0
+script = ExtResource("14_tkdt8")
+
+[node name="Main" type="Node2D" parent="." unique_id=166844271]
+
+[node name="Map" type="Node2D" parent="." unique_id=1671445251 node_paths=PackedStringArray("oBaseGround", "oStand", "oFogOfWar", "GeneralMap")]
 position = Vector2(-8, -8)
 script = ExtResource("28_nc36h")
-BaseGround = NodePath("Control/BaseGround")
-Stand = NodePath("Control/Stand")
-FogOfWar = NodePath("Control/FogOfWar")
+oBaseGround = NodePath("Control/BaseGround")
+oStand = NodePath("Control/Stand")
+oFogOfWar = NodePath("Control/FogOfWar")
+GeneralMap = NodePath("Control")
 
-[node name="Control" type="Control" parent="Map"]
+[node name="Control" type="Control" parent="Map" unique_id=1389732831]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="BaseGround" type="TileMapLayer" parent="Map/Control"]
+[node name="BaseGround" type="TileMapLayer" parent="Map/Control" unique_id=1446809857]
 z_index = -100
-tile_map_data = PackedByteArray("AAAEAAQAAAAGAAAAAAAEAAIAAAABAAEAAAAEAAEAAAABAAEAAAAEAAAAAAABAAEAAAADAAMAAAABAAEAAAADAAIAAAABAAEAAAADAAEAAAABAAEAAAADAAAAAAABAAEAAAACAAQAAAABAAEAAAACAAMAAAABAAEAAAACAAIAAAABAAEAAAACAAAAAAABAAEAAAABAAQAAAABAAEAAAABAAMAAAABAAEAAAABAAIAAAABAAEAAAABAAEAAAABAAEAAAABAAAAAAABAAEAAAAAAAQAAAABAAEAAAAAAAMAAAABAAEAAAAAAAIAAAABAAEAAAAAAAEAAAABAAEAAAAAAAAAAAABAAEAAAAJAAkAAAAHAAEAAAAJAAgAAAAHAAEAAAAJAAcAAAAHAAEAAAAJAAYAAAAHAAEAAAAJAAUAAAAHAAEAAAAIAAkAAAAHAAEAAAAIAAgAAAAHAAEAAAAIAAcAAAAHAAEAAAAIAAYAAAAHAAEAAAAIAAUAAAAHAAEAAAAHAAkAAAAHAAEAAAAHAAgAAAAHAAEAAAAHAAcAAAAHAAEAAAAHAAYAAAAHAAEAAAAHAAUAAAAHAAEAAAAGAAkAAAAHAAEAAAAGAAgAAAAHAAEAAAAGAAcAAAAHAAEAAAAGAAYAAAAHAAEAAAAGAAUAAAAHAAEAAAAFAAkAAAAHAAEAAAAFAAgAAAAHAAEAAAAFAAcAAAAHAAEAAAAFAAYAAAAHAAEAAAAFAAUAAAAHAAEAAAAOAA4AAAAHAAEAAAAOAA0AAAAHAAEAAAAOAAwAAAAHAAEAAAAOAAsAAAAHAAEAAAAOAAoAAAAHAAEAAAANAA4AAAAHAAEAAAANAA0AAAAHAAEAAAANAAwAAAAHAAEAAAANAAsAAAAHAAEAAAANAAoAAAAHAAEAAAAMAA4AAAAHAAEAAAAMAA0AAAAHAAEAAAAMAAwAAAAHAAEAAAAMAAsAAAAHAAEAAAAMAAoAAAAHAAEAAAALAA4AAAAHAAEAAAALAA0AAAAHAAEAAAALAAwAAAAHAAEAAAALAAsAAAAHAAEAAAALAAoAAAAHAAEAAAAKAA4AAAAHAAEAAAAKAA0AAAAHAAEAAAAKAAwAAAAHAAEAAAAKAAsAAAAHAAEAAAAKAAoAAAAHAAEAAAATABMAAAAHAAEAAAATABIAAAAHAAEAAAATABEAAAAHAAEAAAATABAAAAAHAAEAAAATAA8AAAAHAAEAAAASABMAAAAHAAEAAAASABIAAAAHAAEAAAASABEAAAAHAAEAAAASABAAAAAHAAEAAAASAA8AAAAHAAEAAAARABMAAAAHAAEAAAARABIAAAAHAAEAAAARABEAAAAHAAEAAAARABAAAAAHAAEAAAARAA8AAAAHAAEAAAAQABMAAAAHAAEAAAAQABIAAAAHAAEAAAAQABEAAAAHAAEAAAAQABAAAAAHAAEAAAAQAA8AAAAHAAEAAAAPABMAAAAHAAEAAAAPABIAAAAHAAEAAAAPABEAAAAHAAEAAAAPABAAAAAHAAEAAAAPAA8AAAAHAAEAAAAYABgAAAAHAAEAAAAYABcAAAAHAAEAAAAYABYAAAAHAAEAAAAYABUAAAAHAAEAAAAYABQAAAAHAAEAAAAXABgAAAAHAAEAAAAXABcAAAAHAAEAAAAXABYAAAAHAAEAAAAXABUAAAAHAAEAAAAXABQAAAAHAAEAAAAWABgAAAAHAAEAAAAWABcAAAAHAAEAAAAWABYAAAAHAAEAAAAWABUAAAAHAAEAAAAWABQAAAAHAAEAAAAVABgAAAAHAAEAAAAVABcAAAAHAAEAAAAVABYAAAAHAAEAAAAVABUAAAAHAAEAAAAVABQAAAAHAAEAAAAUABgAAAAHAAEAAAAUABcAAAAHAAEAAAAUABYAAAAHAAEAAAAUABUAAAAHAAEAAAAUABQAAAAHAAEAAAAdAB0AAAABAAEAAAAdABwAAAABAAEAAAAdABsAAAABAAEAAAAdABoAAAABAAEAAAAdABkAAAABAAEAAAAcAB0AAAABAAEAAAAcABwAAAABAAEAAAAcABsAAAABAAEAAAAcABoAAAABAAEAAAAcABkAAAABAAEAAAAbAB0AAAABAAEAAAAbABwAAAABAAEAAAAbABsAAAABAAEAAAAbABoAAAABAAEAAAAbABkAAAABAAEAAAAaAB0AAAABAAEAAAAaABwAAAABAAEAAAAaABsAAAABAAEAAAAaABoAAAABAAEAAAAaABkAAAABAAEAAAAZAB0AAAABAAEAAAAZABwAAAABAAEAAAAZABsAAAABAAEAAAAZABoAAAABAAEAAAAZABkAAAAIAAIAAAAiACIAAAABAAEAAAAiACEAAAABAAEAAAAiACAAAAABAAEAAAAiAB8AAAABAAEAAAAiAB4AAAABAAEAAAAhACIAAAABAAEAAAAhACEAAAABAAEAAAAhACAAAAABAAEAAAAhAB8AAAABAAEAAAAhAB4AAAABAAEAAAAgACIAAAABAAEAAAAgACEAAAABAAEAAAAgACAAAAABAAEAAAAgAB8AAAABAAEAAAAgAB4AAAABAAEAAAAfACIAAAABAAEAAAAfACEAAAABAAEAAAAfACAAAAABAAEAAAAfAB8AAAABAAEAAAAfAB4AAAABAAEAAAAeACIAAAABAAEAAAAeACEAAAABAAEAAAAeACAAAAABAAEAAAAeAB8AAAABAAEAAAAeAB4AAAABAAEAAAAnACcAAAABAAEAAAAnACYAAAABAAEAAAAnACUAAAABAAEAAAAnACQAAAABAAEAAAAnACMAAAABAAEAAAAmACcAAAABAAEAAAAmACYAAAABAAEAAAAmACUAAAABAAEAAAAmACQAAAABAAEAAAAmACMAAAABAAEAAAAlACcAAAABAAEAAAAlACYAAAABAAEAAAAlACUAAAABAAEAAAAlACQAAAABAAEAAAAlACMAAAABAAEAAAAkACcAAAABAAEAAAAkACYAAAABAAEAAAAkACUAAAABAAEAAAAkACQAAAABAAEAAAAkACMAAAABAAEAAAAjACcAAAABAAEAAAAjACYAAAABAAEAAAAjACUAAAABAAEAAAAjACQAAAABAAEAAAAjACMAAAABAAEAAAAiACcAAAABAAEAAAAiACYAAAABAAEAAAAiACUAAAABAAEAAAAiACQAAAABAAEAAAAiACMAAAABAAEAAAAiAB0AAAABAAEAAAAiABwAAAABAAEAAAAiABsAAAABAAEAAAAiABoAAAABAAEAAAAiABkAAAABAAEAAAAiABgAAAABAAEAAAAiABcAAAABAAEAAAAiABYAAAABAAEAAAAiABUAAAABAAEAAAAiABQAAAABAAEAAAAiABMAAAABAAEAAAAiABIAAAABAAEAAAAiABEAAAABAAEAAAAiABAAAAABAAEAAAAiAA8AAAABAAEAAAAiAA4AAAABAAEAAAAiAA0AAAABAAEAAAAiAAwAAAABAAEAAAAiAAsAAAABAAEAAAAiAAoAAAABAAEAAAAiAAkAAAABAAEAAAAiAAgAAAABAAEAAAAiAAcAAAABAAEAAAAiAAYAAAABAAEAAAAiAAUAAAABAAEAAAAiAAQAAAABAAEAAAAiAAMAAAABAAEAAAAiAAIAAAABAAEAAAAiAAEAAAABAAEAAAAiAAAAAAABAAEAAAAhACcAAAABAAEAAAAhACYAAAABAAEAAAAhACUAAAABAAEAAAAhACQAAAABAAEAAAAhACMAAAABAAEAAAAhAB0AAAABAAEAAAAhABwAAAABAAEAAAAhABsAAAABAAEAAAAhABoAAAABAAEAAAAhABkAAAABAAEAAAAhABgAAAABAAEAAAAhABcAAAABAAEAAAAhABYAAAABAAEAAAAhABUAAAABAAEAAAAhABQAAAABAAEAAAAhABMAAAABAAEAAAAhABIAAAABAAEAAAAhABEAAAABAAEAAAAhABAAAAABAAEAAAAhAA8AAAABAAEAAAAhAA4AAAABAAEAAAAhAA0AAAABAAEAAAAhAAwAAAABAAEAAAAhAAsAAAABAAEAAAAhAAoAAAABAAEAAAAhAAkAAAABAAEAAAAhAAgAAAABAAEAAAAhAAcAAAABAAEAAAAhAAYAAAABAAEAAAAhAAUAAAABAAEAAAAhAAQAAAABAAEAAAAhAAMAAAABAAEAAAAhAAIAAAABAAEAAAAhAAEAAAABAAEAAAAhAAAAAAABAAEAAAAgACcAAAABAAEAAAAgACYAAAABAAEAAAAgACUAAAABAAEAAAAgACQAAAABAAEAAAAgACMAAAABAAEAAAAgAB0AAAABAAEAAAAgABwAAAABAAEAAAAgABsAAAABAAEAAAAgABoAAAABAAEAAAAgABkAAAABAAEAAAAgABgAAAABAAEAAAAgABcAAAABAAEAAAAgABYAAAABAAEAAAAgABUAAAABAAEAAAAgABQAAAABAAEAAAAgABMAAAABAAEAAAAgABIAAAABAAEAAAAgABEAAAABAAEAAAAgABAAAAABAAEAAAAgAA8AAAABAAEAAAAgAA4AAAABAAEAAAAgAA0AAAABAAEAAAAgAAwAAAABAAEAAAAgAAsAAAABAAEAAAAgAAoAAAABAAEAAAAgAAkAAAABAAEAAAAgAAgAAAABAAEAAAAgAAcAAAABAAEAAAAgAAYAAAABAAEAAAAgAAUAAAABAAEAAAAgAAQAAAABAAEAAAAgAAMAAAABAAEAAAAgAAIAAAABAAEAAAAgAAEAAAABAAEAAAAgAAAAAAABAAEAAAAfACcAAAABAAEAAAAfACYAAAABAAEAAAAfACUAAAABAAEAAAAfACQAAAABAAEAAAAfACMAAAABAAEAAAAfAB0AAAABAAEAAAAfABwAAAABAAEAAAAfABsAAAABAAEAAAAfABoAAAABAAEAAAAfABkAAAABAAEAAAAfABgAAAABAAEAAAAfABcAAAABAAEAAAAfABYAAAABAAEAAAAfABUAAAABAAEAAAAfABQAAAABAAEAAAAfABMAAAABAAEAAAAfABIAAAABAAEAAAAfABEAAAABAAEAAAAfABAAAAABAAEAAAAfAA8AAAABAAEAAAAfAA4AAAABAAEAAAAfAA0AAAABAAEAAAAfAAwAAAABAAEAAAAfAAsAAAABAAEAAAAfAAoAAAABAAEAAAAfAAkAAAABAAEAAAAfAAgAAAABAAEAAAAfAAcAAAABAAEAAAAfAAYAAAABAAEAAAAfAAUAAAABAAEAAAAfAAQAAAABAAEAAAAfAAMAAAABAAEAAAAfAAIAAAABAAEAAAAfAAEAAAABAAEAAAAfAAAAAAABAAEAAAAeACcAAAABAAEAAAAeACYAAAABAAEAAAAeACUAAAABAAEAAAAeACQAAAABAAEAAAAeACMAAAABAAEAAAAeAB0AAAABAAEAAAAeABwAAAABAAEAAAAeABsAAAABAAEAAAAeABoAAAABAAEAAAAeABkAAAABAAEAAAAeABgAAAABAAEAAAAeABcAAAABAAEAAAAeABYAAAABAAEAAAAeABUAAAABAAEAAAAeABQAAAABAAEAAAAeABMAAAABAAEAAAAeABIAAAABAAEAAAAeABEAAAABAAEAAAAeABAAAAABAAEAAAAeAA8AAAABAAEAAAAeAA4AAAABAAEAAAAeAA0AAAABAAEAAAAeAAwAAAABAAEAAAAeAAsAAAABAAEAAAAeAAoAAAABAAEAAAAeAAkAAAABAAEAAAAeAAgAAAABAAEAAAAeAAcAAAABAAEAAAAeAAYAAAABAAEAAAAeAAUAAAABAAEAAAAeAAQAAAABAAEAAAAeAAMAAAABAAEAAAAeAAIAAAABAAEAAAAeAAEAAAABAAEAAAAeAAAAAAABAAEAAAAdACcAAAABAAEAAAAdACYAAAABAAEAAAAdACUAAAABAAEAAAAdACQAAAABAAEAAAAdACMAAAABAAEAAAAdACIAAAABAAEAAAAdACEAAAABAAEAAAAdACAAAAABAAEAAAAdAB8AAAABAAEAAAAdAB4AAAABAAEAAAAdABgAAAABAAEAAAAdABcAAAABAAEAAAAdABYAAAABAAEAAAAdABUAAAABAAEAAAAdABQAAAABAAEAAAAdABMAAAABAAEAAAAdABIAAAAIAAIAAAAdABEAAAAIAAEAAAAdABAAAAAIAAEAAAAdAA8AAAAIAAEAAAAdAA4AAAAIAAEAAAAdAA0AAAAIAAEAAAAdAAwAAAAIAAEAAAAdAAsAAAAIAAAAAAAdAAoAAAABAAEAAAAdAAkAAAABAAEAAAAdAAgAAAABAAEAAAAdAAcAAAABAAEAAAAdAAYAAAABAAEAAAAdAAUAAAABAAEAAAAdAAQAAAABAAEAAAAdAAMAAAABAAEAAAAdAAIAAAABAAEAAAAdAAEAAAABAAEAAAAdAAAAAAABAAEAAAAcACcAAAABAAEAAAAcACYAAAABAAEAAAAcACUAAAABAAEAAAAcACQAAAABAAEAAAAcACMAAAABAAEAAAAcACIAAAABAAEAAAAcACEAAAABAAEAAAAcACAAAAABAAEAAAAcAB8AAAABAAEAAAAcAB4AAAABAAEAAAAcABgAAAABAAEAAAAcABcAAAABAAEAAAAcABYAAAABAAEAAAAcABUAAAAIAAIAAAAcABQAAAAIAAEAAAAcABMAAAAIAAEAAAAcABIAAAALAAEAAAAcABEAAAAHAAEAAAAcABAAAAAHAAEAAAAcAA8AAAAHAAEAAAAcAA4AAAAHAAEAAAAcAA0AAAAHAAEAAAAcAAwAAAAHAAEAAAAcAAsAAAALAAIAAAAcAAoAAAAIAAEAAAAcAAkAAAAIAAEAAAAcAAgAAAAIAAAAAAAcAAcAAAABAAEAAAAcAAYAAAABAAEAAAAcAAUAAAABAAEAAAAcAAQAAAABAAEAAAAcAAMAAAABAAEAAAAcAAIAAAABAAEAAAAcAAEAAAABAAEAAAAcAAAAAAABAAEAAAAbACcAAAABAAEAAAAbACYAAAABAAEAAAAbACUAAAABAAEAAAAbACQAAAABAAEAAAAbACMAAAABAAEAAAAbACIAAAABAAEAAAAbACEAAAABAAEAAAAbACAAAAABAAEAAAAbAB8AAAABAAEAAAAbAB4AAAABAAEAAAAbABgAAAABAAEAAAAbABcAAAABAAEAAAAbABYAAAAIAAIAAAAbABUAAAALAAEAAAAbABQAAAAHAAEAAAAbABMAAAAHAAEAAAAbABIAAAAHAAEAAAAbABEAAAAHAAEAAAAbABAAAAAHAAEAAAAbAA8AAAAHAAEAAAAbAA4AAAAHAAEAAAAbAA0AAAAHAAEAAAAbAAwAAAAHAAEAAAAbAAsAAAAHAAEAAAAbAAoAAAAHAAEAAAAbAAkAAAAHAAEAAAAbAAgAAAALAAIAAAAbAAcAAAAIAAAAAAAbAAYAAAABAAEAAAAbAAUAAAABAAEAAAAbAAQAAAABAAEAAAAbAAMAAAABAAEAAAAbAAIAAAABAAEAAAAbAAEAAAABAAEAAAAbAAAAAAABAAEAAAAaACcAAAABAAEAAAAaACYAAAABAAEAAAAaACUAAAABAAEAAAAaACQAAAABAAEAAAAaACMAAAABAAEAAAAaACIAAAABAAEAAAAaACEAAAABAAEAAAAaACAAAAABAAEAAAAaAB8AAAABAAEAAAAaAB4AAAABAAEAAAAaABgAAAAIAAIAAAAaABcAAAAIAAEAAAAaABUAAAAHAAEAAAAaABQAAAAHAAEAAAAaABMAAAAHAAEAAAAaABIAAAAHAAEAAAAaABEAAAAHAAEAAAAaABAAAAAHAAEAAAAaAA8AAAAHAAEAAAAaAA4AAAAHAAEAAAAaAA0AAAAHAAEAAAAaAAwAAAAHAAEAAAAaAAsAAAAHAAEAAAAaAAoAAAAHAAEAAAAaAAkAAAAHAAEAAAAaAAgAAAAHAAEAAAAaAAcAAAALAAIAAAAaAAYAAAAIAAEAAAAaAAUAAAAIAAAAAAAaAAQAAAABAAEAAAAaAAMAAAABAAEAAAAaAAIAAAABAAEAAAAaAAEAAAABAAEAAAAaAAAAAAABAAEAAAAZACcAAAABAAEAAAAZACYAAAABAAEAAAAZACUAAAABAAEAAAAZACQAAAABAAEAAAAZACMAAAABAAEAAAAZACIAAAABAAEAAAAZACEAAAABAAEAAAAZACAAAAABAAEAAAAZAB8AAAABAAEAAAAZAB4AAAABAAEAAAAZABgAAAALAAEAAAAZABcAAAAHAAEAAAAZABYAAAAHAAEAAAAZABUAAAAHAAEAAAAZABQAAAAHAAEAAAAZABMAAAAHAAEAAAAZABIAAAAHAAEAAAAZABEAAAAHAAEAAAAZABAAAAAHAAEAAAAZAA8AAAAHAAEAAAAZAA4AAAAHAAEAAAAZAA0AAAAHAAEAAAAZAAwAAAAHAAEAAAAZAAsAAAAHAAEAAAAZAAoAAAAHAAEAAAAZAAkAAAAHAAEAAAAZAAgAAAAHAAEAAAAZAAcAAAAHAAEAAAAZAAYAAAAHAAEAAAAZAAUAAAALAAIAAAAZAAQAAAAIAAAAAAAZAAMAAAABAAEAAAAZAAIAAAABAAEAAAAZAAEAAAABAAEAAAAZAAAAAAABAAEAAAAYACcAAAABAAEAAAAYACYAAAABAAEAAAAYACUAAAABAAEAAAAYACQAAAABAAEAAAAYACMAAAABAAEAAAAYACIAAAABAAEAAAAYACEAAAABAAEAAAAYACAAAAABAAEAAAAYAB8AAAABAAEAAAAYAB4AAAABAAEAAAAYAB0AAAABAAEAAAAYABwAAAABAAEAAAAYABsAAAABAAEAAAAYABoAAAAIAAIAAAAYABkAAAALAAEAAAAYABMAAAAHAAEAAAAYABIAAAAHAAEAAAAYABEAAAAHAAEAAAAYABAAAAAHAAEAAAAYAA8AAAAHAAEAAAAYAA4AAAAHAAEAAAAYAA0AAAAHAAEAAAAYAAwAAAAHAAEAAAAYAAsAAAAHAAEAAAAYAAoAAAAHAAEAAAAYAAkAAAAHAAEAAAAYAAgAAAAHAAEAAAAYAAcAAAAHAAEAAAAYAAYAAAAHAAEAAAAYAAUAAAAHAAEAAAAYAAQAAAALAAIAAAAYAAMAAAAIAAAAAAAYAAIAAAABAAEAAAAYAAEAAAABAAEAAAAYAAAAAAABAAEAAAAXACcAAAABAAEAAAAXACYAAAABAAEAAAAXACUAAAABAAEAAAAXACQAAAABAAEAAAAXACMAAAABAAEAAAAXACIAAAABAAEAAAAXACEAAAABAAEAAAAXACAAAAABAAEAAAAXAB8AAAABAAEAAAAXAB4AAAABAAEAAAAXAB0AAAABAAEAAAAXABwAAAABAAEAAAAXABoAAAAHAAIAAAAXABkAAAAHAAEAAAAXABMAAAAHAAEAAAAXABIAAAAHAAEAAAAXABEAAAAHAAEAAAAXABAAAAAHAAEAAAAXAA8AAAAHAAEAAAAXAA4AAAAHAAEAAAAXAA0AAAAHAAEAAAAXAAwAAAAHAAEAAAAXAAsAAAAHAAEAAAAXAAoAAAAHAAEAAAAXAAkAAAAHAAEAAAAXAAgAAAAHAAEAAAAXAAcAAAAHAAEAAAAXAAYAAAAHAAEAAAAXAAUAAAAHAAEAAAAXAAQAAAAHAAEAAAAXAAMAAAAHAAAAAAAXAAIAAAABAAEAAAAXAAEAAAABAAEAAAAXAAAAAAABAAEAAAAWACcAAAABAAEAAAAWACYAAAABAAEAAAAWACUAAAABAAEAAAAWACQAAAABAAEAAAAWACMAAAABAAEAAAAWACIAAAABAAEAAAAWACEAAAABAAEAAAAWACAAAAABAAEAAAAWAB8AAAABAAEAAAAWAB4AAAABAAEAAAAWAB0AAAABAAEAAAAWABwAAAABAAEAAAAWABsAAAAIAAIAAAAWABoAAAALAAEAAAAWABkAAAAHAAEAAAAWABMAAAAHAAEAAAAWABIAAAAHAAEAAAAWABEAAAAHAAEAAAAWABAAAAAHAAEAAAAWAA8AAAAHAAEAAAAWAA4AAAAHAAEAAAAWAA0AAAAHAAEAAAAWAAwAAAAHAAEAAAAWAAsAAAAHAAEAAAAWAAoAAAAHAAEAAAAWAAkAAAAHAAEAAAAWAAgAAAAHAAEAAAAWAAcAAAAHAAEAAAAWAAYAAAAHAAEAAAAWAAUAAAAHAAEAAAAWAAQAAAAHAAEAAAAWAAMAAAALAAIAAAAWAAIAAAAIAAAAAAAWAAEAAAABAAEAAAAWAAAAAAABAAEAAAAVACcAAAABAAEAAAAVACYAAAABAAEAAAAVACUAAAABAAEAAAAVACQAAAABAAEAAAAVACMAAAABAAEAAAAVACIAAAABAAEAAAAVACEAAAABAAEAAAAVACAAAAABAAEAAAAVAB8AAAABAAEAAAAVAB4AAAABAAEAAAAVAB0AAAABAAEAAAAVABwAAAAIAAIAAAAVABsAAAALAAEAAAAVABoAAAAHAAEAAAAVABkAAAAHAAEAAAAVABMAAAAHAAEAAAAVABIAAAAHAAEAAAAVABEAAAAHAAEAAAAVABAAAAAHAAEAAAAVAA8AAAAHAAEAAAAVAA4AAAAHAAEAAAAVAA0AAAAHAAEAAAAVAAwAAAAHAAEAAAAVAAsAAAAHAAEAAAAVAAoAAAAHAAEAAAAVAAkAAAAHAAEAAAAVAAgAAAAHAAEAAAAVAAcAAAAHAAEAAAAVAAYAAAAHAAEAAAAVAAUAAAAHAAEAAAAVAAQAAAAHAAEAAAAVAAMAAAAHAAEAAAAVAAIAAAALAAIAAAAVAAEAAAAIAAAAAAAVAAAAAAABAAEAAAAUACcAAAABAAEAAAAUACYAAAABAAEAAAAUACUAAAABAAEAAAAUACQAAAABAAEAAAAUACMAAAABAAEAAAAUACIAAAABAAEAAAAUACEAAAABAAEAAAAUACAAAAABAAEAAAAUAB8AAAABAAEAAAAUAB4AAAABAAEAAAAUAB0AAAABAAEAAAAUABwAAAAHAAIAAAAUABsAAAAHAAEAAAAUABoAAAAHAAEAAAAUABkAAAAHAAEAAAAUABMAAAAHAAEAAAAUABIAAAAHAAEAAAAUABEAAAAHAAEAAAAUABAAAAAHAAEAAAAUAA8AAAAHAAEAAAAUAA4AAAAHAAEAAAAUAA0AAAAHAAEAAAAUAAwAAAAHAAEAAAAUAAsAAAAHAAEAAAAUAAoAAAAHAAEAAAAUAAkAAAAHAAEAAAAUAAgAAAAHAAEAAAAUAAcAAAAHAAEAAAAUAAYAAAAHAAEAAAAUAAUAAAAHAAEAAAAUAAQAAAAHAAEAAAAUAAMAAAAHAAEAAAAUAAIAAAAHAAEAAAAUAAEAAAAHAAAAAAAUAAAAAAABAAEAAAATACcAAAABAAEAAAATACYAAAABAAEAAAATACUAAAABAAEAAAATACQAAAABAAEAAAATACMAAAABAAEAAAATACIAAAABAAEAAAATACEAAAABAAEAAAATACAAAAABAAEAAAATAB8AAAABAAEAAAATAB4AAAABAAEAAAATAB0AAAABAAEAAAATABwAAAAHAAIAAAATABsAAAAHAAEAAAATABoAAAAHAAEAAAATABkAAAAHAAEAAAATABgAAAAHAAEAAAATABcAAAAHAAEAAAATABYAAAAHAAEAAAATABUAAAAHAAEAAAATABQAAAAHAAEAAAATAA4AAAAHAAEAAAATAA0AAAAHAAEAAAATAAwAAAAHAAEAAAATAAsAAAAHAAEAAAATAAoAAAAHAAEAAAATAAkAAAAHAAEAAAATAAgAAAAHAAEAAAATAAcAAAAHAAEAAAATAAYAAAAHAAEAAAATAAUAAAAHAAEAAAATAAQAAAAHAAEAAAATAAMAAAAHAAEAAAATAAIAAAAHAAEAAAATAAEAAAAHAAAAAAATAAAAAAABAAEAAAASACcAAAABAAEAAAASACYAAAABAAEAAAASACUAAAABAAEAAAASACQAAAABAAEAAAASACMAAAABAAEAAAASACIAAAABAAEAAAASACEAAAABAAEAAAASACAAAAABAAEAAAASAB8AAAABAAEAAAASAB4AAAABAAEAAAASAB0AAAAIAAIAAAASABwAAAALAAEAAAASABsAAAAHAAEAAAASABoAAAAHAAEAAAASABkAAAAHAAEAAAASABgAAAAHAAEAAAASABcAAAAHAAEAAAASABYAAAAHAAEAAAASABUAAAAHAAEAAAASABQAAAAHAAEAAAASAA4AAAAHAAEAAAASAA0AAAAHAAEAAAASAAwAAAAHAAEAAAASAAsAAAAHAAEAAAASAAoAAAAHAAEAAAASAAkAAAAHAAEAAAASAAgAAAAHAAEAAAASAAcAAAAHAAEAAAASAAYAAAAHAAEAAAASAAUAAAAHAAEAAAASAAQAAAAHAAEAAAASAAMAAAAHAAEAAAASAAIAAAAHAAEAAAASAAEAAAALAAIAAAASAAAAAAAIAAAAAAARACcAAAABAAEAAAARACYAAAABAAEAAAARACUAAAABAAEAAAARACQAAAABAAEAAAARACMAAAABAAEAAAARACIAAAABAAEAAAARACEAAAABAAEAAAARACAAAAABAAEAAAARAB8AAAABAAEAAAARAB4AAAABAAEAAAARAB0AAAAHAAIAAAARABwAAAAHAAEAAAARABsAAAAHAAEAAAARABoAAAAHAAEAAAARABkAAAAHAAEAAAARABgAAAAHAAEAAAARABcAAAAHAAEAAAARABYAAAAHAAEAAAARABUAAAAHAAEAAAARABQAAAAHAAEAAAARAA4AAAAHAAEAAAARAA0AAAAHAAEAAAARAAwAAAAHAAEAAAARAAsAAAAHAAEAAAARAAoAAAAHAAEAAAARAAkAAAAHAAEAAAARAAgAAAAHAAEAAAARAAcAAAAHAAEAAAARAAYAAAAHAAEAAAARAAUAAAAHAAEAAAARAAQAAAAHAAEAAAARAAMAAAAHAAEAAAARAAIAAAAHAAEAAAARAAEAAAAHAAEAAAARAAAAAAAHAAAAAAAQACcAAAABAAEAAAAQACYAAAABAAEAAAAQACUAAAABAAEAAAAQACQAAAABAAEAAAAQACMAAAABAAEAAAAQACIAAAABAAEAAAAQACEAAAABAAEAAAAQACAAAAABAAEAAAAQAB8AAAABAAEAAAAQAB4AAAABAAEAAAAQAB0AAAAHAAIAAAAQABwAAAAHAAEAAAAQABsAAAAHAAEAAAAQABoAAAAHAAEAAAAQABkAAAAHAAEAAAAQABgAAAAHAAEAAAAQABcAAAAHAAEAAAAQABYAAAAHAAEAAAAQABUAAAAHAAEAAAAQABQAAAAHAAEAAAAQAA4AAAAHAAEAAAAQAA0AAAAHAAEAAAAQAAwAAAAHAAEAAAAQAAsAAAAHAAEAAAAQAAoAAAAHAAEAAAAQAAkAAAAHAAEAAAAQAAgAAAAHAAEAAAAQAAcAAAAHAAEAAAAQAAYAAAAHAAEAAAAQAAUAAAAHAAEAAAAQAAQAAAAHAAEAAAAQAAMAAAAHAAEAAAAQAAIAAAAHAAEAAAAQAAEAAAAHAAEAAAAQAAAAAAAHAAAAAAAPACcAAAABAAEAAAAPACYAAAABAAEAAAAPACUAAAABAAEAAAAPACQAAAABAAEAAAAPACMAAAABAAEAAAAPACIAAAABAAEAAAAPACEAAAABAAEAAAAPACAAAAABAAEAAAAPAB8AAAABAAEAAAAPAB4AAAABAAEAAAAPAB0AAAAHAAIAAAAPABwAAAAHAAEAAAAPABsAAAAHAAEAAAAPABoAAAAHAAEAAAAPABkAAAAHAAEAAAAPABgAAAAHAAEAAAAPABcAAAAHAAEAAAAPABYAAAAHAAEAAAAPABUAAAAHAAEAAAAPABQAAAAHAAEAAAAPAA4AAAAHAAEAAAAPAA0AAAAHAAEAAAAPAAwAAAAHAAEAAAAPAAsAAAAHAAEAAAAPAAoAAAAHAAEAAAAPAAkAAAAHAAEAAAAPAAgAAAAHAAEAAAAPAAcAAAAHAAEAAAAPAAYAAAAHAAEAAAAPAAUAAAAHAAEAAAAPAAQAAAAHAAEAAAAPAAMAAAAHAAEAAAAPAAIAAAAHAAEAAAAPAAEAAAAHAAEAAAAPAAAAAAAHAAAAAAAOACcAAAABAAEAAAAOACYAAAABAAEAAAAOACUAAAABAAEAAAAOACQAAAABAAEAAAAOACMAAAABAAEAAAAOACIAAAABAAEAAAAOACEAAAABAAEAAAAOACAAAAABAAEAAAAOAB8AAAABAAEAAAAOAB4AAAABAAEAAAAOAB0AAAAHAAIAAAAOABwAAAAHAAEAAAAOABsAAAAHAAEAAAAOABoAAAAHAAEAAAAOABkAAAAHAAEAAAAOABgAAAAHAAEAAAAOABcAAAAHAAEAAAAOABYAAAAHAAEAAAAOABUAAAAHAAEAAAAOABQAAAAHAAEAAAAOABMAAAAHAAEAAAAOABIAAAAHAAEAAAAOABEAAAAHAAEAAAAOABAAAAAHAAEAAAAOAA8AAAAHAAEAAAAOAAkAAAAHAAEAAAAOAAgAAAAHAAEAAAAOAAcAAAAHAAEAAAAOAAYAAAAHAAEAAAAOAAUAAAAHAAEAAAAOAAQAAAAHAAEAAAAOAAMAAAAHAAEAAAAOAAIAAAAHAAEAAAAOAAEAAAAHAAEAAAAOAAAAAAAHAAAAAAANACcAAAABAAEAAAANACYAAAABAAEAAAANACUAAAABAAEAAAANACQAAAABAAEAAAANACMAAAABAAEAAAANACIAAAABAAEAAAANACEAAAABAAEAAAANACAAAAABAAEAAAANAB8AAAABAAEAAAANAB4AAAABAAEAAAANAB0AAAAHAAIAAAANABwAAAAHAAEAAAANABsAAAAHAAEAAAANABoAAAAHAAEAAAANABkAAAAHAAEAAAANABgAAAAHAAEAAAANABcAAAAHAAEAAAANABYAAAAHAAEAAAANABUAAAAHAAEAAAANABQAAAAHAAEAAAANABMAAAAHAAEAAAANABIAAAAHAAEAAAANABEAAAAHAAEAAAANABAAAAAHAAEAAAANAA8AAAAHAAEAAAANAAkAAAAHAAEAAAANAAgAAAAHAAEAAAANAAcAAAAHAAEAAAANAAYAAAAHAAEAAAANAAUAAAAHAAEAAAANAAQAAAAHAAEAAAANAAMAAAAHAAEAAAANAAIAAAAHAAEAAAANAAEAAAAHAAEAAAANAAAAAAAHAAAAAAAMACcAAAABAAEAAAAMACYAAAABAAEAAAAMACUAAAABAAEAAAAMACQAAAABAAEAAAAMACMAAAABAAEAAAAMACIAAAABAAEAAAAMACEAAAABAAEAAAAMACAAAAABAAEAAAAMAB8AAAABAAEAAAAMAB4AAAABAAEAAAAMAB0AAAAHAAIAAAAMABwAAAAHAAEAAAAMABsAAAAHAAEAAAAMABoAAAAHAAEAAAAMABkAAAAHAAEAAAAMABgAAAAHAAEAAAAMABcAAAAHAAEAAAAMABYAAAAHAAEAAAAMABUAAAAHAAEAAAAMABQAAAAHAAEAAAAMABMAAAAHAAEAAAAMABIAAAAHAAEAAAAMABEAAAAHAAEAAAAMABAAAAAHAAEAAAAMAA8AAAAHAAEAAAAMAAkAAAAHAAEAAAAMAAgAAAAHAAEAAAAMAAcAAAAHAAEAAAAMAAYAAAAHAAEAAAAMAAUAAAAHAAEAAAAMAAQAAAAHAAEAAAAMAAMAAAAHAAEAAAAMAAIAAAAHAAEAAAAMAAEAAAAHAAEAAAAMAAAAAAAHAAAAAAALACcAAAABAAEAAAALACYAAAABAAEAAAALACUAAAABAAEAAAALACQAAAABAAEAAAALACMAAAABAAEAAAALACIAAAABAAEAAAALACEAAAABAAEAAAALACAAAAABAAEAAAALAB8AAAABAAEAAAALAB4AAAABAAEAAAALAB0AAAAGAAIAAAALABwAAAAMAAEAAAALABsAAAAHAAEAAAALABoAAAAHAAEAAAALABkAAAAHAAEAAAALABgAAAAHAAEAAAALABcAAAAHAAEAAAALABYAAAAHAAEAAAALABUAAAAHAAEAAAALABQAAAAHAAEAAAALABMAAAAHAAEAAAALABIAAAAHAAEAAAALABEAAAAHAAEAAAALABAAAAAHAAEAAAALAA8AAAAHAAEAAAALAAkAAAAHAAEAAAALAAgAAAAHAAEAAAALAAcAAAAHAAEAAAALAAYAAAAHAAEAAAALAAUAAAAHAAEAAAALAAQAAAAHAAEAAAALAAMAAAAHAAEAAAALAAIAAAAHAAEAAAALAAEAAAAMAAIAAAALAAAAAAAGAAAAAAAKACcAAAABAAEAAAAKACYAAAABAAEAAAAKACUAAAABAAEAAAAKACQAAAABAAEAAAAKACMAAAABAAEAAAAKACIAAAABAAEAAAAKACEAAAABAAEAAAAKACAAAAABAAEAAAAKAB8AAAABAAEAAAAKAB4AAAABAAEAAAAKAB0AAAABAAEAAAAKABwAAAAHAAIAAAAKABsAAAAHAAEAAAAKABoAAAAHAAEAAAAKABkAAAAHAAEAAAAKABgAAAAHAAEAAAAKABcAAAAHAAEAAAAKABYAAAAHAAEAAAAKABUAAAAHAAEAAAAKABQAAAAHAAEAAAAKABMAAAAHAAEAAAAKABIAAAAHAAEAAAAKABEAAAAHAAEAAAAKABAAAAAHAAEAAAAKAA8AAAAHAAEAAAAKAAkAAAAHAAEAAAAKAAgAAAAHAAEAAAAKAAcAAAAHAAEAAAAKAAYAAAAHAAEAAAAKAAUAAAAHAAEAAAAKAAQAAAAHAAEAAAAKAAMAAAAHAAEAAAAKAAIAAAAHAAEAAAAKAAEAAAAHAAAAAAAKAAAAAAABAAEAAAAJACcAAAABAAEAAAAJACYAAAABAAEAAAAJACUAAAABAAEAAAAJACQAAAABAAEAAAAJACMAAAABAAEAAAAJACIAAAABAAEAAAAJACEAAAABAAEAAAAJACAAAAABAAEAAAAJAB8AAAABAAEAAAAJAB4AAAABAAEAAAAJAB0AAAABAAEAAAAJABwAAAAHAAIAAAAJABsAAAAHAAEAAAAJABoAAAAHAAEAAAAJABkAAAAHAAEAAAAJABgAAAAHAAEAAAAJABcAAAAHAAEAAAAJABYAAAAHAAEAAAAJABUAAAAHAAEAAAAJABQAAAAHAAEAAAAJABMAAAAHAAEAAAAJABIAAAAHAAEAAAAJABEAAAAHAAEAAAAJABAAAAAHAAEAAAAJAA8AAAAHAAEAAAAJAA4AAAAHAAEAAAAJAA0AAAAHAAEAAAAJAAwAAAAHAAEAAAAJAAsAAAAHAAEAAAAJAAoAAAAHAAEAAAAJAAQAAAAHAAEAAAAJAAMAAAAHAAEAAAAJAAIAAAAHAAEAAAAJAAEAAAAHAAAAAAAJAAAAAAABAAEAAAAIACcAAAABAAEAAAAIACYAAAABAAEAAAAIACUAAAABAAEAAAAIACQAAAABAAEAAAAIACMAAAABAAEAAAAIACIAAAABAAEAAAAIACEAAAABAAEAAAAIACAAAAABAAEAAAAIAB8AAAABAAEAAAAIAB4AAAABAAEAAAAIAB0AAAABAAEAAAAIABwAAAAGAAIAAAAIABsAAAAMAAEAAAAIABoAAAAHAAEAAAAIABkAAAAHAAEAAAAIABgAAAAHAAEAAAAIABcAAAAHAAEAAAAIABYAAAAHAAEAAAAIABUAAAAHAAEAAAAIABQAAAAHAAEAAAAIABMAAAAHAAEAAAAIABIAAAAHAAEAAAAIABEAAAAHAAEAAAAIABAAAAAHAAEAAAAIAA8AAAAHAAEAAAAIAA4AAAAHAAEAAAAIAA0AAAAHAAEAAAAIAAwAAAAHAAEAAAAIAAsAAAAHAAEAAAAIAAoAAAAHAAEAAAAIAAQAAAAHAAEAAAAIAAMAAAAHAAEAAAAIAAIAAAAMAAIAAAAIAAEAAAAGAAAAAAAIAAAAAAABAAEAAAAHACcAAAABAAEAAAAHACYAAAABAAEAAAAHACUAAAABAAEAAAAHACQAAAABAAEAAAAHACMAAAABAAEAAAAHACIAAAABAAEAAAAHACEAAAABAAEAAAAHACAAAAABAAEAAAAHAB8AAAABAAEAAAAHAB4AAAABAAEAAAAHAB0AAAABAAEAAAAHABwAAAABAAEAAAAHABsAAAAGAAIAAAAHABoAAAAMAAEAAAAHABkAAAAHAAEAAAAHABgAAAAHAAEAAAAHABcAAAAHAAEAAAAHABYAAAAHAAEAAAAHABUAAAAHAAEAAAAHABQAAAAHAAEAAAAHABMAAAAHAAEAAAAHABIAAAAHAAEAAAAHABEAAAAHAAEAAAAHABAAAAAHAAEAAAAHAA8AAAAHAAEAAAAHAA4AAAAHAAEAAAAHAA0AAAAHAAEAAAAHAAwAAAAHAAEAAAAHAAsAAAAHAAEAAAAHAAoAAAAHAAEAAAAHAAQAAAAHAAEAAAAHAAMAAAAMAAIAAAAHAAIAAAAGAAAAAAAHAAEAAAABAAEAAAAHAAAAAAABAAEAAAAGACcAAAABAAEAAAAGACYAAAABAAEAAAAGACUAAAABAAEAAAAGACQAAAABAAEAAAAGACMAAAABAAEAAAAGACIAAAABAAEAAAAGACEAAAABAAEAAAAGACAAAAABAAEAAAAGAB8AAAABAAEAAAAGAB4AAAABAAEAAAAGAB0AAAABAAEAAAAGABwAAAABAAEAAAAGABsAAAABAAEAAAAGABoAAAAHAAIAAAAGABkAAAAHAAEAAAAGABgAAAAHAAEAAAAGABcAAAAHAAEAAAAGABYAAAAHAAEAAAAGABUAAAAHAAEAAAAGABQAAAAHAAEAAAAGABMAAAAHAAEAAAAGABIAAAAHAAEAAAAGABEAAAAHAAEAAAAGABAAAAAHAAEAAAAGAA8AAAAHAAEAAAAGAA4AAAAHAAEAAAAGAA0AAAAHAAEAAAAGAAwAAAAHAAEAAAAGAAsAAAAHAAEAAAAGAAoAAAAHAAEAAAAGAAQAAAAHAAEAAAAGAAMAAAAHAAAAAAAGAAEAAAABAAEAAAAGAAAAAAABAAEAAAAFACcAAAABAAEAAAAFACYAAAABAAEAAAAFACUAAAABAAEAAAAFACQAAAABAAEAAAAFACMAAAABAAEAAAAFACIAAAABAAEAAAAFACEAAAABAAEAAAAFACAAAAABAAEAAAAFAB8AAAABAAEAAAAFAB4AAAABAAEAAAAFAB0AAAABAAEAAAAFABwAAAABAAEAAAAFABsAAAABAAEAAAAFABoAAAAGAAIAAAAFABkAAAAMAAEAAAAFABgAAAAHAAEAAAAFABcAAAAHAAEAAAAFABYAAAAHAAEAAAAFABUAAAAHAAEAAAAFABQAAAAHAAEAAAAFABMAAAAHAAEAAAAFABIAAAAHAAEAAAAFABEAAAAHAAEAAAAFABAAAAAHAAEAAAAFAA8AAAAHAAEAAAAFAA4AAAAHAAEAAAAFAA0AAAAHAAEAAAAFAAwAAAAHAAEAAAAFAAsAAAAHAAEAAAAFAAoAAAAHAAEAAAAFAAQAAAAMAAIAAAAFAAMAAAAGAAAAAAAFAAIAAAABAAEAAAAFAAEAAAABAAEAAAAFAAAAAAABAAEAAAAEACcAAAABAAEAAAAEACYAAAABAAEAAAAEACUAAAABAAEAAAAEACQAAAABAAEAAAAEACMAAAABAAEAAAAEACIAAAABAAEAAAAEACEAAAABAAEAAAAEACAAAAABAAEAAAAEAB8AAAABAAEAAAAEAB4AAAABAAEAAAAEAB0AAAABAAEAAAAEABwAAAABAAEAAAAEABsAAAABAAEAAAAEABoAAAABAAEAAAAEABkAAAAGAAIAAAAEABgAAAAMAAEAAAAEABcAAAAHAAEAAAAEABYAAAAHAAEAAAAEABUAAAAHAAEAAAAEABQAAAAHAAEAAAAEABMAAAAHAAEAAAAEABIAAAAHAAEAAAAEABEAAAAHAAEAAAAEABAAAAAHAAEAAAAEAA8AAAAHAAEAAAAEAA4AAAAHAAEAAAAEAA0AAAAHAAEAAAAEAAwAAAAHAAEAAAAEAAsAAAAHAAEAAAAEAAoAAAAHAAEAAAAEAAkAAAAHAAEAAAAEAAgAAAAHAAEAAAAEAAcAAAAHAAEAAAAEAAYAAAAHAAEAAAADACcAAAABAAEAAAADACYAAAABAAEAAAADACUAAAABAAEAAAADACQAAAABAAEAAAADACMAAAABAAEAAAADACIAAAABAAEAAAADACEAAAABAAEAAAADACAAAAABAAEAAAADAB8AAAABAAEAAAADAB4AAAABAAEAAAADAB0AAAABAAEAAAADABwAAAABAAEAAAADABsAAAABAAEAAAADABoAAAABAAEAAAADABkAAAABAAEAAAADABgAAAAGAAIAAAADABcAAAAGAAEAAAADABYAAAAMAAEAAAADABUAAAAHAAEAAAADABQAAAAHAAEAAAADABMAAAAHAAEAAAADABIAAAAHAAEAAAADABEAAAAHAAEAAAADABAAAAAHAAEAAAADAA8AAAAHAAEAAAADAA4AAAAHAAEAAAADAA0AAAAHAAEAAAADAAwAAAAHAAEAAAADAAsAAAAHAAEAAAADAAoAAAAHAAEAAAADAAkAAAAHAAEAAAADAAgAAAAHAAEAAAADAAcAAAAMAAIAAAADAAYAAAAGAAEAAAADAAUAAAAGAAAAAAACACcAAAABAAEAAAACACYAAAABAAEAAAACACUAAAABAAEAAAACACQAAAABAAEAAAACACMAAAABAAEAAAACACIAAAABAAEAAAACACEAAAABAAEAAAACACAAAAABAAEAAAACAB8AAAABAAEAAAACAB4AAAABAAEAAAACAB0AAAABAAEAAAACABwAAAABAAEAAAACABsAAAABAAEAAAACABoAAAABAAEAAAACABkAAAABAAEAAAACABgAAAABAAEAAAACABcAAAABAAEAAAACABYAAAAGAAIAAAACABUAAAAMAAEAAAACABQAAAAHAAEAAAACABMAAAAHAAEAAAACABIAAAAHAAEAAAACABEAAAAHAAEAAAACABAAAAAHAAEAAAACAA8AAAAHAAEAAAACAA4AAAAHAAEAAAACAA0AAAAHAAEAAAACAAwAAAAHAAEAAAACAAsAAAAHAAEAAAACAAoAAAAHAAEAAAACAAkAAAAHAAEAAAACAAgAAAAMAAIAAAABACcAAAABAAEAAAABACYAAAABAAEAAAABACUAAAABAAEAAAABACQAAAABAAEAAAABACMAAAABAAEAAAABACIAAAABAAEAAAABACEAAAABAAEAAAABACAAAAABAAEAAAABAB8AAAABAAEAAAABAB4AAAABAAEAAAABAB0AAAABAAEAAAABABwAAAABAAEAAAABABsAAAABAAEAAAABABoAAAABAAEAAAABABkAAAABAAEAAAABABgAAAABAAEAAAABABcAAAABAAEAAAABABYAAAABAAEAAAABABUAAAAGAAIAAAABABQAAAAGAAEAAAABABMAAAAGAAEAAAABABIAAAAMAAEAAAABABEAAAAHAAEAAAABABAAAAAHAAEAAAABAA8AAAAHAAEAAAABAA4AAAAHAAEAAAABAA0AAAAHAAEAAAABAAwAAAAHAAEAAAABAAsAAAAMAAIAAAABAAoAAAAGAAEAAAABAAkAAAAGAAEAAAABAAgAAAAGAAAAAAABAAcAAAABAAEAAAABAAYAAAABAAEAAAABAAUAAAABAAEAAAAAACcAAAABAAEAAAAAACYAAAABAAEAAAAAACUAAAABAAEAAAAAACQAAAABAAEAAAAAACMAAAABAAEAAAAAACIAAAABAAEAAAAAACEAAAABAAEAAAAAACAAAAABAAEAAAAAAB8AAAABAAEAAAAAAB4AAAABAAEAAAAAAB0AAAABAAEAAAAAABwAAAABAAEAAAAAABsAAAABAAEAAAAAABoAAAABAAEAAAAAABkAAAABAAEAAAAAABgAAAABAAEAAAAAABcAAAABAAEAAAAAABYAAAABAAEAAAAAABUAAAABAAEAAAAAABQAAAABAAEAAAAAABMAAAABAAEAAAAAABIAAAAGAAIAAAAAABEAAAAGAAEAAAAAABAAAAAGAAEAAAAAAA8AAAAGAAEAAAAAAA4AAAAGAAEAAAAAAA0AAAAGAAEAAAAAAAwAAAAGAAEAAAAAAAsAAAAGAAAAAAAAAAoAAAABAAEAAAAAAAkAAAABAAEAAAAAAAgAAAABAAEAAAAAAAcAAAABAAEAAAAAAAYAAAABAAEAAAAAAAUAAAABAAEAAAAnACIAAAABAAEAAAAnACEAAAABAAEAAAAnACAAAAABAAEAAAAnAB8AAAABAAEAAAAnAB4AAAABAAEAAAAnAB0AAAABAAEAAAAnABwAAAABAAEAAAAnABsAAAABAAEAAAAnABoAAAABAAEAAAAnABkAAAABAAEAAAAnABgAAAABAAEAAAAnABcAAAABAAEAAAAnABYAAAABAAEAAAAnABUAAAABAAEAAAAnABQAAAABAAEAAAAnABMAAAABAAEAAAAnABIAAAABAAEAAAAnABEAAAABAAEAAAAnABAAAAABAAEAAAAnAA8AAAABAAEAAAAnAA4AAAABAAEAAAAnAA0AAAABAAEAAAAnAAwAAAABAAEAAAAnAAsAAAABAAEAAAAnAAoAAAABAAEAAAAnAAkAAAABAAEAAAAnAAgAAAABAAEAAAAnAAcAAAABAAEAAAAnAAYAAAABAAEAAAAnAAUAAAABAAEAAAAnAAQAAAABAAEAAAAnAAMAAAABAAEAAAAnAAIAAAABAAEAAAAnAAEAAAABAAEAAAAnAAAAAAABAAEAAAAmACIAAAABAAEAAAAmACEAAAABAAEAAAAmACAAAAABAAEAAAAmAB8AAAABAAEAAAAmAB4AAAABAAEAAAAmAB0AAAABAAEAAAAmABwAAAABAAEAAAAmABsAAAABAAEAAAAmABoAAAABAAEAAAAmABkAAAABAAEAAAAmABgAAAABAAEAAAAmABcAAAABAAEAAAAmABYAAAABAAEAAAAmABUAAAABAAEAAAAmABQAAAABAAEAAAAmABMAAAABAAEAAAAmABIAAAABAAEAAAAmABEAAAABAAEAAAAmABAAAAABAAEAAAAmAA8AAAABAAEAAAAmAA4AAAABAAEAAAAmAA0AAAABAAEAAAAmAAwAAAABAAEAAAAmAAsAAAABAAEAAAAmAAoAAAABAAEAAAAmAAkAAAABAAEAAAAmAAgAAAABAAEAAAAmAAcAAAABAAEAAAAmAAYAAAABAAEAAAAmAAUAAAABAAEAAAAmAAQAAAABAAEAAAAmAAMAAAABAAEAAAAmAAIAAAABAAEAAAAmAAEAAAABAAEAAAAmAAAAAAABAAEAAAAlACIAAAABAAEAAAAlACEAAAABAAEAAAAlACAAAAABAAEAAAAlAB8AAAABAAEAAAAlAB4AAAABAAEAAAAlAB0AAAABAAEAAAAlABwAAAABAAEAAAAlABsAAAABAAEAAAAlABoAAAABAAEAAAAlABkAAAABAAEAAAAlABgAAAABAAEAAAAlABcAAAABAAEAAAAlABYAAAABAAEAAAAlABUAAAABAAEAAAAlABQAAAABAAEAAAAlABMAAAABAAEAAAAlABIAAAABAAEAAAAlABEAAAABAAEAAAAlABAAAAABAAEAAAAlAA8AAAABAAEAAAAlAA4AAAABAAEAAAAlAA0AAAABAAEAAAAlAAwAAAABAAEAAAAlAAsAAAABAAEAAAAlAAoAAAABAAEAAAAlAAkAAAABAAEAAAAlAAgAAAABAAEAAAAlAAcAAAABAAEAAAAlAAYAAAABAAEAAAAlAAUAAAABAAEAAAAlAAQAAAABAAEAAAAlAAMAAAABAAEAAAAlAAIAAAABAAEAAAAlAAEAAAABAAEAAAAlAAAAAAABAAEAAAAkACIAAAABAAEAAAAkACEAAAABAAEAAAAkACAAAAABAAEAAAAkAB8AAAABAAEAAAAkAB4AAAABAAEAAAAkAB0AAAABAAEAAAAkABwAAAABAAEAAAAkABsAAAABAAEAAAAkABoAAAABAAEAAAAkABkAAAABAAEAAAAkABgAAAABAAEAAAAkABcAAAABAAEAAAAkABYAAAABAAEAAAAkABUAAAABAAEAAAAkABQAAAABAAEAAAAkABMAAAABAAEAAAAkABIAAAABAAEAAAAkABEAAAABAAEAAAAkABAAAAABAAEAAAAkAA8AAAABAAEAAAAkAA4AAAABAAEAAAAkAA0AAAABAAEAAAAkAAwAAAABAAEAAAAkAAsAAAABAAEAAAAkAAoAAAABAAEAAAAkAAkAAAABAAEAAAAkAAgAAAABAAEAAAAkAAcAAAABAAEAAAAkAAYAAAABAAEAAAAkAAUAAAABAAEAAAAkAAQAAAABAAEAAAAkAAMAAAABAAEAAAAkAAIAAAABAAEAAAAkAAEAAAABAAEAAAAkAAAAAAABAAEAAAAjACIAAAABAAEAAAAjACEAAAABAAEAAAAjACAAAAABAAEAAAAjAB8AAAABAAEAAAAjAB4AAAABAAEAAAAjAB0AAAABAAEAAAAjABwAAAABAAEAAAAjABsAAAABAAEAAAAjABoAAAABAAEAAAAjABkAAAABAAEAAAAjABgAAAABAAEAAAAjABcAAAABAAEAAAAjABYAAAABAAEAAAAjABUAAAABAAEAAAAjABQAAAABAAEAAAAjABMAAAABAAEAAAAjABIAAAABAAEAAAAjABEAAAABAAEAAAAjABAAAAABAAEAAAAjAA8AAAABAAEAAAAjAA4AAAABAAEAAAAjAA0AAAABAAEAAAAjAAwAAAABAAEAAAAjAAsAAAABAAEAAAAjAAoAAAABAAEAAAAjAAkAAAABAAEAAAAjAAgAAAABAAEAAAAjAAcAAAABAAEAAAAjAAYAAAABAAEAAAAjAAUAAAABAAEAAAAjAAQAAAABAAEAAAAjAAMAAAABAAEAAAAjAAIAAAABAAEAAAAjAAEAAAABAAEAAAAjAAAAAAABAAEAAAACAAEAAAABAAEAAAACAAcAAAAGAAAAAAAaABYAAAALAAEAAAAXABsAAAABAAEAAAAEAAMAAAABAAEAAAAGAAIAAAABAAEAAAAEAAUAAAAMAAIAAAADAAQAAAABAAEAAAACAAUAAAABAAEAAAACAAYAAAABAAEAAAA=")
 tile_set = ExtResource("29_ol46v")
 
-[node name="Stand" type="TileMapLayer" parent="Map/Control"]
+[node name="Stand" type="TileMapLayer" parent="Map/Control" unique_id=947927840]
 z_index = -99
-tile_map_data = PackedByteArray("AAAFACMAAAAAAAEAAAAOACIAAAAAAAEAAAARACcAAAAAAAEAAAAaAB8AAAAAAAEAAAAWACMAAAAAAAEAAAARAB8AAAAAAAEAAAASAB8AAAAAAAEAAAAEAB4AAAAAAAEAAAAHACAAAAAAAAEAAAAgAAYAAAAAAAEAAAAjABAAAAAAAAEAAAAiABoAAAAAAAEAAAAfAB8AAAAAAAEAAAAiACIAAAAAAAEAAAAjACUAAAAAAAEAAAAeACYAAAAAAAEAAAAbABgAAAAAAAEAAAAcABcAAAAAAAEAAAAaAAQAAAAAAAEAAAAdAAkAAAAAAAEAAAAhAA8AAAAAAAEAAAADAAMAAAAAAAEAAAABAAEAAAAAAAEAAAAHAAEAAAAAAAEAAAABAAQAAAAAAAEAAAA=")
-tile_set = SubResource("TileSet_nxf1r")
+tile_set = ExtResource("33_c2j4f")
 
-[node name="FogOfWar" type="TileMapLayer" parent="Map/Control"]
+[node name="FogOfWar" type="TileMapLayer" parent="Map/Control" unique_id=1862536633]
 tile_set = SubResource("TileSet_4sf5t")
 
-[node name="LayerItemDropped" type="Node2D" parent="Map/Control"]
+[node name="LayerItemDropped" type="Node2D" parent="Map/Control" unique_id=1716248870]
 z_index = -50
 script = ExtResource("32_1gorf")
 droppedScene = ExtResource("33_giel3")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="Exit" type="TileMapLayer" parent="Map/Control" unique_id=566690916]
+tile_set = ExtResource("37_cnqvw")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1546217714]
 position = Vector2(-35, 120)
 script = ExtResource("34_ktiqe")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2002768829]
 visible = false
 anchor_mode = 0
 
-[node name="HighlightManager" type="Node2D" parent="."]
+[node name="HighlightManager" type="Node2D" parent="." unique_id=1649234056]
 script = ExtResource("35_700qy")
 highlightBlue = ExtResource("36_7nmk8")
 highlightGreen = ExtResource("37_w6faq")
 highlightRed = ExtResource("38_roil7")
 highlightYellow = ExtResource("39_fasdi")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=92523995]
 offset_left = 27.0
 offset_top = 50.0
 offset_right = 67.0
 offset_bottom = 73.0
 pivot_offset = Vector2(20, 0)
 
-[node name="Fsm" type="Node" parent="." node_paths=PackedStringArray("InventoryBos", "Cab", "Usbb")]
+[node name="Fsm" type="Node" parent="." unique_id=509790649 node_paths=PackedStringArray("InventoryBos", "Cab", "Usbb")]
 script = ExtResource("40_m2rxn")
-InventoryBos = NodePath("../UI/InventoryBox")
-Cab = NodePath("../UI/CombatAbilityBox")
-Usbb = NodePath("../UI/UaSkillPointBox")
+InventoryBos = NodePath("../UI/UiRoot/InventoryBox")
+Cab = NodePath("../UI/UiRoot/CombatAbilityBox")
+Usbb = NodePath("../UI/UiRoot/UaSkillPointBox")
 
-[node name="SpriteManager" type="Node" parent="."]
+[node name="SpriteManager" type="Node" parent="." unique_id=1028350266]
 script = ExtResource("41_es6mh")
 
-[node name="Scene" type="Node" parent="."]
+[node name="Scene" type="Node" parent="." unique_id=1211123227]
 
-[node name="MapExporterNode" type="Node" parent="." node_paths=PackedStringArray("tbase", "tstand")]
-script = ExtResource("42_22g5y")
-mapName = "dishuiLake"
-tbase = NodePath("../Map/Control/BaseGround")
-tstand = NodePath("../Map/Control/Stand")
+[node name="MapExporterNode" type="Node" parent="." unique_id=977732578]
+
+[node name="AnimationManager" type="Node2D" parent="." unique_id=1400786942]
+position = Vector2(-8, -8)
+script = ExtResource("46_dgtui")
+LaserScene = ExtResource("47_ofgj4")

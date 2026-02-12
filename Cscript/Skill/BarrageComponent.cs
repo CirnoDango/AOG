@@ -39,13 +39,30 @@ public class Barrage
     }
     public Barrage RandomSummonParam()
     {
-        var bcDeck = Item.ItemDeck.Where(x => x is BarrageComponent && x is not BulletModule).ToList();
-        for(int i = 0; i < MaxComponents - 1; i++)
+        int draw2num = (MaxComponents - 2) / 3;
+        int fixNum = MaxComponents - 3 * draw2num - 2;
+        bool fire = true;
+        for (int i = 0; i < MaxComponents; i++)
         {
-            Components[i] = (BarrageComponent)Item.CreateItem(bcDeck[GD.RandRange(0, bcDeck.Count - 1)].Name).RandomSummonParam();
+            if (i < draw2num)
+                Components[i] = (BarrageComponent)Item.CreateItem(GroupList("Draw2")[GD.RandRange(0, GroupList("Draw2").Count - 1)].Name).RandomSummonParam();
+            else if (i < draw2num + fixNum)
+                Components[i] = (BarrageComponent)Item.CreateItem(GroupList("")[GD.RandRange(0, GroupList("").Count - 1)].Name).RandomSummonParam();
+            else if (fire)
+            {
+                Components[i] = (BarrageComponent)Item.CreateItem(GroupList("Fire")[GD.RandRange(0, GroupList("Fire").Count - 1)].Name).RandomSummonParam();
+                fire = false;
+            }
+            else
+            {
+                Components[i] = (BarrageComponent)new BulletModule().RandomSummonParam();
+                fire = true;
+            }
         }
-        Components[^1] = (BarrageComponent)new BulletModule().RandomSummonParam();
         return this;
+
+        List<Item> GroupList(string groupName) =>
+            [.. Item.ItemDeck.Where(x => x is BarrageComponent bc && bc.group == groupName)];
     }
     public void Execute(SkillContext sc)
     {
@@ -53,28 +70,18 @@ public class Barrage
         var executor = new Executor(executeBc, sc);
         executor.Execute();
     }
-    public static Barrage Test()
-    {
-        Barrage barrage = new();
-        barrage.Components[0] = (BarrageComponent)Item.CreateItem("AddDamage");
-        barrage.Components[1] = (BarrageComponent)Item.CreateItem("CircleFire");
-        barrage.Components[2] = (BarrageComponent)Item.CreateItem("Way3Fire");
-        barrage.Components[3] = (BarrageComponent)Item.CreateItem("MultiSpeedFire");
-        barrage.Components[4] = (BarrageComponent)Item.CreateItem("RandomFire");
-        barrage.Components[5] = new BulletModule
-        {
-            bulletContext = new BulletContext(10, 2, 10, ShapeBullet.Micro, ColorBullet.Red)
-        };
-        return barrage;
-    }
 }
 
 public abstract class BarrageComponent : Item
 {
     public override bool CanEquip => false;
-
+    public string group = "";
+    public float SpCost = 0;
+    public float CoolDown = 0;
+    public int draw = 1;
+    public override float Weight => 0;
     public override void ApplyParameters(Dictionary<string, object> parameters) { }
-
+    
     public virtual void Execute(ref List<BulletContext> lbc, Executor executor)
     {
         if (this is IBarrageComponentEvent ibce)
@@ -91,6 +98,7 @@ public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
 {
     public SkillContext sc = s;
     public Queue<BarrageComponent> PendingComponents = new(components);
+    public Dictionary<BarrageComponent, BarrageComponent> DrawPairs = [];
     public List<IBarrageComponentEvent> Events = [];
     public int draw = 1;
     public List<BulletContext> PendingLbc = [];
@@ -104,21 +112,23 @@ public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
             {
                 next = PendingComponents.Dequeue();
             } while (next == null && PendingComponents.Count > 0);
+            draw--;
+            draw += next.draw;
             next?.Execute(ref lbc, this);
-        }
-        else
-        {
-            FireOnce(lbc);
         }
     }
     public void FireOnce(List<BulletContext> lbc)
     {
+        Events.Reverse();
         foreach (var evt in Events)
             evt.ApplyTo(ref lbc);
         foreach (var bc in lbc)
         {
-            Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Up.Position, sc.GridOne.Position,
+            Bullet b = Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Up.Position, sc.GridOne.Position,
                 bc.Point, bc.Angle, bc.Speed, bc.MaxDistance, bc.Shape, bc.Color);
+            b.crit = bc.crit;
+            b.NewUpdateEvents = bc.UpdateEvents;
+            bc.AfterSummonEvents?.Invoke(b);
         }
     }
     public void Continue(List<BulletContext> lbc)
@@ -131,30 +141,33 @@ public interface IBarrageComponentEvent
     public void ApplyTo(ref List<BulletContext> lbc);
 }
 
-public class BulletContext(float damage, float speed, float maxDistance, ShapeBullet shape, ColorBullet color)
+public class BulletContext(Damage damage, float speed, float maxDistance, ShapeBullet shape, ColorBullet color)
 {
-    public float damage = damage;
+    public Damage damage = damage;
     public float Speed = speed;
     public float MaxDistance = maxDistance;
     public ShapeBullet Shape = shape;
     public ColorBullet Color = color;
-
+    public float crit = 0;
     public Vector2 Point = Vector2.Zero;
     public float Angle = 0;
-
+    public Action<Bullet, float> UpdateEvents { get; set; }
+    public Action<Bullet> AfterSummonEvents { get; set; }
     internal BulletContext Clone()
     {
         return new BulletContext(damage, Speed, MaxDistance, Shape, Color)
         {
             Point = Point,
             Angle = Angle,
+            UpdateEvents = UpdateEvents,
+            AfterSummonEvents = AfterSummonEvents
         };
     }
 
     public static explicit operator BulletContext(Dictionary<string, object> dict)
     {
         return new BulletContext(
-            Convert.ToSingle(dict["damage"]),
+            new Damage(Convert.ToSingle(dict["damage"]), (DamageType)Enum.Parse(typeof(DamageType), (string)dict["type"])),
             Convert.ToSingle(dict["speed"]),
             Convert.ToSingle(dict["maxDistance"]),
             (ShapeBullet)Enum.Parse(typeof(ShapeBullet), (string)dict["shape"]),

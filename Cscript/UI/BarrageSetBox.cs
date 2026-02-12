@@ -8,11 +8,14 @@ public partial class BarrageSetBox : VBoxContainer
     public FlowContainer FBox;
     [Export]
     public TextureRect Image;
+    [Export]
+    public Label L;
     public Dictionary<TextureButton, BarrageComponent> Buttons = [];
 
     public void Init(BarrageSet bs)
     {
         Image.Texture = bs.Texture;
+        L.Text = $"SpCost:{bs.Skill.GetSpCost(1)}; CD:{bs.Skill.GetCooldown(1) / 100}";
         Init(bs.B);
     }
     public void Init(Barrage b)

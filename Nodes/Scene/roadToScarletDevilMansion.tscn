@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://0l73v0ffh62k"]
+
+[ext_resource type="Script" uid="uid://bgsrh4ltjmmtb" path="res://Cscript/Scene/RoadToScarletDevilMansion.cs" id="1_vrweg"]
+
+[node name="RoadToScarletDevilMansion" type="Node"]
+script = ExtResource("1_vrweg")

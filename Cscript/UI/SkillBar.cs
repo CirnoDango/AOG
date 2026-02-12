@@ -17,9 +17,12 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     public Dictionary<string, Color> skillBoxColor = new()
     {
         { "YinyangBall", new Color(1f, 0.2f, 0.4f) },
-        { "Freeze", new Color(0.5f, 0.5f, 0.9f) },
+        { "Circle", new Color(0f, 0.8f, 0.5f) },
         { "Star", new Color(0.9f, 0.9f, 0.1f) },
         { "Dark", new Color(0.2f, 0.1f, 0.1f) },
+        { "Freeze", new Color(0.5f, 0.5f, 0.9f) },
+        { "Fist", new Color(0.5f, 0.1f, 0.5f) },
+        { "FireElement", new Color(1f, 0.3f, 0.1f) },
     };
     // 学会一个技能，添加按钮
     public void LearnSkill(SkillInstance skill)
@@ -53,7 +56,8 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             StretchMode = TextureButton.StretchModeEnum.Scale,
             TooltipText = Tr(skill.Template.SkillInfo(Player.PlayerUnit.Us.GetSkill(skill.Name).Level)),
             SizeFlagsVertical = SizeFlags.ShrinkCenter,
-            SizeFlagsHorizontal = SizeFlags.ShrinkCenter
+            SizeFlagsHorizontal = SizeFlags.ShrinkCenter,
+            FocusMode = FocusModeEnum.None
         };
         float ratio = 60 / skill.Texture.GetSize().X;
         btn.Scale = new Vector2(ratio, ratio);

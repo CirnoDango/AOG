@@ -1,0 +1,30 @@
+[gd_resource type="TileSet" format=3 uid="uid://bk5yqay6li22q"]
+
+[ext_resource type="Texture2D" uid="uid://bxp8lig5ce3j8" path="res://Assets/tiles/arrow.png" id="1_gq84v"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o60m2"]
+texture = ExtResource("1_gq84v")
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 1
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 2
+3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 3
+
+[resource]
+terrain_set_0/mode = 2
+terrain_set_0/terrain_0/name = "Left"
+terrain_set_0/terrain_0/color = Color(0.256855, 0.775455, 0, 1)
+terrain_set_0/terrain_1/name = "Up"
+terrain_set_0/terrain_1/color = Color(0.995593, 0, 0.257339, 1)
+terrain_set_0/terrain_2/name = "Right"
+terrain_set_0/terrain_2/color = Color(1, 1, 0, 1)
+terrain_set_0/terrain_3/name = "Down"
+terrain_set_0/terrain_3/color = Color(0, 0.560784, 1, 1)
+sources/1 = SubResource("TileSetAtlasSource_o60m2")

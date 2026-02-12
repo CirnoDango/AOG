@@ -16,7 +16,7 @@ public class Icefall : Skill
     int[] t0 = { 3, 6, 6, 6 };
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     public override float GetCooldown(int level)
     {
@@ -24,19 +24,19 @@ public class Icefall : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+        Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
             new Vector2(0, 1), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+        Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
             new Vector2(0, 0), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+        Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
             new Vector2(0,-1), 0, 2, 10, ShapeBullet.Bullet, ColorBullet.Ice);
         if (sc.Level >= 2)
         {
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+            Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
                 new Vector2(0, 1), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+            Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
                 new Vector2(0, 0), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
-            Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 
+            Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.pierce), sc.User.Up.Position, sc.GridOne.Position, 
                 new Vector2(0, -1), Vector2.Right, 2.5f, 10, ShapeBullet.Bullet, ColorBullet.Ice);
         }
     }
@@ -62,7 +62,7 @@ public class MinusK : Skill
         SkillGroup = "Freeze";
         SpCost = 5;
         MpCost = 5;
-        Cooldown = 800;
+        Cooldown = 1800;
     }
     public override TargetType GetTargeting(int level)
     {
@@ -84,12 +84,13 @@ public class MinusK : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.UnitOne.Ua.TakeBulletDamage(30, sc.User, this);
+        sc.UnitOne.Ua.TakeBulletDamage(new Damage(30, DamageType.cold), sc.User, this);
         sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[sc.Level - 1]));
+        if (sc.Level < 4) return;
         foreach (var grid in sc.UnitOne.Up.CurrentGrid.NearGrids(1))
         {
             if (grid.unit != null)
-                sc.UnitOne.GetStatus(new Frozen(300));
+                grid.unit.GetStatus(new Frozen(300));
         }
     }
 }
@@ -101,7 +102,6 @@ public class DiamondBlizzard : Skill
         SkillGroup = "Freeze";
         SpCost = 5;
         Cooldown = 800;
-        Targeting = new TargetType(Target.Self);
     }
     int[] t0 = { 2, 3, 4, 4 };
     string[] extra = [
@@ -112,7 +112,7 @@ public class DiamondBlizzard : Skill
     ];
     public override TargetType GetTargeting(int level)
     {
-        return new TargetType(Target.Self, 1, t0[level]);
+        return new TargetType(Target.Self, 1, t0[level - 1]);
     }
     public override string GetDescription(int level)
     {
@@ -124,7 +124,7 @@ public class DiamondBlizzard : Skill
         {
             if (g.unit != null && g.unit != sc.User)
             {
-                g.unit.Ua.CheckBodyHit(30, sc.User, this);
+                g.unit.Ua.CheckBodyHit(new Damage(30, DamageType.slash), sc.User, this);
                 if (sc.Level == 4)
                 {
                     sc.UnitOne.Up.KnockBack(4, sc);
@@ -142,7 +142,7 @@ public class PerfectGlacialist : Skill
         SkillGroup = "Freeze";
         SpCost = 5;
         MpCost = 5;
-        Cooldown = 800;
+        Cooldown = 1800;
         Targeting = new TargetType(Target.Grid, 1, 10);
     }
     int[] t0 = { 18, 36, 54, 54 };
@@ -153,7 +153,7 @@ public class PerfectGlacialist : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet.CreateBullet(sc.User, this, 15, sc.User.Up.Position, sc.GridOne.Position, 5, 10, ShapeBullet.Bullet, ColorBullet.White);
+        Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.cold), sc.User.Up.Position, sc.GridOne.Position, 5, 10, ShapeBullet.Bullet, ColorBullet.White);
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
@@ -166,7 +166,7 @@ public class PerfectGlacialist : Skill
         {
             for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.Level - 1]; i++)
             {
-                Bullet.CreateBullet(sc.User, this, 8, sc.UnitOne.Up.Position, sc.UnitOne.Up.Position + RandomV2(), 
+                Bullet.CreateBullet(sc.User, this, new Damage(8, DamageType.cold), sc.UnitOne.Up.Position, sc.UnitOne.Up.Position + RandomV2(), 
                     (float)GD.RandRange(1.5, 3), 6, ShapeBullet.Micro, ColorBullet.White);
             }
         }
@@ -198,7 +198,7 @@ public class PerfectFreeze : SpellCard
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 冻结的气息弥漫四周……");
         AddTimedEvent(Linspace(20,300,70), (ctx, advanceTime) =>
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, 12, sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 
+            var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.cold), sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
                 ShapeBullet.Ring,(ColorBullet)(new List<int> { 0, 4, 9, 12, 13 })[GD.RandRange(0,4)] , advanceTime);
         });

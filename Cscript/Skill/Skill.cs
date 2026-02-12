@@ -20,6 +20,7 @@ public class TargetType
     public int BombRange { get; set; } = 0;
     public TargetType(Target type)
     {
+        // 当 type == Target.Self 时，Range的作用仅为让UnitAi判断在离玩家多近时释放该技能。因此该重载只用于AI永不使用的技能。
         Type = type;
         if (type == Target.Self)
         {
@@ -92,6 +93,7 @@ public abstract class Skill
     public static List<Skill> SkillDeck { get; set; } = [];
     public static Dictionary<string, Skill> NameSkill { get; set; } = [];
     public static SkillInstance CurrentSkill { get; set; }
+    public static List<SkillInstance> ContinueSkills { get; set; } = [];
     public string Name;
     public string[] Extra(string index = "0")
     {
@@ -131,6 +133,8 @@ public abstract class Skill
         {
             si.CurrentCooldown += GetCooldown(sc.Level);
         }
+        GameEvents.UseSkill(sc.User, sc, si);
+        sc.User.Ue.UseSkill(sc, si);
         //用速度修正timecost
         float RealTimeCost = GetTimeCost(sc.Level);
         if (Name == "Move")
@@ -170,6 +174,8 @@ public abstract class Skill
             text += $" 持续时间 ：{Math.Round(spell.GetDuration(level) / 100):F0} 回合 \n";
         if (GetCooldown(level) > 0)
             text += $" 冷却时间 ：{Math.Round(GetCooldown(level) / 100):F0} 回合 \n";
+        if (GetTargeting(level) != null)
+            text += $" 使用范围 ：{GetTargeting(level).Range}\n";
         if (GetSpNeed(level) != 0) { text += $" SP要求 ：{GetSpNeed(level)}\n"; }
         if (GetSpCost(level) > 0)
         {
@@ -240,7 +246,8 @@ public class SkillInstance
     {
         bool canuse;
         if (CurrentCooldown <= 0 && 
-            user.Ua.CurrentSp >= Template.GetSpNeed(user.Us.GetSkill(Name).Level) && 
+            user.Ua.CurrentSp >= Template.GetSpNeed(user.Us.GetSkill(Name).Level) &&
+            (user.Ua.CurrentSp >= Template.GetSpCost(user.Us.GetSkill(Name).Level) || user.Ua.MaxSp == 0) &&
             user.Ua.CurrentMp >= Template.GetMpCost(user.Us.GetSkill(Name).Level) &&
             Template.SkillGroup != "" && 
             Template.EffectType == EffectType.Activate)
@@ -259,9 +266,15 @@ public class SkillInstance
 
     public void Update(SkillContext context, float delta)
     {
-        if (Template is SpellCard spellCard)
+        if (Template is SkillLong sl)
         {
-            spellCard.Update(context, delta);
+            sl.Update(context, delta);
+            return;
+        }
+        if (Template is SpellCard sc)
+        {
+            sc.Update(context, delta);
+            return;
         }
     }
     public void Activate(SkillContext sc)
@@ -273,7 +286,72 @@ public class SkillInstance
 
     public TargetType Targeting => Template.GetTargeting(Level);
 }
+public abstract class SkillLong : Skill
+{
+    public float Duration;
+    public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = [];
+    public virtual float GetDuration(int level) => Duration;
+    protected void AddTimedEvent(float time, Action<SkillContext, float> action)
+    {
+        timedEvents.Add((time, action));
+        timedEvents.Sort((a, b) => a.triggerTime.CompareTo(b.triggerTime));
+    }
+    protected void AddTimedEvent(float[] time, Action<SkillContext, float> action)
+    {
+        foreach (var t in time)
+        {
+            AddTimedEvent(t, action);
+        }
+    }
 
+    protected override void StartActivate(SkillContext sc)
+    {
+        SkillInstance si = sc.User.Us.GetSkill(Name);
+        si.IsActive = true;
+        si.TimeElapsed = 0;
+        si.User = sc.User;
+        ContinueSkills.Add(si);
+        OnSkillStart(sc);
+    }
+    public override void Activate(SkillContext sc, SkillInstance si = null)
+    {
+        StartActivate(sc);
+        EndActive(sc, si);
+    }
+
+    public void Update(SkillContext sc, float delta)
+    {
+        SkillInstance si = sc.User.Us.GetSkill(Name);
+        if (!si.IsActive)
+            return;
+        float previousTime = si.TimeElapsed;
+        si.TimeElapsed += delta;
+        // 触发事件，传入 advanceTime
+        while (si.eventIndex < timedEvents.Count && si.TimeElapsed >= timedEvents[si.eventIndex].triggerTime)
+        {
+            var (triggerTime, action) = timedEvents[si.eventIndex];
+            float advanceTime = si.TimeElapsed - triggerTime;
+            action.Invoke(sc, advanceTime);
+            si.eventIndex++;
+        }
+
+        OnSkillUpdate(sc, delta);
+        if (si.TimeElapsed >= GetDuration(sc.Level))
+        {
+            OnSkillEnd(sc);
+        }
+    }
+    protected abstract void OnSkillStart(SkillContext sc);
+    protected virtual void OnSkillUpdate(SkillContext sc, float delta) { }
+    public virtual void OnSkillEnd(SkillContext sc)
+    {
+        SkillInstance si = sc.User.Us.GetSkill(Name);
+        timedEvents.Clear();
+        si.eventIndex = 0;
+        ContinueSkills.Remove(si);
+        si.IsActive = false;
+    }
+}
 public abstract class SpellCard : Skill
 {
     public static List<SkillInstance> currentSpellcards = [];

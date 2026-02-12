@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b6hs4jiqkgfp5"]
+
+[ext_resource type="Texture2D" uid="uid://iuslct5jqxae" path="res://Assets/UI/hex.png" id="1_t2b2x"]
+[ext_resource type="Script" uid="uid://b8d3fdrx4ebef" path="res://Cscript/UI/SkillTreeEntry.cs" id="2_qr8dh"]
+[ext_resource type="Texture2D" uid="uid://c7fhmwkxod1l6" path="res://Assets/UI/hexBack.png" id="3_xyo0t"]
+
+[node name="SkillTreeEntry" type="TextureRect" unique_id=785962061 node_paths=PackedStringArray("background", "image")]
+z_index = 1
+offset_left = -550.0
+offset_top = -500.0
+offset_right = 550.0
+offset_bottom = 500.0
+pivot_offset = Vector2(550, 500)
+texture = ExtResource("1_t2b2x")
+script = ExtResource("2_qr8dh")
+background = NodePath("TextureRect")
+image = NodePath("TextureButton")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=758101729]
+modulate = Color(0.329158, 0.329158, 0.329158, 1)
+layout_mode = 0
+offset_right = 1100.0
+offset_bottom = 1000.0
+texture = ExtResource("3_xyo0t")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1731553254]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 200.0
+offset_right = 850.0
+offset_bottom = 800.0
+stretch_mode = 0

@@ -33,14 +33,15 @@ public partial class Tutorial2 : Stage
     public void Init()
     {
         // 场景资源加载
-        Player.Init("cirno", 3);
-        Map tutorial = MapBuilder.ImportMapFromJson("res://map.json", "tutorial");
-        MapBuilder.BuildLogicFromTileMap();
-        tutorial.Entrance = new Vector2I(10, 5);
+        Player.Init("cirno", 1);
+        Map tutorial = new("tutorial")
+        {
+            Entrance = new Vector2I(10, 5)
+        };
         Scene.Enter(tutorial);
         tutorial.CreateEnemy(new Vector2I(10, 3), "reimu");
         tutorial.SummonChest(6, 1, tutorial.GetGrid(new Vector2I(3, 2)));
-        G.I.SkillPanel.Add("Freeze");
+        G.I.SkillTreeBox.Expert("Freeze");
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Player.PlayerUnit.Memorys.MaxEquipWeight += 15;
@@ -54,20 +55,39 @@ public partial class Tutorial2 : Stage
             new("【次日】【雾之湖边】", L("null"),
                 "琪露诺碰见了灵梦。"),
             new("灵梦", L("reimu_fight_confident"),
-                "听说你很努力呢, 让我也来教你一些东西吧。"),
-            new("休息状态可以对自己的灵力进行操控哦。"),
-            new("按5或F的休息是使灵力消散，减少SP。"),
-            new("而按0或者空格的休息则是聚集灵力，增加SP！"),
-            new("按R，T，Y，U分别是打开装备栏、能力栏、技能栏、记忆栏。"),
-            new("在你背包里的装备，只要不超过负重限制，都可以装备到装备栏中！"),
-            new("而名字中带有记忆的，只能放进你的“记忆槽”！记忆是永久的，装备上了就不能再取下来。"),
-            new("装备栏负重随着灵巧属性提升而上升，记忆负重则随着游戏进程不断深入自动增加。"),
-            new("能力栏中可以查看当前的战斗属性，技能栏中可以使用自由属性点和技能点进行升级。"),
-            new("每个技能组中都有5个技能可以学习并升级，其中最后一个是符卡"),
-            new("再说一遍，R，T，Y，U分别是装备栏、能力栏、技能栏、记忆栏！也就是键盘第一排除了移动用按键的左边四个。"),
-            new("记不起来就挨个按过去也行啦！"),
-            new("来试试吧，用你背包里的记忆学习3级的【perfect freeze】")
-        );
+                "听说魔理沙教了你一些战斗技巧, 让我来教你成长技巧吧。"),
+            new("首先按B(aBility)可以进入能力栏")
+            );
+        G.I.Fsm.Cab.Update(Player.PlayerUnit);
+        G.I.Fsm.Cab.Visible = true;
+        await ShowDialogSequence(
+            new("灵梦", L("reimu_fight_confident"),
+                "能力栏中可以查看当前的人物状态、能力属性和持有技能。"),
+            new("而敌人的信息可以通过将鼠标悬停在单位图像上查看。")
+            );
+        G.I.Fsm.Cab.Visible = false;
+        await ShowDialogSequence(
+            new("灵梦", L("reimu_fight_confident"),
+                "地图上的宝箱和敌人会掉落物品和记忆，他们是主要的战斗力提升来源。"),
+            new("按I(Inventory)打开装备栏，在这里进行装备、卸下、丢弃操作。"),
+            new("你的装备栏和背包都不能超过负重限制，而负重限制可以通过提高灵巧值来提升。"),
+            new("按M(Memory)打开记忆栏，记忆会提供各种能力点数。"),
+            new("记忆和装备不同的是，记忆一旦装备就不能再被卸下，记忆上限在进入新地图时自动提升。"),
+            new("按K(sKill)进入技能栏，在这里可以花费能力点数提升属性和技能等级。")
+            );
+        G.I.SkillPanel.Refresh();
+        G.I.Ua.Refresh();
+        G.I.Fsm.Usbb.Visible = true;
+        await ShowDialogSequence(
+            new("灵梦", L("reimu_fight_confident"),
+                "每个技能组中都有5个技能可以学习并升级，其中最后一个是符卡"),
+            new("每个技能最多可以升到3级，如果精通这个技能组则可以升到4级！")
+            );
+        G.I.Fsm.Usbb.Visible = false;
+        G.I.DialogBox.ShowDialog([
+            new("灵梦", L("reimu_fight_confident"),
+            "来试试吧，用你背包里的记忆学习3级的【perfect freeze】")
+        ]); await Click();
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
         GameEvents.OnSkillLearned += CheckPf3Get;
@@ -76,11 +96,24 @@ public partial class Tutorial2 : Stage
 
         DialogBox.SShow();
         G.I.Fsm.ChangeState(Fsm.TalkState);
+        G.I.DialogBox.ShowDialog([
+            new("灵梦", L("reimu_fight_confident"),
+            "按T(Talent)打开天赋栏，在这里可以学习和精通新的技能树。")
+        ]); await Click();
+        G.I.SkillTreeBox.Refresh();
+        G.I.SkillTreeBox.Visible = true;
         await ShowDialogSequence(
-            new("除了使用学习的技能发射弹幕以外，使用弹幕盒子也可以发射弹幕。"),
-            new("弹幕盒子里可以装备数个弹幕组件，使用时读取弹幕组件并发射弹幕。"),
+            new("这里的六边形格子图就是天赋栏，部分格子包含的每个图标就是技能树。"),
+            new("每个格子有3种状态。金色格子代表你精通该格子的技能树。"),
+            new("金色格的所有相邻格子会变成蓝色，代表你学习了该格子的技能树。"),
+            new("剩下的白色格就是未学习。每花1天赋点，可以点击一个蓝色格子，将其变成金色。")
+            );
+        G.I.SkillTreeBox.Visible = false;
+        await ShowDialogSequence(
+            new("想要发射弹幕，除了使用技能外，还可以使用叫“弹幕盒子”的特殊物品。"),
+            new("每个弹幕盒子都包含几个弹幕组件，使用弹幕盒子会根据里面的弹幕组件发射不同的弹幕。"),
             new("弹幕组件有很多种，比如不同色不同形状的子弹、弹幕形状、火力增强等。"),
-            new("I键可以打开弹幕编辑面板，自由组合弹幕组件！"),
+            new("O(danmOku)键可以打开弹幕编辑面板，自由组合弹幕组件！"),
             new("然后按G是和自己所在的格子互动，比如打开宝箱什么的。"),
             new("而要打开门的话，就朝着门移动就好啦！"),
             new("如果找到了地图的出口，在那里按↓就可以进入下一层了。"),
@@ -90,11 +123,11 @@ public partial class Tutorial2 : Stage
         G.I.DialogBox.Hide();
         Player.PlayerUnit.Ua.Cun += 100;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 8 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 8 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
+            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 8 } } } }));
     }
 }
 

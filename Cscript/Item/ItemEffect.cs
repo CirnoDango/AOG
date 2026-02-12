@@ -9,7 +9,23 @@ public abstract class ItemEffect : IEquipable
 {
     public static List<ItemEffect> ItemEffectDeck { get; set; } = [];
     public abstract int Value { get; }
-    public abstract string Name { get; }
+    public string Name => GetType().Name;
+    public virtual float ParamF { get; set; }
+    public virtual int ParamI { get; set; }
+    public virtual string Description { get; }
+    public virtual string GetDescription()
+    {
+        return string.Format(TranslationServer.Translate($"ie{Name}"), InfoParam);
+    }
+    public virtual string InfoParam
+    {
+        get
+        {
+            if(ParamF != 0)
+                return $"{ParamF:F1}";
+            return $"{ParamI}";
+        }
+    }
     public abstract void OnEquip(Unit unit);
     public abstract void OnUnequip(Unit unit);
     public virtual void RandomSummonParam() { }
@@ -23,6 +39,7 @@ public abstract class ItemEffect : IEquipable
     }
     public void ApplyItemEffect(Item item)
     {
+        item.egos.Add(this);
         item.EquipEvent += OnEquip;
         item.UnequipEvent += OnUnequip;
     }
@@ -47,24 +64,5 @@ public abstract class ItemEffect : IEquipable
         }
 
         ItemEffectDeck = ItemEffects;
-    }
-}
-
-public class Healthy : ItemEffect
-{
-    private int _addMaxHp = 30;
-    public override string Name { get => "Healthy"; }
-    public override int Value { get => 3; }
-    public override void OnEquip(Unit unit)
-    {
-        unit.Ua.MaxHp += _addMaxHp;
-    }
-    public override void OnUnequip(Unit unit)
-    {
-        unit.Ua.MaxHp -= _addMaxHp;
-    }
-    public override void RandomSummonParam()
-    {
-        _addMaxHp = (int)GD.Randfn(30, 4);
     }
 }

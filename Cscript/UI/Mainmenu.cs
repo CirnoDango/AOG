@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Xml.Linq;
 
 public partial class Mainmenu : Control
@@ -22,6 +23,7 @@ public partial class Mainmenu : Control
             EnemyLoader.LoadEnemies();
             Skill.LoadSkillDeck();
             ItemLoader.LoadAllItems();
+            ItemEffect.LoadAllItemEffects();
             SpriteManager.LoadSkills();
             Game.IsLoaded = true;
         }
@@ -29,10 +31,11 @@ public partial class Mainmenu : Control
         OptionPlayer.ItemSelected += OnPlayerSelected;
         OptionScene.ItemSelected += OnSceneSelected;
 
-        OnPlayerSelected(0);
+        OnPlayerSelected(3);
         OnSceneSelected(0);
 
         // 开始按钮
+        Visible = true;
         start.Pressed += StartGame;
     }
 
@@ -40,6 +43,10 @@ public partial class Mainmenu : Control
     {
         selectedPlayer = OptionPlayer.GetItemText((int)index);
         Image.Texture = GD.Load<Texture2D>($"res://Assets/Sprites/{selectedPlayer}.png");
+        var ed = EnemyLoader.enemyDatas.Where(x => x.Name == selectedPlayer).FirstOrDefault();
+        Info.Text = $"{TextEx.Tr($"u{ed.Name}")}\nHP:{ed.HP}  SP:{ed.SP}  MP:{ed.MP}\n" +
+            $"力量:{ed.Str} 敏捷:{ed.Dex} 体质:{ed.Con}\n灵力:{ed.Spi} 魔力:{ed.Mag} 灵巧:{ed.Cun}\n" +
+            $"初始技能组：{TextEx.Tr($"sg{ed.SkillGroups.FirstOrDefault()}")}";
     }
 
     private void OnSceneSelected(long index)
@@ -59,6 +66,9 @@ public partial class Mainmenu : Control
                 break;
             case "雾之湖":
                 selectedScene = "mistylake";
+                break;
+            default:
+                selectedScene = s;
                 break;
         }
     }

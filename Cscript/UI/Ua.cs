@@ -27,12 +27,12 @@ public partial class Ua : VBoxContainer, IRegisterToG
         // 初始化字典
         buttonHints = new Dictionary<Button, string>
         {
-            { str, "+1力量：+2%体术伤害，+1普攻伤害" },
-            { dex, "+1敏捷：+1%整体速度，+1%体术命中，+1%闪避" },
-            { con, "+1体质：+2%治疗系数，+5MaxHp" },
-            { spi, "+1灵力：+1%弹幕伤害，+1%擦弹，+2MaxSp" },
-            { mag, "+1魔力：+1.5%弹幕伤害，+1MaxMp，+0.1Mp回复" },
-            { cun, "+1灵巧：+1%弹幕命中，+1装备负重，+1背包负重" }
+            { str, TranslationServer.Translate("estr") },
+            { dex, TranslationServer.Translate("edex") },
+            { con, TranslationServer.Translate("econ") },
+            { spi, TranslationServer.Translate("espi") },
+            { mag, TranslationServer.Translate("emag") },
+            { cun, TranslationServer.Translate("ecun") },
         };
 
         // 为每个按钮注册事件

@@ -8,8 +8,7 @@ using System.Xml.Linq;
 
 public partial class SpriteManager : Node
 {
-    //public static Dictionary<string, PackedScene> EnemyPrefabs = [];
-    //public static Dictionary<string, PackedScene> SkillPrefabs = [];
+    
     public static void LoadEnemy(Unit unit)
     {
         string name = unit.Name;

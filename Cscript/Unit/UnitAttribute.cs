@@ -9,7 +9,12 @@ public class UnitAttribute(Unit unit)
     private ColorRect hpBarAhead;
     private ColorRect spBarAhead;
 
-    public float MaxHp = 100;
+    public float MaxHp
+    {
+        get => _maxHp;
+        set { _maxHp = Math.Max(1, value); }
+    }
+    private float _maxHp = 100;
     public float CurrentHp = 100;
     private float _maxSp = 40;
     public float MaxSp
@@ -32,6 +37,8 @@ public class UnitAttribute(Unit unit)
     public float BulletGraze = 0;
     private int _str = 10, _dex = 10, _con = 10, _spi = 10, _mag = 10, _cun = 10;
     public float imageSizeFactor = 0.16f;
+    public float CritRate = 0.05f;
+    public DamageTypeSet DamageTypeSet { get; set; } = new();
     public int Str
     {
         get => _str - 10;
@@ -40,6 +47,7 @@ public class UnitAttribute(Unit unit)
             int old = _str - 10;
             int now = value;
             DamageBody += (now - old) * 2;
+            CritRate += (now - old) * 0.01f;
             _str = value + 10;
         }
     }
@@ -107,6 +115,7 @@ public class UnitAttribute(Unit unit)
         }
     }
     public int skillPoint { get; set; } = 0;
+    public int talentPoint { get; set; } = 0;
     public int uaPoint { get; set; } = 0;
     // 可选：一个构造函数初始化所有属性
     public void UnitAtt(int str = 10, int dex = 10, int con = 10, int spi = 10, int mag = 10, int cun = 10)
@@ -224,35 +233,47 @@ public class UnitAttribute(Unit unit)
     /// <param name="user"></param>
     /// <param name="skill"></param>
     /// <returns></returns>
-    public float TakeBulletDamage(float amount, Unit user, Skill skill)
+    public float TakeBulletDamage(Damage damage, Unit user, Skill skill, float crit = 0)
     {
+        if(GD.Randf() < user.Ua.CritRate + crit)
+        {
+            Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+            switch (damage.Type)
+            {
+                default:
+                    damage.Value *= 1.5f; break;
+            } 
+        }
+        Damage amount = damage.ApplyModifiers(user.Ua.DamageTypeSet, DamageTypeSet);
         foreach (var status in _parent.Status)
             status.OnTakeBulletDamage(_parent, skill, ref amount);
-        amount = user.Ue.TakeBulletDamage(_parent, amount);
+        amount = user.Ue.DealBulletDamage(_parent, amount);
+        amount = _parent.Ue.TakeBulletDamage(user, amount);
         amount *= user.Ua.DamageBullet / 100;
         float rd = 0;
         if (_parent.Us.currentSpellcard != null)
         {
-            CurrentSp -= amount;
+            amount = _parent.Ue.Graze(_parent, amount);
+            CurrentSp -= amount.Value;
             if (CurrentSp < 0)
             {
                 float overflow = -CurrentSp;
                 CurrentSp = 0;
-                float damage = overflow * 2 + MaxHp / 3;
-                GetHp(-damage);
-                string template = TranslationServer.Translate("击破符卡");
-                string result = string.Format(template, user.TrName, skill.TrName, _parent.TrName, _parent.Us.currentSpellcard.TrName, $"{damage:F0}");
+                float dam = overflow * 2 + MaxHp / 3;
+                GetHp(-dam);
+                string template = TranslationServer.Translate("acSpellBreak");
+                string result = string.Format(template, user.TrName, skill.TrName, _parent.TrName, _parent.Us.currentSpellcard.TrName, damage.ToString());
                 Info.Print(result);
 
                 _parent.Us.currentSpellcard.OnSpellBreak(new SkillContext(_parent));
-                rd = damage;
+                rd = dam;
             }
             else
             {
                 string msg;
                 msg = string.Format(
-                    TranslationServer.Translate("技能被擦弹_减少SP"),
-                    user.TrName, skill.TrName, _parent.TrName, amount.ToString("F0")
+                    TranslationServer.Translate("acGrazeD"),
+                    user.TrName, skill.TrName, _parent.TrName, amount.Value.ToString("F0")
                 );
                 Info.Print(msg);
             }
@@ -260,45 +281,65 @@ public class UnitAttribute(Unit unit)
         else
         {
             // 擦弹检定
-            if (GD.Randf() < MathEx.Logistic(1 - 0.7f * (CurrentSp / MaxSp), BulletGraze - user.Ua.BulletDamageAccuracy))
+            if (GD.Randf() < GrazePercent(this, user.Ua))
             {
-                CurrentSp += amount;
+                amount = _parent.Ue.Graze(_parent, amount);
+                CurrentSp += amount.Value;
                 if (CurrentSp > MaxSp)
                 {
                     float overflow = CurrentSp - MaxSp;
                     CurrentSp = MaxSp;
                     GetHp(-overflow);
-                    string msg = string.Format(TranslationServer.Translate("技能击中_溢出伤害"),
-                        user.TrName, skill.TrName, _parent.TrName, overflow.ToString("F0"));
+                    string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                        user.TrName, skill.TrName, _parent.TrName, new Damage(overflow, damage.Type).ToString());
                     Info.Print(msg);
                     rd = overflow;
                 }
                 else
                 {
                     string
-                    msg = string.Format(TranslationServer.Translate("技能被擦弹_增加SP"),
-                        user.TrName, skill.TrName, _parent.TrName, amount.ToString("F0"));
+                    msg = string.Format(TranslationServer.Translate("acGraze"),
+                        user.TrName, skill.TrName, _parent.TrName, amount.Value.ToString("F0"));
                     Info.Print(msg);
                 }
             }
             else
             {
-                GetHp(-amount);
-                string msg = string.Format(TranslationServer.Translate("技能击中_溢出伤害"),
-                    user.TrName, skill.TrName, _parent.TrName, amount.ToString("F0"));
+                GetHp(-amount.Value);
+                string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                    user.TrName, skill.TrName, _parent.TrName, amount.ToString());
                 Info.Print(msg);
-                rd = amount;
+                rd = amount.Value;
             }
         }
         GetSp(0);
         return rd;
+        
     }
-    public bool CheckBodyHit(float amount, Unit user, Skill skill)
+
+    public static float GrazePercent(UnitAttribute ua, UnitAttribute ub)
+    {
+        return MathEx.Logistic(1 - 0.7f * (ua.CurrentSp / ua.MaxSp), ua.BulletGraze - ub.BulletDamageAccuracy);
+    }
+    public static float GrazePercent(UnitAttribute ua)
+    {
+        return MathEx.Logistic(1 - 0.7f * (ua.CurrentSp / ua.MaxSp), ua.BulletGraze);
+    }
+    public bool CheckBodyHit(Damage damage, Unit user, Skill skill)
     {
         float dice = MathEx.Logistic(0.8f, user.Ua.BodyDamageAccuracy - DamageEvasion);
         if (GD.Randf() < dice)
         {
-            TakeBodyDamage(amount, user, skill);
+            if (GD.Randf() < user.Ua.CritRate)
+            {
+                Info.Print($"{user.Name} 造成了一次暴击！");
+                switch (damage.Type)
+                {
+                    default:
+                        damage.Value *= 1.5f; break;
+                }
+            }
+            TakeBodyDamage(damage, user, skill);
             return true;
         }
         else
@@ -308,16 +349,19 @@ public class UnitAttribute(Unit unit)
             return false;
         }
     }
-    public float TakeBodyDamage(float amount, Unit user, Skill skill)
+    public Damage TakeBodyDamage(Damage damage, Unit user, Skill skill)
     {
-        amount = user.Ue.TakeBodyDamage(_parent, amount);
+        Damage amount = damage.ApplyModifiers(user.Ua.DamageTypeSet, DamageTypeSet);
+        amount = user.Ue.DealBodyDamage(_parent, amount);
+        amount = _parent.Ue.TakeBodyDamage(user, amount);
         foreach (var status in _parent.Status.ToList())
             status.OnTakeBodyDamage(_parent, ref amount);
         amount *= user.Ua.DamageBody / 100;
         amount *= Math.Min(1, (float)(1 / Math.Round(Math.Pow((user.Up.Position - _parent.Up.Position).Length(), 0.5f))));
-        if (amount < 0) { amount = 0; }
-        GetHp(-amount);
-        string msg = string.Format(TranslationServer.Translate("skill.hit_damage"), user.TrName, skill.TrName, _parent.TrName, amount.ToString("F0"));
+        if (amount.Value < 0) { amount.Value = 0; }
+        GetHp(-amount.Value);
+        string msg = string.Format(TranslationServer.Translate("skill.hit_damage"),
+            user.TrName, skill.TrName, _parent.TrName, amount.ToString());
         Info.Print(msg);
         return amount;
     }
@@ -337,7 +381,7 @@ public class UnitAttribute(Unit unit)
         if (_parent.Us.currentSpellcard != null)
             spBarAhead.Color = new Color(1, 0.5f, 0);
         else
-            spBarAhead.Color = new Color(1, 1, 0);
+            spBarAhead.Color = new Color(120f/255, 200f/255, 0);
     }
     public string Description()
     {

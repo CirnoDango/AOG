@@ -32,6 +32,7 @@ public class Grid : IInteractable
                 IsTransparent = true;
                 break;
             case "Wall":
+            case "ScarletWall":
             case "Stone":
                 IsWalkable = false;
                 IsTransparent = false;
@@ -87,7 +88,7 @@ public class Grid : IInteractable
         {
             for (int dy = -radius; dy <= radius; dy++)
             {
-                Vector2I pos = new Vector2I(Position.X + dx, Position.Y + dy);
+                Vector2I pos = new(Position.X + dx, Position.Y + dy);
                 int distSquared = dx * dx + dy * dy;
 
                 if (distSquared <= rSquared && Scene.CurrentMap.CheckGrid(pos))
@@ -105,10 +106,12 @@ public class Grid : IInteractable
             {
                 Skill.NameSkill["Attack"].Activate(new SkillContext(u, unit));
             }
-            else
+            else if (u.Ue.CheckMoveUsage(true))
             {
                 Skill.NameSkill["Move"].Activate(new SkillContext(u, this));
             }
+            else
+                Info.Print("你无法移动！");
         }
         else
         {
@@ -125,14 +128,13 @@ public class Grid : IInteractable
 
 public class Map
 {
+    public string Name;
     public Grid[,] Grid;
     public int Width;
     public int Height;
     public int Size => Width * Height;
     public List<Unit> Units = [];
     public HashSet<Unit> WakeUnits = [];
-    public event Action OnUnitDied;
-    public event Action OnMarisaDied;
     public Action AfterEnter;
     public List<Bullet> Bullets = [];
     public Vector2I Entrance;
@@ -143,6 +145,7 @@ public class Map
     /// 权重单位：每100格生成数量
     /// </summary>
     public Dictionary<string, float> EnemySummonValue;
+    public bool IsPrebuild = false;
     public Map(int width, int height)
     {
         Width = width;
@@ -157,7 +160,11 @@ public class Map
             }
         }
     }
-
+    public Map(string name)
+    {
+        IsPrebuild = true;
+        Name = name;
+    }
     public Grid GetGrid(Vector2I v)
     {
         int x = v.X; int y = v.Y;
@@ -207,7 +214,7 @@ public class Map
         {
             for (int dy = -radius; dy <= radius; dy++)
             {
-                Vector2I pos = new Vector2I(grid.Position.X + dx, grid.Position.Y + dy);
+                Vector2I pos = new(grid.Position.X + dx, grid.Position.Y + dy);
                 int distSquared = dx * dx + dy * dy;
 
                 if (distSquared <= rSquared && CheckGrid(pos))
@@ -223,6 +230,11 @@ public class Map
         exit.TerrainBaseGround = "Stair";
         exit.TerrainStand = "";
     }
+    public void FindExit()
+    {
+        Grid exit = GetGrid(MapGenerator.FloodFindFarthest(this, Entrance));
+        Exit = exit.Position;
+    }
     public Unit CreateEnemy(Vector2I position, string name, UnitEgo ego = UnitEgo.random, float memoryValue = -1, bool jsonImport = true)
     {
         Unit unit = EnemyLoader.LoadEnemy(name, jsonImport);
@@ -230,9 +242,9 @@ public class Map
         if (ego == UnitEgo.random)
         {
             float p = GD.Randf();
-            if (p < 0.95f)
+            if (p < 1 - Scene.eliteProp - Scene.greatProp)
                 unit.Ego = UnitEgo.normal;
-            else if (p < 0.99f)
+            else if (p < 1 - Scene.greatProp)
                 unit.Ego = UnitEgo.elite;
             else
                 unit.Ego = UnitEgo.great;
@@ -246,6 +258,9 @@ public class Map
         Root.rootnode.AddChild(unit.Up.sprite);
         unit.Up.sprite.Position = Setting.imagePx * unit.Up.Position;
         Units.Add(unit);
+        // 初始化事件：Ue
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.HealHp(updateTime * unit.Ua.MaxHp / 10000);
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         // 初始化技能,Ai
         unit.UnitAi = new UnitAi(unit);
         foreach (var gskill in Skill.SkillDeck)
@@ -257,20 +272,23 @@ public class Map
         switch (unit.Ego)
         {
             case UnitEgo.normal:
-                unit.MemoryValue += Setting.chaos;
+                unit.MemoryValue += 1.5f * Setting.chaos;
                 break;
             case UnitEgo.elite:
-                unit.MemoryValue += 2 * Setting.chaos;
+                unit.MemoryValue += 5 * Setting.chaos;
                 unit.Memorys.TryEquip(Item.CreateItem("mElite"), unit);
                 break;
             case UnitEgo.great:
-                unit.MemoryValue += 4 * Setting.chaos;
+                unit.MemoryValue += 8 * Setting.chaos;
                 unit.Memorys.TryEquip(Item.CreateItem("mGreat"), unit);
                 break;
             case UnitEgo.boss:
-            case UnitEgo.eliteBoss:
-                unit.MemoryValue += 6 * Setting.chaos;
+                unit.MemoryValue += 12 * Setting.chaos;
                 unit.Memorys.TryEquip(Item.CreateItem("mBoss"), unit);
+                break;
+            case UnitEgo.eliteBoss:
+                unit.MemoryValue += 16 * Setting.chaos;
+                unit.Memorys.TryEquip(Item.CreateItem("mEliteBoss"), unit);
                 break;
         }
         if(memoryValue != -1)
@@ -297,12 +315,21 @@ public class Map
 
                 if (currentWeight + it.Weight <= capacity)
                 {
-                    unit.Memorys.TryEquip(Item.CreateItem(it.Name), unit);
+                    unit.Memorys.TryEquip(Item.CreateItem(it.Name, 0.3f), unit);
                     currentWeight += it.Weight;
                 }
             }
         }
-
+        // 升级技能
+        for(int i = 0; i < unit.Ua.skillPoint; i++)
+        {
+            List<SkillInstance> skills = [.. unit.Us.skills
+                .Select(x => x.skill)
+                .Where(x => x.Template.SkillGroup != "" && x.Template is not ISkillInstance && x.Level < 4)];
+            if (skills.Count == 0) break;
+            var sn = skills[GD.RandRange(0, skills.Count - 1)].Template.Name;
+            unit.Us.skills.FirstOrDefault(si => si.skill.Name == sn).skill.Level++;
+        }
 
         // 计算优势距离
         float bestScore = int.MinValue;
@@ -373,7 +400,6 @@ public class Map
     {
         return CreateEnemy(RandomEmptyGrid().Position, name);
     }
-    
     public void DeleteUnit(Unit unit)
     {
         if (unit == Player.PlayerUnit)
@@ -381,6 +407,7 @@ public class Map
             // 实际玩家死亡效果由scene脚本负责
             return;
         }
+        unit.dead = true;
         unit.Ue.EnemyKilled();
         unit.Up.CurrentGrid.unit = null;
         Info.Print($"{unit.TrName} 被退治了");
@@ -392,9 +419,7 @@ public class Map
             SpellCard.currentSpellcards.Remove(si);
         }
         Tutorial.enemydead++;
-        OnUnitDied?.Invoke();
-        if (unit.Name == "marisa")
-            OnMarisaDied?.Invoke();
+        GameEvents.EnemyKilled(unit);
         if (unit.Ego != UnitEgo.normal)
         {
             foreach (Item i in unit.Equipment.EquippedItems.ToList())
@@ -410,10 +435,10 @@ public class Map
         }
         foreach (Item i in unit.Inventory.Items.ToList())
         {
-            unit.Inventory.ThrowItem(i);
+            if (GD.Randf() < i.salvage)
+                unit.Inventory.ThrowItem(i);
         }
     }
-
     public void SummonEnemy()
     {
         if (EnemySummonValue == null || EnemySummonValue.Count == 0)
@@ -440,7 +465,7 @@ public class Map
             while (GD.Randf() < expectExtraNumber / (expectExtraNumber + 1))
             {
                 var lg = Scene.CurrentMap.NearGrids(GetGrid(position), searchDist);
-                List<Grid> lga = lg.Where(x => x.IsWalkable && x.unit == null).ToList();
+                List<Grid> lga = [.. lg.Where(x => x.IsWalkable && x.unit == null)];
                 if (lga.Count == 0) return; // 没有可用格子了
                 int index = GD.RandRange(0, lga.Count - 1);
                 CreateEnemy(lga[index].Position, name);
@@ -450,20 +475,37 @@ public class Map
     public void SummonChest(float value, int number, Grid grid = null)
     {
         AfterEnter += Instance;
+
         void Instance()
         {
+            // 提前准备“可抽取物品池”
+            var itemPool = Item.ItemDeck
+                .Where(x => x is not BarrageComponent && x.chestValue > 0)
+                .ToList();
+
             for (int i = 0; i < number; i++)
             {
                 Chest c = new(grid ?? RandomEmptyGrid());
-                int j = 0; float v = 0; Item it;
+                int j = 0;
+                float v = 0;
+
                 do
                 {
                     j++;
-                    it = Item.ItemDeck[GD.RandRange(0, Item.ItemDeck.Count - 1)];
-                    it = Item.CreateItem(it.Name);
+                    Item baseItem = Item.GetWeightedRandomItem(itemPool);
+                    if (baseItem == null)
+                        break;
+                    // 实例化
+                    Item it = Item.CreateItem(baseItem.Name);
+                    // 随机参数 & Ego
                     Item item = it.RandomSummonParam();
+                    item.effectLevel = GD.RandRange(0, 2);
+                    if (item is Memory)
+                        item.effectLevel = 0;
+                    item.AddRandomEgo(3 * item.effectLevel);
                     item.ApplyParameters([]);
                     it = item;
+                    // 价值判断
                     if (v + it.Weight - 1 < value)
                     {
                         if (it is Memory m && m.Group != "")
@@ -471,17 +513,28 @@ public class Map
                         c.items.Add(it);
                         v += it.Weight;
                     }
+
                 } while (j < 40 && v < value);
             }
         }
-        
     }
+
 }
 public static class Scene
 {
-    public static Map CurrentMap = new(2, 2);
+    public static Map CurrentMap { get; set; } = new(2, 2);
+    public static float eliteProp = 0.04f;
+    public static float greatProp = 0.01f;
     public static void Enter(Map map)
     {
+        if (map.IsPrebuild)
+        {
+            CurrentMap = G.I.TileMapAllLayer.InitImportMap(map);
+        }
+        else
+        {
+            G.I.TileMapAllLayer.InitGeneralMap();
+        }
         CurrentMap = map;
         CurrentMap.Units.Clear();
         CurrentMap.WakeUnits.Clear();
@@ -489,13 +542,22 @@ public static class Scene
         map.Units.Add(Player.PlayerUnit);
         map.WakeUnits.Add(Player.PlayerUnit);
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));
-        MapBuilder.BuildTileMapFromLogic(CurrentMap);
+        if (!map.IsPrebuild)
+            MapBuilder.BuildTileMapFromLogic(CurrentMap);
         CurrentMap.SummonEnemy();
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();
         Player.PlayerUnit.Ua.HealHp(Player.PlayerUnit.Ua.MaxHp);
-        Info.Print("进入新地图，记忆已提升");
+        Info.Print("进入新地图，记忆上限已提升");
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
+        eliteProp += 0.006f;
+        greatProp += 0.003f;
+    }
+
+    public static void LeaveAndGo()
+    {
+        Quit();
+        Enter(CurrentMap.MapGoto);
     }
 
     public static void Quit()
@@ -507,11 +569,10 @@ public static class Scene
                 u.Up.sprite.QueueFree();
         CurrentMap.Units.Clear();
         CurrentMap.WakeUnits.Clear();
-        foreach(var b in CurrentMap.Bullets)
+        foreach (var b in CurrentMap.Bullets)
             b.image.QueueFree();
         CurrentMap.Bullets.Clear();
         SpellCard.currentSpellcards.Clear();
-        Enter(CurrentMap.MapGoto);
     }
 }
 

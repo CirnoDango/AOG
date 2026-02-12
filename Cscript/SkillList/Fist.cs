@@ -17,7 +17,7 @@ public class Multistrike : Skill
     int[] t0 = { 2, 3, 4, 4 };
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1], Extra()[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -25,7 +25,7 @@ public class Multistrike : Skill
         if (sc.Level == 4)
             number += Math.Max(0, (sc.User.Ua.Str - sc.UnitOne.Ua.Str) / 5);
         for (int i = 0; i < number; i++)
-            sc.UnitOne.Ua.CheckBodyHit(8, sc.User, this);
+            sc.UnitOne.Ua.CheckBodyHit(new Damage(8, DamageType.strike), sc.User, this);
     }
 }
 public class SpiralLightSteps : Skill
@@ -36,14 +36,14 @@ public class SpiralLightSteps : Skill
         SkillGroup = "Fist";
         SpCost = 5;
         Cooldown = 1600;
-        Targeting = new TargetType(Target.Self);
+        Targeting = new TargetType(Target.Self, 1, 5);
     }
     int[] t0 = [3, 4, 5, 5];
     int[] t1 = [66, 88, 108, 108];
 
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], Extra()[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -58,7 +58,7 @@ public class CrimsonEnergyRelease : Skill
         SkillGroup = "Fist";
         EffectType = EffectType.Passive;
     }
-    private Func<Unit, Unit, float, float> _event;
+    private Func<Unit, Unit, Damage, Damage> _event;
     int[] t0 = { 8,12,16,16 };
     string[] extra = [
     " sCrimsonEnergyRelease0 ",
@@ -74,7 +74,7 @@ public class CrimsonEnergyRelease : Skill
     {
         _event = (user, target, initDmg) =>
         {
-            unit.GetStatus(new SCrimsonEnergyRelease(1));
+            unit.GetStatus(new SCrimsonEnergyRelease());
             return initDmg;
         };
 
@@ -103,31 +103,15 @@ public class IntenseRainbowFist : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        float dmg = sc.UnitOne.Ua.TakeBodyDamage(20, sc.User, this);
+        Damage dmg = sc.UnitOne.Ua.TakeBodyDamage(new Damage(20, DamageType.strike), sc.User, this);
         foreach(Unit unit in sc.UnitOne.Up.CurrentGrid.NearGrids(t0[sc.Level - 1])
             .Where(x => x.unit != null)
             .Select(x => x.unit)
             .Where(x => x.Friendness * sc.User.Friendness < 0))
         {
-            unit.Ua.TakeBulletDamage(dmg / 2, sc.User, this);
+            unit.Ua.TakeBulletDamage(new Damage(dmg.Value / 2, DamageType.sonic), sc.User, this);
         }
         
-    }
-    public override void ActivateBullet(SkillContext sc, Bullet bullet)
-    {
-        if (bullet.Shape == ShapeBullet.Micro) return;
-        if (sc.UnitOne.Status.FirstOrDefault(x => x is Frozen) == null)
-        {
-            sc.UnitOne.GetStatus(new Frozen(400));
-        }
-        else
-        {
-            for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.Level - 1]; i++)
-            {
-                Bullet.CreateBullet(sc.User, this, 8, sc.UnitOne.Up.Position, sc.UnitOne.Up.Position + RandomV2(), 
-                    (float)GD.RandRange(1.5, 3), 6, ShapeBullet.Micro, ColorBullet.White);
-            }
-        }
     }
 }
 public class DapengFellingFist : SpellCard
@@ -140,12 +124,12 @@ public class DapengFellingFist : SpellCard
         SpCost = 6;
         Duration = 600;
         Cooldown = 36;
-        Targeting = new TargetType(Target.Self);
+        Targeting = new TargetType(Target.Self, 1, 1);
     }
     int[] t0 = [26, 36, 46, 46];
     public override string GetDescription(int level)
     {
-        return string.Format(EffectTr(), t0[level - 1], Extra()[level - 1]);
+        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -159,9 +143,100 @@ public class DapengFellingFist : SpellCard
     }
     private void Attack(SkillContext sc)
     {
-        sc.UnitOne.Ua.TakeBodyDamage(t0[sc.Level - 1], sc.User, this);
+        sc.UnitOne.Ua.TakeBodyDamage(new Damage(t0[sc.Level - 1], DamageType.strike), sc.User, this);
         sc.UnitOne.GetStatus(new Stun(500));
         sc.UnitOne.Up.KnockBack(5, sc);
         OnSpellEnd(sc);
+    }
+}
+
+public class SSpiralLightSteps : Status
+{
+    private Skill Parent;
+    public float Speed
+    {
+        get => (float)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public SSpiralLightSteps(float speed, float duration, Skill parent)
+    {
+        Name = "SpiralLightSteps";
+        Duration = duration;
+        Speed = speed;
+        Parent = parent;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        unit.Ue.OnUnitMove += MoveDamage;
+        CombineTime(unit, status);
+    }
+    public override void OnQuit(Unit unit)
+    {
+        unit.Ue.OnUnitMove -= MoveDamage;
+        Quit(unit);
+    }
+    public void MoveDamage(Unit unit)
+    {
+        foreach (Unit target in unit.Up.CurrentGrid.NearGrids(2).Where(x => x != unit.Up.CurrentGrid).Select(g => g.unit))
+        {
+            target?.Ua.TakeBulletDamage(new Damage(15, DamageType.sonic), unit, Parent);
+            target?.GetStatus(new Daze(300));
+        }
+    }
+}
+public class SCrimsonEnergyRelease : Status
+{
+    private int level;
+    int[] t0 = [8, 12, 16, 16];
+    public int Layer
+    {
+        get => (int)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public SCrimsonEnergyRelease(int l = 1)
+    {
+        Name = "CrimsonEnergyRelease";
+        Duration = 100;
+        Layer = l;
+    }
+    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
+    {
+        damage -= damage * t0[level - 1] * Layer / 100f;
+    }
+    public override void OnDealBodyDamage(Unit unit, ref Damage damage)
+    {
+        damage += damage * t0[level - 1] * Layer / 100f;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        foreach (var s in unit.Status)
+        {
+            if (s.Name == Name)
+            {
+                s.Param += ((SCrimsonEnergyRelease)status).Layer;
+                s.Param = Math.Min(s.Param, 10);
+                return;
+            }
+        }
+        Get(unit);
+        unit.Status.Add(status);
+        ((SCrimsonEnergyRelease)status).level =
+            unit.Us.skills.FirstOrDefault(x => x.skill.Name == "CrimsonEnergyRelease").skill.Level;
+    }
+    public override void OnQuit(Unit unit)
+    {
+        if (level == 4 || Layer > 2)
+        {
+            Layer -= 2;
+            Duration += 100;
+        }
+        else
+            Quit(unit);
     }
 }

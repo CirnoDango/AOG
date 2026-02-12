@@ -148,7 +148,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
                 break;
         }
 
-		instance.Position = pos * Setting.imagePx; // 假设 tile 是 16x16
+		instance.Position = pos * Setting.imagePx;
 		AddChild(instance);
         activeHighlights.Add(instance);
     }
