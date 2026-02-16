@@ -1,11 +1,9 @@
 using Godot;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 public static class EnemyLoader
 {
@@ -129,12 +127,11 @@ public static class EnemyLoader
 
                 while (GD.Randf() < n)
                 {
-                    Item i = Item.CreateItem((string)dict["Name"]);
-
+                    Item i;
                     if (dict.TryGetValue("Parameters", out object value))
-                    {
-                        i.ApplyParameters(value as Dictionary<string, object>);
-                    }
+                        i = Item.CreateItem((string)dict["Name"], (Dictionary<string, object>)value);
+                    else
+                        i = Item.CreateItem((string)dict["Name"]);
                     unit.Inventory.AddItem(i);
                     n--;
                 }
@@ -145,12 +142,11 @@ public static class EnemyLoader
 
                 while (GD.Randf() < n)
                 {
-                    Item i = Item.CreateItem((string)dict["Name"]);
-
+                    Item i;
                     if (dict.TryGetValue("Parameters", out object value))
-                    {
-                        i.ApplyParameters(value as Dictionary<string, object>);
-                    }
+                        i = Item.CreateItem((string)dict["Name"], (Dictionary<string, object>)value);
+                    else
+                        i = Item.CreateItem((string)dict["Name"]);
                     unit.Equipment.TryEquip(i, unit);
                     n--;
                 }

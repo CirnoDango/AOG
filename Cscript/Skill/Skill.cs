@@ -209,6 +209,9 @@ public abstract class Skill
     public virtual void OnLearn(Unit unit)
     {
     }
+    public virtual void OnLoad(Unit unit)
+    {
+    }
     public virtual void OffLearn(Unit unit)
     {
     }
@@ -315,6 +318,10 @@ public abstract class SkillLong : Skill
     }
     public override void Activate(SkillContext sc, SkillInstance si = null)
     {
+        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
+        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
+        if (SkillGroup != "")
+            Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
         EndActive(sc, si);
     }
@@ -387,6 +394,8 @@ public abstract class SpellCard : Skill
     }
     public override void Activate(SkillContext sc, SkillInstance si = null)
     {
+        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
+        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
         StartActivate(sc);
         EndActive(sc, si);
     }

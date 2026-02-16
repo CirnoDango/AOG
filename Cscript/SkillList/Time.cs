@@ -169,7 +169,7 @@ public class SImaginaryVerticalTime : Status
     public float Cd;
     public SImaginaryVerticalTime(int count, float cd, float duration, Skill parent)
     {
-        Name = "SImaginaryVerticalTime";
+        Name = "ImaginaryVerticalTime";
         Duration = 500;
         rcd = cd;
         Count = count;

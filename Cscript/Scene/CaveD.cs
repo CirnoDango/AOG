@@ -87,6 +87,7 @@ public partial class CaveD : Node
         Floor2.MapGoto = Floor3;
         Floor1.SummonChest(200, 1);
         Floor2.SummonChest(20, 100);
+        Floor1.Entrance = new Vector2I(5, 7);
         Scene.Enter(Floor1);
         Player.PlayerUnit.Inventory.AddItem(
             Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
@@ -97,8 +98,12 @@ public partial class CaveD : Node
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 5 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
-        var r = Scene.CurrentMap.CreateEnemy(new Vector2I(10, 10), "remilia", UnitEgo.eliteBoss);
-        r.Ua.MaxSp = 9999; r.Ua.CurrentSp = 9999;
+        Floor1.CreateEnemy(new Vector2I(2, 4), "rumia", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 5), "cirno", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 6), "meiling", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
     }
     
     public async void Victory()

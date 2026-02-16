@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 public class Barrage
 {
     public int MaxComponents { get; set; }
@@ -16,7 +17,7 @@ public class Barrage
     }
     public static explicit operator Barrage(Dictionary<string, object> parameters)
     {
-        Barrage barrage = new((int)parameters["MaxComponents"]);
+        Barrage barrage = new(Convert.ToInt32(parameters["MaxComponents"]));
         if (!parameters.TryGetValue("Components", out _) || 
             parameters["Components"] is not IEnumerable<object> componentNames || 
             !componentNames.Any())
@@ -36,6 +37,37 @@ public class Barrage
             i++;
         }
         return barrage;
+    }
+    public static Dictionary <string, object> GetParam(Barrage barrage)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        // MaxComponents
+        parameters["MaxComponents"] = barrage.MaxComponents;
+
+        // Components
+        var components = new List<object>();
+
+        foreach (var comp in barrage.Components)
+        {
+            if (comp == null)
+            {
+                components.Add(null);
+                continue;
+            }
+            comp.GetParam();
+            var compDict = new Dictionary<string, object>
+            {
+                ["Name"] = comp.Name,
+                ["Parameters"] = comp.Params
+            };
+
+            components.Add(compDict);
+        }
+
+        parameters["Components"] = components;
+
+        return parameters;
     }
     public Barrage RandomSummonParam()
     {
@@ -80,48 +112,121 @@ public abstract class BarrageComponent : Item
     public float CoolDown = 0;
     public int draw = 1;
     public override float Weight => 0;
-    public override void ApplyParameters(Dictionary<string, object> parameters) { }
-    
-    public virtual void Execute(ref List<BulletContext> lbc, Executor executor)
+    public override void ApplyParameters(Dictionary<string, object> parameters)
     {
-        if (this is IBarrageComponentEvent ibce)
-            executor.Events.Add(ibce);
-        executor.Continue(lbc);
+        base.ApplyParameters(parameters);
+        Params = parameters;
     }
+    public abstract void Activate(ref List<BulletContext> lbc);
     public override Item RandomSummonParam()
     {
         return CreateItem(Name);
     }
 }
 
-public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
+public class Executor
 {
-    public SkillContext sc = s;
-    public Queue<BarrageComponent> PendingComponents = new(components);
-    public Dictionary<BarrageComponent, BarrageComponent> DrawPairs = [];
-    public List<IBarrageComponentEvent> Events = [];
-    public int draw = 1;
-    public List<BulletContext> PendingLbc = [];
-    public void Execute(List<BulletContext> lbc = null)
+    public SkillContext sc;
+
+    // 牌库
+    public List<BarrageComponent> PendingComponents;
+
+    // 子 -> 父
+    public Dictionary<BarrageComponent, BarrageComponent> DrawPairs = new();
+
+    // 终端牌
+    public List<BarrageComponent> terminals = new();
+
+    // 当前执行顺序
+    public List<BarrageComponent> ExecuteOrder = new();
+
+    private int deckIndex = 0;
+
+    public List<BulletContext> lbc = [];
+    public Executor(List<BarrageComponent> lbc, SkillContext s)
     {
-        lbc ??= [];
-        if (PendingComponents.Count > 0 && draw > 0)
+        PendingComponents = lbc;
+        sc = s;
+    }
+
+    public void Execute()
+    {
+        deckIndex = 0;
+        DrawPairs.Clear();
+        terminals.Clear();
+        ExecuteOrder.Clear();
+
+        if (PendingComponents.Count == 0)
+            return;
+
+        // 根节点虚拟
+        var root = new DrawNode(null, 1);
+
+        var stack = new Stack<DrawNode>();
+        stack.Push(root);
+
+        while (stack.Count > 0)
         {
-            BarrageComponent next;
+            var node = stack.Peek();
+
+            // 当前节点没有剩余抽牌次数
+            if (node.remainingDraw == 0)
+            {
+                stack.Pop();
+
+                // 如果是真实牌，并且 draw==0 → terminal
+                if (node.component != null && node.component.draw == 0)
+                    terminals.Add(node.component);
+
+                continue;
+            }
+
+            // 没牌了
+            if (deckIndex >= PendingComponents.Count)
+                break;
+
+            var next = PendingComponents[deckIndex++];
+            node.remainingDraw--;
+
+            if (next == null)
+                continue;
+
+            ExecuteOrder.Add(next);
+
+            if (node.component != null)
+                DrawPairs[next] = node.component;
+
+            var child = new DrawNode(next, next.draw);
+
+            stack.Push(child);
+        }
+        foreach(var t in terminals)
+        {
+            List<BulletContext> bc = [];
+            var a = t;
             do
             {
-                next = PendingComponents.Dequeue();
-            } while (next == null && PendingComponents.Count > 0);
-            draw--;
-            draw += next.draw;
-            next?.Execute(ref lbc, this);
+                a.Activate(ref bc);
+                a = DrawPairs.GetValueOrDefault(a);
+            } while (a != null);
+            lbc.AddRange(bc);
+        }
+        Fire(lbc);
+    }
+
+    class DrawNode
+    {
+        public BarrageComponent component;
+        public int remainingDraw;
+
+        public DrawNode(BarrageComponent c, int draw)
+        {
+            component = c;
+            remainingDraw = draw;
         }
     }
-    public void FireOnce(List<BulletContext> lbc)
+    public void Fire(List<BulletContext> lbc)
     {
-        Events.Reverse();
-        foreach (var evt in Events)
-            evt.ApplyTo(ref lbc);
         foreach (var bc in lbc)
         {
             Bullet b = Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Up.Position, sc.GridOne.Position,
@@ -131,16 +236,7 @@ public class Executor(IEnumerable<BarrageComponent> components, SkillContext s)
             bc.AfterSummonEvents?.Invoke(b);
         }
     }
-    public void Continue(List<BulletContext> lbc)
-    {
-        Execute(lbc);
-    }
 }
-public interface IBarrageComponentEvent
-{
-    public void ApplyTo(ref List<BulletContext> lbc);
-}
-
 public class BulletContext(Damage damage, float speed, float maxDistance, ShapeBullet shape, ColorBullet color)
 {
     public Damage damage = damage;

@@ -32,7 +32,7 @@ public class mGreat : Memory
     {
         unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(6 * Setting.chaos);
-        unit.Ua.MaxHp *= 1 + (0.2f * Setting.chaos);
+        unit.Ua.MaxHp *= 1 + (0f * Setting.chaos);
         unit.Ua.MaxSp *= 1 + (0.1f * Setting.chaos);
         unit.Ua.MaxMp *= 1 + (0.1f * Setting.chaos);
         unit.Ua.skillPoint += 6;
@@ -53,7 +53,7 @@ public class mBoss : Memory
     {
         unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(12 * Setting.chaos);
-        unit.Ua.MaxHp *= 1 + (0.6f * Setting.chaos);
+        unit.Ua.MaxHp *= 1 + (0.2f * Setting.chaos);
         unit.Ua.MaxSp *= 1 + (0.2f * Setting.chaos);
         unit.Ua.MaxMp *= 1 + (0.2f * Setting.chaos);
         unit.Ua.skillPoint += 10;
@@ -77,7 +77,7 @@ public class mEliteBoss : Memory
     {
         unit.Ua.MaxHp += 20 * Setting.chaos;
         unit.Ua.uaPoint += (int)(18 * Setting.chaos);
-        unit.Ua.MaxHp *= 1 + (1f * Setting.chaos);
+        unit.Ua.MaxHp *= 1 + (0.5f * Setting.chaos);
         unit.Ua.MaxSp *= 1 + (0.3f * Setting.chaos);
         unit.Ua.MaxMp *= 1 + (0.3f * Setting.chaos);
         unit.Ua.skillPoint += 15;

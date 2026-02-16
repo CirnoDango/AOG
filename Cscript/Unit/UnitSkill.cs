@@ -7,7 +7,7 @@ public class UnitSkill(Unit unit)
     public SpellCard currentSpellcard;
     public List<(SkillInstance skill, float weight)> skills = [];
     public SkillInstance GetSkill(string name) => skills.FirstOrDefault(x => x.skill.Name == name).skill;
-    public void LearnSkill(Skill skill)
+    public void LearnSkill(Skill skill, bool load = false)
     {
         SkillInstance si = new(skill);
         if (skill.SkillGroup == "Item" && _parent == Player.PlayerUnit)
@@ -17,7 +17,9 @@ public class UnitSkill(Unit unit)
         {
             G.I.SkillBar.LearnSkill(si);
         }
-        skill.OnLearn(_parent); // 👈 自动触发学习效果
+        if (!load)
+            skill.OnLearn(_parent);
+        skill.OnLoad(_parent);
     }
     public void LearnSkill(string Name)
     {
@@ -30,7 +32,7 @@ public class UnitSkill(Unit unit)
         {
             G.I.SkillBar.LearnSkill(si);
         }
-        skill.OnLearn(_parent); // 👈 自动触发学习效果
+        skill.OnLearn(_parent);
     }
     public void UnLearnSkill(Skill skill)
     {
@@ -40,7 +42,7 @@ public class UnitSkill(Unit unit)
         {
             if (Player.PlayerUnit == _parent)
             {
-                G.I.SkillBar.UnLearnSkill(Player.PlayerUnit.Us.GetSkill(skill.Name));
+                G.I.SkillBar.UnLearnSkill(skills.Select(x => x.skill).ToList()[index]);
             }
             skills.RemoveAt(index);
         }

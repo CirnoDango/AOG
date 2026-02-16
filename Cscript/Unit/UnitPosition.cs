@@ -76,7 +76,7 @@ public class UnitPosition(Unit unit)
                 MapBuilder.SetLogicMapTerrain(LogicMapLayer.FogOfWar, g, "Clear");
                 g.unit?.Up.sprite.Visible = true;
             }
-            if (g.unit != null && g.unit != Player.PlayerUnit && g.unit.Up.GridInVision().Contains(g))
+            if (g.unit != null && g.unit != Player.PlayerUnit && g.unit.Up.GridInVision().Contains(CurrentGrid))
             {
                 Scene.CurrentMap.WakeUnits.Add(g.unit);
                 g.unit.UnitAi.State = AiState.Attack;

@@ -21,12 +21,28 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
 
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
-        if (parameters.TryGetValue("barrage", out var val))
+        parameters = MathEx.ConvertLong(parameters);
+        base.ApplyParameters(parameters);
+        if (Params.TryGetValue("barrage", out var val))
         {
             B = (Barrage)(Dictionary<string, object>)val;
         }
-        Texture = ImageEx.ColorizeTexture(Texture, new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+        if (Params.TryGetValue("colorR", out var r))
+        {
+            Texture = ImageEx.ColorizeTexture(Texture, new Color((float)r, (float)Params["colorG"], (float)Params["colorB"]));
+        }
+        else
+        {
+            Params.Add("colorR", GD.Randf());
+            Params.Add("colorG", GD.Randf());
+            Params.Add("colorB", GD.Randf());
+            Texture = ImageEx.ColorizeTexture(Texture, new Color((float)Params["colorR"], (float)Params["colorG"], (float)Params["colorB"]));
+        } 
         Skill = new Instance(this);
+    }
+    public override void GetParam()
+    {
+        Params["barrage"] = Barrage.GetParam(B);
     }
 
     public class Instance : Skill, ISkillInstance

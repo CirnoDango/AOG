@@ -194,7 +194,7 @@ public class UnitAi(Unit u)
             Vector2I nextPosition = _parent.Up.Position + dir;
             Grid nextGrid = Scene.CurrentMap.GetGrid(nextPosition);
             if (nextGrid != null && nextGrid.IsWalkable && nextGrid.unit == null)
-            {
+            {   
                 float nextDist = (nextPosition - PlayerPosition).Length();
                 if (nextDist < playerDist)
                 {

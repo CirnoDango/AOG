@@ -1,0 +1,99 @@
+{
+  "skilltreehexXs": [
+    -1
+  ],
+  "skilltreehexYs": [
+    4
+  ],
+  "SceneName": "Eosd",
+  "StageNumber": 8,
+  "PlayerData": {
+    "Name": "cirno",
+    "Tags": [
+      "妖精"
+    ],
+    "HP": 100.0,
+    "SP": 58.0,
+    "MP": 22.0,
+    "Str": 10,
+    "Dex": 18,
+    "Con": 10,
+    "Spi": 14,
+    "Mag": 12,
+    "Cun": 10,
+    "Value": 0,
+    "SkillGroups": [
+      "Freeze"
+    ],
+    "Skills": {},
+    "Equipment": [],
+    "Inventory": [
+      {
+        "Amount": 1,
+        "Name": "HealPotion",
+        "Parameters": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
+        }
+      },
+      {
+        "Amount": 1,
+        "Name": "MagicPotion",
+        "Parameters": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+          "MpRecoverPercent": 30.0
+        }
+      },
+      {
+        "Amount": 1,
+        "Name": "BarrageSet",
+        "Parameters": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+          "barrage": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+            "MaxComponents": 2,
+            "Components": {
+              "$type": "System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+              "$values": [
+                {
+                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+                  "Name": "CircleFire",
+                  "Parameters": {
+                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
+                  }
+                },
+                {
+                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+                  "Name": "BulletModule",
+                  "Parameters": {
+                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+                    "bulletContext": {
+                      "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+                      "damage": 6.3888,
+                      "speed": 1.2399725,
+                      "maxDistance": 6.0,
+                      "shape": "S",
+                      "type": "arcane",
+                      "color": "Rose"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "colorR": 0.23881724,
+          "colorG": 0.77542144,
+          "colorB": 0.1802369
+        }
+      }
+    ],
+    "Memory": {}
+  },
+  "MaxMemory": 55.0,
+  "UaPoint": 5,
+  "SkillPoint": 6,
+  "TalentPoint": 0,
+  "PlayerDamageTypeSet": {
+    "DamageAdvantage": {},
+    "DamageResistance": {}
+  }
+}

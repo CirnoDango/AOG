@@ -1,6 +1,7 @@
+using Godot;
 using System;
 using System.Collections.Generic;
-using Godot;
+using System.Linq;
 public static class MathEx
 {
     public static List<Vector2I> GetLine(Vector2I start, Vector2I end)
@@ -96,6 +97,47 @@ public static class MathEx
     public static bool Contain(float t, float dt, float et)
     {
         return et >= t && et < t + dt;
+    }
+    public static Dictionary<string, object> ConvertLong(Dictionary<string, object> dict)
+    {
+        var keys = dict.Keys.ToList();
+
+        foreach (var key in keys)
+        {
+            dict[key] = FixValue(dict[key]);
+        }
+
+        return dict;
+    }
+
+    private static object FixValue(object value)
+    {
+        if (value == null)
+            return null;
+
+        // Int64 → Int32
+        if (value is long l)
+            return checked((int)l);
+
+        // Double → Float
+        if (value is double d)
+            return (float)d;
+
+        // Dictionary → 递归
+        if (value is Dictionary<string, object> subDict)
+            return ConvertLong(subDict);
+
+        // List → 递归
+        if (value is List<object> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = FixValue(list[i]);
+            }
+            return list;
+        }
+
+        return value;
     }
 }
 

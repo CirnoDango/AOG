@@ -110,8 +110,8 @@ public class ScarletNetherworld : SkillLong
             {
                 if (g.unit == null || g.unit.symbol.Contains("吸血鬼"))
                     continue;
-                g.unit.Ua.TakeBulletDamage(new Damage(10, DamageType.wither), sc.User, this);
                 g.unit.GetStatus(new SScarletNetherworld(0, 100, sc.User, this));
+                g.unit.Ua.TakeBulletDamage(new Damage(10, DamageType.wither), sc.User, this);
             }
         });
     }
@@ -132,15 +132,11 @@ public class ScarletDevil : Skill
         EffectType = EffectType.Passive;
     }
     int[] t0 = [20, 30, 40, 40];
-    public override float GetSpCost(int level)
-    {
-        return t0[level - 1];
-    }
     public override string GetDescription(int level)
     {
         return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
-    public override void OnLearn(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         DrainBlood = (user, target, dmg) =>
         {
@@ -153,6 +149,12 @@ public class ScarletDevil : Skill
             return dmg;
         };
         unit.Ue.OnDealBodyDamage.Add(DrainBlood);
+        unit.Ue.OnDealBulletDamage.Add(DrainBlood);
+    }
+    public override void OffLearn(Unit unit)
+    {
+        unit.Ue.OnDealBodyDamage.Remove(DrainBlood);
+        unit.Ue.OnDealBulletDamage.Remove(DrainBlood);
     }
     private Func<Unit, Unit, Damage, Damage> DrainBlood;
 }
@@ -266,8 +268,9 @@ public class ScarletGensokyo : SpellCard
             {
                 if (g.unit == null || g.unit.symbol.Contains("吸血鬼"))
                     continue;
-                g.unit.Ua.TakeBulletDamage(new Damage(10, DamageType.wither), sc.User, this);
                 g.unit.GetStatus(new SScarletNetherworld(0, 100, sc.User, this));
+                g.unit.Ua.TakeBulletDamage(new Damage(10, DamageType.wither), sc.User, this);
+                
             }
         });
     }

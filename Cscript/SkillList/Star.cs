@@ -55,13 +55,13 @@ public class MilkyWay : Skill
     {
         return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
     }
-    public override void OnLearn(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         onMoveHandler = (movingUnit) =>
         {
-            if (GD.Randf() < new float[] { 0.12f, 0.18f, 0.24f,0.24f }[unit.Us.GetSkill(Name).Level - 1])
+            if (GD.Randf() < new float[] { 0.12f, 0.18f, 0.24f, 0.24f }[unit.Us.GetSkill(Name).Level - 1])
             {
-                if(unit.Up.RandomEnemyInVision(out Unit u))
+                if (unit.Up.RandomEnemyInVision(out Unit u))
                 {
                     Bullet.CreateBullet(unit, this, new Damage(10, DamageType.celestial), unit.Up.Position, u.Up.Position, Vector2I.Zero, -10,
                         3, 12, ShapeBullet.Star, ColorBullet.Yellow);
@@ -73,8 +73,11 @@ public class MilkyWay : Skill
                 }
             }
         };
-
         unit.Ue.OnUnitMove += onMoveHandler;
+    }
+    public override void OffLearn(Unit unit)
+    {
+        unit.Ue.OnUnitMove -= onMoveHandler;
     }
 }
 public class BlazingStar : Skill

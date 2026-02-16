@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 
-public partial class Mainmenu : Control
+public partial class Mainmenu : Control, IRegisterToG
 {
     [Export] public OptionButton OptionPlayer;
     [Export] public OptionButton OptionScene;
@@ -14,6 +14,11 @@ public partial class Mainmenu : Control
 
     private string selectedScene;
     private string selectedPlayer;
+
+    public void RegisterToG(G g)
+    {
+        g.Mainmenu = this;
+    }
 
     public override void _Ready()
     {

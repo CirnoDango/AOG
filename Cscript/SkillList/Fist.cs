@@ -70,15 +70,18 @@ public class CrimsonEnergyRelease : Skill
     {
         return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
     }
-    public override void OnLearn(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _event = (user, target, initDmg) =>
         {
             unit.GetStatus(new SCrimsonEnergyRelease());
             return initDmg;
         };
-
         unit.Ue.OnTakeBulletDamage.Add(_event);
+    }
+    public override void OffLearn(Unit unit)
+    {
+        unit.Ue.OnTakeBulletDamage.Remove(_event);
     }
 }
 public class IntenseRainbowFist : Skill

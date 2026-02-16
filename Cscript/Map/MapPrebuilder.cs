@@ -395,7 +395,11 @@ public class MapPrebuilder
     public static List<MapPrebuild> MapPrebuildDeck { get; set; } = [];
     public static MapPrebuild GetMapPrebuild(string name)
     {
-        return MapPrebuildDeck.FirstOrDefault(x => x.Name == name);
+        Console.WriteLine(MapPrebuildDeck.Count.ToString() + " maps");
+        foreach (var m in MapPrebuildDeck)
+            Console.WriteLine(m.Name);
+        return MapPrebuildDeck
+    .FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
     public static void LoadMapsFromFolder(string folderPath)
     {
@@ -410,25 +414,40 @@ public class MapPrebuilder
         dir.ListDirBegin();
 
         string fileName = dir.GetNext();
+        Console.WriteLine("open: " + fileName);
         while (fileName != "")
         {
-            if (!dir.CurrentIsDir() && fileName.EndsWith(".tscn"))
+            if (!dir.CurrentIsDir() && fileName.EndsWith(".tscn.remap"))
             {
-                string filePath = $"{folderPath}/{fileName}";
+                string realName = fileName.Replace(".remap", "");
+
+                string filePath = $"{folderPath}/{realName}";
+
+                GD.Print("Loading map: ", filePath);
+
                 try
                 {
                     var map = LoadMap(filePath);
+
                     if (map != null)
                     {
-                        map.Name = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                        map.Name = System.IO.Path.GetFileNameWithoutExtension(realName);
+
                         maps.Add(map);
+
+                        GD.Print("Loaded OK: ", map.Name);
+                    }
+                    else
+                    {
+                        GD.PrintErr("LoadMap returned NULL");
                     }
                 }
                 catch (Exception ex)
                 {
-                    GD.PrintErr($"加载地图 {filePath} 失败: {ex.Message}");
+                    GD.PrintErr($"加载地图失败: {ex}");
                 }
             }
+
             fileName = dir.GetNext();
         }
 

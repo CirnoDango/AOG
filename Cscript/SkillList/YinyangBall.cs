@@ -77,7 +77,7 @@ public class TreasureOrb : Skill
     {
         return TextEx.Tr($"sTreasureOrb sTreasureOrb{level - 1} ");
     }
-    public override void OnLearn(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         OnTurnEnd = (movingUnit) =>
         {
@@ -91,6 +91,10 @@ public class TreasureOrb : Skill
         };
 
         unit.Ue.OnUnitTurnEnd += OnTurnEnd;
+    }
+    public override void OffLearn(Unit unit)
+    {
+        unit.Ue.OnUnitTurnEnd -= OnTurnEnd;
     }
 }
 public class LightToShade : Skill 

@@ -332,7 +332,7 @@ public class UnitAttribute(Unit unit)
         {
             if (GD.Randf() < user.Ua.CritRate)
             {
-                Info.Print($"{user.Name} 造成了一次暴击！");
+                Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
                 switch (damage.Type)
                 {
                     default:

@@ -26,7 +26,7 @@ public abstract partial class Item : IInteractable, IEquipable
     // 实例特有属性
     public Vector2I Position { get; set; }
     public ItemDropped Sprite { get; set; }
-    public Dictionary<string, float> Params { get; set; }
+    public Dictionary<string, object> Params { get; set; } = [];
     
     // 使用时或装备时的即时效果
     public event Action<Unit> EquipEvent;
@@ -48,6 +48,7 @@ public abstract partial class Item : IInteractable, IEquipable
         UnequipEvent?.Invoke(unit);
     }
     public virtual void OnEquip(Unit unit) { }
+    public virtual void OnLoad(Unit unit) { }
     public virtual void OnUnequip(Unit unit) { }
     public virtual string GetDescription()
     {
@@ -78,10 +79,24 @@ public abstract partial class Item : IInteractable, IEquipable
     public static Item CreateItem(string name, Dictionary<string, object> parameters = null)
     {
         var template = GetTemplate(name).MemberwiseClone();
+        ((Item)template).Params = [];
         if (template == null) return null;
         Item item = (Item)template;
         item.egos = [];
         item.EquipEvent += item.OnEquip;
+        item.EquipEvent += item.OnLoad;
+        item.UnequipEvent += item.OnUnequip;
+        item.ApplyParameters(parameters ?? []);
+        return item;
+    }
+    public static Item CreateItem(string name, bool load, Dictionary<string, object> parameters = null)
+    {
+        var template = GetTemplate(name).MemberwiseClone();
+        ((Item)template).Params = [];
+        if (template == null) return null;
+        Item item = (Item)template;
+        item.egos = [];
+        item.EquipEvent += item.OnLoad;
         item.UnequipEvent += item.OnUnequip;
         item.ApplyParameters(parameters ?? []);
         return item;
@@ -120,12 +135,17 @@ public abstract partial class Item : IInteractable, IEquipable
 
     public virtual void ApplyParameters(Dictionary<string, object> parameters)
     {
-        Params = parameters
-            .Where(x => x.Value is float || x.Value is int || x.Value is double)
-            .ToDictionary(
-                x => x.Key, 
-                x => Convert.ToSingle(x.Value)
-            );
+        if (Params == null)
+            Params = new Dictionary<string, object>();
+
+        foreach (var kv in parameters)
+        {
+            Params[kv.Key] = kv.Value;
+        }
+    }
+    public virtual void GetParam()
+    {
+
     }
     public virtual Item RandomSummonParam()
     {
@@ -156,13 +176,14 @@ public abstract class SkillItem<TSkillInstance> : SkillItem
 {
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
+        base.ApplyParameters(parameters);
         Skill = (TSkillInstance)Activator.CreateInstance(typeof(TSkillInstance), this);
     }
 }
 
 public abstract class SkillItem : Item, IEquipable
 {
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         unit.Us.LearnSkill(Skill);
     }

@@ -24,6 +24,7 @@ public partial class G : Node
     public Ua Ua { get; set; }
     public SkillTreeBox SkillTreeBox { get; set; }
     public AnimationManager AnimationManager { get; set; }
+    public Mainmenu Mainmenu { get; set; }
     public override void _Ready()
     {
         I = this;
@@ -67,6 +68,7 @@ public partial class G : Node
         Ua = null;
         SkillTreeBox = null;
         AnimationManager = null;
+        Mainmenu = null;
         //Scene.CurrentMap = null;
         GameTime.Reset();
     }

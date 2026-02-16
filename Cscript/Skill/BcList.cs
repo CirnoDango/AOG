@@ -26,22 +26,38 @@ public class BulletModule : BarrageComponent
         return $"{bulletContext.Color} {bulletContext.Shape}子弹\n" +
             $"伤害：{bulletContext.damage:F1}\n速度：{bulletContext.Speed:F1}\n距离：{bulletContext.MaxDistance:F1}";
     }
-    public override void Execute(ref List<BulletContext> lbc, Executor executor)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         var bullet = new BulletContext(bulletContext.damage, bulletContext.Speed, 
             bulletContext.MaxDistance, bulletContext.Shape, bulletContext.Color);
         lbc = [bullet];
-        executor.FireOnce(lbc);
-        executor.Continue(lbc);
     }
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
+        base.ApplyParameters(parameters);
         if (parameters.TryGetValue("bulletContext", out var val))
         {
             bulletContext = (BulletContext)(Dictionary<string, object>)val;
         }
     }
-
+    public override void GetParam()
+    {
+        Params = new Dictionary<string, object>
+        {
+            {
+                "bulletContext",
+                new Dictionary<string, object>
+                {
+                    {"damage", bulletContext.damage.Value},
+                    {"speed", bulletContext.Speed},
+                    {"maxDistance", bulletContext.MaxDistance},
+                    {"shape", bulletContext.Shape},
+                    {"type", bulletContext.damage.Type},
+                    {"color", bulletContext.Color},
+                }
+            }
+        };
+    }
     public override Item RandomSummonParam()
     {
         BulletModule bm = new()
@@ -50,10 +66,11 @@ public class BulletModule : BarrageComponent
                 (ShapeBullet)GD.RandRange(0, 29),
                 (ColorBullet)GD.RandRange(0, 19))
         };
+        
         return bm;
     }
 }
-public class AddDamage : BarrageComponent, IBarrageComponentEvent
+public class AddDamage : BarrageComponent
 {
     public AddDamage()
     {
@@ -61,20 +78,20 @@ public class AddDamage : BarrageComponent, IBarrageComponentEvent
         CoolDown = 200;
         SpCost = 6;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
             bc.damage += 5;
     }
 }
-public class SnakeRoute : BarrageComponent, IBarrageComponentEvent
+public class SnakeRoute : BarrageComponent
 {
     public SnakeRoute()
     {
         Name = "SnakeRoute";
         SpCost = 2;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -98,13 +115,13 @@ public class SnakeRoute : BarrageComponent, IBarrageComponentEvent
     }
 }
 
-public class ChaosRoute : BarrageComponent, IBarrageComponentEvent
+public class ChaosRoute : BarrageComponent
 {
     public ChaosRoute()
     {
         Name = "ChaosRoute";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -117,13 +134,13 @@ public class ChaosRoute : BarrageComponent, IBarrageComponentEvent
         bullet.Acceleration = MathEx.RandomV2(GD.RandRange(4, 25));
     }
 }
-public class LeftCircleRoute : BarrageComponent, IBarrageComponentEvent
+public class LeftCircleRoute : BarrageComponent
 {
     public LeftCircleRoute()
     {
         Name = "LeftCircleRoute";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -137,13 +154,13 @@ public class LeftCircleRoute : BarrageComponent, IBarrageComponentEvent
         bullet.Acceleration = bullet.Speed.Length() * bullet.Speed.Length() / 6 * bullet.Speed.Normalized().Rotated(-90 / 57.3f);
     }
 }
-public class RightCircleRoute : BarrageComponent, IBarrageComponentEvent
+public class RightCircleRoute : BarrageComponent
 {
     public RightCircleRoute()
     {
         Name = "RightCircleRoute";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -157,14 +174,14 @@ public class RightCircleRoute : BarrageComponent, IBarrageComponentEvent
         bullet.Acceleration = bullet.Speed.Length() * bullet.Speed.Length() / 6 * bullet.Speed.Normalized().Rotated(+90 / 57.3f);
     }
 }
-public class GreatSpread : BarrageComponent, IBarrageComponentEvent
+public class GreatSpread : BarrageComponent
 {
     public GreatSpread()
     {
         Name = "GreatSpread";
         CoolDown = -300;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -172,7 +189,7 @@ public class GreatSpread : BarrageComponent, IBarrageComponentEvent
         }
     }
 }
-public class SpeedUp : BarrageComponent, IBarrageComponentEvent
+public class SpeedUp : BarrageComponent
 {
     public SpeedUp()
     {
@@ -180,7 +197,7 @@ public class SpeedUp : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         SpCost = 2;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -188,7 +205,7 @@ public class SpeedUp : BarrageComponent, IBarrageComponentEvent
         }
     }
 }
-public class SpeedDown : BarrageComponent, IBarrageComponentEvent
+public class SpeedDown : BarrageComponent
 {
     public SpeedDown()
     {
@@ -196,7 +213,7 @@ public class SpeedDown : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         SpCost = 2;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -204,7 +221,7 @@ public class SpeedDown : BarrageComponent, IBarrageComponentEvent
         }
     }
 }
-public class RangeUp : BarrageComponent, IBarrageComponentEvent
+public class RangeUp : BarrageComponent
 {
     public RangeUp()
     {
@@ -212,7 +229,7 @@ public class RangeUp : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         SpCost = 4;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -220,7 +237,7 @@ public class RangeUp : BarrageComponent, IBarrageComponentEvent
         }
     }
 }
-public class CritUp : BarrageComponent, IBarrageComponentEvent
+public class CritUp : BarrageComponent
 {
     public CritUp()
     {
@@ -228,7 +245,7 @@ public class CritUp : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         SpCost = 6;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -236,7 +253,7 @@ public class CritUp : BarrageComponent, IBarrageComponentEvent
         }
     }
 }
-public class AccUp : BarrageComponent, IBarrageComponentEvent
+public class AccUp : BarrageComponent
 {
     public AccUp()
     {
@@ -244,7 +261,7 @@ public class AccUp : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         SpCost = 6;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         foreach (var bc in lbc)
         {
@@ -256,7 +273,7 @@ public class AccUp : BarrageComponent, IBarrageComponentEvent
         b.accuracy += 0.15f;
     }
 }
-public class MultiSpeedClone : BarrageComponent, IBarrageComponentEvent
+public class MultiSpeedClone : BarrageComponent
 {
     public MultiSpeedClone()
     {
@@ -264,7 +281,7 @@ public class MultiSpeedClone : BarrageComponent, IBarrageComponentEvent
         SpCost = 5;
         CoolDown = 200;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         List<BulletContext> nlbc = [];
         foreach (var bc in lbc)
@@ -280,7 +297,7 @@ public class MultiSpeedClone : BarrageComponent, IBarrageComponentEvent
         lbc = nlbc;
     }
 }
-public class Draw2 : BarrageComponent, IBarrageComponentEvent
+public class Draw2 : BarrageComponent
 {
     public Draw2()
     {
@@ -289,12 +306,12 @@ public class Draw2 : BarrageComponent, IBarrageComponentEvent
         draw = 2;
         group = "Draw2";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         return;
     }
 }
-public class CircleFire : BarrageComponent, IBarrageComponentEvent
+public class CircleFire : BarrageComponent
 {
     public CircleFire()
     {
@@ -303,7 +320,7 @@ public class CircleFire : BarrageComponent, IBarrageComponentEvent
         CoolDown = 200;
         group = "Fire";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         if (lbc.Count == 0) return;
         List<BulletContext> nlbc = [];
@@ -316,7 +333,7 @@ public class CircleFire : BarrageComponent, IBarrageComponentEvent
         lbc = nlbc;
     }
 }
-public class Way3Fire : BarrageComponent, IBarrageComponentEvent
+public class Way3Fire : BarrageComponent
 {
     public Way3Fire()
     {
@@ -325,7 +342,7 @@ public class Way3Fire : BarrageComponent, IBarrageComponentEvent
         CoolDown = 100;
         group = "Fire";
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         if (lbc.Count == 0) return;
         List<BulletContext> nlbc = [];
@@ -345,7 +362,7 @@ public class Way3Fire : BarrageComponent, IBarrageComponentEvent
 
 
 
-public class RandomFire : BarrageComponent, IBarrageComponentEvent
+public class RandomFire : BarrageComponent
 {
     public RandomFire()
     {
@@ -354,7 +371,7 @@ public class RandomFire : BarrageComponent, IBarrageComponentEvent
         SpCost = 5;
         CoolDown = 200;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         if (lbc.Count == 0) return;
         List<BulletContext> nlbc = [];
@@ -369,7 +386,7 @@ public class RandomFire : BarrageComponent, IBarrageComponentEvent
     }
 }
 
-public class PyramidFire : BarrageComponent, IBarrageComponentEvent
+public class PyramidFire : BarrageComponent
 {
     public PyramidFire()
     {
@@ -378,7 +395,7 @@ public class PyramidFire : BarrageComponent, IBarrageComponentEvent
         SpCost = 5;
         CoolDown = 200;
     }
-    public void ApplyTo(ref List<BulletContext> lbc)
+    public override void Activate(ref List<BulletContext> lbc)
     {
         if (lbc.Count == 0) return;
         List<BulletContext> nlbc = [];

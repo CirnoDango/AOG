@@ -47,17 +47,17 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         s.Modulate = skillBoxColor.TryGetValue(skill.Template.SkillGroup, out Color value) ? value : new Color(1, 1, 1);
 
 
-        var btn = new TextureButton
+        var btn = new SkillButton
         {
             Name = skill.Name,
             TextureNormal = skill.Texture,
             IgnoreTextureSize = true,
             CustomMinimumSize = new Vector2(60, 60),
             StretchMode = TextureButton.StretchModeEnum.Scale,
-            TooltipText = Tr(skill.Template.SkillInfo(Player.PlayerUnit.Us.GetSkill(skill.Name).Level)),
             SizeFlagsVertical = SizeFlags.ShrinkCenter,
             SizeFlagsHorizontal = SizeFlags.ShrinkCenter,
-            FocusMode = FocusModeEnum.None
+            FocusMode = FocusModeEnum.None,
+            Skill = skill.Template
         };
         float ratio = 60 / skill.Texture.GetSize().X;
         btn.Scale = new Vector2(ratio, ratio);
@@ -139,3 +139,14 @@ public partial class SkillBar : FlowContainer, IRegisterToG
 	}
 }
 
+public partial class SkillButton : TextureButton
+{
+    public Skill Skill;
+
+    public override string _GetTooltip(Vector2 atPosition)
+    {
+        var player = Player.PlayerUnit;
+        var level = player.Us.GetSkill(Skill.Name).Level;
+        return Tr(Skill.SkillInfo(level));
+    }
+}

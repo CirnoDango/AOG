@@ -74,7 +74,8 @@ public class MoonlightRay : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        foreach(var g in sc.GridsTarget)
+        Animation.ShootLaser(sc.User.Up.Position, sc.GridsTarget[^1].Position - sc.User.Up.Position, Colors.Gold);
+        foreach (var g in sc.GridsTarget)
         {
             if(g.unit != null)
             {
@@ -82,7 +83,6 @@ public class MoonlightRay : Skill
                     * t0[sc.Level - 1] / 100f);
             }
         }
-        Animation.ShootLaser(sc.User.Up.Position, sc.GridsTarget[^1].Position - sc.User.Up.Position, Colors.Gold);
     }
 }
 public class DarkSideOfTheMoon : Skill

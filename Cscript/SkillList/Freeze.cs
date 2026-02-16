@@ -127,7 +127,7 @@ public class DiamondBlizzard : Skill
                 g.unit.Ua.CheckBodyHit(new Damage(30, DamageType.slash), sc.User, this);
                 if (sc.Level == 4)
                 {
-                    sc.UnitOne.Up.KnockBack(4, sc);
+                    g.unit.Up.KnockBack(4, sc);
                 }
             }
         }

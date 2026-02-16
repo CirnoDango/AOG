@@ -34,6 +34,11 @@ public class GameEvents
     {
         OnSceneQuit?.Invoke();
     }
+    public static event Action OnMapEnter;
+    public static void MapEnter()
+    {
+        OnMapEnter?.Invoke();
+    }
     public static event Action<Unit> OnEnemyKilled;
     public static void EnemyKilled(Unit unit)
     {

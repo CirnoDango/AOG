@@ -499,10 +499,10 @@ public class Map
                     Item it = Item.CreateItem(baseItem.Name);
                     // 随机参数 & Ego
                     Item item = it.RandomSummonParam();
-                    item.effectLevel = GD.RandRange(0, 2);
+                    item.effectLevel = 0;//GD.RandRange(0, 2);
                     if (item is Memory)
                         item.effectLevel = 0;
-                    item.AddRandomEgo(3 * item.effectLevel);
+                    //item.AddRandomEgo(3 * item.effectLevel);
                     item.ApplyParameters([]);
                     it = item;
                     // 价值判断
@@ -552,6 +552,7 @@ public static class Scene
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
         eliteProp += 0.006f;
         greatProp += 0.003f;
+        GameEvents.MapEnter();
     }
 
     public static void LeaveAndGo()

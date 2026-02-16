@@ -65,6 +65,9 @@ public static class GameData
 {
     public static string SelectedCharacter = "Reimu";
     public static string SelectedStage = "TutorialStage.tscn";
+    public static string LoadPath = "";
+    public static int CurrentStage = 0;
+    public static IMapNode CurrentScene;
 }
 
 

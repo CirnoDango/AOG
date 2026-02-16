@@ -19,7 +19,7 @@ udangoSpellcard,dangoSpellcard,符札团子,
 udangoLight,dangoLight,闪光团子,
 udangoFire,dangoFire,火焰团子,
 udangoClock,dangoClock,钟表团子,
-udangoLight,dangoRedwine,红酒团子,
+udangoRedwine,dangoRedwine,红酒团子,
 udangoChest,dangoChest,宝箱团子,
 剩余技能点,Skill points,剩余技能点,////////技能属性版
 剩余属性点,Ua points,剩余属性点,
@@ -93,6 +93,9 @@ stSpiralLightSteps,SpiralLightSteps,螺光步,///////////////////专用状态名
 stCrimsonEnergyRelease,CrimsonEnergyRelease,红寸劲,
 stScarletNetherworld,ScarletNetherworld,红色的冥界,
 stYinyangBall,YinyangBall,阴阳玉,
+stImaginaryVerticalTime,ImaginaryVerticalTime,假想时轴,
+stPerfectSquare,PerfectSquare,完美空间,
+stLunaDial,LunaDial,月时计,
 snMagicPotion,Magic Potion,魔法药水,/////物品技能名
 snHealPotion,Heal Potion,治疗药水,
 snBarrageSet,Barrage Set,弹幕盒子,

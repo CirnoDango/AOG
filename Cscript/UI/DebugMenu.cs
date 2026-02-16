@@ -12,12 +12,24 @@ public partial class DebugMenu : ColorRect
     public Button Debug3;
     [Export]
     public Button Debug4;
+    [Export]
+    public Button Debug5;
+    [Export]
+    public Button Debug6;
+    [Export]
+    public Button Debug7;
+    [Export]
+    public Button Debug8;
     public override void _Ready()
     {
         Debug1.Pressed += OnDebug1Pressed;
         Debug2.Pressed += OnDebug2Pressed;
         Debug3.Pressed += OnDebug3Pressed;
         Debug4.Pressed += OnDebug4Pressed;
+        Debug5.Pressed += OnDebug5Pressed;
+        Debug6.Pressed += OnDebug6Pressed;
+        Debug7.Pressed += OnDebug7Pressed;
+        Debug8.Pressed += OnDebug8Pressed;
         Hide();
     }
     public override void _Input(InputEvent @event)
@@ -54,5 +66,19 @@ public partial class DebugMenu : ColorRect
     private void OnDebug4Pressed()
     {
         Scene.LeaveAndGo();
+    }
+    private void OnDebug5Pressed()
+    {
+        Save save = new();
+        save.CreateSaveFile(GameData.SelectedStage, GameData.CurrentScene.Maps.IndexOf(Scene.CurrentMap), "sav.sav");
+    }
+    private void OnDebug6Pressed()
+    {
+    }
+    private void OnDebug7Pressed()
+    {
+    }
+    private void OnDebug8Pressed()
+    {
     }
 }

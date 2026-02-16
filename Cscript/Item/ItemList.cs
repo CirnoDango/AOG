@@ -11,12 +11,12 @@ public class PowerBlock : Item, IEquipable
         Weight = 2f;
     }
 
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) => dmg + 1;
         unit.Ue.OnDealBulletDamage.Add(_modifierCallback);
     }
-
+    
     public override void OnUnequip(Unit unit)
     {
         if (_modifierCallback != null)
@@ -32,7 +32,7 @@ public class DangoLight : Item, IEquipable
         Weight = 4f;
     }
 
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         unit.Up.Vision += 2;
     }
@@ -67,7 +67,7 @@ public interface ISkillInstance
 }
 public class MagicPotion : SkillItem<MagicPotion.Instance>
 {
-    public int MpRecoverPercent { get; private set; } = 40;
+    public float MpRecoverPercent { get; private set; } = 40;
     public MagicPotion()
     {
         Name = "MagicPotion";
@@ -77,7 +77,7 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
     {
         if (parameters.TryGetValue("MpRecoverPercent", out var val))
         {
-            MpRecoverPercent = (int)val;
+            MpRecoverPercent = Convert.ToSingle(val);
         }
         base.ApplyParameters(parameters);
     }
@@ -88,7 +88,7 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
     }
     public class Instance : Skill, ISkillInstance
     {
-        private readonly int _mp;
+        private readonly float _mp;
         public Instance(MagicPotion parent)
         {
             _mp = parent.MpRecoverPercent;
@@ -153,7 +153,7 @@ public class Axe : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -177,7 +177,7 @@ public class Dagger : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -201,7 +201,7 @@ public class Club : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -225,7 +225,7 @@ public class Rapier : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -249,7 +249,7 @@ public class QuarterStaff : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
@@ -273,7 +273,7 @@ public class BullWhip : Item, IEquipable
         Weight = 4f;
     }
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnEquip(Unit unit)
+    public override void OnLoad(Unit unit)
     {
         _modifierCallback = (user, target, dmg) =>
         {
