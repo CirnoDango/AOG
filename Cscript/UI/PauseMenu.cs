@@ -30,6 +30,7 @@ public partial class PauseMenu : ColorRect
             if (key == Key.Escape)
             {
                 Show();
+                DebugMenu.Visible = false;
                 G.I.Fsm.ChangeState(Fsm.TalkState);
             }
         }
@@ -41,7 +42,7 @@ public partial class PauseMenu : ColorRect
     }
     private void OnDebugPressed()
     {
-        DebugMenu.Visible = !DebugMenu.Visible;
+        //DebugMenu.Visible = !DebugMenu.Visible;
     }
     private void OnRestartPressed()
     {

@@ -123,8 +123,7 @@ public class DapengFellingFist : SpellCard
     {
         Name = "DapengFellingFist";
         SkillGroup = "Fist";
-        SpNeed = 40;
-        SpCost = 6;
+        SpCost = 40;
         Duration = 600;
         Cooldown = 36;
         Targeting = new TargetType(Target.Self, 1, 1);

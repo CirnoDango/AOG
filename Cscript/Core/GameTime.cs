@@ -54,6 +54,10 @@ public static class GameTime
         {
             si.Update(new SkillContext(si.User), updateTime);
         }
+        foreach(var sc in G.I.SpellcardBox.scs)
+        {
+            sc.Refresh();
+        }
         return activeUnit;
     }
     public static void Reset()

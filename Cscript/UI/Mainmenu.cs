@@ -69,8 +69,11 @@ public partial class Mainmenu : Control, IRegisterToG
                 OptionPlayer.Selected = 3;
                 selectedScene = "tutorial2";
                 break;
-            case "雾之湖":
-                selectedScene = "mistylake";
+            case "红魔馆":
+                selectedScene = "Eosd";
+                break;
+            case "测试场景":
+                selectedScene = "CaveD";
                 break;
             default:
                 selectedScene = s;

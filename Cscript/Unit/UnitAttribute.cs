@@ -251,66 +251,56 @@ public class UnitAttribute(Unit unit)
         amount = _parent.Ue.TakeBulletDamage(user, amount);
         amount *= user.Ua.DamageBullet / 100;
         float rd = 0;
-        if (_parent.Us.currentSpellcard != null)
+        // 擦弹检定
+        if (GD.Randf() < GrazePercent(this, user.Ua))
         {
             amount = _parent.Ue.Graze(_parent, amount);
-            CurrentSp -= amount.Value;
-            if (CurrentSp < 0)
+            CurrentSp += amount.Value;
+            if (CurrentSp > MaxSp)
             {
-                float overflow = -CurrentSp;
-                CurrentSp = 0;
-                float dam = overflow * 2 + MaxHp / 3;
-                GetHp(-dam);
-                string template = TranslationServer.Translate("acSpellBreak");
-                string result = string.Format(template, user.TrName, skill.TrName, _parent.TrName, _parent.Us.currentSpellcard.TrName, damage.ToString());
-                Info.Print(result);
-
-                _parent.Us.currentSpellcard.OnSpellBreak(new SkillContext(_parent));
-                rd = dam;
+                float overflow = CurrentSp - MaxSp;
+                CurrentSp = MaxSp;
+                GetHp(-overflow);
+                string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                    user.TrName, skill.TrName, _parent.TrName, new Damage(overflow, damage.Type).ToString());
+                Info.Print(msg);
+                rd = overflow;
             }
             else
             {
-                string msg;
-                msg = string.Format(
-                    TranslationServer.Translate("acGrazeD"),
-                    user.TrName, skill.TrName, _parent.TrName, amount.Value.ToString("F0")
-                );
+                string
+                msg = string.Format(TranslationServer.Translate("acGraze"),
+                    user.TrName, skill.TrName, _parent.TrName, amount.Value.ToString("F0"));
                 Info.Print(msg);
             }
         }
         else
         {
-            // 擦弹检定
-            if (GD.Randf() < GrazePercent(this, user.Ua))
+            GetHp(-amount.Value);
+            string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                user.TrName, skill.TrName, _parent.TrName, amount.ToString());
+            Info.Print(msg);
+            rd = amount.Value;
+        }
+
+        if (_parent.Us.currentSpellcard != null)
+        {
+            _parent.Us.currentSpellcard.CurrentDurability -= amount.Value;
+            if (_parent.Us.currentSpellcard.CurrentDurability < 0)
             {
-                amount = _parent.Ue.Graze(_parent, amount);
-                CurrentSp += amount.Value;
-                if (CurrentSp > MaxSp)
-                {
-                    float overflow = CurrentSp - MaxSp;
-                    CurrentSp = MaxSp;
-                    GetHp(-overflow);
-                    string msg = string.Format(TranslationServer.Translate("acOverflow"),
-                        user.TrName, skill.TrName, _parent.TrName, new Damage(overflow, damage.Type).ToString());
-                    Info.Print(msg);
-                    rd = overflow;
-                }
-                else
-                {
-                    string
-                    msg = string.Format(TranslationServer.Translate("acGraze"),
-                        user.TrName, skill.TrName, _parent.TrName, amount.Value.ToString("F0"));
-                    Info.Print(msg);
-                }
+                float overflow = -_parent.Us.currentSpellcard.CurrentDurability;
+                float dam = overflow * 2 + MaxHp / 3;
+                GetHp(-dam);
+                string template = TranslationServer.Translate("acSpellBreak");
+                string result = string.Format(template, user.TrName, skill.TrName, _parent.TrName, _parent.Us.currentSpellcard.TrName, damage.ToString());
+                Info.Print(result);
+                _parent.Us.currentSpellcard.OnSpellBreak(new SkillContext(_parent));
+                rd = dam;
             }
-            else
-            {
-                GetHp(-amount.Value);
-                string msg = string.Format(TranslationServer.Translate("acOverflow"),
-                    user.TrName, skill.TrName, _parent.TrName, amount.ToString());
-                Info.Print(msg);
-                rd = amount.Value;
-            }
+        }
+        else
+        {
+            
         }
         GetSp(0);
         return rd;

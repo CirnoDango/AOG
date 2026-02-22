@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_7yoxt"]
 [ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="9_tkdt8"]
 [ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
+[ext_resource type="Texture2D" uid="uid://bt5ubtyqa4u36" path="res://Assets/UI/NaturalSpBar.png" id="10_mdtu7"]
 [ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
 [ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xcvs3"]
 [ext_resource type="Texture2D" uid="uid://bbs3tfde7aewc" path="res://Assets/UI/close.png" id="13_7yoxt"]
@@ -43,7 +44,9 @@
 [ext_resource type="Script" uid="uid://mgbju6wq5qdr" path="res://Cscript/UI/Player.cs" id="34_ktiqe"]
 [ext_resource type="Script" uid="uid://d3ab0k3gxv2nm" path="res://Cscript/UI/HighlightManager.cs" id="35_700qy"]
 [ext_resource type="PackedScene" uid="uid://bg318vxlkr5tm" path="res://Nodes/Ui/blue_select.tscn" id="36_7nmk8"]
+[ext_resource type="Script" uid="uid://ddpkbwv5mjpsd" path="res://Cscript/UI/SpellcardBox.cs" id="36_dlj3q"]
 [ext_resource type="TileSet" uid="uid://bk5yqay6li22q" path="res://Other/Resource/tileExit.tres" id="37_cnqvw"]
+[ext_resource type="PackedScene" uid="uid://cmqfmcf8shgem" path="res://Nodes/Ui/spellcard_bar.tscn" id="37_urhty"]
 [ext_resource type="PackedScene" uid="uid://c1q3i2jujapps" path="res://Nodes/Ui/green_select.tscn" id="37_w6faq"]
 [ext_resource type="PackedScene" uid="uid://0edv3xem63n5" path="res://Nodes/Ui/red_select.tscn" id="38_roil7"]
 [ext_resource type="PackedScene" uid="uid://by50wrjk1ltfk" path="res://Nodes/Ui/yellow_select.tscn" id="39_fasdi"]
@@ -145,13 +148,13 @@ text = "1"
 horizontal_alignment = 2
 script = ExtResource("7_ofgj4")
 
-[node name="PlayerStatusBar" type="VBoxContainer" parent="UI/UiRoot" unique_id=402618475 node_paths=PackedStringArray("uilayer")]
-visible = false
+[node name="PlayerStatusBar" type="VBoxContainer" parent="UI/UiRoot" unique_id=402618475 node_paths=PackedStringArray("uilayer", "NaturalSpBar")]
 layout_mode = 0
 offset_right = 4564.0
 offset_bottom = 4000.0
 script = ExtResource("8_7yoxt")
 uilayer = NodePath("../..")
+NaturalSpBar = NodePath("SpRow/BarBack/Bar/TextureRect")
 
 [node name="HpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=1338597966]
 layout_mode = 2
@@ -189,6 +192,13 @@ offset_right = 4000.0
 offset_bottom = 400.0
 color = Color(0.47058824, 0.78431374, 0, 1)
 
+[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/PlayerStatusBar/SpRow/BarBack/Bar" unique_id=1325775178]
+layout_mode = 0
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 400.0
+texture = ExtResource("10_mdtu7")
+
 [node name="SpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/SpRow" unique_id=355243260]
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
@@ -224,6 +234,14 @@ color = Color(0.0836337, 0.350465, 0.769215, 1)
 layout_mode = 2
 theme_override_font_sizes/font_size = 360
 text = "100"
+
+[node name="Label" type="Label" parent="UI/UiRoot/PlayerStatusBar" unique_id=1175531311]
+layout_mode = 2
+theme_override_font_sizes/font_size = 200
+text = "直向移动：WASD,num2468      斜线移动：QEZC,num1379
+聚灵：space,num0                      散灵：R,num5
+装备栏：I         记忆栏：M         弹幕栏：O
+技能栏：K        能力栏：B          天赋树：T"
 
 [node name="Status" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=139083883]
 layout_mode = 2
@@ -681,6 +699,7 @@ scale = Vector2(10, 10)
 GameRoot = NodePath("../../../Scene")
 
 [node name="StartMenu" parent="UI/UiRoot" unique_id=1738170210 instance=ExtResource("27_mdtu7")]
+visible = false
 z_index = 1001
 layout_mode = 1
 
@@ -774,6 +793,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DebugMenu" type="ColorRect" parent="UI/UiRoot/PauseMenu" unique_id=1716580616 node_paths=PackedStringArray("Debug1", "Debug2", "Debug3", "Debug4", "Debug5", "Debug6", "Debug7", "Debug8")]
+visible = false
 z_index = 2000
 layout_mode = 0
 offset_left = 6340.0
@@ -1064,6 +1084,15 @@ offset_bottom = 1200.0
 texture_normal = ExtResource("13_7yoxt")
 stretch_mode = 0
 script = ExtResource("14_tkdt8")
+
+[node name="SpellcardBox" type="VBoxContainer" parent="UI/UiRoot" unique_id=662034810]
+layout_mode = 0
+offset_left = 5560.0
+offset_top = 120.00012
+offset_right = 5600.0
+offset_bottom = 160.00012
+script = ExtResource("36_dlj3q")
+SpellcardBar = ExtResource("37_urhty")
 
 [node name="Main" type="Node2D" parent="." unique_id=166844271]
 

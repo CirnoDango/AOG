@@ -183,8 +183,7 @@ public class DreamSeal : SpellCard
     {
         Name = "DreamSeal";
         SkillGroup = "YinyangBall";
-        SpNeed = 50;
-        SpCost = 6;
+        SpCost = 50;
         Cooldown = 2600;
         Targeting = new TargetType(Target.Self, 1, 10);
     }

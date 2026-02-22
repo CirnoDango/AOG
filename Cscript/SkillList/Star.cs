@@ -155,8 +155,7 @@ public class StardustReverie : SpellCard
         Name = "StardustReverie";
         SkillGroup = "Star";
         Description = "持续发出大量星弹，发动时移动速度+100%";
-        SpNeed = 50;
-        SpCost = 6;
+        SpCost = 50;
         Cooldown = 3000;
         Duration = 500;
         Targeting = new TargetType(Target.Enemy, 1, 12);

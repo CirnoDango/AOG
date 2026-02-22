@@ -297,8 +297,7 @@ public class OmniDragonSlayingCircle : SpellCard
     {
         Name = "OmniDragonSlayingCircle";
         SkillGroup = "Circle";
-        SpNeed = 45;
-        SpCost = 8;
+        SpCost = 45;
         Cooldown = 3000;
         Duration = 400;
         Targeting = new TargetType(Target.Self, 1, 4);

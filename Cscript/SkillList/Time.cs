@@ -124,8 +124,7 @@ public class SakuyasWorld : SpellCard
     {
         Name = "SakuyasWorld";
         SkillGroup = "Time";
-        SpNeed = 40;
-        SpCost = 8;
+        SpCost = 40;
         MpCost = 30;
         Cooldown = 4200;
         Duration = 500;

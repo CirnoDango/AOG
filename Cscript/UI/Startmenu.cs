@@ -19,7 +19,7 @@ public partial class Startmenu : Control
         start.Pressed += OnStartPressed;
         load.Pressed += OnLoadPressed;
         quit.Pressed += OnExitPressed;
-        //Visible = true;
+        Visible = true;
         string path = "sav.sav";
         if (!File.Exists(path))
         {

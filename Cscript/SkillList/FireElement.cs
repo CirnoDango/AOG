@@ -354,8 +354,7 @@ public class PhlogisticPillar : SpellCard
     {
         Name = "PhlogisticPillar";
         SkillGroup = "FireElement";
-        SpNeed = 40;
-        SpCost = 8;
+        SpCost = 40;
         Duration = 400;
         Cooldown = 3600;
         Targeting = new TargetType(Target.Grid, 1, 9);

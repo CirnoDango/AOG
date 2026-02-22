@@ -73,10 +73,7 @@ public abstract class Status
         }
         string path = $"res://Assets/Status/{Name}Map.png";
         Texture2D texture = null;
-        if (FileAccess.FileExists(path))
-        {
-            texture = GD.Load<Texture2D>(path);
-        }
+        texture = GD.Load<Texture2D>(path);
         if (texture == null)
             return;
         var sprite = new Sprite2D

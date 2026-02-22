@@ -146,6 +146,7 @@ public class Map
     /// </summary>
     public Dictionary<string, float> EnemySummonValue;
     public bool IsPrebuild = false;
+    public int NaturalSp = 20;
     public Map(int width, int height)
     {
         Width = width;
@@ -260,6 +261,7 @@ public class Map
         Units.Add(unit);
         // 初始化事件：Ue
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.HealHp(updateTime * unit.Ua.MaxHp / 10000);
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetSp(0.002f * updateTime * (NaturalSp - unit.Ua.CurrentSp));
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         // 初始化技能,Ai
         unit.UnitAi = new UnitAi(unit);
@@ -547,12 +549,13 @@ public static class Scene
         CurrentMap.SummonEnemy();
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();
-        Player.PlayerUnit.Ua.HealHp(Player.PlayerUnit.Ua.MaxHp);
         Info.Print("进入新地图，记忆上限已提升");
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
         eliteProp += 0.006f;
         greatProp += 0.003f;
         GameEvents.MapEnter();
+        G.I.PlayerStatusBar.Init();
+        Player.PlayerUnit.Ua.HealHp(Player.PlayerUnit.Ua.MaxHp);
     }
 
     public static void LeaveAndGo()

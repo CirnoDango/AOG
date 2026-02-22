@@ -178,8 +178,7 @@ public class PerfectFreeze : SpellCard
     {
         Name = "PerfectFreeze";
         SkillGroup = "Freeze";
-        SpNeed = 40;
-        SpCost = 10;
+        SpCost = 40;
         Duration = 300;
         Targeting = new TargetType(Target.Self, 1, 12);
     }

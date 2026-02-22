@@ -417,7 +417,7 @@ public class MapPrebuilder
         Console.WriteLine("open: " + fileName);
         while (fileName != "")
         {
-            if (!dir.CurrentIsDir() && fileName.EndsWith(".tscn.remap"))
+            if (!dir.CurrentIsDir() && (fileName.EndsWith(".tscn.remap") || fileName.EndsWith(".tscn")))
             {
                 string realName = fileName.Replace(".remap", "");
 

@@ -78,6 +78,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
         unit.Ua.InitializeHpSpBar();
         // 初始化事件：Ue
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.HealHp(updateTime * unit.Ua.MaxHp / 10000);
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetSp(0.002f * updateTime * (Scene.CurrentMap.NaturalSp - unit.Ua.CurrentSp));
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         unit.UnitAi = new UnitAi(unit);
         foreach (var gskill in Skill.SkillDeck)
@@ -96,7 +97,6 @@ public partial class Player : CharacterBody2D, IRegisterToG
         unit.Up.sprite.AddChild(playerCamera);  // 加到角色节点下
         playerCamera.MakeCurrent();  // 设置为当前摄像机
         playerCamera.Position = new Vector2I(Setting.imagePx/2, Setting.imagePx/2);
-        G.I.PlayerStatusBar.Init();
     }
     private void HandleBoxInput(InputEvent @event)
     {
@@ -119,21 +119,10 @@ public partial class Player : CharacterBody2D, IRegisterToG
             var key = keyEvent.Keycode;
 
             // 特判数字键盘5
-            if (key == Key.Kp5 || key == Key.R)
+            if (key == Key.Kp5 || key == Key.Space)
             {
                 if (Skill.NameSkill.TryGetValue("Rest", out var restSkill))
                 {
-                    if (PlayerUnit.Us.currentSpellcard == null)
-                        PlayerUnit.Ua.GetSp(-5);
-                    restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.Up.CurrentGrid));
-                }
-                return;
-            }
-            if (key == Key.Kp0 || key == Key.Space)
-            {
-                if (Skill.NameSkill.TryGetValue("Rest", out var restSkill))
-                {
-                    PlayerUnit.Ua.GetSp(10);
                     restSkill.Activate(new SkillContext(PlayerUnit, PlayerUnit.Up.CurrentGrid));
                 }
                 return;

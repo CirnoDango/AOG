@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
 {
     [Export] public CanvasLayer uilayer;
-
+    [Export] public TextureRect NaturalSpBar;
     private Label hpLabel, spLabel, grazeLabel, mpLabel;
     private ColorRect hpBarBack, spBarBack, mpBarBack;
     private ColorRect hpBar, spBar, mpBar;
@@ -41,6 +41,7 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
         hpBar.Size = new Vector2(barMaxWidth * hpRatio, barHeight);
         spBar.Size = new Vector2(barMaxWidth * spRatio, barHeight);
         mpBar.Size = new Vector2(barMaxWidth * mpRatio, barHeight);
+        NaturalSpBar.Position = new Vector2(-40 + barMaxWidth * Scene.CurrentMap.NaturalSp / Player.PlayerUnit.Ua.MaxSp, 0);
         if (Player.PlayerUnit.Us.currentSpellcard != null)
             spBar.Color = new Color(1, 0.5f, 0);
         else

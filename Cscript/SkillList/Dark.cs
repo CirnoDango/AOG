@@ -177,8 +177,7 @@ public class Demarcation : SpellCard
         Name = "Demarcation";
         SkillGroup = "Dark";
         Description = "周围8格陷入黑暗，发出大量交叉子弹";
-        SpNeed = 40;
-        SpCost = 10;
+        SpCost = 40;
         Cooldown = 2800;
         Duration = 300;
         Targeting = new TargetType(Target.Self, 1, 8);

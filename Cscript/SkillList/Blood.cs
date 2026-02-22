@@ -216,8 +216,7 @@ public class ScarletGensokyo : SpellCard
     {
         Name = "ScarletGensokyo";
         SkillGroup = "Blood";
-        SpNeed = 50;
-        SpCost = 8;
+        SpCost = 50;
         MpCost = 20;
         Cooldown = 3700;
         Duration = 500;
@@ -309,6 +308,8 @@ public class SScarletNetherworld : Status
     }
     public override void OnGet(Unit unit, Status status)
     {
+        if (!CombineTime(unit, status))
+            return;
         if (unit.symbol.Contains("吸血鬼"))
         {
             unit.Ua.Mag += 5;
@@ -320,7 +321,7 @@ public class SScarletNetherworld : Status
             unit.Ua.Dex -= 5;
             unit.Ua.Con -= 5;
         }
-        CombineTime(unit, status);
+        
     }
     public override void OnQuit(Unit unit)
     {

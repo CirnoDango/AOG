@@ -23,6 +23,7 @@ public partial class G : Node
     public SkillPanel SkillPanel { get; set; }
     public Ua Ua { get; set; }
     public SkillTreeBox SkillTreeBox { get; set; }
+    public SpellcardBox SpellcardBox { get; set; }
     public AnimationManager AnimationManager { get; set; }
     public Mainmenu Mainmenu { get; set; }
     public override void _Ready()
@@ -69,6 +70,7 @@ public partial class G : Node
         SkillTreeBox = null;
         AnimationManager = null;
         Mainmenu = null;
+        SpellcardBox = null;
         //Scene.CurrentMap = null;
         GameTime.Reset();
     }

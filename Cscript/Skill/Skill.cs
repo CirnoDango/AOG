@@ -180,8 +180,6 @@ public abstract class Skill
         if (GetSpCost(level) > 0)
         {
             text += $" SP消耗 ：{GetSpCost(level)}";
-            if (this is SpellCard spel)
-                text += $" * {Math.Round(spel.GetDuration(level) / 100):F0}";
             text += "\n";
         }
         if (GetSpCost(level) < 0) { text += $" SP累积 ：{-GetSpCost(level)}\n"; }
@@ -363,9 +361,13 @@ public abstract class SpellCard : Skill
 {
     public static List<SkillInstance> currentSpellcards = [];
     public float Duration;
+    public virtual float GetDuration(int level) => Duration;
+    public float MaxDurability => SpCost * 1.5f;
+    public virtual float GetMaxDurability(int level) => GetSpCost(level) * 1.5f;
+    public float CurrentDurability;
     public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = new();
     public override bool IsSpellCard() => true;
-    public virtual float GetDuration(int level) => Duration;
+    
     protected void AddTimedEvent(float time, Action<SkillContext, float> action)
     {
         timedEvents.Add((time, action));
@@ -384,10 +386,12 @@ public abstract class SpellCard : Skill
         SkillInstance si = sc.User.Us.GetSkill(Name);
         si.IsActive = true;
         si.TimeElapsed = 0;
+        ((SpellCard)si.Template).CurrentDurability = ((SpellCard)si.Template).GetMaxDurability(sc.Level);
         si.User = sc.User;
         currentSpellcards.Add(si);
         sc.User.Us.currentSpellcard = this;
         sc.User.Ua.UpdateSpBar();
+        G.I.SpellcardBox.Init(si);
         if (sc.User == Player.PlayerUnit)
             G.I.PlayerStatusBar.UpdateStatusUI();
         OnSpellStart(sc);
@@ -407,7 +411,6 @@ public abstract class SpellCard : Skill
             return;
         float previousTime = si.TimeElapsed;
         si.TimeElapsed += delta;
-        sc.User.Ua.GetSp(-GetSpCost(sc.Level) * delta / 100);
         // 触发事件，传入 advanceTime
         while (si.eventIndex < timedEvents.Count && si.TimeElapsed >= timedEvents[si.eventIndex].triggerTime)
         {
@@ -428,6 +431,7 @@ public abstract class SpellCard : Skill
     public virtual void OnSpellEnd(SkillContext sc)
     {
         SkillInstance si = sc.User.Us.GetSkill(Name);
+        G.I.SpellcardBox.Remove(si);
         timedEvents.Clear();
         si.eventIndex = 0;
         currentSpellcards.Remove(si);
