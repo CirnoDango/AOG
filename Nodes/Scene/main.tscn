@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://duiokn4iivi5c" path="res://Nodes/Scene/UiRoot.cs" id="2_cnqvw"]
 [ext_resource type="PackedScene" uid="uid://b0b613bgfx2do" path="res://Nodes/Ui/skillbox.tscn" id="3_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://b5ig21a8jomxe" path="res://Nodes/Ui/spellbox.tscn" id="4_cnqvw"]
-[ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://Assets/Font/TjfPastaRegular-3lRDz.ttf" id="5_6k5eg"]
 [ext_resource type="Script" uid="uid://befekncgewd8s" path="res://Cscript/UI/Info.cs" id="6_dgtui"]
 [ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="7_ofgj4"]
 [ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_7yoxt"]
@@ -91,51 +90,148 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_cnqvw")
 
-[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
-custom_minimum_size = Vector2(660, 600)
-layout_mode = 0
-offset_left = 90.0
-offset_top = 4830.0
-offset_right = 750.0
-offset_bottom = 5430.0
-scale = Vector2(10, 10)
-script = ExtResource("2_1ocm2")
-skillContainer = NodePath(".")
-skillButtonScene = ExtResource("3_c2j4f")
-spellButtonScene = ExtResource("4_cnqvw")
-
-[node name="Control" type="Control" parent="UI/UiRoot" unique_id=1784127797]
+[node name="InfoPanel" type="Control" parent="UI/UiRoot" unique_id=638818915]
 anchors_preset = 0
-offset_right = 4000.0
-offset_bottom = 4000.0
+offset_right = 4800.0
+offset_bottom = 10800.0
 
-[node name="Label" type="Label" parent="UI/UiRoot/Control" unique_id=1877071645]
-visible = false
-texture_filter = 2
+[node name="Back" type="ColorRect" parent="UI/UiRoot/InfoPanel" unique_id=1860639167]
+z_index = -100
 layout_mode = 0
-offset_right = 259.0
-offset_bottom = 300.0
-theme_override_fonts/font = ExtResource("5_6k5eg")
-theme_override_font_sizes/font_size = 300
-text = "12"
+offset_right = 4800.0
+offset_bottom = 10800.0
+color = Color(0, 0, 0.28627452, 1)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/UiRoot/Control" unique_id=2065021963]
+[node name="PlayerStatusBar" type="VBoxContainer" parent="UI/UiRoot/InfoPanel" unique_id=402618475 node_paths=PackedStringArray("uilayer", "NaturalSpBar")]
+layout_mode = 0
+offset_right = 4071.0
+offset_bottom = 2073.0
+script = ExtResource("8_7yoxt")
+uilayer = NodePath("../../..")
+NaturalSpBar = NodePath("SpRow/BarBack/Bar/TextureRect")
+
+[node name="HpRow" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=1338597966]
+layout_mode = 2
+
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/HpRow" unique_id=1047661770]
+z_index = -1
+custom_minimum_size = Vector2(3600, 400)
+layout_mode = 2
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/HpRow/BarBack" unique_id=1860986849]
+layout_mode = 0
+offset_left = 0.00048828125
+offset_right = 3600.0005
+offset_bottom = 400.0
+color = Color(0.721569, 0, 0, 1)
+
+[node name="HpValue" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/HpRow" unique_id=1287877790]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "100"
+
+[node name="SpRow" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=972236240]
+layout_mode = 2
+
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/SpRow" unique_id=1229508022]
+z_index = -1
+custom_minimum_size = Vector2(3600, 400)
+layout_mode = 2
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/SpRow/BarBack" unique_id=1831628522]
+layout_mode = 0
+offset_right = 3600.0
+offset_bottom = 400.0
+color = Color(0.47058824, 0.78431374, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/SpRow/BarBack/Bar" unique_id=1325775178]
+layout_mode = 0
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 400.0
+texture = ExtResource("10_mdtu7")
+
+[node name="SpValue" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/SpRow" unique_id=355243260]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "100"
+
+[node name="GrazePercent" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/SpRow/SpValue" unique_id=728360145]
+layout_mode = 0
+offset_left = -1143.9999
+offset_top = -4.0000153
+offset_right = -12.999878
+offset_bottom = 356.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 300
+text = "10%"
+horizontal_alignment = 2
+
+[node name="MpRow" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=1584128997]
+layout_mode = 2
+
+[node name="BarBack" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/MpRow" unique_id=1951119699]
+z_index = -1
+custom_minimum_size = Vector2(3600, 400)
+layout_mode = 2
+color = Color(0.176419, 0.176419, 0.176419, 1)
+
+[node name="Bar" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/MpRow/BarBack" unique_id=1487635019]
+custom_minimum_size = Vector2(3600, 0)
+layout_mode = 0
+offset_right = 3600.0
+offset_bottom = 400.0
+color = Color(0.0836337, 0.350465, 0.769215, 1)
+
+[node name="MpValue" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/MpRow" unique_id=834387578]
+layout_mode = 2
+theme_override_font_sizes/font_size = 300
+text = "100"
+
+[node name="Label" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=1175531311]
+layout_mode = 2
+theme_override_font_sizes/font_size = 160
+text = "直向移动：WASD,num2468      斜线移动：QEZC,num1379
+聚灵：space,num0                      散灵：R,num5
+装备栏：I         记忆栏：M         弹幕栏：O
+技能栏：K        能力栏：B          天赋树：T"
+
+[node name="Status" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=139083883]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/Status" unique_id=1096087119]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/UiRoot/InfoPanel" unique_id=2065021963]
 texture_filter = 4
 layout_mode = 0
-offset_left = 11930.0
-offset_top = 6660.0
-offset_right = 18930.0
-offset_bottom = 10660.0
+offset_top = 4380.0
+offset_right = 4800.0
+offset_bottom = 6380.0
 theme_override_colors/default_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/normal_font_size = 240
-theme_override_font_sizes/bold_font_size = 240
-theme_override_font_sizes/bold_italics_font_size = 240
-theme_override_font_sizes/italics_font_size = 240
-theme_override_font_sizes/mono_font_size = 240
+theme_override_font_sizes/normal_font_size = 200
+theme_override_font_sizes/bold_font_size = 200
+theme_override_font_sizes/bold_italics_font_size = 200
+theme_override_font_sizes/italics_font_size = 200
+theme_override_font_sizes/mono_font_size = 200
 bbcode_enabled = true
 scroll_following = true
 vertical_alignment = 2
 script = ExtResource("6_dgtui")
+
+[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot/InfoPanel" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
+custom_minimum_size = Vector2(660, 600)
+layout_mode = 0
+offset_top = 6380.0
+offset_right = 660.0
+offset_bottom = 6980.0
+scale = Vector2(7.273, 7.273)
+script = ExtResource("2_1ocm2")
+skillContainer = NodePath(".")
+skillButtonScene = ExtResource("3_c2j4f")
+spellButtonScene = ExtResource("4_cnqvw")
 
 [node name="fps" type="Label" parent="UI/UiRoot" unique_id=1730787130]
 layout_mode = 0
@@ -147,107 +243,6 @@ theme_override_font_sizes/font_size = 300
 text = "1"
 horizontal_alignment = 2
 script = ExtResource("7_ofgj4")
-
-[node name="PlayerStatusBar" type="VBoxContainer" parent="UI/UiRoot" unique_id=402618475 node_paths=PackedStringArray("uilayer", "NaturalSpBar")]
-layout_mode = 0
-offset_right = 4564.0
-offset_bottom = 4000.0
-script = ExtResource("8_7yoxt")
-uilayer = NodePath("../..")
-NaturalSpBar = NodePath("SpRow/BarBack/Bar/TextureRect")
-
-[node name="HpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=1338597966]
-layout_mode = 2
-
-[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/HpRow" unique_id=1047661770]
-z_index = -1
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 2
-color = Color(0.176419, 0.176419, 0.176419, 1)
-
-[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/HpRow/BarBack" unique_id=1860986849]
-layout_mode = 0
-offset_left = 0.00048828125
-offset_right = 4000.0005
-offset_bottom = 400.0
-color = Color(0.721569, 0, 0, 1)
-
-[node name="HpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/HpRow" unique_id=1287877790]
-layout_mode = 2
-theme_override_font_sizes/font_size = 360
-text = "100"
-
-[node name="SpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=972236240]
-layout_mode = 2
-
-[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/SpRow" unique_id=1229508022]
-z_index = -1
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 2
-color = Color(0.176419, 0.176419, 0.176419, 1)
-
-[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/SpRow/BarBack" unique_id=1831628522]
-layout_mode = 0
-offset_right = 4000.0
-offset_bottom = 400.0
-color = Color(0.47058824, 0.78431374, 0, 1)
-
-[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/PlayerStatusBar/SpRow/BarBack/Bar" unique_id=1325775178]
-layout_mode = 0
-offset_left = -40.0
-offset_right = 40.0
-offset_bottom = 400.0
-texture = ExtResource("10_mdtu7")
-
-[node name="SpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/SpRow" unique_id=355243260]
-layout_mode = 2
-theme_override_font_sizes/font_size = 360
-text = "100"
-
-[node name="GrazePercent" type="Label" parent="UI/UiRoot/PlayerStatusBar/SpRow/SpValue" unique_id=728360145]
-layout_mode = 0
-offset_left = -1143.9999
-offset_top = -4.0000153
-offset_right = -12.999878
-offset_bottom = 356.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 360
-text = "10%"
-horizontal_alignment = 2
-
-[node name="MpRow" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=1584128997]
-layout_mode = 2
-
-[node name="BarBack" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/MpRow" unique_id=1951119699]
-z_index = -1
-custom_minimum_size = Vector2(4000, 400)
-layout_mode = 2
-color = Color(0.176419, 0.176419, 0.176419, 1)
-
-[node name="Bar" type="ColorRect" parent="UI/UiRoot/PlayerStatusBar/MpRow/BarBack" unique_id=1487635019]
-layout_mode = 0
-offset_right = 4000.0
-offset_bottom = 400.0
-color = Color(0.0836337, 0.350465, 0.769215, 1)
-
-[node name="MpValue" type="Label" parent="UI/UiRoot/PlayerStatusBar/MpRow" unique_id=834387578]
-layout_mode = 2
-theme_override_font_sizes/font_size = 360
-text = "100"
-
-[node name="Label" type="Label" parent="UI/UiRoot/PlayerStatusBar" unique_id=1175531311]
-layout_mode = 2
-theme_override_font_sizes/font_size = 200
-text = "直向移动：WASD,num2468      斜线移动：QEZC,num1379
-聚灵：space,num0                      散灵：R,num5
-装备栏：I         记忆栏：M         弹幕栏：O
-技能栏：K        能力栏：B          天赋树：T"
-
-[node name="Status" type="HBoxContainer" parent="UI/UiRoot/PlayerStatusBar" unique_id=139083883]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="UI/UiRoot/PlayerStatusBar/Status" unique_id=1096087119]
-layout_mode = 2
 
 [node name="CombatAbilityBox" type="Control" parent="UI/UiRoot" unique_id=703309021 node_paths=PackedStringArray("HeadPicture", "Info1", "Info2", "Info3")]
 visible = false

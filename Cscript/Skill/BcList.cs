@@ -104,7 +104,7 @@ public class SnakeRoute : BarrageComponent
     {
         if (MathEx.Contain(bullet.timeUsed, time, 0))
             bullet.Speed = bullet.Speed.Rotated(45 / 57.3f);
-        if((int)(bullet.timeUsed / (100*1.5*3.14/bullet.Speed.Length())) % 2 == 0)
+        if ((int)(bullet.timeUsed / (100 * 1.5 * 3.14 / bullet.Speed.Length())) % 2 == 0)
         {
             bullet.Acceleration = bullet.Speed.Length() * bullet.Speed.Length() / 3 * bullet.Speed.Normalized().Rotated(-90 / 57.3f);
         }

@@ -10,7 +10,7 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
     private ColorRect hpBarBack, spBarBack, mpBarBack;
     private ColorRect hpBar, spBar, mpBar;
     public Node StatusRow;
-    private const float barMaxWidth = 4000;
+    private const float barMaxWidth = 3600;
     private const float barHeight = 400;
     public Dictionary<Status, Node> StatusImages = [];
     public void Init()

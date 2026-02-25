@@ -1,6 +1,12 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+public interface IWeapon
+{
+    Damage Damage(Unit unit);
+    float Accurency { get; }
+    float CritRate { get; }
+}
 public class PowerBlock : Item, IEquipable
 {
     private Func<Unit, Unit, Damage, Damage> _modifierCallback;
@@ -81,11 +87,6 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
         }
         base.ApplyParameters(parameters);
     }
-    public override Item RandomSummonParam()
-    {
-        MpRecoverPercent = GD.RandRange(20, 50);
-        return this;
-    }
     public class Instance : Skill, ISkillInstance
     {
         private readonly float _mp;
@@ -113,7 +114,7 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
 
 public class HealPotion : SkillItem<HealPotion.Instance>
 {
-    public int HpRecoverPercent { get; private set; } = 60;
+    public int HpRecoverPercent { get; private set; } = 40;
     public HealPotion()
     {
         Name = "HealPotion";
@@ -145,147 +146,87 @@ public class HealPotion : SkillItem<HealPotion.Instance>
     }
 }
 
-public class Axe : Item, IEquipable
+public class Axe : Item, IEquipable, IWeapon
 {
     public Axe()
     {
         Name = "Axe";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Str + 10) * 0.2f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str, DamageType.slash);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.8f;
+    public float CritRate => 0.05f;
 }
-public class Dagger : Item, IEquipable
+public class Dagger : Item, IEquipable, IWeapon
 {
     public Dagger()
     {
         Name = "Dagger";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Dex + 10) * 0.3f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str*0.4f+unit.Ua.Dex*0.4f, DamageType.pierce);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.9f;
+    public float CritRate => 0.1f;
 }
-public class Club : Item, IEquipable
+public class Club : Item, IEquipable, IWeapon
 {
     public Club()
     {
         Name = "Club";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Con + 10) * 0.3f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str*0.5f+unit.Ua.Con*0.5f, DamageType.strike);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.7f;
+    public float CritRate => 0.1f;
 }
-public class Rapier : Item, IEquipable
+public class Rapier : Item, IEquipable, IWeapon
 {
     public Rapier()
     {
         Name = "Rapier";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Spi + 10) * 0.3f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str*0.4f+unit.Ua.Spi*0.4f, DamageType.slash);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.9f;
+    public float CritRate => 0.05f;
 }
-public class QuarterStaff : Item, IEquipable
+public class QuarterStaff : Item, IEquipable, IWeapon
 {
     public QuarterStaff()
     {
         Name = "QuarterStaff";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Mag + 10) * 0.3f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str*0.4f+unit.Ua.Mag*0.4f, DamageType.strike);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.8f;
+    public float CritRate => 0.02f;
 }
-public class BullWhip : Item, IEquipable
+public class BullWhip : Item, IEquipable, IWeapon
 {
     public BullWhip()
     {
         Name = "BullWhip";
         Weight = 4f;
     }
-    private Func<Unit, Unit, Damage, Damage> _modifierCallback;
-    public override void OnLoad(Unit unit)
+    public Damage Damage(Unit unit)
     {
-        _modifierCallback = (user, target, dmg) =>
-        {
-            return dmg + (user.Ua.Cun + 10) * 0.3f;
-        };
-
-        unit.Ue.OnTakeBodyDamage.Add(_modifierCallback);
+        return new Damage(unit.Ua.Str * 0.4f + unit.Ua.Cun * 0.4f, DamageType.slash);
     }
-
-    public override void OnUnequip(Unit unit)
-    {
-        if (_modifierCallback != null)
-            unit.Ue.OnTakeBodyDamage.Remove(_modifierCallback);
-    }
+    public float Accurency => 0.8f;
+    public float CritRate => 0.1f;
 }

@@ -96,7 +96,7 @@ public partial class Player : CharacterBody2D, IRegisterToG
         };
         unit.Up.sprite.AddChild(playerCamera);  // 加到角色节点下
         playerCamera.MakeCurrent();  // 设置为当前摄像机
-        playerCamera.Position = new Vector2I(Setting.imagePx/2, Setting.imagePx/2);
+        playerCamera.Position = new Vector2I(Setting.imagePx/2-240, Setting.imagePx/2);
     }
     private void HandleBoxInput(InputEvent @event)
     {

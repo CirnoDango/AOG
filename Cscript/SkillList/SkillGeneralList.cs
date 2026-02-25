@@ -65,8 +65,17 @@ public class Attack : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        float damage = 10 + sc.User.Ua.Str - sc.UnitOne.Ua.Dex;
-        sc.UnitOne.Ua.CheckBodyHit(new Damage(damage, DamageType.strike), sc.User, this);
+        var weapons = sc.User.Equipment.EquippedItems.Where(x => x is IWeapon).ToList();
+        if (weapons.Count > 0)
+        {
+            float accK = 0; float damK = 1;
+            foreach (IWeapon weapon in weapons.Cast<IWeapon>())
+            {
+                accK -= 0.2f; damK *= 0.8f;
+            }
+        }
+        else
+            sc.UnitOne.Ua.CheckBodyHit(new Damage(10+sc.User.Ua.Str, DamageType.strike), 0.8f, 0, sc.User, this);
         sc.User.Ue.Attack(sc);
     }
 }
@@ -86,5 +95,5 @@ public class Shoot : Skill
         Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 1, 8, ShapeBullet.Micro, ColorBullet.Green);
         Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 1.5f, 8, ShapeBullet.Micro, ColorBullet.Green);
         Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 2, 8, ShapeBullet.Micro, ColorBullet.Green);
-    }
+    } 
 }

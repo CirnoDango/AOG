@@ -315,6 +315,30 @@ public class UnitAttribute(Unit unit)
     {
         return MathEx.Logistic(1 - 0.7f * (ua.CurrentSp / ua.MaxSp), ua.BulletGraze);
     }
+    public bool CheckBodyHit(Damage damage, float acc, float crit, Unit user, Skill skill)
+    {
+        float dice = MathEx.Logistic(acc, user.Ua.BodyDamageAccuracy - DamageEvasion);
+        if (GD.Randf() < dice)
+        {
+            if (GD.Randf() < user.Ua.CritRate + crit)
+            {
+                Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+                switch (damage.Type)
+                {
+                    default:
+                        damage.Value *= 1.5f; break;
+                }
+            }
+            TakeBodyDamage(damage, user, skill);
+            return true;
+        }
+        else
+        {
+            string msg = string.Format(TranslationServer.Translate("skill.evaded"), user.TrName, skill.TrName, _parent.TrName);
+            Info.Print(msg);
+            return false;
+        }
+    }
     public bool CheckBodyHit(Damage damage, Unit user, Skill skill)
     {
         float dice = MathEx.Logistic(0.8f, user.Ua.BodyDamageAccuracy - DamageEvasion);
