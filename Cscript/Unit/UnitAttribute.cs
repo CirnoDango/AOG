@@ -415,10 +415,10 @@ MP:{CurrentMp:F0}/{MaxMp:F0}
         if (_parent.Status.Count == 0)
             text += "无";
         text += "\n持有技能：\n";
-        foreach ((SkillInstance si, _) in _parent.Us.skills)
+        foreach ((Skill si, _) in _parent.Us.skills)
         {
-            if (si.Template.SkillGroup != "")
-                text += $"{si.Template.Name}\n";
+            if (si.SkillGroup != "")
+                text += $"{si.Name}\n";
         }
         return text;
     }

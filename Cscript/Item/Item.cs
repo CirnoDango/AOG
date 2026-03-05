@@ -17,7 +17,7 @@ public abstract partial class Item : IInteractable, IEquipable
 {
     public static List<Item> ItemDeck { get; set; } = [];
     //用于查找并复制一个同名的物品
-    public string Name { get; set; }
+    public string Name => GetType().Name;
     public string TrName => $"i{Name}";
     public virtual float Weight { get; set; }
     public Texture2D Texture { get; set; }
@@ -171,13 +171,13 @@ public abstract partial class Item : IInteractable, IEquipable
         } while (number < 40 && value > 0);
     }
 }
-public abstract class SkillItem<TSkillInstance> : SkillItem
-    where TSkillInstance : Skill, ISkillInstance
+public abstract class SkillItem<TSkill> : SkillItem
+    where TSkill : Skill, ISkill
 {
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
         base.ApplyParameters(parameters);
-        Skill = (TSkillInstance)Activator.CreateInstance(typeof(TSkillInstance), this);
+        Skill = (TSkill)Activator.CreateInstance(typeof(TSkill), this);
     }
 }
 

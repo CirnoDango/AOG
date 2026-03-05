@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class GameEvents
 {
-    public static event Action<Unit, SkillInstance> OnSkillLearned;
-    public static void SkillLearned(Unit enemy, SkillInstance si)
+    public static event Action<Unit, Skill> OnSkillLearned;
+    public static void SkillLearned(Unit enemy, Skill si)
     {
         OnSkillLearned?.Invoke(enemy, si);
     }
@@ -14,8 +14,8 @@ public class GameEvents
     {
         OnItemPicked?.Invoke(item);
     }
-    public static event Action<Unit, SkillContext, SkillInstance> OnUseSkill;
-    public static void UseSkill(Unit user, SkillContext sc, SkillInstance si)
+    public static event Action<Unit, SkillContext, Skill> OnUseSkill;
+    public static void UseSkill(Unit user, SkillContext sc, Skill si)
     {
         OnUseSkill?.Invoke(user, sc, si);
     }

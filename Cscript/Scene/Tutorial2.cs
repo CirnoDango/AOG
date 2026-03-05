@@ -11,7 +11,7 @@ public partial class Tutorial2 : Stage
         _Pf3GetTcs = new TaskCompletionSource();
         await _Pf3GetTcs.Task;
     }
-    private void CheckPf3Get(Unit unit, SkillInstance si)
+    private void CheckPf3Get(Unit unit, Skill si)
     {
         if (si.Name == "PerfectFreeze" && si.Level == 3)
         {

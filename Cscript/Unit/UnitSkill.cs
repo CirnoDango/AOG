@@ -5,11 +5,11 @@ public class UnitSkill(Unit unit)
 {
     private Unit _parent = unit;
     public SpellCard currentSpellcard;
-    public List<(SkillInstance skill, float weight)> skills = [];
-    public SkillInstance GetSkill(string name) => skills.FirstOrDefault(x => x.skill.Name == name).skill;
+    public List<(Skill skill, float weight)> skills = [];
+    public Skill GetSkill(string name) => skills.FirstOrDefault(x => x.skill.Name == name).skill;
     public void LearnSkill(Skill skill, bool load = false)
     {
-        SkillInstance si = new(skill);
+        Skill si = skill.Clone();
         if (skill.SkillGroup == "Item" && _parent == Player.PlayerUnit)
             si.CurrentCooldown = skill.Cooldown;
         AddSkill(si);
@@ -24,7 +24,7 @@ public class UnitSkill(Unit unit)
     public void LearnSkill(string Name)
     {
         Skill skill = Skill.NameSkill[Name];
-        SkillInstance si = new(skill);
+        Skill si = skill.Clone();
         if (skill.SkillGroup == "Item")
             si.CurrentCooldown = skill.Cooldown;
         AddSkill(si);
@@ -36,8 +36,8 @@ public class UnitSkill(Unit unit)
     }
     public void UnLearnSkill(Skill skill)
     {
-        var s = skills.Select(x => x.skill.Template).Where(x => x == skill).FirstOrDefault();
-        var index = skills.FindIndex(entry => entry.skill.Template == s);
+        var s = skills.Select(x => x.skill).Where(x => x == skill).FirstOrDefault();
+        var index = skills.FindIndex(entry => entry.skill == s);
         if (index >= 0)
         {
             if (Player.PlayerUnit == _parent)
@@ -52,7 +52,7 @@ public class UnitSkill(Unit unit)
         Skill skill = Skill.NameSkill[skilll];
         UnLearnSkill(skill);
     }
-    public void AddSkill(SkillInstance newSkill, float weight = 10)
+    public void AddSkill(Skill newSkill, float weight = 10)
     {
         skills.Add((newSkill, weight));
     }

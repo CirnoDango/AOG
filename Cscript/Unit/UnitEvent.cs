@@ -9,8 +9,8 @@ public class UnitEvent(Unit parent)
     {
         OnEnemyKilled?.Invoke(_parent);
     }
-    public event Action<Unit, SkillInstance> OnSkillLearned;
-    public void SkillLearned(SkillInstance si)
+    public event Action<Unit, Skill> OnSkillLearned;
+    public void SkillLearned(Skill si)
     {
         OnSkillLearned?.Invoke(_parent, si);
     }
@@ -74,8 +74,8 @@ public class UnitEvent(Unit parent)
         }
         return modifiedDamage;
     }
-    public List<Func<Unit, SkillInstance, bool, bool>> OnCheckSkillUsage = [];
-    public bool CheckSkillUsage(SkillInstance si, bool initCheck)
+    public List<Func<Unit, Skill, bool, bool>> OnCheckSkillUsage = [];
+    public bool CheckSkillUsage(Skill si, bool initCheck)
     {
         bool modifiedCheck = initCheck;
         foreach (var modifier in OnCheckSkillUsage)
@@ -94,8 +94,8 @@ public class UnitEvent(Unit parent)
         }
         return modifiedCheck;
     }
-    public event Action<Unit, SkillContext, SkillInstance> OnUseSkill;
-    public void UseSkill(SkillContext sc, SkillInstance si)
+    public event Action<Unit, SkillContext, Skill> OnUseSkill;
+    public void UseSkill(SkillContext sc, Skill si)
     {
         OnUseSkill?.Invoke(_parent, sc, si);
     }

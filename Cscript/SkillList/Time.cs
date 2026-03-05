@@ -17,14 +17,14 @@ public class MesmerizingMisdirection: Skill
     }
     int[] t0 = [18, 27, 36, 36];
     int[] t1 = [100, 100, 100, 200];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         Vector2 offset = MathEx.RandomV2(2);
-        for (int i = 0; i < t0[sc.Level - 1] / 9; i++)
+        for (int i = 0; i < t0[iLevel] / 9; i++)
         {
             for(int a = 20; a < 360; a += 40)
             {
@@ -38,7 +38,7 @@ public class MesmerizingMisdirection: Skill
         if(G.I.Fsm.currentState is EnemySkillState || G.I.Fsm.currentState is PlayerSkillState)
         {
             bullet.accuracy += 0.5f;
-            bullet.damage += bullet.damage * t1[sc.Level - 1] / 100;
+            bullet.damage += bullet.damage * t1[iLevel] / 100;
         }
     }
 }
@@ -54,18 +54,18 @@ public class ImaginaryVerticalTime : Skill
     int[] t0 = [30, 25, 20, 20];
     float[] t1 = [0.15f, 0.10f, 0.06f, 0.06f];
     int[] t2 = [2, 2, 2, 3];
-    public override float GetSpCost(int level)
+    public override float GetSpCost()
     {
-        return t0[level - 1];
+        return t0[iLevel];
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t2[level - 1], (int)(100 * t1[level - 1]));
+        return string.Format(EffectTr(), t2[iLevel], (int)(100 * t1[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SImaginaryVerticalTime(t2[sc.Level - 1] - 1,
-            t1[sc.Level - 1], 500, this));
+        sc.User.GetStatus(new SImaginaryVerticalTime(t2[iLevel] - 1,
+            t1[iLevel], 500, this));
     }
 }
 public class PerfectSquare: Skill
@@ -82,15 +82,15 @@ public class PerfectSquare: Skill
     int[] t1 = [3, 4, 5, 5];
     float[] t2 = [0.4f, 0.55f, 0.7f, 0.7f];
     float[] t3 = [0.3f, 0.3f, 0.3f, 1];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), (int)(100 * t0[level - 1]), t1[level - 1],
-            (int)(100 * t2[level - 1]), (int)(100 * t3[level - 1]));
+        return string.Format(EffectTr(), (int)(100 * t0[iLevel]), t1[iLevel],
+            (int)(100 * t2[iLevel]), (int)(100 * t3[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SPerfectSquare(t0[sc.Level - 1], t1[sc.Level - 1], t2[sc.Level - 1],
-            t3[sc.Level - 1], this));
+        sc.User.GetStatus(new SPerfectSquare(t0[iLevel], t1[iLevel], t2[iLevel],
+            t3[iLevel], this));
     }
 }
 public class LunaDial: Skill
@@ -105,17 +105,17 @@ public class LunaDial: Skill
     }
     int[] t0 = [2, 3, 4, 4];
     int[] t1 = [0, 0, 0, 50];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Unit, 1, new int[] { 3, 5, 7, 7 }[level - 1]);
+        return new TargetType(Target.Unit, 1, new int[] { 3, 5, 7, 7 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.UnitOne.GetStatus(new SLunaDial(t1[sc.Level - 1], 100 * t0[sc.Level - 1], sc.User, this));
+        sc.UnitOne.GetStatus(new SLunaDial(t1[iLevel], 100 * t0[iLevel], sc.User, this));
     }
 }
 public class SakuyasWorld : SpellCard
@@ -131,9 +131,9 @@ public class SakuyasWorld : SpellCard
         Targeting = new TargetType(Target.Self, 1, 6);
     }
     int[] t0 = [3, 4, 5, 5];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -154,7 +154,7 @@ public class SImaginaryVerticalTime : Status
 {
     private Skill Parent;
     private SkillContext rsc;
-    private SkillInstance rsi;
+    private Skill rsi;
     private float rcd;
     private bool active = false;
     public float Count
@@ -197,7 +197,7 @@ public class SImaginaryVerticalTime : Status
             Quit(unit);
         }
     }
-    public void BulletboxCheck(Unit unit, SkillContext sc, SkillInstance si)
+    public void BulletboxCheck(Unit unit, SkillContext sc, Skill si)
     {
         if (si != null && si.Name == "BarrageSet")
         {

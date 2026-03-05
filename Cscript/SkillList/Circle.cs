@@ -8,7 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 interface ICircle
 {
     List<Grid> Grids { get; set; }
-    Unit User { get; set; }
+    Unit Summoner { get; set; }
 }
 public class EvilSealingCircle : SkillLong, ICircle
 {
@@ -23,12 +23,12 @@ public class EvilSealingCircle : SkillLong, ICircle
     }
     public List<Grid> Grids { get; set; } = [];
     private List<Sprite2D> Images = [];
-    public Unit User { get; set; }
+    public Unit Summoner { get; set; }
     int[] t0 = [8, 12, 16, 16];
     int[] t1 = [6, 9, 12, 12];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
@@ -37,15 +37,15 @@ public class EvilSealingCircle : SkillLong, ICircle
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/EvilSealingCircle.png"));
         }
-        User = sc.User;
+        Summoner = sc.User;
         AddTimedEvent(Linspace(100, 500, 5), (ctx, advanceTime) =>
         {
             foreach(Grid g in Grids)
             {
-                if (g.unit == null || g.unit.Friendness * User.Friendness > 0)
+                if (g.unit == null || g.unit.Friendness * Summoner.Friendness > 0)
                     continue;
-                g.unit.Ua.TakeBulletDamage(new Damage(t0[sc.Level - 1], DamageType.barrier), sc.User, this);
-                g.unit?.Ua.GetMp(-t1[sc.Level - 1]);
+                g.unit.Ua.TakeBulletDamage(new Damage(t0[iLevel], DamageType.barrier), sc.User, this);
+                g.unit?.Ua.GetMp(-t1[iLevel]);
             }
         });
         if (sc.Level == 4)
@@ -59,11 +59,11 @@ public class EvilSealingCircle : SkillLong, ICircle
         GameEvents.OnUseSkill -= MpDamage;
         base.OnSkillEnd(sc);
     }
-    private void MpDamage(Unit unit, SkillContext sc, SkillInstance si)
+    private void MpDamage(Unit unit, SkillContext sc, Skill si)
     {
-        if(Grids.Contains(unit.Up.CurrentGrid) && si.Template.GetMpCost(sc.Level) > 0)
+        if(Grids.Contains(unit.Up.CurrentGrid) && si.GetMpCost() > 0)
         {
-            unit.Ua.TakeBulletDamage(new Damage(2 * si.Template.GetMpCost(sc.Level), DamageType.barrier), User, this);
+            unit.Ua.TakeBulletDamage(new Damage(2 * si.GetMpCost(), DamageType.barrier), Summoner, this);
         }
     }
 }
@@ -80,19 +80,19 @@ public class CautionaryBorder : SkillLong, ICircle
     public List<Grid> Grids { get; set; }= [];
     private List<Unit> units = [];
     private List<Sprite2D> Images = [];
-    public Unit User { get; set; }
+    public Unit Summoner { get; set; }
     private int level;
     int[] t0 = [20, 25, 30, 30];
     int[] t1 = [30, 45, 55, 55];
-    public override float GetSpCost(int level)
+    public override float GetSpCost()
     {
         if (level == 4)
             return 40;
         return 10;
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
@@ -101,7 +101,7 @@ public class CautionaryBorder : SkillLong, ICircle
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/CautionaryBorder.png"));
         }
-        User = sc.User;
+        Summoner = sc.User;
         level = sc.Level;
         GameEvents.OnUnitMove += AddEvasion;
     }
@@ -123,19 +123,19 @@ public class CautionaryBorder : SkillLong, ICircle
         if (!units.Contains(unit) && Grids.Contains(unit.Up.CurrentGrid))
         {
             units.Add(unit);
-            unit.Ua.DamageEvasion += t0[level - 1] / 100f;
+            unit.Ua.DamageEvasion += t0[iLevel] / 100f;
             unit.Ue.OnGraze.Add(GrazeResist);
         }
         else if(units.Contains(unit) && !Grids.Contains(unit.Up.CurrentGrid))
         {
             units.Remove(unit);
-            unit.Ua.DamageEvasion -= t0[level - 1] / 100f;
+            unit.Ua.DamageEvasion -= t0[iLevel] / 100f;
             unit.Ue.OnGraze.Remove(GrazeResist);
         }
     }
     private Damage GrazeResist(Unit unit, Unit attack, Damage baseGraze)
     {
-        return baseGraze * (1 - t1[level - 1] / 100f);
+        return baseGraze * (1 - t1[iLevel] / 100f);
     }
 }
 public class BindingBorder : SkillLong, ICircle
@@ -152,12 +152,12 @@ public class BindingBorder : SkillLong, ICircle
     public List<Grid> Grids { get; set; }= [];
     private List<Unit> units = [];
     private List<Sprite2D> Images = [];
-    public Unit User { get; set; }
+    public Unit Summoner { get; set; }
     private int level;
     int[] t0 = [4, 8, 12, 20];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
@@ -166,16 +166,16 @@ public class BindingBorder : SkillLong, ICircle
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/BindingBorder.png"));
         }
-        User = sc.User;
+        Summoner = sc.User;
         level = sc.Level;
         GameEvents.OnUnitMove += AddPinned;
         AddTimedEvent(Linspace(100, 500, 5), (ctx, advanceTime) =>
         {
             foreach (Grid g in Grids)
             {
-                if (g.unit == null || g.unit.Friendness * User.Friendness >= 0)
+                if (g.unit == null || g.unit.Friendness * Summoner.Friendness >= 0)
                     continue;
-                g.unit.Ua.TakeBodyDamage(new Damage(t0[sc.Level - 1], DamageType.barrier), sc.User, this);
+                g.unit.Ua.TakeBodyDamage(new Damage(t0[iLevel], DamageType.barrier), sc.User, this);
             }
         });
     }
@@ -189,7 +189,7 @@ public class BindingBorder : SkillLong, ICircle
     }
     private void AddPinned(Unit unit)
     {
-        if (Grids.Contains(unit.Up.CurrentGrid) && unit.Friendness * User.Friendness < 0)
+        if (Grids.Contains(unit.Up.CurrentGrid) && unit.Friendness * Summoner.Friendness < 0)
             unit.GetStatus(new Pinned(500));
     }
 }
@@ -207,35 +207,35 @@ public class PermanentBorder : SkillLong, ICircle
     public List<Grid> Grids { get; set; }= [];
     private List<Unit> units = [];
     private List<Sprite2D> Images = [];
-    public Unit User { get; set; }
+    public Unit Summoner { get; set; }
     private int level;
     private float time;
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         if (ContinueSkills.FirstOrDefault(x=>x.Name == Name && x.User == sc.User) != null)
         {
-            PermanentBorder pb = (PermanentBorder)ContinueSkills.FirstOrDefault(x => x.Name == Name && x.User == sc.User).Template;
+            PermanentBorder pb = (PermanentBorder)ContinueSkills.FirstOrDefault(x => x.Name == Name && x.User == sc.User);
             pb.OnSkillEnd(sc);
         }
         base.StartActivate(sc);
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 1, t0[level - 1]);
+        return new TargetType(Target.Self, 1, t0[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
 
-        Grids = [.. sc.User.Up.CurrentGrid.NearGrids(t0[sc.Level - 1]).Where(x => x.IsWalkable)];
+        Grids = [.. sc.User.Up.CurrentGrid.NearGrids(t0[iLevel]).Where(x => x.IsWalkable)];
         foreach (Grid grid in Grids)
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/PermanentBorder.png"));
         }
-        User = sc.User;
+        Summoner = sc.User;
         level = sc.Level;
         time = 0;
         GameEvents.OnUnitMove += AddCun;
@@ -248,16 +248,16 @@ public class PermanentBorder : SkillLong, ICircle
         {
             foreach (Grid g in Grids)
             {
-                if (g.unit == null || g.unit.Friendness * User.Friendness >= 0)
+                if (g.unit == null || g.unit.Friendness * Summoner.Friendness >= 0)
                     continue;
-                g.unit.Ua.TakeBulletDamage(new Damage(t1[sc.Level - 1], DamageType.spirit), sc.User, this);
+                g.unit.Ua.TakeBulletDamage(new Damage(t1[iLevel], DamageType.spirit), sc.User, this);
             }
         }
         time += delta;
     }
     private void SceneQuit()
     {
-        OnSkillEnd(new SkillContext(User));
+        OnSkillEnd(new SkillContext(Summoner));
     }
     public override void OnSkillEnd(SkillContext sc)
     {
@@ -306,9 +306,9 @@ public class OmniDragonSlayingCircle : SpellCard
     private List<Unit> units = [];
     private Unit user;
     private int level;
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel]);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -321,7 +321,7 @@ public class OmniDragonSlayingCircle : SpellCard
             {
                 if (g.unit == null || g.unit.Friendness * user.Friendness >= 0)
                     continue;
-                g.unit.Ua.TakeBulletDamage(new Damage(t0[sc.Level - 1], DamageType.slash), sc.User, this);
+                g.unit.Ua.TakeBulletDamage(new Damage(t0[iLevel], DamageType.slash), sc.User, this);
             }
         });
     }
@@ -338,7 +338,7 @@ public class OmniDragonSlayingCircle : SpellCard
     {
         sc ??= new SkillContext(user);
         List<Grid> grids = [];
-        foreach (ICircle ic in ContinueSkills.Select(x => x.Template).Where(x => x is ICircle).Where(x=>((ICircle)x).User == sc.User))
+        foreach (ICircle ic in ContinueSkills.Select(x => x).Where(x => x is ICircle).Where(x=>((ICircle)x).Summoner == sc.User))
         {
             grids.AddRange(ic.Grids);
         }

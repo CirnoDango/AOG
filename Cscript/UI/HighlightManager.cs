@@ -32,7 +32,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
             if (Player.PlayerUnit.Up.CheckSkillTarget(si, MapToGrid(clickPos)) == HighlightType.green)
             {
                 
-                switch (si.Targeting.Type)
+                switch (si.GetTargeting().Type)
                 {
                     case Target.Dash:
                         Skill.CurrentSkill.Activate(new SkillContext(
@@ -77,7 +77,9 @@ public partial class HighlightManager : Node2D, IRegisterToG
         if (showingTileWorldPos == tileWorldPos)
             return;
         showingTileWorldPos = tileWorldPos;
-        ShowHighlights(MathEx.GetLine(Player.PlayerUnit.Up.Position, tileWorldPos), Player.PlayerUnit.Up.CheckSkillTarget(Skill.CurrentSkill, tileWorldPos), Skill.CurrentSkill.Targeting.BombRange);
+        ShowHighlights(MathEx.GetLine(Player.PlayerUnit.Up.Position, tileWorldPos), 
+            Player.PlayerUnit.Up.CheckSkillTarget(Skill.CurrentSkill, tileWorldPos), 
+            Skill.CurrentSkill.GetTargeting().BombRange);
     }
     public static Vector2I MapToGrid(Vector2 screenPosf)
     {
@@ -161,7 +163,7 @@ public partial class HighlightManager : Node2D, IRegisterToG
         activeHighlights.Clear();
     }
 
-    public static void StartTargeting(SkillInstance si)
+    public static void StartTargeting(Skill si)
     {
         Skill.CurrentSkill = si;
         isTargeting = true;

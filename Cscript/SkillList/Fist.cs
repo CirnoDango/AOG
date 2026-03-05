@@ -15,13 +15,13 @@ public class Multistrike : Skill
         Targeting = new TargetType(Target.Unit, 1, 1);
     }
     int[] t0 = { 2, 3, 4, 4 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        int number = t0[sc.Level - 1] + Math.Max(0, (sc.User.Ua.Dex - sc.UnitOne.Ua.Dex) / 5);
+        int number = t0[iLevel] + Math.Max(0, (sc.User.Ua.Dex - sc.UnitOne.Ua.Dex) / 5);
         if (sc.Level == 4)
             number += Math.Max(0, (sc.User.Ua.Str - sc.UnitOne.Ua.Str) / 5);
         for (int i = 0; i < number; i++)
@@ -41,13 +41,13 @@ public class SpiralLightSteps : Skill
     int[] t0 = [3, 4, 5, 5];
     int[] t1 = [66, 88, 108, 108];
 
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SSpiralLightSteps(t1[sc.Level - 1], 100*t0[sc.Level - 1], this));
+        sc.User.GetStatus(new SSpiralLightSteps(t1[iLevel], 100*t0[iLevel], this));
     }
 }
 public class CrimsonEnergyRelease : Skill
@@ -66,9 +66,9 @@ public class CrimsonEnergyRelease : Skill
     " sCrimsonEnergyRelease0 ",
     " sCrimsonEnergyRelease1 ",
     ];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], extra[iLevel]);
     }
     public override void OnLoad(Unit unit)
     {
@@ -95,19 +95,19 @@ public class IntenseRainbowFist : Skill
         Targeting = new TargetType(Target.Unit, 1, 1);
     }
     int[] t0 = { 1,2,3,3 };
-    public override float GetSpCost(int level)
+    public override float GetSpCost()
     {
-        if (level == 4) return 30;
+        if (iLevel == 4) return 30;
         return 5;
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         Damage dmg = sc.UnitOne.Ua.TakeBodyDamage(new Damage(20, DamageType.strike), sc.User, this);
-        foreach(Unit unit in sc.UnitOne.Up.CurrentGrid.NearGrids(t0[sc.Level - 1])
+        foreach(Unit unit in sc.UnitOne.Up.CurrentGrid.NearGrids(t0[iLevel])
             .Where(x => x.unit != null)
             .Select(x => x.unit)
             .Where(x => x.Friendness * sc.User.Friendness < 0))
@@ -129,9 +129,9 @@ public class DapengFellingFist : SpellCard
         Targeting = new TargetType(Target.Self, 1, 1);
     }
     int[] t0 = [26, 36, 46, 46];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -145,7 +145,7 @@ public class DapengFellingFist : SpellCard
     }
     private void Attack(SkillContext sc)
     {
-        sc.UnitOne.Ua.TakeBodyDamage(new Damage(t0[sc.Level - 1], DamageType.strike), sc.User, this);
+        sc.UnitOne.Ua.TakeBodyDamage(new Damage(t0[iLevel], DamageType.strike), sc.User, this);
         sc.UnitOne.GetStatus(new Stun(500));
         sc.UnitOne.Up.KnockBack(5, sc);
         OnSpellEnd(sc);

@@ -14,13 +14,13 @@ public class Icefall : Skill
         Targeting = new TargetType(Target.Grid, 1, 10);
     }
     int[] t0 = { 3, 6, 6, 6 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
-    public override float GetCooldown(int level)
+    public override float GetCooldown()
     {
-        return new float[] { 300, 300, 200, 200 }[level - 1];
+        return new float[] { 300, 300, 200, 200 }[iLevel];
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -64,9 +64,9 @@ public class MinusK : Skill
         MpCost = 5;
         Cooldown = 1800;
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        if (level == 4)
+        if (Level == 4)
             return Targeting = new TargetType(Target.Enemy, 1, 10, 1);
         else
             return new TargetType(Target.Enemy, 1, 10);
@@ -78,14 +78,14 @@ public class MinusK : Skill
     "",
     " sMinusK0 "
 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], extra[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         sc.UnitOne.Ua.TakeBulletDamage(new Damage(30, DamageType.cold), sc.User, this);
-        sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[sc.Level - 1]));
+        sc.UnitOne.GetStatus(new Frozen(new int[] { 300, 500, 700, 700 }[iLevel]));
         if (sc.Level < 4) return;
         foreach (var grid in sc.UnitOne.Up.CurrentGrid.NearGrids(1))
         {
@@ -110,17 +110,17 @@ public class DiamondBlizzard : Skill
     "",
     " sDiamondBlizzard0 "
     ];
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 1, t0[level - 1]);
+        return new TargetType(Target.Self, 1, t0[iLevel]);
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], extra[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        foreach(Grid g in sc.User.Up.CurrentGrid.NearGrids(new int[] { 2, 3, 4, 4 }[sc.Level - 1]))
+        foreach(Grid g in sc.User.Up.CurrentGrid.NearGrids(new int[] { 2, 3, 4, 4 }[iLevel]))
         {
             if (g.unit != null && g.unit != sc.User)
             {
@@ -147,9 +147,9 @@ public class PerfectGlacialist : Skill
     }
     int[] t0 = { 18, 36, 54, 54 };
     string[] t1 = { " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist1 " };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t1[level - 1], t0[level - 1]);
+        return string.Format(EffectTr(), t1[iLevel], t0[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -164,7 +164,7 @@ public class PerfectGlacialist : Skill
         }
         else
         {
-            for (int i = 0; i < new int[] { 18, 36, 54, 54 }[sc.Level - 1]; i++)
+            for (int i = 0; i < new int[] { 18, 36, 54, 54 }[iLevel]; i++)
             {
                 Bullet.CreateBullet(sc.User, this, new Damage(8, DamageType.cold), sc.UnitOne.Up.Position, sc.UnitOne.Up.Position + RandomV2(), 
                     (float)GD.RandRange(1.5, 3), 6, ShapeBullet.Micro, ColorBullet.White);
@@ -184,13 +184,13 @@ public class PerfectFreeze : SpellCard
     }
     int[] t0 = { 20, 30, 40, 40 };
     int[] t1 = { 4, 5, 6, 6 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
-    public override float GetCooldown(int level)
+    public override float GetCooldown()
     {
-        return new int[] { 2800, 2800, 2800, 2400 }[level - 1];
+        return new int[] { 2800, 2800, 2800, 2400 }[iLevel];
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -209,7 +209,7 @@ public class PerfectFreeze : SpellCard
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
-        if (GD.Randf() <  new float[] { 0.2f,0.3f,0.4f,0.4f }[sc.Level - 1])
-            sc.UnitOne.GetStatus(new Frozen( new int[] { 400,500,600,600}[sc.Level - 1] ));
+        if (GD.Randf() <  new float[] { 0.2f,0.3f,0.4f,0.4f }[iLevel])
+            sc.UnitOne.GetStatus(new Frozen( new int[] { 400,500,600,600}[iLevel] ));
     }
 }

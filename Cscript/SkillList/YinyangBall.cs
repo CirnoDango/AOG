@@ -12,10 +12,10 @@ public class YinyangBallShoot : Skill
         SkillGroup = "Private";
         Targeting = new TargetType(Target.Grid, 1, 12);
     }
-    public override void Activate(SkillContext sc, SkillInstance si = null)
+    public override void Activate(SkillContext sc, Skill si = null)
     {
-        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
-        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost());
+        sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
@@ -28,7 +28,7 @@ public class YinyangBallShoot : Skill
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
-        if (sc.Level >= 2)
+        if (Level >= 2)
             sc.UnitOne.GetStatus(new Weak(100));
     }
 }
@@ -44,23 +44,23 @@ public class DreamOrb : Skill
     int[] t0 = [12, 12, 12, 12];
     int[] t1 = [5, 7, 9, 9];
     int[] t2 = [1, 1, 1, 2];
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, t0[level - 1]);
+        return new TargetType(Target.Grid, 1, t0[iLevel]);
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t1[level - 1], t2[level - 1]);
+        return string.Format(EffectTr(), t1[iLevel], t2[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        for(float a = 0; a < 360 ; a += 360 / t1[sc.Level - 1])
+        for(float a = 0; a < 360 ; a += 360 / t1[iLevel])
         {
             Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.strike), sc.User.Up.Position, sc.GridOne.Position,
                 Vector2.Right.Rotated(a / 57.3f), a, (float)GD.RandRange(3f, 4f)
-                ,t0[sc.Level - 1], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
+                ,t0[iLevel], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
         }
-        sc.User.GetStatus(new YinyangBall(t2[sc.Level - 1]));
+        sc.User.GetStatus(new YinyangBall(t2[iLevel]));
     }
 }
 public class TreasureOrb : Skill
@@ -73,9 +73,9 @@ public class TreasureOrb : Skill
     }
     private Action<Unit> OnTurnEnd;
     private int turnCount = 0;
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return TextEx.Tr($"sTreasureOrb sTreasureOrb{level - 1} ");
+        return TextEx.Tr($"sTreasureOrb sTreasureOrb{iLevel} ");
     }
     public override void OnLoad(Unit unit)
     {
@@ -109,9 +109,9 @@ public class LightToShade : Skill
     }
     int[] t0 = { 3, 5, 7, 7 };
     string[] extra = ["", "", "", " sLightToShade0 "];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], extra[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], extra[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -123,7 +123,7 @@ public class LightToShade : Skill
                     Vector2.Zero, a, v, 8, ShapeBullet.Square, ColorBullet.Red);
             }
         }
-        for(int i = 0; i < t0[sc.Level - 1]; i++)
+        for(int i = 0; i < t0[iLevel]; i++)
         {
             Bullet b = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.spirit), sc.User.Up.Position, sc.GridOne.Position,
                     Vector2.Zero, GD.RandRange(-10, 10), 4, 12, ShapeBullet.Yinyang, ColorBullet.Red);
@@ -151,22 +151,22 @@ public class YinyangScatter : Skill
         Targeting = new TargetType(Target.Self, 1, 6);
     }
     int[] k = [4, 6, 8, 10];
-    public override float GetSpCost(int level)
+    public override float GetSpCost()
     {
-        if (level == 4)
+        if (Level == 4)
             return 30;
         return 0;
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), k[level-1]);
+        return string.Format(EffectTr(), k[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         int l = 0;
         if (sc.User.Status.FirstOrDefault(x => x is YinyangBall yb) is YinyangBall yb)
         {
-            l = k[sc.Level - 1] * yb.Layer;
+            l = k[iLevel] * yb.Layer;
             yb.Quit(sc.User);
         }
         
@@ -190,26 +190,26 @@ public class DreamSeal : SpellCard
     int[] t0 = { 24,30,36,36 };
     int[] t1 = { 400,500,600,600 };
     string[] t2 = ["", "", "", " sDreamSeal0 "];
-    public override float GetDuration(int level)
+    public override float GetDuration()
     {
-        return t1[level - 1];
+        return t1[iLevel];
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t2[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t2[iLevel]);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
         sc.User.GetStatus(new YinyangBall(2));
         sc.User.GetStatus(new YinyangBall(2));
-        AddTimedEvent(Linspace(20, GetDuration(sc.Level), t0[sc.Level - 1]), (ctx, advanceTime) =>
+        AddTimedEvent(Linspace(20, GetDuration(), t0[iLevel]), (ctx, advanceTime) =>
         {
             var bullet = Bullet.CreateBullet(sc.User, this, new Damage(22, DamageType.strike), sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12, 
                 ShapeBullet.Ring, 0 , advanceTime, sc.User.Up.CurrentGrid);
         });
-        AddTimedEvent(Linspace(0, GetDuration(sc.Level) - 100, (int)GetDuration(sc.Level)/100), (ctx, advanceTime) =>
+        AddTimedEvent(Linspace(0, GetDuration() - 100, (int)GetDuration()/100), (ctx, advanceTime) =>
         {
             sc.User.GetStatus(new YinyangBall());
         });
@@ -217,7 +217,7 @@ public class DreamSeal : SpellCard
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
         sc.UnitOne.GetStatus(new SpiritSeal(300));
-        if (sc.Level == 4)
+        if (iLevel == 4)
             sc.UnitOne.GetStatus(new MagicSeal(300));
     }
 }

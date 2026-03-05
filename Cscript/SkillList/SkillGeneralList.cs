@@ -39,7 +39,7 @@ public class Interact : Skill
 
         Targeting = new TargetType(Target.Grid, 1, 0);
     }
-    public override float GetTimeCost(int level) => 0;
+    public override float GetTimeCost() => 0;
     protected override void StartActivate(SkillContext sc)
     {
         if (sc.GridOne.InteractableObjects.Count == 0)
@@ -88,8 +88,8 @@ public class Shoot : Skill
         Description = "发射弹幕！";
         Targeting = new TargetType(Target.Grid, 1, 8);
     }
-    public override float GetSpCost(int level) => 0;
-    public override float GetCooldown(int level) => 300;
+    public override float GetSpCost() => 0;
+    public override float GetCooldown() => 300;
     protected override void StartActivate(SkillContext sc)
     {
         Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.nature), sc.User.Up.Position, sc.GridOne.Position, 1, 8, ShapeBullet.Micro, ColorBullet.Green);

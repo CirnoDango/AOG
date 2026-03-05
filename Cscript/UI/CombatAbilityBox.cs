@@ -42,10 +42,10 @@ MP:{unit.Ua.CurrentMp:F0}/{unit.Ua.MaxMp:F0}
         $"移动速度 :{unit.Ua.SpeedMove:F1}%\n";
 
         string text3 = " 持有技能 ：\n";
-        foreach ((SkillInstance si, _) in unit.Us.skills)
+        foreach ((Skill si, _) in unit.Us.skills)
         {
-            if (si.Template.SkillGroup != "")
-                text3 += $" {si.Template.TrName} \n";
+            if (si.SkillGroup != "")
+                text3 += $" {si.TrName} \n";
         }
         Info1.Text = text1;
         Info2.Text = text2;

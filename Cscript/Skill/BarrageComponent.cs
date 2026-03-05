@@ -229,7 +229,9 @@ public class Executor
     {
         foreach (var bc in lbc)
         {
-            Bullet b = Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, sc.User.Up.Position, sc.GridOne.Position,
+            Bullet b = Bullet.CreateBullet(sc.User, Skill.NameSkill["Shoot"], bc.damage, 
+                sc.User.Up.Position + bc.Offset.Rotated(((Vector2)(sc.GridOne.Position - sc.User.Up.Position)).Angle()), 
+                sc.GridOne.Position + bc.Offset.Rotated(((Vector2)(sc.GridOne.Position - sc.User.Up.Position)).Angle()),
                 bc.Point, bc.Angle, bc.Speed, bc.MaxDistance, bc.Shape, bc.Color);
             b.crit = bc.crit;
             b.NewUpdateEvents = bc.UpdateEvents;
@@ -241,12 +243,25 @@ public class BulletContext(Damage damage, float speed, float maxDistance, ShapeB
 {
     public Damage damage = damage;
     public float Speed = speed;
+    public Vector2 VSpeed
+    {
+        get => Speed * Vector2.Right.Rotated(MathEx.Deg2Rad(Angle));
+        set => Speed = value.Length() * Mathf.Sign(value.Dot(Vector2.Right.Rotated(MathEx.Deg2Rad(Angle))));
+    }
     public float MaxDistance = maxDistance;
     public ShapeBullet Shape = shape;
     public ColorBullet Color = color;
     public float crit = 0;
+    public Vector2 Offset = Vector2.Zero;
     public Vector2 Point = Vector2.Zero;
-    public float Angle = 0;
+    // backing field for angle (stores raw value)
+    private float _angle = 0;
+    // 读取时归一化到 (-180, 180]，写入保留原值
+    public float Angle
+    {
+        get => NormalizeAngle(_angle);
+        set => _angle = value;
+    }
     public Action<Bullet, float> UpdateEvents { get; set; }
     public Action<Bullet> AfterSummonEvents { get; set; }
     internal BulletContext Clone()
@@ -269,5 +284,16 @@ public class BulletContext(Damage damage, float speed, float maxDistance, ShapeB
             (ShapeBullet)Enum.Parse(typeof(ShapeBullet), (string)dict["shape"]),
             (ColorBullet)Enum.Parse(typeof(ColorBullet), (string)dict["color"])
         );
+    }
+
+    private static float NormalizeAngle(float angle)
+    {
+        // 将任意角度归一化到 (-180, 180] 区间
+        float a = angle % 360f;
+        if (a <= -180f)
+            a += 360f;
+        else if (a > 180f)
+            a -= 360f;
+        return a;
     }
 }

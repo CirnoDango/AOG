@@ -7,14 +7,14 @@ public partial class SpellcardBox : VBoxContainer, IRegisterToG
     [Export] public PackedScene SpellcardBar;
     public List<SpellcardBar> scs = [];
 
-    public void Init(SkillInstance si)
+    public void Init(Skill si)
     {
         SpellcardBar sb = (SpellcardBar)SpellcardBar.Instantiate();
         sb.Init(si);
         scs.Add(sb);
         AddChild(sb);
     }
-    public void Remove(SkillInstance si)
+    public void Remove(Skill si)
     {
         SpellcardBar sb = scs.FirstOrDefault(x => x.sc == si);
         scs.Remove(sb);

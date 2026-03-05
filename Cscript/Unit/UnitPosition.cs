@@ -194,14 +194,14 @@ public class UnitPosition(Unit unit)
         unit = null;
         return false;
     }
-    public HighlightType CheckSkillTarget(SkillInstance skill, Vector2I target)
+    public HighlightType CheckSkillTarget(Skill skill, Vector2I target)
     {
         // Step 1: 地图边界检查
         if (!Scene.CurrentMap.CheckGrid(target))
             return HighlightType.blue;
 
         // Step 2: 距离检查
-        if (Position.DistanceTo(target) > (skill.Targeting.Range+0.5f))
+        if (Position.DistanceTo(target) > (skill.GetTargeting().Range+0.5f))
             return HighlightType.red;
 
         // Step 3: 获取目标格子和单位（缓存）
@@ -209,7 +209,7 @@ public class UnitPosition(Unit unit)
         var unit = grid?.unit;
 
         // Step 4: 根据技能目标类型判定
-        switch (skill.Targeting.Type)
+        switch (skill.GetTargeting().Type)
         {
             case Target.Grid:
                 if (grid.IsWalkable)

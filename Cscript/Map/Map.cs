@@ -325,11 +325,11 @@ public class Map
         // 升级技能
         for(int i = 0; i < unit.Ua.skillPoint; i++)
         {
-            List<SkillInstance> skills = [.. unit.Us.skills
+            List<Skill> skills = [.. unit.Us.skills
                 .Select(x => x.skill)
-                .Where(x => x.Template.SkillGroup != "" && x.Template is not ISkillInstance && x.Level < 4)];
+                .Where(x => x.SkillGroup != "" && x is not ISkill && x.Level < 4)];
             if (skills.Count == 0) break;
-            var sn = skills[GD.RandRange(0, skills.Count - 1)].Template.Name;
+            var sn = skills[GD.RandRange(0, skills.Count - 1)].Name;
             unit.Us.skills.FirstOrDefault(si => si.skill.Name == sn).skill.Level++;
         }
 
@@ -342,10 +342,10 @@ public class Map
             foreach (var lvp in unit.Us.skills)
             {
                 var skill = lvp.skill;
-                if (skill.Template.EffectType == EffectType.Passive || skill.Targeting.Range == -1)
+                if (skill.EffectType == EffectType.Passive || skill.GetTargeting().Range == -1)
                     continue;
                 float weight = lvp.weight;
-                int skillDistance = skill.Targeting.Range;
+                int skillDistance = skill.GetTargeting().Range;
                 if (skillDistance == 0) { continue; }
                 double diff = Math.Abs(dist - skillDistance) + 0.3;
                 score += weight / (diff * diff);

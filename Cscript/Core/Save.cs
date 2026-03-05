@@ -71,11 +71,11 @@ public class Save
         }
         foreach(var si in player.Us.skills.ToList())
         {
-            if(si.skill.Template.SkillGroup == "" ||
-               si.skill.Template.SkillGroup == "Item")
+            if(si.skill.SkillGroup == "" ||
+               si.skill.SkillGroup == "Item")
                 continue;
-            Skills.Add(si.skill.Template.Name, si.skill.Level);
-            //si.skill.Template.OffLearn(player);
+            Skills.Add(si.skill.Name, si.skill.Level);
+            //si.skill.OffLearn(player);
         }
         // 4.技能树格子
         var hexs = G.I.SkillTreeBox.hexs

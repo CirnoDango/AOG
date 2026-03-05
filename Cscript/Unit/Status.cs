@@ -275,9 +275,9 @@ public class SpiritSeal : Status
         unit.Ue.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
         Quit(unit);
     }
-    public bool OnCheckSkillUsage(Unit unit, SkillInstance si, bool init)
+    public bool OnCheckSkillUsage(Unit unit, Skill si, bool init)
     {
-        return init && si.Template.GetSpCost(si.Level) <= 0;
+        return init && si.GetSpCost() <= 0;
     }
 }
 public class MagicSeal : Status
@@ -297,9 +297,9 @@ public class MagicSeal : Status
         unit.Ue.OnCheckSkillUsage.Remove(OnCheckSkillUsage);
         Quit(unit);
     }
-    public bool OnCheckSkillUsage(Unit unit, SkillInstance si, bool init)
+    public bool OnCheckSkillUsage(Unit unit, Skill si, bool init)
     {
-        return init && si.Template.GetMpCost(si.Level) <= 0;
+        return init && si.GetMpCost() <= 0;
     }
 }
 

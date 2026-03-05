@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public partial class CaveD : Node
@@ -98,12 +99,14 @@ public partial class CaveD : Node
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 5 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
+        foreach(var i in Item.ItemDeck.Where(x=>x is BarrageComponent && x is not BulletModule))
+            Player.PlayerUnit.Inventory.AddItem(Item.CreateItem(i.Name));
         Floor1.CreateEnemy(new Vector2I(2, 4), "rumia", UnitEgo.great);
-        Floor1.CreateEnemy(new Vector2I(2, 5), "cirno", UnitEgo.great);
-        Floor1.CreateEnemy(new Vector2I(2, 6), "meiling", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
+        //Floor1.CreateEnemy(new Vector2I(2, 5), "cirno", UnitEgo.great);
+        //Floor1.CreateEnemy(new Vector2I(2, 6), "meiling", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
     }
     
     public async void Victory()

@@ -22,7 +22,7 @@ public static class GameTime
         foreach (Unit u in CurrentMap.WakeUnits)
         {
             u.TimeEnergy += updateTime;
-            foreach(SkillInstance skill in u.Us.skills.Select(x => x.skill))
+            foreach(Skill skill in u.Us.skills.Select(x => x.skill))
             {
                 skill.CurrentCooldown = Math.Max(skill.CurrentCooldown - updateTime, 0);
             }
@@ -46,11 +46,11 @@ public static class GameTime
         {
             b.Update(updateTime);
         }
-        foreach (SkillInstance si in Skill.ContinueSkills.ToList())
+        foreach (Skill si in Skill.ContinueSkills.ToList())
         {
             si.Update(new SkillContext(si.User), updateTime);
         }
-        foreach (SkillInstance si in SpellCard.currentSpellcards.ToList())
+        foreach (Skill si in SpellCard.currentSpellcards.ToList())
         {
             si.Update(new SkillContext(si.User), updateTime);
         }

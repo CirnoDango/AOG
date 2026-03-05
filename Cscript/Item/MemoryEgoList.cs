@@ -5,7 +5,6 @@ public class mElite : Memory
 {
     public mElite()
     {
-        Name = "mElite";
         Weight = 0f;
         Group = "Ego";
     }
@@ -23,7 +22,6 @@ public class mGreat : Memory
 {
     public mGreat()
     {
-        Name = "mGreat";
         Weight = 0f;
         Group = "Ego";
     }
@@ -44,7 +42,6 @@ public class mBoss : Memory
 {
     public mBoss()
     {
-        Name = "mBoss";
         Weight = 0f;
         Group = "Ego";
     }
@@ -68,7 +65,6 @@ public class mEliteBoss : Memory
 {
     public mEliteBoss()
     {
-        Name = "mEliteBoss";
         Weight = 0f;
         Group = "Ego";
     }

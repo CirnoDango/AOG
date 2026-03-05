@@ -67,8 +67,8 @@ skill.evaded,{0} 's {1} was dodged by {2},{0} 的 {1} 被 {2} 闪避了,
 skill.hit_damage,{0} 's {1} hit {2} dealing {3} damage,{0} 的 {1} 击中了 {2} ，造成了 {3} 伤害,
 激活中的符卡不允许升级！,can't upgrade active spellcard,激活中的符卡不允许升级！,
 宝箱掉落了一些物品!,find some items in chest!,宝箱掉落了一些物品!,
-estr,+1 Strength: +2% Body Damage，+1 Attack Damage,+1力量：+2%体术伤害，+1普攻伤害，+1%暴击率,uaBox
-edex,+1 Dexterity: +1% Global Speed，+1% Body Accuracy，+1% Body Evasion,+1敏捷：+1%整体速度，+1%体术命中，+1%体术闪避,
+estr,+1 Strength: +2% Body Damage，+1 Crit Rate,+1力量：+2%体术伤害，+1%暴击率,uaBox
+edex,+1 Dexterity: +1% Global Speed，+1% Body Accuracy，+1% Evasion,+1敏捷：+1%整体速度，+1%体术命中，+1%闪避,
 econ,+1 Constitution: +2% Healing Efficiency，+5 MaxHp,+1体质：+2%治疗系数，+5MaxHp,
 espi,+1 Spirit: +1% Bullet Damage，+2 MaxSp,+1灵力：+1%弹幕伤害，+1%擦弹率，+2MaxSp,
 emag,+1 Magic: +1% Bullet Damage，+1 MaxMp，+0.1 Mp Regen,+1魔力：+1.5%弹幕伤害，+1MaxMp，+0.1Mp回复,

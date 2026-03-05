@@ -15,18 +15,18 @@ public class NightBird : Skill
     }
     int[] t0 = { 7, 9, 11, 11 };
     int[] t1 = { 4, 6, 8, 8 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
 
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, new int[] { 8,8,8,12}[level - 1]);
+        return new TargetType(Target.Grid, 1, new int[] { 8,8,8,12}[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        int r = new int[] { 8, 8, 8, 12 }[sc.Level - 1];
+        int r = new int[] { 8, 8, 8, 12 }[iLevel];
         ColorBullet c = (ColorBullet)(new List<int> {4, 7})[GD.RandRange(0, 1)];
         Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.shadow), sc.User.Up.Position, sc.GridOne.Position, new Vector2(0, 0), -15, 2.00f, r, ShapeBullet.Ring, c);
         Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.shadow), sc.User.Up.Position, sc.GridOne.Position, new Vector2(0, 0), -10, 2.14f, r, ShapeBullet.Ring, c);
@@ -67,9 +67,9 @@ public class MoonlightRay : Skill
     }
     int[] t0 = [30, 50, 70, 70];
     string[] t1 = ["", "", "", " sMoonlightRay0 "];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
 
     protected override void StartActivate(SkillContext sc)
@@ -80,7 +80,7 @@ public class MoonlightRay : Skill
             if(g.unit != null)
             {
                 sc.User.Ua.HealHp(g.unit.Ua.TakeBulletDamage(new Damage(30, DamageType.celestial), sc.User, this)
-                    * t0[sc.Level - 1] / 100f);
+                    * t0[iLevel] / 100f);
             }
         }
     }
@@ -95,9 +95,9 @@ public class DarkSideOfTheMoon : Skill
         SpCost = 3;
         Cooldown = 800;
     }
-    public override TargetType GetTargeting(int level) 
+    public override TargetType GetTargeting() 
     {
-        return new TargetType(Target.Dash, 1, new int[] { 6, 9, 12, 12 }[level - 1]);
+        return new TargetType(Target.Dash, 1, new int[] { 6, 9, 12, 12 }[iLevel]);
     }
     string[] t0 = {
     "50%",
@@ -105,9 +105,9 @@ public class DarkSideOfTheMoon : Skill
     "50%",
     "100%"
 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel]);
     }
 
     protected override void StartActivate(SkillContext sc)
@@ -137,14 +137,14 @@ public class MagicDark : Skill
         SpCost = 0;
         MpCost = 10;
     }
-    public override float GetCooldown(int level)
+    public override float GetCooldown()
     {
-        return new int[] { 2400, 1800, 1200, 1200 }[level - 1];
+        return new int[] { 2400, 1800, 1200, 1200 }[iLevel];
     }
     int[] range = { 3, 4, 5, 5 };
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 10, range[level - 1]);
+        return new TargetType(Target.Grid, 1, 10, range[iLevel]);
     }
 
     int[] t0 = { 3, 4, 5, 5 };
@@ -154,14 +154,14 @@ public class MagicDark : Skill
     "",
     " sMagicDark0 "
 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
 
     protected override void StartActivate(SkillContext sc)
     {
-        foreach (var grid in sc.GridOne.NearGrids(new int[] { 3, 4, 5, 5 }[sc.Level - 1]))
+        foreach (var grid in sc.GridOne.NearGrids(new int[] { 3, 4, 5, 5 }[iLevel]))
         {
             grid.unit?.GetStatus(new Dark(500));
             if (sc.Level == 4)
@@ -190,18 +190,18 @@ public class Demarcation : SpellCard
     "",
     " sDemarcation0 "
 };
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], t2[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel], t2[iLevel]);
     }
 
     protected override void OnSpellStart(SkillContext sc)
     {
-        List<Grid> lg = sc.User.Up.CurrentGrid.NearGrids(new int[] { 6, 8, 10, 10 }[sc.Level - 1]);
+        List<Grid> lg = sc.User.Up.CurrentGrid.NearGrids(new int[] { 6, 8, 10, 10 }[iLevel]);
         lg.Remove(sc.User.Up.CurrentGrid);
         foreach (var g in lg)
         {
-            g.unit?.GetStatus(new Dark(new int[] { 300, 400, 500, 500 }[sc.Level - 1]));
+            g.unit?.GetStatus(new Dark(new int[] { 300, 400, 500, 500 }[iLevel]));
         }
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 周围陷入了黑暗！");
         AddTimedEvent(50, (ctx, advanceTime) =>
@@ -236,7 +236,7 @@ public class Demarcation : SpellCard
         });
         _event = (breaker, user, dmgin) =>
         {
-            if (user.Us.GetSkill(Name).Level == 4)
+            if (iLevel == 4)
                 return dmgin * 0.5f;
             return dmgin;
         };

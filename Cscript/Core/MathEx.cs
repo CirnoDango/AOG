@@ -70,6 +70,14 @@ public static class MathEx
     {
         return new Vector2(radius * Mathf.Cos(Mathf.DegToRad(angle)), radius * Mathf.Sin(Mathf.DegToRad(angle)));
     }
+    public static float Rad2Deg(float rad)
+    {
+        return rad * 180 / MathF.PI;
+    }
+    public static float Deg2Rad(float deg)
+    {
+        return deg * MathF.PI / 180;
+    }
     public static List<Vector2I> NearVectors =
         [
             new Vector2I(-1, -1), new Vector2I(0, -1), new Vector2I(1, -1),

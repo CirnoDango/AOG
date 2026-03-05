@@ -104,7 +104,7 @@ public class UnitAi(Unit u)
                         if ((string)use == "TacticMove") { TacticMove(); return; }
                         if ((string)use == "Attack") { _parent.Us.GetSkill("Attack").Use(SelectTarget(_parent.Us.GetSkill("Attack"))); return; }
                     }
-                    else if(use is SkillInstance si)
+                    else if(use is Skill si)
                         si.Use(SelectTarget(si));
                     return;
                 }
@@ -155,9 +155,9 @@ public class UnitAi(Unit u)
         }
         return false;
     }
-    public SkillContext SelectTarget(SkillInstance skill)
+    public SkillContext SelectTarget(Skill skill)
     {
-        return skill.Template.GetTargeting(skill.Level).Type switch
+        return skill.GetTargeting().Type switch
         {
             Target.Enemy or Target.Unit or Target.Dash => new SkillContext(_parent, Player.PlayerUnit, skill.Level),
             Target.Grid or Target.Ray => new SkillContext(_parent, Player.PlayerUnit.Up.CurrentGrid, skill.Level),

@@ -14,9 +14,9 @@ public class StarOfDavid: Skill
     }
     int[] t0 = [12, 12, 18, 18];
     int[] t1 = [50, 50, 50, 100];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -68,7 +68,7 @@ public class StarOfDavid: Skill
     {
         if(sc.UnitOne.Ua.CurrentHp > sc.UnitOne.Ua.MaxHp*0.9)
         {
-            bullet.damage += bullet.damage * t1[sc.Level - 1] / 100;
+            bullet.damage += bullet.damage * t1[iLevel] / 100;
         }
     }
 }
@@ -85,25 +85,25 @@ public class ScarletNetherworld : SkillLong
     public List<Grid> Grids { get; set; } = [];
     public List<Unit> Units { get; set; } = [];
     private List<Sprite2D> Images = [];
-    public Unit User { get; set; }
+    public Unit Summoner { get; set; }
     int[] t0 = [2, 3, 4, 4];
     int[] t1 = [5, 5, 5, 7];
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 10, t0[level - 1]);
+        return new TargetType(Target.Grid, 1, 10, t0[iLevel]);
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
-        Grids = [.. sc.GridOne.NearGrids(t0[sc.Level - 1])];
+        Grids = [.. sc.GridOne.NearGrids(t0[iLevel])];
         foreach (Grid grid in Grids)
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/ScarletNetherworld.png"));
         }
-        User = sc.User;
+        Summoner = sc.User;
         AddTimedEvent(Linspace(100, 500, 5), (ctx, advanceTime) =>
         {
             foreach (Grid g in Grids)
@@ -132,9 +132,9 @@ public class ScarletDevil : Skill
         EffectType = EffectType.Passive;
     }
     int[] t0 = [20, 30, 40, 40];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     public override void OnLoad(Unit unit)
     {
@@ -142,7 +142,7 @@ public class ScarletDevil : Skill
         {
             if (dmg.Type == DamageType.wither)
             {
-                unit.Ua.HealHp((dmg * t0[unit.Us.GetSkill(Name).Level - 1] / 100f).Value);
+                unit.Ua.HealHp((dmg * t0[unit.Us.GetSkill(Name).iLevel] / 100f).Value);
                 if (unit.Us.GetSkill(Name).Level == 4)
                     return dmg * 1.2f;
             }
@@ -173,39 +173,39 @@ public class ScarletShoot: Skill
     int[] t0 = [12, 12, 12, 16];
     int[] t1 = [9, 13, 17, 17];
     int[] t2 = [24, 30, 36, 36];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t2[level - 1]);
+        return string.Format(EffectTr(), t2[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
         sc.User.TimeEnergy -= (sc.User.Ua.SpeedGlobal * sc.User.Ua.SpeedCombat / 100);
         for (int a = 0; a < 360; a += 30)
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), a, 4, 12, ShapeBullet.Big, ColorBullet.Red);
-        Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+        Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), -4, 6, 12, ShapeBullet.Big, ColorBullet.Red);
-        Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+        Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), 0, 6, 12, ShapeBullet.Big, ColorBullet.Red);
-        Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+        Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), 4, 6, 12, ShapeBullet.Big, ColorBullet.Red);
         if(sc.Level >= 2)
         {
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), -8, 6, 12, ShapeBullet.Big, ColorBullet.Red);
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), 8, 6, 12, ShapeBullet.Big, ColorBullet.Red);
         }
         if (sc.Level >= 3)
         {
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), -12, 6, 12, ShapeBullet.Big, ColorBullet.Red);
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), 12, 6, 12, ShapeBullet.Big, ColorBullet.Red);
         }
-        for (int i = 0; i < t1[sc.Level - 1]; i++)
+        for (int i = 0; i < t1[iLevel]; i++)
         {
-            Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
+            Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.wither), sc.User.Up.Position, sc.GridOne.Position,
                 new Vector2(0, 0), (float)GD.RandRange(-15f, 15f), (float)GD.RandRange(3f, 6f), 6, ShapeBullet.Ring, ColorBullet.Red);
         }
     }
@@ -228,14 +228,14 @@ public class ScarletGensokyo : SpellCard
     private List<Sprite2D> Images = [];
     int[] t0 = [5, 7, 9, 9];
     float[] t1 = [40, 50, 60, 60];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        Grids = [.. sc.User.Up.CurrentGrid.NearGrids(t0[sc.Level - 1])];
+        Grids = [.. sc.User.Up.CurrentGrid.NearGrids(t0[iLevel])];
         foreach (Grid grid in Grids)
         {
             Images.Add(ImageEx.CreateGridImage(grid.Position, "res://Assets/GridEffect/ScarletNetherworld.png"));

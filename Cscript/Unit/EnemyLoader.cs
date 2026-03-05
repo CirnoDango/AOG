@@ -115,7 +115,7 @@ public static class EnemyLoader
         {
             foreach (var kvp in ed.Skills)
             {
-                unit.Us.skills.Add((new SkillInstance(Skill.NameSkill[kvp.Key]), kvp.Value));
+                unit.Us.skills.Add((Skill.NameSkill[kvp.Key].Clone(), kvp.Value));
             }
             foreach (var sg in ed.SkillGroups)
             {

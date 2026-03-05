@@ -92,8 +92,8 @@ public abstract class Skill
     // 以下为技能组、技能名组、激活技能静态属性
     public static List<Skill> SkillDeck { get; set; } = [];
     public static Dictionary<string, Skill> NameSkill { get; set; } = [];
-    public static SkillInstance CurrentSkill { get; set; }
-    public static List<SkillInstance> ContinueSkills { get; set; } = [];
+    public static Skill CurrentSkill { get; set; }
+    public static List<Skill> ContinueSkills { get; set; } = [];
     public string Name;
     public string[] Extra(string index = "0")
     {
@@ -111,15 +111,52 @@ public abstract class Skill
     public float Cooldown { get; set; } = 0;
     public float TimeCost { get; set; } = 100;
     public TargetType Targeting { get; set; }
+    // 原Skill属性
+    public int Level { get; set; } = 1;
+#pragma warning disable IDE1006 // 命名样式
+    public int iLevel => Level - 1;
+#pragma warning restore IDE1006 // 命名样式
+    public float CurrentCooldown { get; set; }
+    public Unit User { get; set; }
+    public float Duration;         // 持续时间
+    public float TimeElapsed = 0;  // 已经持续了多久
+    public bool IsActive = false;
+    public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = new();
+    public int eventIndex = 0;
+    public Skill Clone()
+    {
+        // 先做一次浅拷贝以保留具体子类类型和只读/值类型字段
+        var clone = (Skill)MemberwiseClone();
 
+        // 深拷贝可变引用字段，避免模板与克隆共用同一实例
+        if (Targeting != null)
+        {
+            clone.Targeting = new TargetType(Targeting.Type, Targeting.Number, Targeting.Range, Targeting.BombRange);
+        }
+
+        // 复制 timedEvents 列表（Action 委托仍然引用原方法，这是预期行为）
+        clone.timedEvents = new List<(float triggerTime, Action<SkillContext, float> action)>(timedEvents);
+
+        // 重置运行时相关状态，避免从模板继承活动状态
+        clone.User = null;
+        clone.CurrentCooldown = 0;
+        clone.TimeElapsed = 0;
+        clone.IsActive = false;
+        clone.eventIndex = 0;
+
+        // Texture/字符串等通常可以共享引用（不可变或可复用）
+        // 如果需要对 Texture 做深拷贝，应在此处处理（通常不必要）
+
+        return clone;
+    }
     // 默认实现：返回固定字段，不覆写就等于固定
-    public virtual float GetSpNeed(int level) => SpNeed;
-    public virtual float GetSpCost(int level) => SpCost;
-    public virtual float GetMpCost(int level) => MpCost;
-    public virtual float GetCooldown(int level) => Cooldown;
-    public virtual float GetTimeCost(int level) => TimeCost;
-    public virtual TargetType GetTargeting(int level) => Targeting;
-    public virtual string GetDescription(int level) => Description;
+    public virtual float GetSpNeed() => SpNeed;
+    public virtual float GetSpCost() => SpCost;
+    public virtual float GetMpCost() => MpCost;
+    public virtual float GetCooldown() => Cooldown;
+    public virtual float GetTimeCost() => TimeCost;
+    public virtual TargetType GetTargeting() => Targeting;
+    public virtual string GetDescription() => Description;
     // 技能图标，符卡，主动被动
     public Texture2D Texture { get; set; }
     public virtual bool IsSpellCard() => false;
@@ -127,16 +164,16 @@ public abstract class Skill
 
     // 抽象的释放方法，具体由子类实现
     protected virtual void StartActivate(SkillContext sc) { }
-    protected void EndActive(SkillContext sc, SkillInstance si)
+    protected void EndActive(SkillContext sc, Skill si)
     {
         if (si != null)
         {
-            si.CurrentCooldown += GetCooldown(sc.Level);
+            si.CurrentCooldown += GetCooldown();
         }
         GameEvents.UseSkill(sc.User, sc, si);
         sc.User.Ue.UseSkill(sc, si);
         //用速度修正timecost
-        float RealTimeCost = GetTimeCost(sc.Level);
+        float RealTimeCost = GetTimeCost();
         if (Name == "Move")
             RealTimeCost /= (sc.User.Ua.SpeedGlobal * sc.User.Ua.SpeedMove / 10000);
         else
@@ -146,19 +183,17 @@ public abstract class Skill
         if (G.I.Fsm.currentState is not UpdatingState)
             G.I.Fsm.ChangeState(new UpdatingState(G.I.Fsm));
     }
-    public virtual void Activate(SkillContext sc, SkillInstance si = null)
+    public virtual void Activate(SkillContext sc, Skill si = null)
     {
-        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
-        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost());
+        sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
         EndActive(sc, si);
     }
-    public string SkillInfo(int level = -1)
+    public string SkillInfo()
     {
-        if (level == -1)
-            level = Player.PlayerUnit.Us.GetSkill(Name).Level;
         string text = "";
         if (IsSpellCard())
             text += "【 符卡 】";
@@ -171,21 +206,27 @@ public abstract class Skill
                 text += " 被动技能 \n"; break;
         }
         if (this is SpellCard spell)
-            text += $" 持续时间 ：{Math.Round(spell.GetDuration(level) / 100):F0} 回合 \n";
-        if (GetCooldown(level) > 0)
-            text += $" 冷却时间 ：{Math.Round(GetCooldown(level) / 100):F0} 回合 \n";
-        if (GetTargeting(level) != null)
-            text += $" 使用范围 ：{GetTargeting(level).Range}\n";
-        if (GetSpNeed(level) != 0) { text += $" SP要求 ：{GetSpNeed(level)}\n"; }
-        if (GetSpCost(level) > 0)
+            text += $" 持续时间 ：{Math.Round(spell.GetDuration() / 100):F0} 回合 \n";
+        if (GetCooldown() > 0)
+            text += $" 冷却时间 ：{Math.Round(GetCooldown() / 100):F0} 回合 \n";
+        if (GetTargeting() != null)
+            text += $" 使用范围 ：{GetTargeting().Range}\n";
+        if (GetSpNeed() != 0) { text += $" SP要求 ：{GetSpNeed()}\n"; }
+        if (GetSpCost() > 0)
         {
-            text += $" SP消耗 ：{GetSpCost(level)}";
+            text += $" SP消耗 ：{GetSpCost()}";
             text += "\n";
         }
-        if (GetSpCost(level) < 0) { text += $" SP累积 ：{-GetSpCost(level)}\n"; }
-        if (GetMpCost(level) != 0) { text += $" MP消耗 ：{GetMpCost(level)}\n"; }
-        text += GetDescription(level);
+        if (GetSpCost() < 0) { text += $" SP累积 ：{-GetSpCost()}\n"; }
+        if (GetMpCost() != 0) { text += $" MP消耗 ：{GetMpCost()}\n"; }
+        text += GetDescription();
         return TextEx.TrN(text);
+    }
+    public string SkillInfo(int level)
+    {
+        var skill = Clone();
+        skill.Level = level;
+        return skill.SkillInfo();
     }
     public static void LoadSkillDeck()
     {
@@ -217,41 +258,15 @@ public abstract class Skill
     {
         return TranslationServer.Translate($"s{Name}");
     }
-}
-public class SkillInstance
-{
-    public Skill Template { get; set; }
-    public int Level { get; set; } = 1;
-    public float CurrentCooldown { get; set; }
-    public Unit User;
-    public float Duration;         // 持续时间
-    public float TimeElapsed = 0;  // 已经持续了多久
-    public bool IsActive = false;
-    public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = new();
-    public int eventIndex = 0;
-
-    public SkillInstance(Skill template, int level = 1)
-    {
-        Template = template;
-        CurrentCooldown = 0;
-        if (template is SpellCard spell)
-        {
-            Duration = spell.GetDuration(level);
-            timedEvents = spell.timedEvents;
-        }
-
-        Level = level;
-    }
-
     public virtual bool CanUse(Unit user)
     {
         bool canuse;
-        if (CurrentCooldown <= 0 && 
-            user.Ua.CurrentSp >= Template.GetSpNeed(user.Us.GetSkill(Name).Level) &&
-            (user.Ua.CurrentSp >= Template.GetSpCost(user.Us.GetSkill(Name).Level) || user.Ua.MaxSp == 0) &&
-            user.Ua.CurrentMp >= Template.GetMpCost(user.Us.GetSkill(Name).Level) &&
-            Template.SkillGroup != "" && 
-            Template.EffectType == EffectType.Activate)
+        if (CurrentCooldown <= 0 &&
+            user.Ua.CurrentSp >= GetSpNeed() &&
+            (user.Ua.CurrentSp >= GetSpCost() || user.Ua.MaxSp == 0) &&
+            user.Ua.CurrentMp >= GetMpCost() &&
+            SkillGroup != "" &&
+            EffectType == EffectType.Activate)
             canuse = true;
         else
             canuse = false;
@@ -261,37 +276,36 @@ public class SkillInstance
     public void Use(SkillContext sc)
     {
         //if (!CanUse()) return;
-        Template.Activate(sc);
-        CurrentCooldown = Template.GetCooldown(sc.Level);
+        Activate(sc);
+        CurrentCooldown = GetCooldown();
     }
 
-    public void Update(SkillContext context, float delta)
+    public virtual void Update(SkillContext context, float delta)
     {
-        if (Template is SkillLong sl)
-        {
-            sl.Update(context, delta);
-            return;
-        }
-        if (Template is SpellCard sc)
-        {
-            sc.Update(context, delta);
-            return;
-        }
     }
-    public void Activate(SkillContext sc)
-    {
-        Template.Activate(sc, this);
-    }
-    public string Name => Template.Name;
-    public Texture2D Texture => Template.Texture;
-
-    public TargetType Targeting => Template.GetTargeting(Level);
 }
+//public class Skill
+//{
+//    public Skill Template { get; set; }
+//    
+//
+//    public Skill(Skill template, int level = 1)
+//    {
+//        CurrentCooldown = 0;
+//        if (template is SpellCard spell)
+//        {
+//            Duration = spell.GetDuration(level);
+//            timedEvents = spell.timedEvents;
+//        }
+//
+//        Level = level;
+//    }
+//
+//    
+//}
 public abstract class SkillLong : Skill
 {
-    public float Duration;
-    public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = [];
-    public virtual float GetDuration(int level) => Duration;
+    public virtual float GetDuration() => Duration;
     protected void AddTimedEvent(float time, Action<SkillContext, float> action)
     {
         timedEvents.Add((time, action));
@@ -307,26 +321,26 @@ public abstract class SkillLong : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         si.IsActive = true;
         si.TimeElapsed = 0;
         si.User = sc.User;
         ContinueSkills.Add(si);
         OnSkillStart(sc);
     }
-    public override void Activate(SkillContext sc, SkillInstance si = null)
+    public override void Activate(SkillContext sc, Skill si = null)
     {
-        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
-        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost());
+        sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
         EndActive(sc, si);
     }
 
-    public void Update(SkillContext sc, float delta)
+    public override void Update(SkillContext sc, float delta)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         if (!si.IsActive)
             return;
         float previousTime = si.TimeElapsed;
@@ -341,7 +355,7 @@ public abstract class SkillLong : Skill
         }
 
         OnSkillUpdate(sc, delta);
-        if (si.TimeElapsed >= GetDuration(sc.Level))
+        if (si.TimeElapsed >= GetDuration())
         {
             OnSkillEnd(sc);
         }
@@ -350,7 +364,7 @@ public abstract class SkillLong : Skill
     protected virtual void OnSkillUpdate(SkillContext sc, float delta) { }
     public virtual void OnSkillEnd(SkillContext sc)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         timedEvents.Clear();
         si.eventIndex = 0;
         ContinueSkills.Remove(si);
@@ -359,13 +373,11 @@ public abstract class SkillLong : Skill
 }
 public abstract class SpellCard : Skill
 {
-    public static List<SkillInstance> currentSpellcards = [];
-    public float Duration;
-    public virtual float GetDuration(int level) => Duration;
+    public static List<Skill> currentSpellcards = [];
+    public virtual float GetDuration() => Duration;
     public float MaxDurability => SpCost * 1.5f;
-    public virtual float GetMaxDurability(int level) => GetSpCost(level) * 1.5f;
+    public virtual float GetMaxDurability() => GetSpCost() * 1.5f;
     public float CurrentDurability;
-    public List<(float triggerTime, Action<SkillContext, float> action)> timedEvents = new();
     public override bool IsSpellCard() => true;
     
     protected void AddTimedEvent(float time, Action<SkillContext, float> action)
@@ -383,10 +395,10 @@ public abstract class SpellCard : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         si.IsActive = true;
         si.TimeElapsed = 0;
-        ((SpellCard)si.Template).CurrentDurability = ((SpellCard)si.Template).GetMaxDurability(sc.Level);
+        ((SpellCard)si).CurrentDurability = ((SpellCard)si).GetMaxDurability();
         si.User = sc.User;
         currentSpellcards.Add(si);
         sc.User.Us.currentSpellcard = this;
@@ -396,17 +408,17 @@ public abstract class SpellCard : Skill
             G.I.PlayerStatusBar.UpdateStatusUI();
         OnSpellStart(sc);
     }
-    public override void Activate(SkillContext sc, SkillInstance si = null)
+    public override void Activate(SkillContext sc, Skill si = null)
     {
-        sc.User.Ua.GetSp(-GetSpCost(sc.Level));
-        sc.User.Ua.GetMp(-GetMpCost(sc.Level));
+        sc.User.Ua.GetSp(-GetSpCost());
+        sc.User.Ua.GetMp(-GetMpCost());
         StartActivate(sc);
         EndActive(sc, si);
     }
 
-    public void Update(SkillContext sc, float delta)
+    public override void Update(SkillContext sc, float delta)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         if (!si.IsActive)
             return;
         float previousTime = si.TimeElapsed;
@@ -421,7 +433,7 @@ public abstract class SpellCard : Skill
         }
 
         OnSpellUpdate(sc, delta);
-        if (si.TimeElapsed >= GetDuration(sc.Level))
+        if (si.TimeElapsed >= GetDuration())
         {
             OnSpellEnd(sc);
         }
@@ -430,7 +442,7 @@ public abstract class SpellCard : Skill
     protected virtual void OnSpellUpdate(SkillContext sc, float delta) { }
     public virtual void OnSpellEnd(SkillContext sc)
     {
-        SkillInstance si = sc.User.Us.GetSkill(Name);
+        Skill si = sc.User.Us.GetSkill(Name);
         G.I.SpellcardBox.Remove(si);
         timedEvents.Clear();
         si.eventIndex = 0;

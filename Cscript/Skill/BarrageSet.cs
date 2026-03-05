@@ -15,7 +15,6 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
     }
     public BarrageSet()
     {
-        Name = "BarrageSet";
         chestValue = 0;
     }
 
@@ -45,7 +44,7 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
         Params["barrage"] = Barrage.GetParam(B);
     }
 
-    public class Instance : Skill, ISkillInstance
+    public class Instance : Skill, ISkill
     {
         private readonly Barrage _BarrageSet;
         public Instance(BarrageSet parent)
@@ -56,19 +55,19 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
             _BarrageSet = parent.B;
             Texture = parent.Texture;
         }
-        public override float GetCooldown(int level)
+        public override float GetCooldown()
         {
             if (_BarrageSet.Components.Count > 0)
                 return _BarrageSet.Components.Where(bc => bc != null).Select(bc => bc.CoolDown).Sum();
             else return 0;
         }
-        public override float GetSpCost(int level)
+        public override float GetSpCost()
         {
             if (_BarrageSet.Components.Count > 0)
                 return _BarrageSet.Components.Where(bc => bc != null).Select(bc => bc.SpCost).Sum();
             else return 0;
         }
-        public override TargetType GetTargeting(int level = 0)
+        public override TargetType GetTargeting()
         {
             float maxD = _BarrageSet.Components.OfType<BulletModule>()      
                 .Where(bm => bm != null)                                    

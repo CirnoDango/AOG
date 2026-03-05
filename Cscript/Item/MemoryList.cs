@@ -3,7 +3,6 @@ public class mUaAny : Memory
 {
     public mUaAny()
     {
-        Name = "mUaAny";
         Weight = 1f;
         chestValue = 3;
     }
@@ -17,7 +16,6 @@ public class mSkill : Memory
 {
     public mSkill()
     {
-        Name = "mSkill";
         Weight = 5f;
         chestValue = 5;
     }
@@ -31,7 +29,6 @@ public class mUaStr : Memory
 {
     public mUaStr()
     {
-        Name = "mUaStr";
         Weight = 3f;
     }
 
@@ -45,7 +42,6 @@ public class mUaDex : Memory
 {
     public mUaDex()
     {
-        Name = "mUaDex";
         Weight = 3f;
     }
 
@@ -59,7 +55,6 @@ public class mUaCon : Memory
 {
     public mUaCon()
     {
-        Name = "mUaCon";
         Weight = 3f;
     }
 
@@ -73,7 +68,6 @@ public class mUaSpi : Memory
 {
     public mUaSpi()
     {
-        Name = "mUaSpi";
         Weight = 3f;
     }
 
@@ -87,7 +81,6 @@ public class mUaMag : Memory
 {
     public mUaMag()
     {
-        Name = "mUaMag";
         Weight = 3f;
     }
 
@@ -101,7 +94,6 @@ public class mUaCun : Memory
 {
     public mUaCun()
     {
-        Name = "mUaCun";
         Weight = 3f;
     }
 

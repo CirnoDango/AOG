@@ -16,29 +16,29 @@ public class AsteroidBelt : Skill
     }
     int[] t0 = [18, 24, 30, 30];
     int[] t1 = [50, 50, 50, 100];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 0, new int[] { 4, 5, 6, 6 }[level - 1]);
+        return new TargetType(Target.Self, 0, new int[] { 4, 5, 6, 6 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        for (int i = 0; i < new int[] { 18, 24, 30, 30 }[sc.Level - 1]; i++)
+        for (int i = 0; i < new int[] { 18, 24, 30, 30 }[iLevel]; i++)
         {
             Bullet.CreateBullet(sc.User, this, new Damage(4, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
-                (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[sc.Level - 1],
+                (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[iLevel],
                 ShapeBullet.Star, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)]);
             Bullet.CreateBullet(sc.User, this, new Damage(4, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
-                (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[sc.Level - 1],
+                (float)GD.RandRange(0.8f, 1.2f), new int[] { 4, 5, 6, 6 }[iLevel],
                 ShapeBullet.Micro, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)]);
         }
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
     {
-        sc.UnitOne.Ua.TakeBulletDamage(bullet.damage * new float[] { 0.5f, 0.5f, 0.5f, 1 }[sc.Level - 1], sc.User, this);
+        sc.UnitOne.Ua.TakeBulletDamage(bullet.damage * new float[] { 0.5f, 0.5f, 0.5f, 1 }[iLevel], sc.User, this);
     }
 }
 public class MilkyWay : Skill
@@ -51,15 +51,15 @@ public class MilkyWay : Skill
     }
     private Action<Unit> onMoveHandler;
     int[] t0 = [12, 18, 24, 24];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     public override void OnLoad(Unit unit)
     {
         onMoveHandler = (movingUnit) =>
         {
-            if (GD.Randf() < new float[] { 0.12f, 0.18f, 0.24f, 0.24f }[unit.Us.GetSkill(Name).Level - 1])
+            if (GD.Randf() < new float[] { 0.12f, 0.18f, 0.24f, 0.24f }[unit.Us.GetSkill(Name).iLevel])
             {
                 if (unit.Up.RandomEnemyInVision(out Unit u))
                 {
@@ -90,17 +90,17 @@ public class BlazingStar : Skill
         Cooldown = 1200;
     }
     int[] t0 = [6, 8, 10, 10];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel]);
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return Targeting = new TargetType(Target.Dash, 1, new int[] { 6, 8, 10, 10 }[level - 1]);
+        return Targeting = new TargetType(Target.Dash, 1, new int[] { 6, 8, 10, 10 }[iLevel]);
     }
-    public override float GetSpCost(int level)
+    public override float GetSpCost()
     {
-        return new int[] { -5, -5, -5, 5 }[level - 1];
+        return new int[] { -5, -5, -5, 5 }[iLevel];
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -131,17 +131,17 @@ public class DragonMeteor: Skill
         Cooldown = 1600;
     }
     int[] t0 = [2,3,4,4];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
-    public override TargetType GetTargeting(int level)
+    public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 8, new int[] { 2, 3, 4, 4 }[level - 1]);
+        return new TargetType(Target.Grid, 1, 8, new int[] { 2, 3, 4, 4 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        foreach(var grid in sc.GridOne.NearGrids(new int[] { 2, 3, 4, 4 }[sc.Level - 1]))
+        foreach(var grid in sc.GridOne.NearGrids(new int[] { 2, 3, 4, 4 }[iLevel]))
         {
             if(grid.unit != null)
                 grid.unit.Ua.TakeBulletDamage(new Damage(40, DamageType.celestial), sc.User, this);
@@ -162,14 +162,14 @@ public class StardustReverie : SpellCard
     }
     int[] t0 = [150, 190, 230, 230];
     int[] t1 = [50, 50, 50, 100];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        AddTimedEvent(Linspace(20, 500, new int[] { 70,110,150,150 }[sc.Level - 1]), (ctx, advanceTime) =>
+        AddTimedEvent(Linspace(20, 500, new int[] { 70,110,150,150 }[iLevel]), (ctx, advanceTime) =>
         {
             var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
                 new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(2.0, 6.0), 12,
@@ -184,11 +184,11 @@ public class StardustReverie : SpellCard
                 ShapeBullet.Star, ColorBullet.Yellow, advanceTime);
             }
         });
-        sc.User.Ua.SpeedMove += new int[] { 50, 50, 50, 100 }[sc.Level - 1];
+        sc.User.Ua.SpeedMove += new int[] { 50, 50, 50, 100 }[iLevel];
     }
     public override void OnSpellEnd(SkillContext sc)
     {
-        sc.User.Ua.SpeedMove -= new int[] { 50, 50, 50, 100 }[sc.Level - 1];
+        sc.User.Ua.SpeedMove -= new int[] { 50, 50, 50, 100 }[iLevel];
         base.OnSpellEnd(sc);
     }
 }

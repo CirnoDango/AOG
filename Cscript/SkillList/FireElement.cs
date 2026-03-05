@@ -17,15 +17,15 @@ public class SummerRed : Skill
     }
     int[] t0 = [32, 40, 48, 48];
     int[] t1 = [3, 6, 9, 9];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        Bullet fireball = Bullet.CreateBullet(sc.User, this, new Damage(t0[sc.Level - 1], DamageType.fire),
+        Bullet fireball = Bullet.CreateBullet(sc.User, this, new Damage(t0[iLevel], DamageType.fire),
                sc.User.Up.Position, sc.GridOne.Position,
-               t1[sc.Level - 1], 12,
+               t1[iLevel], 12,
                ShapeBullet.Big, ColorBullet.Red);
         if (sc.Level == 4)
             fireball.OverrideUpdateEvents += SummerRedBulletUpdate4;
@@ -196,13 +196,13 @@ public class AgniShine : Skill
     int[] t0 = [40, 60, 80, 80];
     int[] t1 = [20, 20, 20, 50];
 
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        for (int i = 0; i < t0[sc.Level - 1]; i++)
+        for (int i = 0; i < t0[iLevel]; i++)
         {
             Bullet fireball = Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.fire),
                sc.User.Up.Position, sc.User.Up.Position + MathEx.RandomV2(),
@@ -223,17 +223,17 @@ public class AgniRadiance : Skill
     int[] t0 = [5, 6, 7, 7];
     int[] t1 = [30, 35, 40, 40];
     int[] t2 = [40, 32, 24, 24];
-    public override float GetCooldown(int level)
+    public override float GetCooldown()
     {
-        return t2[level - 1] * 100;
+        return t2[iLevel] * 100;
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1], TextEx.Tr(Extra()[level - 1]));
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SAgniRadiance(t1[sc.Level - 1], 100 * t0[sc.Level - 1], this, sc.Level));
+        sc.User.GetStatus(new SAgniRadiance(t1[iLevel], 100 * t0[iLevel], this, Level));
     }
 }
 public class LavaCromlech : Skill
@@ -249,13 +249,13 @@ public class LavaCromlech : Skill
     }
     int[] t0 = [36, 54, 72, 72];
     int[] t1 = [3, 3, 3, 6];
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t0[level - 1], t1[level - 1]);
+        return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
-        for (int i = 0; i < t0[sc.Level - 1]; i++)
+        for (int i = 0; i < t0[iLevel]; i++)
         {
             Bullet lavaball = Bullet.CreateBullet(sc.User, this, new Damage(16, DamageType.earth),
                 sc.User.Up.Position, sc.User.Up.Position + MathEx.RandomV2(),
@@ -363,23 +363,23 @@ public class PhlogisticPillar : SpellCard
     int[] t1 = [30, 30, 30, 15];
     int[] t2 = [100, 200, 300, 300];
     private Vector2 zeroDir;
-    public override float GetMpCost(int level)
+    public override float GetMpCost()
     {
-        return t1[level - 1];
+        return t1[iLevel];
     }
-    public override string GetDescription(int level)
+    public override string GetDescription()
     {
-        return string.Format(EffectTr(), t2[level - 1] / 100);
+        return string.Format(EffectTr(), t2[iLevel] / 100);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
-        zeroDir = ((Vector2)(sc.GridOne.Position - sc.User.Up.Position)).Normalized() * t0[sc.Level - 1];
+        zeroDir = ((Vector2)(sc.GridOne.Position - sc.User.Up.Position)).Normalized() * t0[iLevel];
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ");
         AddTimedEvent(Linspace(50, 250, 2), (ctx, advanceTime) =>
         {
             for (float i = -36; i <= 36; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(i / 57.3f)));
@@ -389,13 +389,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
-                    unit.GetStatus(new Frozen(t2[sc.Level - 1]));
+                    unit.GetStatus(new Frozen(t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = 144; i <= 216; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(i / 57.3f)));
@@ -405,13 +405,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
-                    unit.GetStatus(new Frozen(t2[sc.Level - 1]));
+                    unit.GetStatus(new Frozen(t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = -18; i <= 18; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -421,13 +421,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
-                    unit.GetStatus(new Burned(9, t2[sc.Level - 1]));
+                    unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 162; i <= 198; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -437,7 +437,7 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
-                    unit.GetStatus(new Burned(9, t2[sc.Level - 1]));
+                    unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
@@ -446,7 +446,7 @@ public class PhlogisticPillar : SpellCard
         {
             for (float i = 54; i <= 126; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -456,13 +456,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
-                    unit.GetStatus(new Burned(9, t2[sc.Level - 1]));
+                    unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 234; i <= 306; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -472,13 +472,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
-                    unit.GetStatus(new Burned(9, t2[sc.Level - 1]));
+                    unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 72; i <= 108; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -488,13 +488,13 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
-                    unit.GetStatus(new Frozen(t2[sc.Level - 1]));
+                    unit.GetStatus(new Frozen(t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = 252; i <= 288; i += 36f)
             {
-                Grid g; int maxD = t1[sc.Level - 1];
+                Grid g; int maxD = t1[iLevel];
                 do
                 {
                     g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized()));
@@ -504,7 +504,7 @@ public class PhlogisticPillar : SpellCard
                 foreach (Unit unit in target.Where(x => x.unit != null).Select(x => x.unit))
                 {
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
-                    unit.GetStatus(new Frozen(t2[sc.Level - 1]));
+                    unit.GetStatus(new Frozen(t2[iLevel]));
                 }
                 Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
@@ -515,7 +515,7 @@ public class PhlogisticPillar : SpellCard
 public class SAgniRadiance : Status
 {
     private Skill Parent;
-    private int Level;
+    private int level;
     public float FireBuff
     {
         get => (float)Param;
@@ -530,7 +530,7 @@ public class SAgniRadiance : Status
         Duration = duration;
         FireBuff = fireBuff;
         Parent = parent;
-        Level = level;
+        this.level = level;
     }
     public override void OnGet(Unit unit, Status status)
     {
@@ -550,7 +550,7 @@ public class SAgniRadiance : Status
         {
             if (GD.Randf() < 0.2f)
                 target?.GetStatus(new Stun(200));
-            if (Level == 4)
+            if (level - 1 == 4)
                 target.Ua.TakeBulletDamage(new Damage(20, DamageType.sonic), unit, Parent);
         }
     }

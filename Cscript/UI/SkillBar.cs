@@ -9,7 +9,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     
     [Export]
     public FlowContainer skillContainer;
-    private Dictionary<SkillInstance, TextureButton> skillButtons = [];
+    private Dictionary<Skill, TextureButton> skillButtons = [];
     [Export]
     public PackedScene skillButtonScene;
     [Export]
@@ -25,7 +25,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         { "FireElement", new Color(1f, 0.3f, 0.1f) },
     };
     // 学会一个技能，添加按钮
-    public void LearnSkill(SkillInstance skill)
+    public void LearnSkill(Skill skill)
     {
         if (skillButtons.ContainsKey(skill))
             return;
@@ -36,7 +36,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             return;
         }
         Sprite2D s;
-        if (skill.Template is SpellCard)
+        if (skill is SpellCard)
         {
             s = (Sprite2D)spellButtonScene.Instantiate();
         }
@@ -44,7 +44,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         {
             s = (Sprite2D)skillButtonScene.Instantiate();
         }
-        s.Modulate = skillBoxColor.TryGetValue(skill.Template.SkillGroup, out Color value) ? value : new Color(1, 1, 1);
+        s.Modulate = skillBoxColor.TryGetValue(skill.SkillGroup, out Color value) ? value : new Color(1, 1, 1);
 
 
         var btn = new SkillButton
@@ -57,7 +57,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             SizeFlagsVertical = SizeFlags.ShrinkCenter,
             SizeFlagsHorizontal = SizeFlags.ShrinkCenter,
             FocusMode = FocusModeEnum.None,
-            Skill = skill.Template
+            Skill = skill
         };
         float ratio = 60 / skill.Texture.GetSize().X;
         btn.Scale = new Vector2(ratio, ratio);
@@ -82,7 +82,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         skillContainer.AddChild(btn);
         skillButtons[skill] = btn;
     }
-    public void UnLearnSkill(SkillInstance skill)
+    public void UnLearnSkill(Skill skill)
     {
         if (skillButtons.TryGetValue(skill, out TextureButton btn))
         {
@@ -95,7 +95,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     {
         foreach (var kvp in skillButtons)
         {
-            SkillInstance skill = kvp.Key;
+            Skill skill = kvp.Key;
             TextureButton btn = kvp.Value;
             var label = (Label)(GodotObject)btn.GetMeta("CdLabel");
             if (skill.CurrentCooldown > 0)
@@ -110,18 +110,18 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         }
     }
 
-    private static void OnSkillButtonPressed(SkillInstance si)
+    private static void OnSkillButtonPressed(Skill si)
     {
         if (G.I.Fsm.currentState is not PlayerSkillState)
             return;
-        var skill = si.Template;
+        var skill = si;
         var level = si.Level;
         if (!si.CanUse(Player.PlayerUnit))
         {
             Info.Print("不满足发动条件！");
             return;
         }
-        if (skill.GetTargeting(level).Type == Target.Self)
+        if (skill.GetTargeting().Type == Target.Self)
         {
             skill.Activate(new SkillContext(Player.PlayerUnit, Player.PlayerUnit.Us.GetSkill(skill.Name).Level), si);
         }
@@ -147,6 +147,6 @@ public partial class SkillButton : TextureButton
     {
         var player = Player.PlayerUnit;
         var level = player.Us.GetSkill(Skill.Name).Level;
-        return Tr(Skill.SkillInfo(level));
+        return Tr(Skill.SkillInfo());
     }
 }

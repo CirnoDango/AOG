@@ -89,10 +89,10 @@ public partial class SkillTree : Control
     }
     private int VLevel(string skillName)
     {
-        var skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
-        if (skillInstance != null)
+        var Skill = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+        if (Skill != null)
         {
-            return skillInstance.Level;
+            return Skill.Level;
         }
         else
             return 0;
@@ -103,17 +103,17 @@ public partial class SkillTree : Control
         if (G.I.Player.SkillPoint <= 0)
             return;
         var si = Player.PlayerUnit.Us.GetSkill(skillName);
-        if (si != null && si.Template is SpellCard sc && si.IsActive)
+        if (si != null && si is SpellCard sc && si.IsActive)
         {
             Info.Print(TextEx.TrN("激活中的符卡不允许升级！"));
             return;
         }
-        var skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
-        if (skillInstance != null)
+        var Skill = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+        if (Skill != null)
         {
-            if (skillInstance.Level >= MaxLevel)
+            if (Skill.Level >= MaxLevel)
                 return;
-            skillInstance.Level += 1; // 升级技能
+            Skill.Level += 1; // 升级技能
             UpdateTree();
             G.I.Player.SkillPoint -= 1;
             G.I.SkillPanel.Refresh();
@@ -121,12 +121,12 @@ public partial class SkillTree : Control
         else
         {
             Player.PlayerUnit.Us.LearnSkill(Skill.SkillDeck.FirstOrDefault(s => s.Name == skillName));
-            skillInstance = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
+            Skill = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;
             UpdateTree();
             G.I.Player.SkillPoint -= 1;
             G.I.SkillPanel.Refresh();
         }
-        ShowSkillInfo(skillInstance.Template, skillInstance.Level);
-        GameEvents.SkillLearned(Player.PlayerUnit, skillInstance);
+        ShowSkillInfo(Skill, Skill.Level);
+        GameEvents.SkillLearned(Player.PlayerUnit, Skill);
     }
 }

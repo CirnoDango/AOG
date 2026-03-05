@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
 public partial class Mainmenu : Control, IRegisterToG
@@ -42,6 +43,7 @@ public partial class Mainmenu : Control, IRegisterToG
         // 开始按钮
         Visible = true;
         start.Pressed += StartGame;
+        OnSceneSelected(OptionScene.Selected);
     }
 
     private void OnPlayerSelected(long index)

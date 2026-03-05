@@ -196,7 +196,7 @@ theme_override_font_sizes/font_size = 160
 text = "直向移动：WASD,num2468      斜线移动：QEZC,num1379
 聚灵：space,num0                      散灵：R,num5
 装备栏：I         记忆栏：M         弹幕栏：O
-技能栏：K        能力栏：B          天赋树：T"
+技能栏：K        能力栏：B          天赋树：T              拾取：G"
 
 [node name="Status" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=139083883]
 layout_mode = 2
@@ -221,13 +221,16 @@ scroll_following = true
 vertical_alignment = 2
 script = ExtResource("6_dgtui")
 
-[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot/InfoPanel" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
-custom_minimum_size = Vector2(660, 600)
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/UiRoot/InfoPanel" unique_id=57729865]
 layout_mode = 0
 offset_top = 6380.0
 offset_right = 660.0
-offset_bottom = 6980.0
+offset_bottom = 6680.0
 scale = Vector2(7.273, 7.273)
+
+[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot/InfoPanel/ScrollContainer" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
+custom_minimum_size = Vector2(660, 0)
+layout_mode = 2
 script = ExtResource("2_1ocm2")
 skillContainer = NodePath(".")
 skillButtonScene = ExtResource("3_c2j4f")

@@ -154,10 +154,10 @@ public partial class BarrageBox : Control, IRegisterToG
         // 刷新tag
         BarrageSet bs = (BarrageSet)Player.PlayerUnit.Equipment.EquippedItems.FirstOrDefault(x => x is BarrageSet bs && bs.B == parent.barrage);
         if (bs != null)
-            parent.L.Text = $"SpCost:{bs.Skill.GetSpCost(1)}; CD:{bs.Skill.GetCooldown(1) / 100}";
+            parent.L.Text = $"SpCost:{bs.Skill.GetSpCost()}; CD:{bs.Skill.GetCooldown() / 100}";
         BarrageSet bsd = (BarrageSet)Player.PlayerUnit.Equipment.EquippedItems.FirstOrDefault(x => x is BarrageSet bs && bs.B == draggedParent.barrage);
         if (bsd != null)
-            draggedParent.L.Text = $"SpCost:{bsd.Skill.GetSpCost(1)}; CD:{bsd.Skill.GetCooldown(1) / 100}";
+            draggedParent.L.Text = $"SpCost:{bsd.Skill.GetSpCost()}; CD:{bsd.Skill.GetCooldown() / 100}";
     }
     public void ReturnItem(BarrageSetBox parent, TextureButton slotButton)
     {
@@ -195,10 +195,10 @@ public partial class BarrageBox : Control, IRegisterToG
         // 刷新tag
         BarrageSet bs = (BarrageSet)Player.PlayerUnit.Equipment.EquippedItems.FirstOrDefault(x => x is BarrageSet bs && bs.B == parent.barrage);
         if (bs != null)
-            parent.L.Text = $"SpCost:{bs.Skill.GetSpCost(1)}; CD:{bs.Skill.GetCooldown(1) / 100}";
+            parent.L.Text = $"SpCost:{bs.Skill.GetSpCost()}; CD:{bs.Skill.GetCooldown() / 100}";
         BarrageSet bsd = (BarrageSet)Player.PlayerUnit.Equipment.EquippedItems.FirstOrDefault(x => x is BarrageSet bs && bs.B == draggedParent.barrage);
         if (bsd != null)
-            draggedParent.L.Text = $"SpCost:{bsd.Skill.GetSpCost(1)}; CD:{bsd.Skill.GetCooldown(1) / 100}";
+            draggedParent.L.Text = $"SpCost:{bsd.Skill.GetSpCost()}; CD:{bsd.Skill.GetCooldown() / 100}";
     }
 
 

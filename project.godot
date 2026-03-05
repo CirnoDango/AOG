@@ -1,0 +1,57 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Gensokyo Simulator"
+run/main_scene="uid://b0mqdj26pycpr"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
+config/icon="res://Other/icon.svg"
+
+[autoload]
+
+G="*res://Cscript/Core/G.cs"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/vsync/vsync_mode=0
+
+[dotnet]
+
+project/assembly_name="Gensokyo Simulator"
+
+[editor]
+
+movie_writer/disable_vsync=true
+movie_writer/fps=300
+
+[editor_plugins]
+
+enabled=PackedStringArray()
+
+[gui]
+
+theme/custom_font="uid://biitdjtcl1phq"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://Other/tr.en.translation", "res://Other/tr.zh.translation")
+locale/test="zh"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.103743, 0.103744, 0.103744, 1)

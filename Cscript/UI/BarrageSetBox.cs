@@ -15,7 +15,7 @@ public partial class BarrageSetBox : VBoxContainer
     public void Init(BarrageSet bs)
     {
         Image.Texture = bs.Texture;
-        L.Text = $"SpCost:{bs.Skill.GetSpCost(1)}; CD:{bs.Skill.GetCooldown(1) / 100}";
+        L.Text = $"SpCost:{bs.Skill.GetSpCost()} ; CD: {bs.Skill.GetCooldown() / 100}";
         Init(bs.B);
     }
     public void Init(Barrage b)
