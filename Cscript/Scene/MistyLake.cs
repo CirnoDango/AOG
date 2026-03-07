@@ -116,7 +116,7 @@ public partial class MistyLake : Node
     public void Createboss()
     {
         var boss = diShuiLake.CreateEnemy(new Vector2I(20, 32), "cirno", UnitEgo.boss);
-        boss.Ue.OnEnemyKilled += enemy =>
+        boss.Ue.OnKilled += enemy =>
         {
             Victory();
         };

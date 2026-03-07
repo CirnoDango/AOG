@@ -8,12 +8,11 @@ public class SummerRed : Skill
 {
     public SummerRed()
     {
-        Name = "SummerRed";
         SkillGroup = "FireElement";
         SpCost = 3;
         MpCost = 8;
         Cooldown = 700;
-        Targeting = new TargetType(Target.Grid, 1, 12);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 12);
     }
     int[] t0 = [32, 40, 48, 48];
     int[] t1 = [3, 6, 9, 9];
@@ -186,12 +185,11 @@ public class AgniShine : Skill
 {
     public AgniShine()
     {
-        Name = "AgniShine";
         SkillGroup = "FireElement";
         SpCost = 5;
         MpCost = 12;
         Cooldown = 900;
-        Targeting = new TargetType(Target.Self, 1, 10);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 10);
     }
     int[] t0 = [40, 60, 80, 80];
     int[] t1 = [20, 20, 20, 50];
@@ -215,10 +213,9 @@ public class AgniRadiance : Skill
 {
     public AgniRadiance()
     {
-        Name = "AgniRadiance";
         SkillGroup = "FireElement";
         MpCost = 22;
-        Targeting = new TargetType(Target.Self, 1, 6);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 6);
     }
     int[] t0 = [5, 6, 7, 7];
     int[] t1 = [30, 35, 40, 40];
@@ -240,12 +237,11 @@ public class LavaCromlech : Skill
 {
     public LavaCromlech()
     {
-        Name = "LavaCromlech";
         SkillGroup = "FireElement";
         SpCost = 5;
         MpCost = 20;
         Cooldown = 1400;
-        Targeting = new TargetType(Target.Self, 1, 6);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 6);
     }
     int[] t0 = [36, 54, 72, 72];
     int[] t1 = [3, 3, 3, 6];
@@ -352,12 +348,11 @@ public class PhlogisticPillar : SpellCard
 {
     public PhlogisticPillar()
     {
-        Name = "PhlogisticPillar";
         SkillGroup = "FireElement";
         SpCost = 40;
         Duration = 400;
         Cooldown = 3600;
-        Targeting = new TargetType(Target.Grid, 1, 9);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 9);
     }
     int[] t0 = [6, 9, 9, 9];
     int[] t1 = [30, 30, 30, 15];
@@ -526,7 +521,6 @@ public class SAgniRadiance : Status
     }
     public SAgniRadiance(float fireBuff, float duration, Skill parent, int level)
     {
-        Name = "AgniRadiance";
         Duration = duration;
         FireBuff = fireBuff;
         Parent = parent;

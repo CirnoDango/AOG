@@ -4,10 +4,22 @@ using System.Collections.Generic;
 
 public interface IWeapon
 {
-    Damage Damage(Unit unit);
+    Damage BaseDamage();
     float Accurency { get; }
     float CritRate { get; }
     Dictionary<string, float> Param { get; }
+    string Description()
+    {
+        string d = "";
+        d += "=====武器=====\n伤害：";
+        d += BaseDamage().ToString();
+        foreach (var kv in Param)
+            d += $" + {kv.Value * 100:F0}%{kv.Key.ToUpper()}";
+        d += $"\n命中率：{Accurency * 100:F1}%";
+        d += $"\n暴击率：{CritRate * 100:F1}%\n";
+        return d;
+    }
+    public virtual void OnHit(Unit user, Unit target) { }
 }
 public class PowerBlock : Item, IEquipable
 {
@@ -66,11 +78,7 @@ public class DangoTriple : Item, IEquipable
         unit.Ua.Str -= 2;
     }
 }
-public interface ISkill
-{
-    public Skill GetSkill(SkillItem parent);
-}
-public class MagicPotion : SkillItem<MagicPotion.Instance>
+public class MagicPotion : SkillItem<MagicPotion.SMagicPotion>
 {
     public float MpRecoverPercent { get; private set; } = 40;
     public MagicPotion()
@@ -85,24 +93,17 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
         }
         base.ApplyParameters(parameters);
     }
-    public class Instance : Skill, ISkill
+    public class SMagicPotion : SkillFromItem<MagicPotion>
     {
         private readonly float _mp;
-        public Instance(MagicPotion parent)
+        public SMagicPotion(MagicPotion parent) : base(parent)
         {
             _mp = parent.MpRecoverPercent;
-            Texture = parent.Texture;
-            Name = "MagicPotion";
             SkillGroup = "Item";
             Description = $"恢复{_mp}%MP";
             Cooldown = 2000;
-            Targeting = new TargetType(Target.Self);
+            Targeting = new TargetType(new TargetRuleSelf());
         }
-        public Skill GetSkill(SkillItem parent)
-        {
-            return new Instance((MagicPotion)parent);
-        }
-
         protected override void StartActivate(SkillContext sc)
         {
             sc.User.Ua.GetMp(sc.User.Ua.MaxMp * _mp / 100f);
@@ -110,7 +111,7 @@ public class MagicPotion : SkillItem<MagicPotion.Instance>
     }
 }
 
-public class HealPotion : SkillItem<HealPotion.Instance>
+public class HealPotion : SkillItem<HealPotion.SHealPotion>
 {
     public int HpRecoverPercent { get; private set; } = 40;
     public HealPotion()
@@ -118,24 +119,18 @@ public class HealPotion : SkillItem<HealPotion.Instance>
         Weight = 8f;
     }
 
-    public class Instance : Skill, ISkill
+    public class SHealPotion : Skill
     {
         private readonly int _hp;
-        public Instance(HealPotion parent)
+        public SHealPotion(HealPotion parent)
         {
             _hp = parent.HpRecoverPercent;
             Texture = parent.Texture;
-            Name = "HealPotion";
             SkillGroup = "Item";
             Description = $"恢复{_hp}%HP";
             Cooldown = 2000;
-            Targeting = new TargetType(Target.Self);
+            Targeting = new TargetType(new TargetRuleSelf());
         }
-        public Skill GetSkill(SkillItem parent)
-        {
-            return new Instance((HealPotion)parent);
-        }
-
         protected override void StartActivate(SkillContext sc)
         {
             sc.User.Ua.GetHp(sc.User.Ua.MaxHp * _hp / 100f);
@@ -149,7 +144,7 @@ public class Axe : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.slash);
     }
@@ -163,7 +158,7 @@ public class Dagger : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.pierce);
     }
@@ -177,7 +172,7 @@ public class Club : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.strike);
     }
@@ -191,7 +186,7 @@ public class Rapier : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.slash);
     }
@@ -205,7 +200,7 @@ public class QuarterStaff : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.strike);
     }
@@ -219,7 +214,7 @@ public class BullWhip : Item, IEquipable, IWeapon
     {
         Weight = 4f;
     }
-    public Damage Damage(Unit unit)
+    public Damage BaseDamage()
     {
         return new Damage(10, DamageType.slash);
     }

@@ -2,91 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-public enum Target
-{
-    Enemy, Self, Unit, Grid, Dash, Ray
-}
-public enum EffectType
-{
-    Activate, Passive
-}
-
-public class TargetType
-{
-    public Target Type { get; set; }
-    public int Number { get; set; }
-    public int Range { get; set; }
-    public int BombRange { get; set; } = 0;
-    public TargetType(Target type)
-    {
-        // 当 type == Target.Self 时，Range的作用仅为让UnitAi判断在离玩家多近时释放该技能。因此该重载只用于AI永不使用的技能。
-        Type = type;
-        if (type == Target.Self)
-        {
-            Number = 1;
-            Range = 0;
-        }
-        else
-        {
-            Number = 1;
-            Range = 1;
-        }
-    }
-    public TargetType(Target type, int num, int ran, int bombrange = 0)
-    {
-        Type = type;
-        Number = num;
-        Range = ran;
-        BombRange = bombrange;
-    }
-}
-public class SkillContext
-{
-    public Unit User { get; set; }
-    public List<Unit> UnitsTarget { get; set; } = [];
-    public Unit UnitOne => UnitsTarget.FirstOrDefault();
-    public List<Grid> GridsTarget { get; set; } = [];
-    public Grid GridOne => GridsTarget.FirstOrDefault();
-    private int _level = 1;
-    public int Level
-    {
-        get { return _level; }
-        set { _level = value; }
-    }
-    public SkillContext(Unit user, int level = 1)
-    {
-        User = user;
-        this.Level = level;
-    }
-    public SkillContext(Unit user, Unit Single, int level = 1)
-    {
-        User = user;
-        UnitsTarget.Add(Single);
-        this.Level = level;
-    }
-    public SkillContext(Unit user, List<Unit> targets, int level = 1)
-    {
-        User = user;
-        UnitsTarget = targets;
-        this.Level = level;
-    }
-    public SkillContext(Unit user, Grid Single, int level = 1)
-    {
-        User = user;
-        GridsTarget.Add(Single);
-        this.Level = level;
-    }
-    public SkillContext(Unit user, List<Grid> targets, int level = 1)
-    {
-        User = user;
-        GridsTarget = targets;
-        this.Level = level;
-    }
-    // 其他可能的参数，比如技能等级、buff状态等
-}
-
-
 public abstract class Skill
 {
     // 以下为技能组、技能名组、激活技能静态属性
@@ -94,7 +9,7 @@ public abstract class Skill
     public static Dictionary<string, Skill> NameSkill { get; set; } = [];
     public static Skill CurrentSkill { get; set; }
     public static List<Skill> ContinueSkills { get; set; } = [];
-    public string Name;
+    public string Name => GetType().Name;
     public string[] Extra(string index = "0")
     {
         string[] d = ["","","",$"s{Name}{index}"];
@@ -113,9 +28,9 @@ public abstract class Skill
     public TargetType Targeting { get; set; }
     // 原Skill属性
     public int Level { get; set; } = 1;
-#pragma warning disable IDE1006 // 命名样式
+    #pragma warning disable IDE1006 // 命名样式
     public int iLevel => Level - 1;
-#pragma warning restore IDE1006 // 命名样式
+    #pragma warning restore IDE1006 // 命名样式
     public float CurrentCooldown { get; set; }
     public Unit User { get; set; }
     public float Duration;         // 持续时间
@@ -131,7 +46,7 @@ public abstract class Skill
         // 深拷贝可变引用字段，避免模板与克隆共用同一实例
         if (Targeting != null)
         {
-            clone.Targeting = new TargetType(Targeting.Type, Targeting.Number, Targeting.Range, Targeting.BombRange);
+            clone.Targeting = new TargetType(Targeting.TargetRule, Targeting.Number, Targeting.Range, Targeting.BombRange);
         }
 
         // 复制 timedEvents 列表（Action 委托仍然引用原方法，这是预期行为）
@@ -164,14 +79,11 @@ public abstract class Skill
 
     // 抽象的释放方法，具体由子类实现
     protected virtual void StartActivate(SkillContext sc) { }
-    protected void EndActive(SkillContext sc, Skill si)
+    protected void EndActive(SkillContext sc)
     {
-        if (si != null)
-        {
-            si.CurrentCooldown += GetCooldown();
-        }
-        GameEvents.UseSkill(sc.User, sc, si);
-        sc.User.Ue.UseSkill(sc, si);
+        CurrentCooldown += GetCooldown();
+        GameEvents.UseSkill(sc.User, sc, this);
+        sc.User.Ue.UseSkill(sc, this);
         //用速度修正timecost
         float RealTimeCost = GetTimeCost();
         if (Name == "Move")
@@ -183,14 +95,14 @@ public abstract class Skill
         if (G.I.Fsm.currentState is not UpdatingState)
             G.I.Fsm.ChangeState(new UpdatingState(G.I.Fsm));
     }
-    public virtual void Activate(SkillContext sc, Skill si = null)
+    public virtual void Activate(SkillContext sc)
     {
         sc.User.Ua.GetSp(-GetSpCost());
         sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
-        EndActive(sc, si);
+        EndActive(sc);
     }
     public string SkillInfo()
     {
@@ -328,14 +240,14 @@ public abstract class SkillLong : Skill
         ContinueSkills.Add(si);
         OnSkillStart(sc);
     }
-    public override void Activate(SkillContext sc, Skill si = null)
+    public override void Activate(SkillContext sc)
     {
         sc.User.Ua.GetSp(-GetSpCost());
         sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
             Info.Print($"{sc.User.TrName} 执行 {TrName}");
         StartActivate(sc);
-        EndActive(sc, si);
+        EndActive(sc);
     }
 
     public override void Update(SkillContext sc, float delta)
@@ -408,12 +320,12 @@ public abstract class SpellCard : Skill
             G.I.PlayerStatusBar.UpdateStatusUI();
         OnSpellStart(sc);
     }
-    public override void Activate(SkillContext sc, Skill si = null)
+    public override void Activate(SkillContext sc)
     {
         sc.User.Ua.GetSp(-GetSpCost());
         sc.User.Ua.GetMp(-GetMpCost());
         StartActivate(sc);
-        EndActive(sc, si);
+        EndActive(sc);
     }
 
     public override void Update(SkillContext sc, float delta)

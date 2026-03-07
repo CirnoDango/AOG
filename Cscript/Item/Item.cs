@@ -52,8 +52,18 @@ public abstract partial class Item : IInteractable, IEquipable
     public virtual void OnUnequip(Unit unit) { }
     public virtual string GetDescription()
     {
-        string s = TextEx.Tr($"id{Name}") + "\n";
-        foreach(var e in egos)
+        string s = "";
+        if (this is SkillItem si && this is not BarrageSet)
+        {
+            s += "=====技能=====";
+            s += $"\n冷却回合：{si.Skill.Cooldown / 100:F0}";
+            s += $"\n{TextEx.Tr($"is{Name}")}\n";
+        }
+        else
+            s = TextEx.Tr($"id{Name}") + "\n";
+        if (this is IWeapon iw)
+            s += iw.Description();
+        foreach (var e in egos)
         {
             s += e.GetDescription() + "\n";
         }
@@ -66,7 +76,7 @@ public abstract partial class Item : IInteractable, IEquipable
             if (bc.draw > 0)
                 s += $"抽取：{bc.draw}\n";
         }
-        return s;
+        return s.TrimEnd('\n');
     }
     public void Interact(Unit unit)
     {
@@ -172,12 +182,22 @@ public abstract partial class Item : IInteractable, IEquipable
     }
 }
 public abstract class SkillItem<TSkill> : SkillItem
-    where TSkill : Skill, ISkill
+    where TSkill : Skill
 {
     public override void ApplyParameters(Dictionary<string, object> parameters)
     {
         base.ApplyParameters(parameters);
         Skill = (TSkill)Activator.CreateInstance(typeof(TSkill), this);
+    }
+}
+
+public abstract class SkillFromItem<TItem> : Skill
+    where TItem : SkillItem
+{
+    protected SkillFromItem(TItem parent)
+    {
+        SkillGroup = "Item";
+        Texture = parent.Texture;
     }
 }
 

@@ -14,12 +14,11 @@ public class EvilSealingCircle : SkillLong, ICircle
 {
     public EvilSealingCircle()
     {
-        Name = "EvilSealingCircle";
         SkillGroup = "Circle";
         SpCost = 3;
         Cooldown = 2000;
         Duration = 500;
-        Targeting = new TargetType(Target.Self, 1, 3);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 3);
     }
     public List<Grid> Grids { get; set; } = [];
     private List<Sprite2D> Images = [];
@@ -71,11 +70,10 @@ public class CautionaryBorder : SkillLong, ICircle
 {
     public CautionaryBorder()
     {
-        Name = "CautionaryBorder";
         SkillGroup = "Circle";
         Cooldown = 1600;
         Duration = 500;
-        Targeting = new TargetType(Target.Self, 1, 3);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 3);
     }
     public List<Grid> Grids { get; set; }= [];
     private List<Unit> units = [];
@@ -142,12 +140,11 @@ public class BindingBorder : SkillLong, ICircle
 {
     public BindingBorder()
     {
-        Name = "BindingBorder";
         SkillGroup = "Circle";
         Cooldown = 2400;
         SpCost = 3;
         Duration = 500;
-        Targeting = new TargetType(Target.Self, 1, 3);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 3);
     }
     public List<Grid> Grids { get; set; }= [];
     private List<Unit> units = [];
@@ -197,7 +194,6 @@ public class PermanentBorder : SkillLong, ICircle
 {
     public PermanentBorder()
     {
-        Name = "PermanentBorder";
         SkillGroup = "Circle";
         Cooldown = 4000;
         Duration = 90000000000;
@@ -225,7 +221,7 @@ public class PermanentBorder : SkillLong, ICircle
     }
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 1, t0[iLevel]);
+        return new TargetType(new TargetRuleSelf(), 1, t0[iLevel]);
     }
     protected override void OnSkillStart(SkillContext sc)
     {
@@ -295,12 +291,11 @@ public class OmniDragonSlayingCircle : SpellCard
 {
     public OmniDragonSlayingCircle()
     {
-        Name = "OmniDragonSlayingCircle";
         SkillGroup = "Circle";
         SpCost = 45;
         Cooldown = 3000;
         Duration = 400;
-        Targeting = new TargetType(Target.Self, 1, 4);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 4);
     }
     int[] t0 = { 20, 30, 40, 40 };
     private List<Unit> units = [];

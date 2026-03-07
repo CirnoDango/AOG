@@ -8,11 +8,10 @@ public class YinyangBallShoot : Skill
 {
     public YinyangBallShoot()
     {
-        Name = "YinyangBallShoot";
         SkillGroup = "Private";
-        Targeting = new TargetType(Target.Grid, 1, 12);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 12);
     }
-    public override void Activate(SkillContext sc, Skill si = null)
+    public override void Activate(SkillContext sc)
     {
         sc.User.Ua.GetSp(-GetSpCost());
         sc.User.Ua.GetMp(-GetMpCost());
@@ -36,7 +35,6 @@ public class DreamOrb : Skill
 {
     public DreamOrb()
     {
-        Name = "DreamOrb";
         SkillGroup = "YinyangBall";
         SpCost = 3;
         Cooldown = 500;
@@ -46,7 +44,7 @@ public class DreamOrb : Skill
     int[] t2 = [1, 1, 1, 2];
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, t0[iLevel]);
+        return new TargetType(new TargetRuleAny(), 1, t0[iLevel]);
     }
     public override string GetDescription()
     {
@@ -67,7 +65,6 @@ public class TreasureOrb : Skill
 {
     public TreasureOrb()
     {
-        Name = "TreasureOrb";
         SkillGroup = "YinyangBall";
         EffectType = EffectType.Passive;
     }
@@ -101,11 +98,10 @@ public class LightToShade : Skill
 {
     public LightToShade()
     {
-        Name = "LightToShade";
         SkillGroup = "YinyangBall";
         SpCost = 10;
         Cooldown = 1200;
-        Targeting = new TargetType(Target.Grid, 1, 8);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 8);
     }
     int[] t0 = { 3, 5, 7, 7 };
     string[] extra = ["", "", "", " sLightToShade0 "];
@@ -145,10 +141,9 @@ public class YinyangScatter : Skill
 {
     public YinyangScatter()
     {
-        Name = "YinyangScatter";
         SkillGroup = "YinyangBall";
         Cooldown = 1200;
-        Targeting = new TargetType(Target.Self, 1, 6);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 6);
     }
     int[] k = [4, 6, 8, 10];
     public override float GetSpCost()
@@ -181,11 +176,10 @@ public class DreamSeal : SpellCard
 {
     public DreamSeal()
     {
-        Name = "DreamSeal";
         SkillGroup = "YinyangBall";
         SpCost = 50;
         Cooldown = 2600;
-        Targeting = new TargetType(Target.Self, 1, 10);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 10);
     }
     int[] t0 = { 24,30,36,36 };
     int[] t1 = { 400,500,600,600 };

@@ -1,11 +1,15 @@
 using Godot;
 using System;
 using System.Linq;
-
+public enum StatusType
+{
+    Positive, Negative
+}
 public abstract class Status
 {
-    public string Name { get; set; }
+    public string Name => GetType().Name;
     public string TrName => $"st{Name}";
+    public virtual StatusType Type { get; set; } = StatusType.Positive;
     public float Duration { get; set; } // 回合持续时间
     public float Param = -999;
     public Label label;
@@ -16,7 +20,7 @@ public abstract class Status
     public virtual void OnTakeBodyDamage(Unit unit, ref Damage damage){; }
     public virtual void OnDealDamage(Unit unit, ref Damage damage){; }
     public virtual void OnDealBodyDamage(Unit unit, ref Damage damage) {; }
-    public virtual void OnGet(Unit unit, Status status) { Get(unit); }
+    public virtual void OnGet(Unit unit, Status status) { Get(unit); unit.Status.Add(status); }
     public virtual void OnQuit(Unit unit) { Quit(unit); }
     public void Get(Unit unit)
     {
@@ -121,9 +125,9 @@ public abstract class Status
 
 public class Frozen : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Frozen(float duration)
     {
-        Name = "Frozen";
         Duration = duration;
     }
     public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
@@ -143,9 +147,9 @@ public class Frozen : Status
 }
 public class Dark : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Dark(float duration)
     {
-        Name = "Dark";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status)
@@ -172,7 +176,6 @@ public class YinyangBall : Status
     }
     public YinyangBall(int l = 1)
     {
-        Name = "YinyangBall";
         Duration = 300;
         Layer = l;
     }
@@ -238,9 +241,9 @@ public class YinyangBall : Status
 }
 public class Weak : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Weak(float duration)
     {
-        Name = "Weak";
         Duration = duration;
     }
     public override void OnDealDamage(Unit unit, ref Damage damage)
@@ -260,9 +263,9 @@ public class Weak : Status
 }
 public class SpiritSeal : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public SpiritSeal(float duration)
     {
-        Name = "SpiritSeal";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status)
@@ -282,9 +285,9 @@ public class SpiritSeal : Status
 }
 public class MagicSeal : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public MagicSeal(float duration)
     {
-        Name = "MagicSeal";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status)
@@ -306,9 +309,9 @@ public class MagicSeal : Status
 
 public class Daze : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Daze(float duration)
     {
-        Name = "Daze";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status) 
@@ -328,9 +331,9 @@ public class Daze : Status
 }
 public class Stun : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Stun(float duration)
     {
-        Name = "Stun";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status)
@@ -351,9 +354,9 @@ public class Stun : Status
 
 public class Pinned : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public Pinned(float duration)
     {
-        Name = "Pinned";
         Duration = duration;
     }
     public override void OnGet(Unit unit, Status status)
@@ -376,6 +379,7 @@ public class Pinned : Status
 
 public class Burned : Status
 {
+    public override StatusType Type => StatusType.Negative;
     public int Layer
     {
         get => (int)Param;
@@ -386,7 +390,6 @@ public class Burned : Status
     }
     public Burned(int layer, float duration)
     {
-        Name = "Burned";
         Duration = duration;
         Layer = layer;
     }
@@ -415,5 +418,54 @@ public class Burned : Status
     public override void OnTurnEnd(Unit unit)
     {
         unit.Ua.GetHp(-Layer);
+    }
+}
+
+public class BulletShield : Status
+{
+    public float Value
+    {
+        get => (int)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public BulletShield(float value, float time)
+    {
+        Duration = time;
+        Value = value;
+    }
+    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
+    {
+        var v = Mathf.Min(damage.Value, Value);
+        damage -= v;
+        Value -= v;
+        if (Value == 0)
+            Quit(unit);
+    }
+}
+
+public class NumberShield : Status
+{
+    public float Layer
+    {
+        get => (int)Param;
+        set
+        {
+            Param = value;
+        }
+    }
+    public NumberShield(float value, float time)
+    {
+        Duration = time;
+        Layer = value;
+    }
+    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
+    {
+        damage.Value = 0;
+        Layer--;
+        if (Layer == 0)
+            Quit(unit);
     }
 }

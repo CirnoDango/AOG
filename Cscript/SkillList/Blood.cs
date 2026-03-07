@@ -6,11 +6,10 @@ public class StarOfDavid: Skill
 {
     public StarOfDavid()
     {
-        Name = "StarOfDavid";
         SkillGroup = "Blood";
         SpCost = 7;
         Cooldown = 700;
-        Targeting = new TargetType(Target.Grid, 1, 7);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 7);
     }
     int[] t0 = [12, 12, 18, 18];
     int[] t1 = [50, 50, 50, 100];
@@ -76,7 +75,6 @@ public class ScarletNetherworld : SkillLong
 {
     public ScarletNetherworld()
     {
-        Name = "ScarletNetherworld";
         SkillGroup = "Blood";
         MpCost = 25;
         Cooldown = 1800;
@@ -90,7 +88,7 @@ public class ScarletNetherworld : SkillLong
     int[] t1 = [5, 5, 5, 7];
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 10, t0[iLevel]);
+        return new TargetType(new TargetRuleGrid(), 1, 10, t0[iLevel]);
     }
     public override string GetDescription()
     {
@@ -127,7 +125,6 @@ public class ScarletDevil : Skill
 {
     public ScarletDevil()
     {
-        Name = "ScarletDevil";
         SkillGroup = "Blood";
         EffectType = EffectType.Passive;
     }
@@ -163,12 +160,11 @@ public class ScarletShoot: Skill
 {
     public ScarletShoot()
     {
-        Name = "ScarletShoot";
         SkillGroup = "Blood";
         SpCost = 10;
         MpCost = 10;
         Cooldown = 1800;
-        Targeting = new TargetType(Target.Grid, 1, 12);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 12);
     }
     int[] t0 = [12, 12, 12, 16];
     int[] t1 = [9, 13, 17, 17];
@@ -214,13 +210,12 @@ public class ScarletGensokyo : SpellCard
 {
     public ScarletGensokyo()
     {
-        Name = "ScarletGensokyo";
         SkillGroup = "Blood";
         SpCost = 50;
         MpCost = 20;
         Cooldown = 3700;
         Duration = 500;
-        Targeting = new TargetType(Target.Self, 1, 10);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 10);
     }
     public List<Grid> Grids { get; set; } = [];
     public List<Unit> Units { get; set; } = [];
@@ -300,7 +295,6 @@ public class SScarletNetherworld : Status
     public Skill Skill;
     public SScarletNetherworld(float damage, float duration, Unit user, Skill skill)
     {
-        Name = "ScarletNetherworld";
         Damage = damage;
         Duration = duration;
         User = user;

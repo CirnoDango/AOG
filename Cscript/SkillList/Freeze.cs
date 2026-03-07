@@ -8,10 +8,9 @@ public class Icefall : Skill
 {
     public Icefall()
     {
-        Name = "Icefall";
         SkillGroup = "Freeze";
         SpCost = 3;
-        Targeting = new TargetType(Target.Grid, 1, 10);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 10);
     }
     int[] t0 = { 3, 6, 6, 6 };
     public override string GetDescription()
@@ -58,7 +57,6 @@ public class MinusK : Skill
 {
     public MinusK()
     {
-        Name = "MinusK";
         SkillGroup = "Freeze";
         SpCost = 5;
         MpCost = 5;
@@ -67,9 +65,9 @@ public class MinusK : Skill
     public override TargetType GetTargeting()
     {
         if (Level == 4)
-            return Targeting = new TargetType(Target.Enemy, 1, 10, 1);
+            return Targeting = new TargetType(new TargetRuleEnemy(), 1, 10, 1);
         else
-            return new TargetType(Target.Enemy, 1, 10);
+            return new TargetType(new TargetRuleEnemy(), 1, 10);
     }
     int[] t0 = { 3, 5, 7, 7 };
     string[] extra = {
@@ -98,7 +96,6 @@ public class DiamondBlizzard : Skill
 {
     public DiamondBlizzard()
     {
-        Name = "DiamondBlizzard";
         SkillGroup = "Freeze";
         SpCost = 5;
         Cooldown = 800;
@@ -112,7 +109,7 @@ public class DiamondBlizzard : Skill
     ];
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 1, t0[iLevel]);
+        return new TargetType(new TargetRuleSelf(), 1, t0[iLevel]);
     }
     public override string GetDescription()
     {
@@ -138,12 +135,11 @@ public class PerfectGlacialist : Skill
 {
     public PerfectGlacialist()
     {
-        Name = "PerfectGlacialist";
         SkillGroup = "Freeze";
         SpCost = 5;
         MpCost = 5;
         Cooldown = 1800;
-        Targeting = new TargetType(Target.Grid, 1, 10);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 10);
     }
     int[] t0 = { 18, 36, 54, 54 };
     string[] t1 = { " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist0 ", " sPerfectGlacialist1 " };
@@ -176,11 +172,10 @@ public class PerfectFreeze : SpellCard
 {
     public PerfectFreeze()
     {
-        Name = "PerfectFreeze";
         SkillGroup = "Freeze";
         SpCost = 40;
         Duration = 300;
-        Targeting = new TargetType(Target.Self, 1, 12);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 12);
     }
     int[] t0 = { 20, 30, 40, 40 };
     int[] t1 = { 4, 5, 6, 6 };

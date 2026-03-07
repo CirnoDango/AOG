@@ -8,12 +8,11 @@ public class MesmerizingMisdirection: Skill
 {
     public MesmerizingMisdirection()
     {
-        Name = "MesmerizingMisdirection";
         SkillGroup = "Time";
         SpCost = 5;
         MpCost = 3;
         Cooldown = 600;
-        Targeting = new TargetType(Target.Enemy, 1, 10);
+        Targeting = new TargetType(new TargetRuleEnemy(), 1, 10);
     }
     int[] t0 = [18, 27, 36, 36];
     int[] t1 = [100, 100, 100, 200];
@@ -46,10 +45,9 @@ public class ImaginaryVerticalTime : Skill
 {
     public ImaginaryVerticalTime()
     {
-        Name = "ImaginaryVerticalTime";
         SkillGroup = "Time";
         Cooldown = 2000;
-        Targeting = new TargetType(Target.Self, 1, 8);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 8);
     }
     int[] t0 = [30, 25, 20, 20];
     float[] t1 = [0.15f, 0.10f, 0.06f, 0.06f];
@@ -72,11 +70,10 @@ public class PerfectSquare: Skill
 {
     public PerfectSquare()
     {
-        Name = "PerfectSquare";
         SkillGroup = "Time";
         MpCost = 25;
         Cooldown = 2000;
-        Targeting = new TargetType(Target.Self, 1, 3);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 3);
     }
     float[] t0 = [0.2f, 0.3f, 0.4f, 0.4f];
     int[] t1 = [3, 4, 5, 5];
@@ -97,7 +94,6 @@ public class LunaDial: Skill
 {
     public LunaDial()
     {
-        Name = "LunaDial";
         SkillGroup = "Time";
         SpCost = 10;
         MpCost = 20;
@@ -111,7 +107,7 @@ public class LunaDial: Skill
     }
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Unit, 1, new int[] { 3, 5, 7, 7 }[iLevel]);
+        return new TargetType(new TargetRuleUnit(), 1, new int[] { 3, 5, 7, 7 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -122,13 +118,12 @@ public class SakuyasWorld : SpellCard
 {
     public SakuyasWorld()
     {
-        Name = "SakuyasWorld";
         SkillGroup = "Time";
         SpCost = 40;
         MpCost = 30;
         Cooldown = 4200;
         Duration = 500;
-        Targeting = new TargetType(Target.Self, 1, 6);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 6);
     }
     int[] t0 = [3, 4, 5, 5];
     public override string GetDescription()
@@ -168,7 +163,6 @@ public class SImaginaryVerticalTime : Status
     public float Cd;
     public SImaginaryVerticalTime(int count, float cd, float duration, Skill parent)
     {
-        Name = "ImaginaryVerticalTime";
         Duration = 500;
         rcd = cd;
         Count = count;
@@ -228,7 +222,6 @@ public class SPerfectSquare : Status
     public Unit user;
     public SPerfectSquare(float speedup, int range, float speeddown, float accDown, Skill parent)
     {
-        Name = "PerfectSquare";
         Duration = 500;
         Speedup = speedup;
         Range = range;
@@ -274,7 +267,6 @@ public class SLunaDial : Status
     public Skill Skill;
     public SLunaDial(float damage, float duration, Unit user, Skill skill)
     {
-        Name = "LunaDial";
         Damage = damage;
         Duration = duration;
         User = user;

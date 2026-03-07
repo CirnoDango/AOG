@@ -31,34 +31,10 @@ public partial class HighlightManager : Node2D, IRegisterToG
             var si = Player.PlayerUnit.Us.GetSkill(Skill.CurrentSkill.Name);
             if (Player.PlayerUnit.Up.CheckSkillTarget(si, MapToGrid(clickPos)) == HighlightType.green)
             {
-                
-                switch (si.GetTargeting().Type)
-                {
-                    case Target.Dash:
-                        Skill.CurrentSkill.Activate(new SkillContext(
-                            Player.PlayerUnit, 
-                            Player.PlayerUnit.Up.DashCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos)))[^1].unit,
-                            si.Level));
-                        break;
-                    case Target.Grid:
-                        Skill.CurrentSkill.Activate(new SkillContext(
-                            Player.PlayerUnit, 
-                            Scene.CurrentMap.GetGrid(MapToGrid(clickPos)),
-                            si.Level));
-                        break;
-                    case Target.Ray:
-                        Skill.CurrentSkill.Activate(new SkillContext(
-                            Player.PlayerUnit, 
-                            Player.PlayerUnit.Up.RayCheck(Scene.CurrentMap.GetGrid(MapToGrid(clickPos))),
-                            si.Level));
-                        break;
-                    default:
-                        Skill.CurrentSkill.Activate(new SkillContext(
-                            Player.PlayerUnit, 
-                            Scene.CurrentMap.GetGrid(MapToGrid(clickPos)).unit,
-                            si.Level));
-                        break;
-                }
+                SkillContext sc = si.GetTargeting().TargetRule.GetSc(
+                    Player.PlayerUnit, Scene.CurrentMap.GetGrid(MapToGrid(clickPos)));
+                sc.Level = si.Level;
+                Skill.CurrentSkill.Activate(sc);
             }
             else
             {

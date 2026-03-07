@@ -209,36 +209,7 @@ public class UnitPosition(Unit unit)
         var unit = grid?.unit;
 
         // Step 4: 根据技能目标类型判定
-        switch (skill.GetTargeting().Type)
-        {
-            case Target.Grid:
-                if (grid.IsWalkable)
-                    return HighlightType.green;
-                return HighlightType.blue;
-
-            case Target.Unit:
-                return unit != null ? HighlightType.green : HighlightType.blue;
-
-            case Target.Enemy:
-                if (unit != null && unit.Friendness * _parent.Friendness < 0)
-                    return HighlightType.green;
-                else
-                    return HighlightType.blue;
-            case Target.Dash:
-                List<Grid> g = DashCheck(grid);
-                if (g == null || g.Count == 0 || g[^1].unit == null || g[^1].unit == Player.PlayerUnit)
-                    return HighlightType.blue;
-                return HighlightType.green;
-            case Target.Ray:
-                List<Grid> gr = RayCheck(grid);
-                if (gr == null || gr.Count == 0)
-                    return HighlightType.blue;
-                return HighlightType.green;
-            case Target.Self:
-                return HighlightType.green;
-            default:
-                return HighlightType.blue;
-        }
+        return skill.GetTargeting().TargetRule.CheckSkillTarget(_parent, grid, skill);
     }
     public void KnockBack(float distance, SkillContext sc)
     {

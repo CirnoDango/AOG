@@ -238,6 +238,7 @@ public class UnitAttribute(Unit unit)
         if(GD.Randf() < user.Ua.CritRate + crit)
         {
             Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+            user.Ue.Crit(user);
             switch (damage.Type)
             {
                 default:
@@ -290,6 +291,7 @@ public class UnitAttribute(Unit unit)
             {
                 float overflow = -_parent.Us.currentSpellcard.CurrentDurability;
                 float dam = overflow * 2 + MaxHp / 3;
+                dam = _parent.Ue.TakeSpellcardBreakDamage(_parent, dam);
                 GetHp(-dam);
                 string template = TranslationServer.Translate("acSpellBreak");
                 string result = string.Format(template, user.TrName, skill.TrName, _parent.TrName, _parent.Us.currentSpellcard.TrName, damage.ToString());

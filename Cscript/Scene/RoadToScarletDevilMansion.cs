@@ -109,7 +109,7 @@ public partial class RoadToScarletDevilMansion : Node
     public void Createboss()
     {
         var boss = doorOfScarletMansion.CreateEnemy(new Vector2I(20, 32), "cirno", UnitEgo.boss);
-        boss.Ue.OnEnemyKilled += enemy =>
+        boss.Ue.OnKilled += enemy =>
         {
             Victory();
         };

@@ -8,7 +8,6 @@ public class NightBird : Skill
 {
     public NightBird()
     {
-        Name = "NightBird";
         SkillGroup = "Dark";
         SpCost = 3;
         Cooldown = 400;
@@ -22,7 +21,7 @@ public class NightBird : Skill
 
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, new int[] { 8,8,8,12}[iLevel]);
+        return new TargetType(new TargetRuleAny(), 1, new int[] { 8,8,8,12}[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -58,12 +57,11 @@ public class MoonlightRay : Skill
 {
     public MoonlightRay()
     {
-        Name = "MoonlightRay";
         SkillGroup = "Dark";
         SpCost = 3;
         MpCost = 5;
         Cooldown = 800;
-        Targeting = new TargetType(Target.Ray, 1, 12);
+        Targeting = new TargetType(new TargetRuleRay(), 1, 12);
     }
     int[] t0 = [30, 50, 70, 70];
     string[] t1 = ["", "", "", " sMoonlightRay0 "];
@@ -89,7 +87,6 @@ public class DarkSideOfTheMoon : Skill
 {
     public DarkSideOfTheMoon()
     {
-        Name = "DarkSideOfTheMoon";
         SkillGroup = "Dark";
         Description = "向一个敌人冲锋，造成30体术伤害，若处于视野外伤害+50%";
         SpCost = 3;
@@ -97,7 +94,7 @@ public class DarkSideOfTheMoon : Skill
     }
     public override TargetType GetTargeting() 
     {
-        return new TargetType(Target.Dash, 1, new int[] { 6, 9, 12, 12 }[iLevel]);
+        return new TargetType(new TargetRuleDash(), 1, new int[] { 6, 9, 12, 12 }[iLevel]);
     }
     string[] t0 = {
     "50%",
@@ -132,7 +129,6 @@ public class MagicDark : Skill
 {
     public MagicDark()
     {
-        Name = "MagicDark";
         SkillGroup = "Dark";
         SpCost = 0;
         MpCost = 10;
@@ -144,7 +140,7 @@ public class MagicDark : Skill
     int[] range = { 3, 4, 5, 5 };
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 10, range[iLevel]);
+        return new TargetType(new TargetRuleGrid(), 1, 10, range[iLevel]);
     }
 
     int[] t0 = { 3, 4, 5, 5 };
@@ -174,13 +170,12 @@ public class Demarcation : SpellCard
 {
     public Demarcation()
     {
-        Name = "Demarcation";
         SkillGroup = "Dark";
         Description = "周围8格陷入黑暗，发出大量交叉子弹";
         SpCost = 40;
         Cooldown = 2800;
         Duration = 300;
-        Targeting = new TargetType(Target.Self, 1, 8);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 8);
     }
     int[] t0 = { 6, 8, 10, 10 };
     int[] t1 = { 3, 4, 5, 5 };
@@ -242,7 +237,7 @@ public class Demarcation : SpellCard
         };
         sc.User.Ue.OnTakeSpellcardBreakDamage.Add(_event);
     }
-    private Func<Unit, Unit, Damage, Damage> _event;
+    private Func<Unit, Unit, float, float> _event;
     public override void OnSpellEnd(SkillContext sc)
     {
         sc.User.Ue.OnTakeSpellcardBreakDamage.Remove(_event);

@@ -199,9 +199,9 @@ public class Save
             float n = Convert.ToSingle(dict["Amount"]);
             Item i;
             if (dict.TryGetValue("Parameters", out object value))
-                i = Item.CreateItem((string)dict["Name"], (Dictionary<string, object>)value);
+                i = Item.CreateItem((string)dict["Name"], false, (Dictionary<string, object>)value);
             else
-                i = Item.CreateItem((string)dict["Name"]);
+                i = Item.CreateItem((string)dict["Name"], false);
             unit.Equipment.TryEquip(i, unit);
         }
         foreach (var kvp in ed.Memory)

@@ -78,7 +78,7 @@ public partial class Cave : Node, IRegisterToG
     {
         var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
         boss.Inventory.AddItem(Item.CreateItem("DangoLight"));
-        boss.Ue.OnEnemyKilled += enemy =>
+        boss.Ue.OnKilled += enemy =>
         {
             if (enemy == boss)
             {

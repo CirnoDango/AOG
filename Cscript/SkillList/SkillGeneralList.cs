@@ -7,9 +7,8 @@ public class Rest : Skill
 {
     public Rest()
     {
-        Name = "Rest";
         Description = "休息一回合";
-        Targeting = new TargetType(Target.Self);
+        Targeting = new TargetType(new TargetRuleSelf());
     }
 
     protected override void StartActivate(SkillContext context)
@@ -20,9 +19,8 @@ public class Move : Skill
 {
     public Move()
     {
-        Name = "Move";
         Description = "移动一个格子";
-        Targeting = new TargetType(Target.Grid, 1, 1);
+        Targeting = new TargetType(new TargetRuleGrid(), 1, 1);
     }
 
     protected override void StartActivate(SkillContext sc)
@@ -34,10 +32,9 @@ public class Interact : Skill
 {
     public Interact()
     {
-        Name = "Interact";
         Description = "与场景环境互动";
 
-        Targeting = new TargetType(Target.Grid, 1, 0);
+        Targeting = new TargetType(new TargetRuleGrid(), 1, 0);
     }
     public override float GetTimeCost() => 0;
     protected override void StartActivate(SkillContext sc)
@@ -58,9 +55,8 @@ public class Attack : Skill
 {
     public Attack()
     {
-        Name = "Attack";
         Description = "体术攻击";
-        Targeting = new TargetType(Target.Enemy, 1, 1);
+        Targeting = new TargetType(new TargetRuleEnemy(), 1, 1);
     }
 
     protected override void StartActivate(SkillContext sc)
@@ -71,7 +67,8 @@ public class Attack : Skill
             float accK = 0; float damK = 1;
             foreach (IWeapon weapon in weapons.Cast<IWeapon>())
             {
-                accK -= 0.2f; damK *= 0.8f;
+                accK -= 0.1f; damK *= 0.8f;
+                sc.UnitOne.Ua.CheckBodyHit(weapon.BaseDamage() * damK, weapon.Accurency + accK, weapon.CritRate, sc.User, this);
             }
         }
         else
@@ -83,10 +80,9 @@ public class Shoot : Skill
 {
     public Shoot()
     {
-        Name = "Shoot";
         SkillGroup = "General";
         Description = "发射弹幕！";
-        Targeting = new TargetType(Target.Grid, 1, 8);
+        Targeting = new TargetType(new TargetRuleAny(), 1, 8);
     }
     public override float GetSpCost() => 0;
     public override float GetCooldown() => 300;

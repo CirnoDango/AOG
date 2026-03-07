@@ -121,9 +121,9 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             Info.Print("不满足发动条件！");
             return;
         }
-        if (skill.GetTargeting().Type == Target.Self)
+        if (!skill.GetTargeting().TargetRule.MapClick)
         {
-            skill.Activate(new SkillContext(Player.PlayerUnit, Player.PlayerUnit.Us.GetSkill(skill.Name).Level), si);
+            skill.Activate(new SkillContext(Player.PlayerUnit, Player.PlayerUnit.Us.GetSkill(skill.Name).Level));
         }
         else
         {

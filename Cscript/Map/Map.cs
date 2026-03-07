@@ -327,7 +327,7 @@ public class Map
         {
             List<Skill> skills = [.. unit.Us.skills
                 .Select(x => x.skill)
-                .Where(x => x.SkillGroup != "" && x is not ISkill && x.Level < 4)];
+                .Where(x => x.SkillGroup != "" && x is not SkillFromItem<SkillItem> && x.Level < 4)];
             if (skills.Count == 0) break;
             var sn = skills[GD.RandRange(0, skills.Count - 1)].Name;
             unit.Us.skills.FirstOrDefault(si => si.skill.Name == sn).skill.Level++;
@@ -410,7 +410,7 @@ public class Map
             return;
         }
         unit.dead = true;
-        unit.Ue.EnemyKilled();
+        unit.Ue.Killed();
         unit.Up.CurrentGrid.unit = null;
         Info.Print($"{unit.TrName} 被退治了");
         unit.Up.sprite.QueueFree();
@@ -566,6 +566,7 @@ public static class Scene
 
     public static void Quit()
     {
+        GameEvents.SceneQuit();
         foreach (var child in G.I.LayerItemDropped.GetChildren())
             child?.QueueFree();
         foreach (var u in CurrentMap.Units)

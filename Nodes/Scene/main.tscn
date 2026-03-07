@@ -179,7 +179,6 @@ layout_mode = 2
 color = Color(0.176419, 0.176419, 0.176419, 1)
 
 [node name="Bar" type="ColorRect" parent="UI/UiRoot/InfoPanel/PlayerStatusBar/MpRow/BarBack" unique_id=1487635019]
-custom_minimum_size = Vector2(3600, 0)
 layout_mode = 0
 offset_right = 3600.0
 offset_bottom = 400.0

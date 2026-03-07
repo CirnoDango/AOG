@@ -56,7 +56,7 @@ public partial class CaveD : Node
     {
         var boss = Floor3.CreateEnemy(MapGenerator.FloodFindFarthest(Floor3, Floor3.Entrance), "rumia");
         boss.Inventory.AddItem(Item.CreateItem("DangoLight"));
-        boss.Ue.OnEnemyKilled += enemy =>
+        boss.Ue.OnKilled += enemy =>
         {
             if (enemy == boss)
             {
@@ -92,16 +92,16 @@ public partial class CaveD : Node
         Scene.Enter(Floor1);
         Player.PlayerUnit.Inventory.AddItem(
             Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
-        Player.PlayerUnit.Ua.Cun += 10;
+        Player.PlayerUnit.Ua.Cun += 1000;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 3 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 5 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
-        foreach(var i in Item.ItemDeck.Where(x=>x is BarrageComponent && x is not BulletModule))
-            Player.PlayerUnit.Inventory.AddItem(Item.CreateItem(i.Name));
-        Floor1.CreateEnemy(new Vector2I(2, 4), "rumia", UnitEgo.great);
+        foreach(var i in Item.ItemDeck.Where(x=>x is not BulletModule))
+            Player.PlayerUnit.Equipment.TryEquip(Item.CreateItem(i.Name), Player.PlayerUnit);
+        //Floor1.CreateEnemy(new Vector2I(2, 4), "rumia", UnitEgo.great);
         //Floor1.CreateEnemy(new Vector2I(2, 5), "cirno", UnitEgo.great);
         //Floor1.CreateEnemy(new Vector2I(2, 6), "meiling", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);

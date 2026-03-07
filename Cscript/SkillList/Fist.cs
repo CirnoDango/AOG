@@ -8,11 +8,10 @@ public class Multistrike : Skill
 {
     public Multistrike()
     {
-        Name = "Multistrike";
         SkillGroup = "Fist";
         SpCost = 3;
         Cooldown = 700;
-        Targeting = new TargetType(Target.Unit, 1, 1);
+        Targeting = new TargetType(new TargetRuleUnit(), 1, 1);
     }
     int[] t0 = { 2, 3, 4, 4 };
     public override string GetDescription()
@@ -32,11 +31,10 @@ public class SpiralLightSteps : Skill
 {
     public SpiralLightSteps()
     {
-        Name = "SpiralLightSteps";
         SkillGroup = "Fist";
         SpCost = 5;
         Cooldown = 1600;
-        Targeting = new TargetType(Target.Self, 1, 5);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 5);
     }
     int[] t0 = [3, 4, 5, 5];
     int[] t1 = [66, 88, 108, 108];
@@ -54,7 +52,6 @@ public class CrimsonEnergyRelease : Skill
 {
     public CrimsonEnergyRelease()
     {
-        Name = "CrimsonEnergyRelease";
         SkillGroup = "Fist";
         EffectType = EffectType.Passive;
     }
@@ -88,11 +85,10 @@ public class IntenseRainbowFist : Skill
 {
     public IntenseRainbowFist()
     {
-        Name = "IntenseRainbowFist";
         SkillGroup = "Fist";
         MpCost = 5;
         Cooldown = 1400;
-        Targeting = new TargetType(Target.Unit, 1, 1);
+        Targeting = new TargetType(new TargetRuleUnit(), 1, 1);
     }
     int[] t0 = { 1,2,3,3 };
     public override float GetSpCost()
@@ -121,12 +117,11 @@ public class DapengFellingFist : SpellCard
 {
     public DapengFellingFist()
     {
-        Name = "DapengFellingFist";
         SkillGroup = "Fist";
         SpCost = 40;
         Duration = 600;
         Cooldown = 36;
-        Targeting = new TargetType(Target.Self, 1, 1);
+        Targeting = new TargetType(new TargetRuleSelf(), 1, 1);
     }
     int[] t0 = [26, 36, 46, 46];
     public override string GetDescription()
@@ -165,7 +160,6 @@ public class SSpiralLightSteps : Status
     }
     public SSpiralLightSteps(float speed, float duration, Skill parent)
     {
-        Name = "SpiralLightSteps";
         Duration = duration;
         Speed = speed;
         Parent = parent;
@@ -203,7 +197,6 @@ public class SCrimsonEnergyRelease : Status
     }
     public SCrimsonEnergyRelease(int l = 1)
     {
-        Name = "CrimsonEnergyRelease";
         Duration = 100;
         Layer = l;
     }

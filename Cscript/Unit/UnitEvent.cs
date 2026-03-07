@@ -4,15 +4,10 @@ using System.Collections.Generic;
 public class UnitEvent(Unit parent)
 {
     private Unit _parent = parent;
-    public event Action<Unit> OnEnemyKilled;
-    public void EnemyKilled()
+    public event Action<Unit> OnKilled;
+    public void Killed()
     {
-        OnEnemyKilled?.Invoke(_parent);
-    }
-    public event Action<Unit, Skill> OnSkillLearned;
-    public void SkillLearned(Skill si)
-    {
-        OnSkillLearned?.Invoke(_parent, si);
+        OnKilled?.Invoke(_parent);
     }
     public List<Func<Unit, Unit, Damage, Damage>> OnDealBulletDamage = [];
     public Damage DealBulletDamage(Unit target, Damage baseDamage)
@@ -54,10 +49,10 @@ public class UnitEvent(Unit parent)
         }
         return modifiedDamage;
     }
-    public List<Func<Unit, Unit, Damage, Damage>> OnTakeSpellcardBreakDamage = [];
-    public Damage TakeSpellcardBreakDamage(Unit target, Damage baseDamage)
+    public List<Func<Unit, Unit, float, float>> OnTakeSpellcardBreakDamage = [];
+    public float TakeSpellcardBreakDamage(Unit target, float baseDamage)
     {
-        Damage modifiedDamage = baseDamage;
+        float modifiedDamage = baseDamage;
         foreach (var modifier in OnTakeSpellcardBreakDamage)
         {
             modifiedDamage = modifier(_parent, target, modifiedDamage);
@@ -94,6 +89,16 @@ public class UnitEvent(Unit parent)
         }
         return modifiedCheck;
     }
+    public List<Func<Status, bool>> OnGetStatus = [];
+    public bool GetStatus(Status s)
+    {
+        foreach (var modifier in OnGetStatus)
+        {
+            if (!modifier(s))
+                return false;
+        }
+        return true;
+    }
     public event Action<Unit, SkillContext, Skill> OnUseSkill;
     public void UseSkill(SkillContext sc, Skill si)
     {
@@ -123,5 +128,10 @@ public class UnitEvent(Unit parent)
     public void Attack(SkillContext sc)
     {
         OnAttack?.Invoke(sc);
+    }
+    public event Action<Unit> OnCrit;
+    public void Crit(Unit unit)
+    {
+        OnCrit?.Invoke(unit);
     }
 }

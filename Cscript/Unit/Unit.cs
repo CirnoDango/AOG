@@ -33,6 +33,10 @@ public class Unit
                 return 1;
         }
     }
+    public bool IsFriend(Unit other)
+    {
+        return Friendness * other.Friendness > 0;
+    }
     public List<Status> Status { get; set; } = [];
     public Dictionary<Status, Node> StatusImages { get; set; } = [];
     public Inventory Inventory { get; set; }
@@ -42,7 +46,8 @@ public class Unit
     public UnitEgo Ego { get; set; }
     public void GetStatus(Status status)
     {
-        status.OnGet(this, status);
+        if (Ue.GetStatus(status))
+            status.OnGet(this, status);
     }
     public static Action OnPlayerdied;
 }

@@ -8,11 +8,10 @@ public class AsteroidBelt : Skill
 {
     public AsteroidBelt()
     {
-        Name = "AsteroidBelt";
         SkillGroup = "Star";
         SpCost = 3;
         Cooldown = 400;
-        Targeting = new TargetType(Target.Self, 0, 5);
+        Targeting = new TargetType(new TargetRuleSelf(), 0, 5);
     }
     int[] t0 = [18, 24, 30, 30];
     int[] t1 = [50, 50, 50, 100];
@@ -22,7 +21,7 @@ public class AsteroidBelt : Skill
     }
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Self, 0, new int[] { 4, 5, 6, 6 }[iLevel]);
+        return new TargetType(new TargetRuleSelf(), 0, new int[] { 4, 5, 6, 6 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -45,7 +44,6 @@ public class MilkyWay : Skill
 {
     public MilkyWay()
     {
-        Name = "MilkyWay";
         SkillGroup = "Star";
         EffectType = EffectType.Passive;
     }
@@ -84,7 +82,6 @@ public class BlazingStar : Skill
 {
     public BlazingStar()
     {
-        Name = "BlazingStar";
         SkillGroup = "Star";
         MpCost = 5;
         Cooldown = 1200;
@@ -96,7 +93,7 @@ public class BlazingStar : Skill
     }
     public override TargetType GetTargeting()
     {
-        return Targeting = new TargetType(Target.Dash, 1, new int[] { 6, 8, 10, 10 }[iLevel]);
+        return Targeting = new TargetType(new TargetRuleDash(), 1, new int[] { 6, 8, 10, 10 }[iLevel]);
     }
     public override float GetSpCost()
     {
@@ -123,7 +120,6 @@ public class DragonMeteor: Skill
 {
     public DragonMeteor()
     {
-        Name = "DragonMeteor";
         SkillGroup = "Star";
         Description = "召唤一颗陨石，对3格内敌人造成40弹幕伤害";
         SpCost = -5;
@@ -137,7 +133,7 @@ public class DragonMeteor: Skill
     }
     public override TargetType GetTargeting()
     {
-        return new TargetType(Target.Grid, 1, 8, new int[] { 2, 3, 4, 4 }[iLevel]);
+        return new TargetType(new TargetRuleGrid(), 1, 8, new int[] { 2, 3, 4, 4 }[iLevel]);
     }
     protected override void StartActivate(SkillContext sc)
     {
@@ -152,13 +148,12 @@ public class StardustReverie : SpellCard
 {
     public StardustReverie()
     {
-        Name = "StardustReverie";
         SkillGroup = "Star";
         Description = "持续发出大量星弹，发动时移动速度+100%";
         SpCost = 50;
         Cooldown = 3000;
         Duration = 500;
-        Targeting = new TargetType(Target.Enemy, 1, 12);
+        Targeting = new TargetType(new TargetRuleEnemy(), 1, 12);
     }
     int[] t0 = [150, 190, 230, 230];
     int[] t1 = [50, 50, 50, 100];

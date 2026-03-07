@@ -157,12 +157,10 @@ public class UnitAi(Unit u)
     }
     public SkillContext SelectTarget(Skill skill)
     {
-        return skill.GetTargeting().Type switch
-        {
-            Target.Enemy or Target.Unit or Target.Dash => new SkillContext(_parent, Player.PlayerUnit, skill.Level),
-            Target.Grid or Target.Ray => new SkillContext(_parent, Player.PlayerUnit.Up.CurrentGrid, skill.Level),
-            _ => new SkillContext(_parent),
-        };
+        SkillContext sc = skill.GetTargeting().TargetRule.GetSc(
+                    _parent, Player.PlayerUnit.Up.CurrentGrid);
+        sc.Level = skill.Level;
+        return sc;
     }
     
     public void SleepAi()

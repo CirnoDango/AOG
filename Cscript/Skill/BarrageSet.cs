@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class BarrageSet : SkillItem<BarrageSet.Instance>
+public class BarrageSet : SkillItem<BarrageSet.SBarrageSet>
 {
     public Barrage B = new();
     public override float Weight
@@ -37,19 +37,18 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
             Params.Add("colorB", GD.Randf());
             Texture = ImageEx.ColorizeTexture(Texture, new Color((float)Params["colorR"], (float)Params["colorG"], (float)Params["colorB"]));
         } 
-        Skill = new Instance(this);
+        Skill = new SBarrageSet(this);
     }
     public override void GetParam()
     {
         Params["barrage"] = Barrage.GetParam(B);
     }
 
-    public class Instance : Skill, ISkill
+    public class SBarrageSet : Skill
     {
         private readonly Barrage _BarrageSet;
-        public Instance(BarrageSet parent)
+        public SBarrageSet(BarrageSet parent)
         {
-            Name = "BarrageSet";
             SkillGroup = "Item";
             Description = "发射弹幕";
             _BarrageSet = parent.B;
@@ -75,14 +74,8 @@ public class BarrageSet : SkillItem<BarrageSet.Instance>
                 .DefaultIfEmpty(0)
                 .Max();
 
-            return new TargetType(Target.Grid, 1, (int)Mathf.Round(maxD));
+            return new TargetType(new TargetRuleAny(), 1, (int)Mathf.Round(maxD));
         }
-
-        public Skill GetSkill(SkillItem parent)
-        {
-            return new Instance((BarrageSet)parent);
-        }
-
         protected override void StartActivate(SkillContext sc)
         {
             _BarrageSet.Execute(sc);
