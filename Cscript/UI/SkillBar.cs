@@ -14,6 +14,8 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     public PackedScene skillButtonScene;
     [Export]
     public PackedScene spellButtonScene;
+    [Export]
+    public Godot.Label skillInfo;
     public Dictionary<string, Color> skillBoxColor = new()
     {
         { "YinyangBall", new Color(1f, 0.2f, 0.4f) },
@@ -59,6 +61,8 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             FocusMode = FocusModeEnum.None,
             Skill = skill
         };
+        btn.MouseEntered += () => { OnMouseEntered(skill); };
+        btn.MouseExited += OnMouseExited;
         float ratio = 60 / skill.Texture.GetSize().X;
         btn.Scale = new Vector2(ratio, ratio);
         // 冷却时间文本标签
@@ -132,7 +136,16 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             G.I.Fsm.ChangeState(Fsm.PlayerSkillTargetState);
         } 
     }
+    private void OnMouseEntered(Skill skill)
+    {
+        skillInfo.Text = skill.SkillInfo();
+    }
 
+    // 鼠标移出按钮时
+    private void OnMouseExited()
+    {
+        skillInfo.Text = "";
+    }
     public void RegisterToG(G g)
     {
         g.SkillBar = this;
@@ -142,11 +155,4 @@ public partial class SkillBar : FlowContainer, IRegisterToG
 public partial class SkillButton : TextureButton
 {
     public Skill Skill;
-
-    public override string _GetTooltip(Vector2 atPosition)
-    {
-        var player = Player.PlayerUnit;
-        var level = player.Us.GetSkill(Skill.Name).Level;
-        return Tr(Skill.SkillInfo());
-    }
 }

@@ -189,7 +189,7 @@ public class PerfectFreeze : SpellCard
     }
     protected override void OnSpellStart(SkillContext sc)
     {
-        Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 冻结的气息弥漫四周……");
+        Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
         AddTimedEvent(Linspace(20,300,70), (ctx, advanceTime) =>
         {
             var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.cold), sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 

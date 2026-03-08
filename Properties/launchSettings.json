@@ -1,11 +1,15 @@
 {
   "profiles": {
-    "Gensokyo Simulator": {
-      "commandName": "Project"
-    },
-    "AoG": {
+    "AoG_abcde": {
       "commandName": "Executable",
       "executablePath": "C:\\Users\\abcde\\Desktop\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64.exe",
+      "commandLineArgs": "--path . --verbose",
+      "workingDirectory": ".",
+      "nativeDebugging": true
+    },
+    "AoG_Micro": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Micro\\Desktop\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64.exe",
       "commandLineArgs": "--path . --verbose",
       "workingDirectory": ".",
       "nativeDebugging": true

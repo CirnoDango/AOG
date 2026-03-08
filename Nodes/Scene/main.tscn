@@ -9,19 +9,19 @@
 [ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="7_ofgj4"]
 [ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_7yoxt"]
 [ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="9_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
+[ext_resource type="Texture2D" uid="uid://dammrg4jau5wt" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
 [ext_resource type="Texture2D" uid="uid://bt5ubtyqa4u36" path="res://Assets/UI/NaturalSpBar.png" id="10_mdtu7"]
-[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
+[ext_resource type="Texture2D" uid="uid://bdgfqw1cq5la5" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
 [ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xcvs3"]
 [ext_resource type="Texture2D" uid="uid://bbs3tfde7aewc" path="res://Assets/UI/close.png" id="13_7yoxt"]
-[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
+[ext_resource type="Texture2D" uid="uid://3n4chuooyuju" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
 [ext_resource type="Script" uid="uid://v7xido03yjql" path="res://Cscript/UI/CloseButton.cs" id="14_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://Assets/UI/equip.png" id="14_urhty"]
-[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
-[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://Assets/UI/throw.png" id="16_68pdb"]
+[ext_resource type="Texture2D" uid="uid://bqsexx0ejbclj" path="res://Assets/UI/equip.png" id="14_urhty"]
+[ext_resource type="Texture2D" uid="uid://wb0l3wje15ad" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
+[ext_resource type="Texture2D" uid="uid://bdy4fs4xuvfor" path="res://Assets/UI/throw.png" id="16_68pdb"]
 [ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="17_hast1"]
 [ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="18_tk42s"]
-[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
+[ext_resource type="Texture2D" uid="uid://yvuvgmbyeb30" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
 [ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/UI/Ua.cs" id="20_5umwx"]
 [ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="21_hxw1y"]
 [ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://Nodes/Scene/SkillTree.tscn" id="22_r3qqj"]
@@ -36,7 +36,7 @@
 [ext_resource type="Script" uid="uid://ixn26ady8a3r" path="res://Cscript/UI/SkillTreeBox.cs" id="28_c2j4f"]
 [ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="28_nc36h"]
 [ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="29_ol46v"]
-[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
+[ext_resource type="Texture2D" uid="uid://cf68l0a4lmywo" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
 [ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="32_1gorf"]
 [ext_resource type="TileSet" uid="uid://sd4of61ejnal" path="res://Other/Resource/tileResource.tres" id="33_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://Nodes/Ui/ItemDropped.tscn" id="33_giel3"]
@@ -206,9 +206,9 @@ layout_mode = 2
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/UiRoot/InfoPanel" unique_id=2065021963]
 texture_filter = 4
 layout_mode = 0
-offset_top = 4380.0
+offset_top = 3370.0
 offset_right = 4800.0
-offset_bottom = 6380.0
+offset_bottom = 5370.0
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/normal_font_size = 200
 theme_override_font_sizes/bold_font_size = 200
@@ -222,18 +222,27 @@ script = ExtResource("6_dgtui")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="UI/UiRoot/InfoPanel" unique_id=57729865]
 layout_mode = 0
-offset_top = 6380.0
+offset_top = 5370.0
 offset_right = 660.0
-offset_bottom = 6680.0
+offset_bottom = 5630.0
 scale = Vector2(7.273, 7.273)
 
-[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot/InfoPanel/ScrollContainer" unique_id=1221442602 node_paths=PackedStringArray("skillContainer")]
+[node name="SkillBar" type="HFlowContainer" parent="UI/UiRoot/InfoPanel/ScrollContainer" unique_id=1221442602 node_paths=PackedStringArray("skillContainer", "skillInfo")]
 custom_minimum_size = Vector2(660, 0)
 layout_mode = 2
 script = ExtResource("2_1ocm2")
 skillContainer = NodePath(".")
 skillButtonScene = ExtResource("3_c2j4f")
 spellButtonScene = ExtResource("4_cnqvw")
+skillInfo = NodePath("../../SkillInfo")
+
+[node name="SkillInfo" type="Label" parent="UI/UiRoot/InfoPanel" unique_id=1425607705]
+layout_mode = 0
+offset_top = 7261.0
+offset_right = 4800.0
+offset_bottom = 10800.0
+theme_override_font_sizes/font_size = 160
+autowrap_mode = 2
 
 [node name="fps" type="Label" parent="UI/UiRoot" unique_id=1730787130]
 layout_mode = 0

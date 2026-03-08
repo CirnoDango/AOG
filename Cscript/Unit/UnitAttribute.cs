@@ -237,7 +237,7 @@ public class UnitAttribute(Unit unit)
     {
         if(GD.Randf() < user.Ua.CritRate + crit)
         {
-            Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+            Info.Print($"{user.TrName} ifCrit");
             user.Ue.Crit(user);
             switch (damage.Type)
             {
@@ -324,7 +324,7 @@ public class UnitAttribute(Unit unit)
         {
             if (GD.Randf() < user.Ua.CritRate + crit)
             {
-                Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+                Info.Print($"{user.TrName} ifCrit");
                 switch (damage.Type)
                 {
                     default:
@@ -348,7 +348,7 @@ public class UnitAttribute(Unit unit)
         {
             if (GD.Randf() < user.Ua.CritRate)
             {
-                Info.Print($"{TranslationServer.Translate(user.TrName)} 造成了一次暴击！");
+                Info.Print($"{user.TrName} ifCrit");
                 switch (damage.Type)
                 {
                     default:

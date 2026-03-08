@@ -108,31 +108,30 @@ public abstract class Skill
     {
         string text = "";
         if (IsSpellCard())
-            text += "【 符卡 】";
-        text += $" {TrName} \n";
+            text += $"【{TextEx.Tr("符卡")}】";
+        text += $"{TextEx.Tr(TrName)}\n";
         switch (EffectType)
         {
             case EffectType.Activate:
-                text += " 主动技能 \n"; break;
+                text += $"{TextEx.Tr("主动技能")}\n"; break;
             case EffectType.Passive:
-                text += " 被动技能 \n"; break;
+                text += $"{TextEx.Tr("被动技能")}\n"; break;
         }
         if (this is SpellCard spell)
-            text += $" 持续时间 ：{Math.Round(spell.GetDuration() / 100):F0} 回合 \n";
+            text += $"{TextEx.Tr("持续时间")}：{Math.Round(spell.GetDuration() / 100):F0} {TextEx.Tr("回合")}\n";
         if (GetCooldown() > 0)
-            text += $" 冷却时间 ：{Math.Round(GetCooldown() / 100):F0} 回合 \n";
+            text += $"{TextEx.Tr("冷却时间")}：{Math.Round(GetCooldown() / 100):F0} {TextEx.Tr("回合")}\n";
         if (GetTargeting() != null)
-            text += $" 使用范围 ：{GetTargeting().Range}\n";
-        if (GetSpNeed() != 0) { text += $" SP要求 ：{GetSpNeed()}\n"; }
+            text += $"{TextEx.Tr("使用范围")}：{GetTargeting().Range}\n";
+        if (GetSpNeed() != 0) { text += $"{TextEx.Tr("SP要求")}：{GetSpNeed()}\n"; }
         if (GetSpCost() > 0)
         {
-            text += $" SP消耗 ：{GetSpCost()}";
+            text += $"{TextEx.Tr("SP消耗")}：{GetSpCost()}";
             text += "\n";
         }
-        if (GetSpCost() < 0) { text += $" SP累积 ：{-GetSpCost()}\n"; }
-        if (GetMpCost() != 0) { text += $" MP消耗 ：{GetMpCost()}\n"; }
-        text += GetDescription();
-        return TextEx.TrN(text);
+        if (GetSpCost() < 0) { text += $"{TextEx.Tr("SP累积")}：{-GetSpCost()}\n"; }
+        if (GetMpCost() != 0) { text += $"{TextEx.Tr("MP消耗")}：{GetMpCost()}\n"; }
+        return text + TextEx.Tr(GetDescription() ?? "");
     }
     public string SkillInfo(int level)
     {

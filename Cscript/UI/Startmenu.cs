@@ -16,6 +16,10 @@ public partial class Startmenu : Control
     [Export] public Label info;
     public override void _Ready()
     {
+        
+        start.Text = Tr("smStart");
+        load.Text = Tr("smLoad");
+        quit.Text = Tr("smQuit");
         start.Pressed += OnStartPressed;
         load.Pressed += OnLoadPressed;
         quit.Pressed += OnExitPressed;

@@ -79,7 +79,7 @@ public partial class Fsm : Node, IRegisterToG
     public override void _Ready()
     {
         Engine.MaxFps = 240;
-        TranslationServer.SetLocale("zh");
+        
         StartState = new StartState(this);
         PlayerSkillState = new PlayerSkillState(this);
         PlayerSkillTargetState = new PlayerSkillTargetState(this);

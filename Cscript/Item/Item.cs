@@ -231,7 +231,7 @@ public class Inventory(Unit unit)
             return false;
         if (CurrentWeight + item.Weight > MaxWeight)
         {
-            Info.Print($"超重了，无法添加物品 {TranslationServer.Translate(item.TrName)}！");
+            Info.Print($"超重了无法添加物品 {TranslationServer.Translate(item.TrName)}！");
             return false;
         }
         Items.Add(item);

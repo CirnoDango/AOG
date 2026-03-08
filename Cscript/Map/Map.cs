@@ -549,7 +549,7 @@ public static class Scene
         CurrentMap.SummonEnemy();
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();
-        Info.Print("进入新地图，记忆上限已提升");
+        Info.Print("ifNewMapMemory");
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
         eliteProp += 0.006f;
         greatProp += 0.003f;

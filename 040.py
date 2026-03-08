@@ -1,6 +1,0 @@
-platform="windows" 
-module_mono_enabled="yes"
-target="template_release"
-debug_symbols="no"
-optimize="size"
-lto="full"

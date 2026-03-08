@@ -198,7 +198,7 @@ public class Demarcation : SpellCard
         {
             g.unit?.GetStatus(new Dark(new int[] { 300, 400, 500, 500 }[iLevel]));
         }
-        Info.Print($"{sc.User.TrName} 展开了 {TrName} ！ 周围陷入了黑暗！");
+        Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
         AddTimedEvent(50, (ctx, advanceTime) =>
         {
             for(float i = 0; i < 360; i += 360 / 20f)

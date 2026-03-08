@@ -28,13 +28,13 @@ public partial class HighlightManager : Node2D, IRegisterToG
         if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
             Vector2 clickPos = GetGlobalMousePosition();
-            var si = Player.PlayerUnit.Us.GetSkill(Skill.CurrentSkill.Name);
+            var si = Skill.CurrentSkill;
             if (Player.PlayerUnit.Up.CheckSkillTarget(si, MapToGrid(clickPos)) == HighlightType.green)
             {
                 SkillContext sc = si.GetTargeting().TargetRule.GetSc(
                     Player.PlayerUnit, Scene.CurrentMap.GetGrid(MapToGrid(clickPos)));
                 sc.Level = si.Level;
-                Skill.CurrentSkill.Activate(sc);
+                si.Activate(sc);
             }
             else
             {
