@@ -55,8 +55,8 @@ public abstract partial class Item : IInteractable, IEquipable
         string s = "";
         if (this is SkillItem si && this is not BarrageSet)
         {
-            s += "=====技能=====";
-            s += $"\n冷却回合：{si.Skill.Cooldown / 100:F0}";
+            s += $"====={TextEx.Tr("技能")}=====";
+            s += $"\n{TextEx.Tr("冷却时间")}：{si.Skill.Cooldown / 100:F0}";
             s += $"\n{TextEx.Tr($"is{Name}")}\n";
         }
         else
@@ -70,11 +70,11 @@ public abstract partial class Item : IInteractable, IEquipable
         if(this is BarrageComponent bc)
         {
             if (bc.SpCost > 0)
-                s += $"SP花费：{bc.SpCost}\n";
+                s += $"{TextEx.Tr("SP消耗")}：{bc.SpCost}\n";
             if (bc.CoolDown > 0)
-                s += $"冷却：{bc.CoolDown / 100}\n";
+                s += $"{TextEx.Tr("冷却时间")}：{bc.CoolDown / 100}\n";
             if (bc.draw > 0)
-                s += $"抽取：{bc.draw}\n";
+                s += $"{TextEx.Tr("抽取")}：{bc.draw}\n";
         }
         return s.TrimEnd('\n');
     }

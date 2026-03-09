@@ -14,7 +14,7 @@ public partial class SkillPanel : VFlowContainer, IRegisterToG
     public List<SkillTree> skillTrees = [];
     public void Refresh()
     {
-        Point.Text = TextEx.TrN($"剩余技能点 :{G.I.Player.SkillPoint}");
+        Point.Text = TextEx.Tr($"{Tr("剩余技能点")} :{G.I.Player.SkillPoint}");
         foreach (var skillTree in skillTrees)
         {
             skillTree.UpdateTree();

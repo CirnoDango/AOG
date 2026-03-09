@@ -118,20 +118,4 @@ public static class TextEx
         string translated = string.Join(" ", parts);
         return translated;
     }
-
-    public static string TrN(string text)
-    {
-        // 按空格分割
-        var parts = text.Split(' ');
-
-        // 对每段做翻译
-        for (int i = 0; i < parts.Length; i++)
-        {
-            parts[i] = G.I.Info.Tr(parts[i]);
-        }
-
-        // 用空格拼接回完整字符串
-        string translated = string.Join("", parts);
-        return translated;
-    }
 }

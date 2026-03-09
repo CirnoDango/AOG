@@ -30,7 +30,7 @@ public partial class ItemEntry : Control
 
         // 设置图标、文字
         Image.Texture = item.Texture;
-        Label.Text = TextEx.TrN($"[{item.Weight:F1}] {item.TrName}");
+        Label.Text = TextEx.Tr($"[{item.Weight:F1}] {item.TrName}");
         switch (item.effectLevel)
         {
             case 1:
@@ -42,7 +42,7 @@ public partial class ItemEntry : Control
                 Label.AddThemeColorOverride("font_color", Colors.Blue);
                 break;
         }
-        InfoLabel.Text = TextEx.TrN($"{item.GetDescription()}");
+        InfoLabel.Text = TextEx.Tr($"{item.GetDescription()}");
         Info.Hide();
         Light.Hide();
         // 点击交互

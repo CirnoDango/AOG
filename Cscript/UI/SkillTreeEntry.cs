@@ -20,8 +20,8 @@ public partial class SkillTreeEntry : TextureRect
     {
         if (G.I.Fsm.currentState != Fsm.SkillTreeState) return;
         if (name == "")
-            G.I.SkillTreeBox.pointText.Text = $"剩余天赋点:{G.I.Player.TalentPoint}";
+            G.I.SkillTreeBox.pointText.Text = $"{Tr("剩余天赋点")}:{G.I.Player.TalentPoint}";
         else
-            G.I.SkillTreeBox.pointText.Text = $"剩余天赋点:{G.I.Player.TalentPoint}\n技能树：{TextEx.Tr($"sg{name}")}";
+            G.I.SkillTreeBox.pointText.Text = $"{Tr("剩余天赋点")}:{G.I.Player.TalentPoint}\n{Tr("技能树")}：{TextEx.Tr($"sg{name}")}";
     }
 }

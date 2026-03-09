@@ -126,7 +126,7 @@ public partial class SkillTreeBox : Control, IRegisterToG
             }
         }
         if (G.I.Fsm.currentState != Fsm.SkillTreeState) return;
-        pointText.Text = $"剩余天赋点:{G.I.Player.TalentPoint}";
+        pointText.Text = $"{Tr("剩余天赋点")}:{G.I.Player.TalentPoint}";
     }
     public void RegisterToG(G g)
     {

@@ -20,7 +20,7 @@ public partial class BcEntry : FlowContainer
 
         // 设置图标、文字
         GetNode<TextureRect>("TextureRect").Texture = item.Texture;
-        GetNode<Label>("Label").Text = TextEx.TrN($"[{item.Weight:F1}] {item.TrName} : {item.GetDescription()}");
+        GetNode<Label>("Label").Text = TextEx.Tr($"[{item.Weight:F1}] {item.TrName} : {item.GetDescription()}");
         GetNode<TextureRect>("TextureRect/Light").Hide();
         // 点击交互
         GuiInput += @event =>

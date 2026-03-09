@@ -11,12 +11,12 @@ public interface IWeapon
     string Description()
     {
         string d = "";
-        d += "=====武器=====\n伤害：";
+        d += $"====={TextEx.Tr("武器")}=====\n{TextEx.Tr("伤害")}：";
         d += BaseDamage().ToString();
         foreach (var kv in Param)
             d += $" + {kv.Value * 100:F0}%{kv.Key.ToUpper()}";
-        d += $"\n命中率：{Accurency * 100:F1}%";
-        d += $"\n暴击率：{CritRate * 100:F1}%\n";
+        d += $"\n{TextEx.Tr("命中率")}：{Accurency * 100:F1}%";
+        d += $"\n{TextEx.Tr("暴击率")}：{CritRate * 100:F1}%\n";
         return d;
     }
     public virtual void OnHit(Unit user, Unit target) { }

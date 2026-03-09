@@ -20,19 +20,17 @@ public partial class Ua : VBoxContainer, IRegisterToG
     [Export]
     public RichTextLabel info;
     private Dictionary<Button, string> buttonHints;
-
     public override void _Ready()
     {
-        //C:\Users\abcde\Documents\gensokyo-simulator\Cscript\Enemy\Ua.cs
-        // 初始化字典
+        
         buttonHints = new Dictionary<Button, string>
         {
-            { str, TranslationServer.Translate("estr") },
-            { dex, TranslationServer.Translate("edex") },
-            { con, TranslationServer.Translate("econ") },
-            { spi, TranslationServer.Translate("espi") },
-            { mag, TranslationServer.Translate("emag") },
-            { cun, TranslationServer.Translate("ecun") },
+            { str, Tr("estr") },
+            { dex, Tr("edex") },
+            { con, Tr("econ") },
+            { spi, Tr("espi") },
+            { mag, Tr("emag") },
+            { cun, Tr("ecun") },
         };
 
         // 为每个按钮注册事件
@@ -46,13 +44,13 @@ public partial class Ua : VBoxContainer, IRegisterToG
 
     public void Refresh()
     {
-        Point.Text = $"剩余属性点:{G.I.Player.UaPoint}";
-        str.Text = $"力量:{Player.PlayerUnit.Ua.Str + 10}";
-        dex.Text = $"敏捷:{Player.PlayerUnit.Ua.Dex + 10}";
-        con.Text = $"体质:{Player.PlayerUnit.Ua.Con + 10}";
-        spi.Text = $"灵力:{Player.PlayerUnit.Ua.Spi + 10}";
-        mag.Text = $"魔力:{Player.PlayerUnit.Ua.Mag + 10}";
-        cun.Text = $"灵巧:{Player.PlayerUnit.Ua.Cun + 10}";
+        Point.Text = $"{Tr("剩余属性点")}:{G.I.Player.UaPoint}";
+        str.Text = $"{Tr("力量")}:{Player.PlayerUnit.Ua.Str + 10}";
+        dex.Text = $"{Tr("敏捷")}:{Player.PlayerUnit.Ua.Dex + 10}";
+        con.Text = $"{Tr("体质")}:{Player.PlayerUnit.Ua.Con + 10}";
+        spi.Text = $"{Tr("灵力")}:{Player.PlayerUnit.Ua.Spi + 10}";
+        mag.Text = $"{Tr("魔力")}:{Player.PlayerUnit.Ua.Mag + 10}";
+        cun.Text = $"{Tr("灵巧")}:{Player.PlayerUnit.Ua.Cun + 10}";
     }
     public void RegisterToG(G g)
     {

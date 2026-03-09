@@ -111,7 +111,7 @@ public class Grid : IInteractable
                 Skill.NameSkill["Move"].Activate(new SkillContext(u, this));
             }
             else
-                Info.Print("你无法移动！");
+                Info.Print("你无法移动");
         }
         else
         {

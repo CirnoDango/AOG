@@ -24,7 +24,7 @@ public partial class SkillTree : Control
     {
         skillNames.Clear();
         name = skilltree;
-        title.Text = TextEx.TrN($"技能组 ：{skilltree}");
+        title.Text = TextEx.Tr($"技能组 ：{skilltree}");
 
         int index = 0;
         foreach (var skill in Skill.SkillDeck)
@@ -105,7 +105,7 @@ public partial class SkillTree : Control
         var si = Player.PlayerUnit.Us.GetSkill(skillName);
         if (si != null && si is SpellCard sc && si.IsActive)
         {
-            Info.Print(TextEx.TrN("激活中的符卡不允许升级！"));
+            Info.Print(TextEx.Tr("激活中的符卡不允许升级！"));
             return;
         }
         var Skill = Player.PlayerUnit.Us.skills.FirstOrDefault(si => si.skill.Name == skillName).skill;

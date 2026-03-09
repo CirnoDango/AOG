@@ -24,7 +24,6 @@ public partial class Mainmenu : Control, IRegisterToG
 
 	public override void _Ready()
 	{
-		TranslationServer.SetLocale("en");
 		choosePlayer.Text = Tr("smChoosePlayer");
 		chooseScene.Text = Tr("smChooseScene");
 		start.Text = Tr("smStart");

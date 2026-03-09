@@ -6,6 +6,7 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
 {
     [Export] public CanvasLayer uilayer;
     [Export] public TextureRect NaturalSpBar;
+    [Export] public Label label;
     private Label hpLabel, spLabel, grazeLabel, mpLabel;
     private ColorRect hpBarBack, spBarBack, mpBarBack;
     private ColorRect hpBar, spBar, mpBar;
@@ -29,7 +30,8 @@ public partial class PlayerStatusBar : VBoxContainer, IRegisterToG
         mpBarBack = GetNode<ColorRect>("MpRow/BarBack");
 
         Visible = true;
-        StatusRow = GetNode("Status"); 
+        StatusRow = GetNode("Status");
+        label.Text = Tr("inputtutorial");
         UpdateStatusUI();
     }
     public void UpdateStatusUI()

@@ -29,7 +29,7 @@ public partial class G : Node
     public override void _Ready()
     {
         I = this;
-
+        TranslationServer.SetLocale("en");
         // 先处理当前已经存在的节点
         foreach (var node in GetTree().Root.GetChildren())
             CheckAndRegisterRecursively(node);

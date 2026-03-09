@@ -41,7 +41,7 @@ public class Interact : Skill
     {
         if (sc.GridOne.InteractableObjects.Count == 0)
         {
-            Info.Print($"{sc.User.TrName} 没有可以互动的对象。");
+            Info.Print($"{sc.User.TrName} 没有可以互动的对象");
             return;
         }
         foreach(IInteractable ii in sc.GridOne.InteractableObjects.ToList())
