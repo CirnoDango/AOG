@@ -119,10 +119,10 @@ public class HealPotion : SkillItem<HealPotion.SHealPotion>
         Weight = 8f;
     }
 
-    public class SHealPotion : Skill
+    public class SHealPotion : SkillFromItem<HealPotion>
     {
         private readonly int _hp;
-        public SHealPotion(HealPotion parent)
+        public SHealPotion(HealPotion parent) : base(parent)
         {
             _hp = parent.HpRecoverPercent;
             Texture = parent.Texture;

@@ -45,7 +45,7 @@ public class SpiralLightSteps : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SSpiralLightSteps(t1[iLevel], 100*t0[iLevel], this));
+        sc.User.GetStatus(new SSpiralLightSteps(t1[iLevel], 100*t0[iLevel], this, sc.Level));
     }
 }
 public class CrimsonEnergyRelease : Skill
@@ -147,91 +147,4 @@ public class DapengFellingFist : SpellCard
     }
 }
 
-public class SSpiralLightSteps : Status
-{
-    private Skill Parent;
-    public float Speed
-    {
-        get => (float)Param;
-        set
-        {
-            Param = value;
-        }
-    }
-    public SSpiralLightSteps(float speed, float duration, Skill parent)
-    {
-        Duration = duration;
-        Speed = speed;
-        Parent = parent;
-    }
-    public override void OnGet(Unit unit, Status status)
-    {
-        unit.Ue.OnUnitMove += MoveDamage;
-        CombineTime(unit, status);
-    }
-    public override void OnQuit(Unit unit)
-    {
-        unit.Ue.OnUnitMove -= MoveDamage;
-        Quit(unit);
-    }
-    public void MoveDamage(Unit unit)
-    {
-        foreach (Unit target in unit.Up.CurrentGrid.NearGrids(2).Where(x => x != unit.Up.CurrentGrid).Select(g => g.unit))
-        {
-            target?.Ua.TakeBulletDamage(new Damage(15, DamageType.sonic), unit, Parent);
-            target?.GetStatus(new Daze(300));
-        }
-    }
-}
-public class SCrimsonEnergyRelease : Status
-{
-    private int level;
-    int[] t0 = [8, 12, 16, 16];
-    public int Layer
-    {
-        get => (int)Param;
-        set
-        {
-            Param = value;
-        }
-    }
-    public SCrimsonEnergyRelease(int l = 1)
-    {
-        Duration = 100;
-        Layer = l;
-    }
-    public override void OnTakeBulletDamage(Unit unit, Skill skill, ref Damage damage)
-    {
-        damage -= damage * t0[level - 1] * Layer / 100f;
-    }
-    public override void OnDealBodyDamage(Unit unit, ref Damage damage)
-    {
-        damage += damage * t0[level - 1] * Layer / 100f;
-    }
-    public override void OnGet(Unit unit, Status status)
-    {
-        foreach (var s in unit.Status)
-        {
-            if (s.Name == Name)
-            {
-                s.Param += ((SCrimsonEnergyRelease)status).Layer;
-                s.Param = Math.Min(s.Param, 10);
-                return;
-            }
-        }
-        Get(unit);
-        unit.Status.Add(status);
-        ((SCrimsonEnergyRelease)status).level =
-            unit.Us.skills.FirstOrDefault(x => x.skill.Name == "CrimsonEnergyRelease").skill.Level;
-    }
-    public override void OnQuit(Unit unit)
-    {
-        if (level == 4 || Layer > 2)
-        {
-            Layer -= 2;
-            Duration += 100;
-        }
-        else
-            Quit(unit);
-    }
-}
+

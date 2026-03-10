@@ -43,11 +43,10 @@ public class BarrageSet : SkillItem<BarrageSet.SBarrageSet>
     {
         Params["barrage"] = Barrage.GetParam(B);
     }
-
-    public class SBarrageSet : Skill
+    public class SBarrageSet : SkillFromItem<BarrageSet>
     {
         private readonly Barrage _BarrageSet;
-        public SBarrageSet(BarrageSet parent)
+        public SBarrageSet(BarrageSet parent) : base(parent)
         {
             SkillGroup = "Item";
             Description = "发射弹幕";

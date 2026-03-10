@@ -60,7 +60,12 @@ public abstract partial class Item : IInteractable, IEquipable
             s += $"\n{TextEx.Tr($"is{Name}")}\n";
         }
         else
-            s = TextEx.Tr($"id{Name}") + "\n";
+        {
+            var v = TextEx.Tr($"id{Name}");
+            if (v != "null")
+                s = TextEx.Tr($"id{Name}") + "\n";
+        }
+            
         if (this is IWeapon iw)
             s += iw.Description();
         foreach (var e in egos)
@@ -190,8 +195,10 @@ public abstract class SkillItem<TSkill> : SkillItem
         Skill = (TSkill)Activator.CreateInstance(typeof(TSkill), this);
     }
 }
-
-public abstract class SkillFromItem<TItem> : Skill
+public abstract class SkillFromItem : Skill
+{
+}
+public abstract class SkillFromItem<TItem> : SkillFromItem
     where TItem : SkillItem
 {
     protected SkillFromItem(TItem parent)

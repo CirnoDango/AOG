@@ -77,6 +77,8 @@ public class TargetRuleAny : ITargetRule
     public bool MapClick => true;
     public HighlightType CheckSkillTarget(Unit user, Grid target, Skill skill)
     {
+        if(user.Up.CurrentGrid == target)
+            return HighlightType.blue;
         return HighlightType.green;
     }
     public SkillContext GetSc(Unit user, Grid target)

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 public abstract class Skill
 {
     // 以下为技能组、技能名组、激活技能静态属性
@@ -109,7 +110,10 @@ public abstract class Skill
         string text = "";
         if (IsSpellCard())
             text += $"【{TextEx.Tr("符卡")}】";
-        text += $"{TextEx.Tr(TrName)}\n";
+        if (this is not SkillFromItem)
+            text += $"{TextEx.Tr(TrName)}\n";
+        else
+            text += $"{TextEx.Tr(Name.StartsWith('S') ? "i" + Name[1..] : Name)}\n";
         switch (EffectType)
         {
             case EffectType.Activate:

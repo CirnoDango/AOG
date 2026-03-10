@@ -58,7 +58,7 @@ public class DreamOrb : Skill
                 Vector2.Right.Rotated(a / 57.3f), a, (float)GD.RandRange(3f, 4f)
                 ,t0[iLevel], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
         }
-        sc.User.GetStatus(new YinyangBall(t2[iLevel]));
+        sc.User.GetStatus(new YinyangBall(sc.User, t2[iLevel]));
     }
 }
 public class TreasureOrb : Skill
@@ -82,7 +82,7 @@ public class TreasureOrb : Skill
             turnCount++;
             if (turnCount >= 5)
             {
-                unit.GetStatus(new YinyangBall(1));
+                unit.GetStatus(new YinyangBall(unit, 1));
                 turnCount -= 5;
             }
         };
@@ -133,7 +133,7 @@ public class LightToShade : Skill
     {
         if (sc.Level == 4 && bullet.Shape == ShapeBullet.Yinyang)
         {
-            sc.User.GetStatus(new YinyangBall(1));
+            sc.User.GetStatus(new YinyangBall(sc.User, 1));
         }
     }
 }
@@ -195,8 +195,6 @@ public class DreamSeal : SpellCard
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        sc.User.GetStatus(new YinyangBall(2));
-        sc.User.GetStatus(new YinyangBall(2));
         AddTimedEvent(Linspace(20, GetDuration(), t0[iLevel]), (ctx, advanceTime) =>
         {
             var bullet = Bullet.CreateBullet(sc.User, this, new Damage(22, DamageType.strike), sc.User.Up.Position, sc.User.Up.Position + RandomV2(), 
@@ -205,7 +203,7 @@ public class DreamSeal : SpellCard
         });
         AddTimedEvent(Linspace(0, GetDuration() - 100, (int)GetDuration()/100), (ctx, advanceTime) =>
         {
-            sc.User.GetStatus(new YinyangBall());
+            sc.User.GetStatus(new YinyangBall(sc.User, 1));
         });
     }
     public override void ActivateBullet(SkillContext sc, Bullet bullet)
