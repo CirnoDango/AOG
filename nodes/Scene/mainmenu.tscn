@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bwf2ipfqc7iok" path="res://Cscript/UI/Mainmenu.cs" id="1_giku7"]
 [ext_resource type="Script" uid="uid://bdifnuttc7a03" path="res://Nodes/Scene/Selecter.cs" id="2_bf03f"]
-[ext_resource type="Texture2D" uid="uid://dg0vhbuuvtiqp" path="res://Assets/Sprites/cirno.png" id="4_vy6a5"]
+[ext_resource type="Texture2D" uid="uid://dtg6folfpn0j7" path="res://Assets/Sprites/cirno.png" id="4_vy6a5"]
 
 [node name="Mainmenu" type="Control" unique_id=1738170210 node_paths=PackedStringArray("OptionPlayer", "OptionScene", "Image", "start", "Info", "choosePlayer", "chooseScene")]
 layout_mode = 3

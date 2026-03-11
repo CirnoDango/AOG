@@ -57,6 +57,7 @@ public abstract class Status
                 AnchorBottom = 1.0f,
                 PivotOffset = new Vector2(200, 200), // 原点从中心偏移到左上角
                 Position = new Vector2(-200, -200),   // 相对于右下角向左上偏移200
+                Modulate = new Color(0, 1, 0)
             };
             label.AddThemeFontSizeOverride("font_size", 200);
             s.AddChild(label);
@@ -73,7 +74,7 @@ public abstract class Status
                     AnchorBottom = 1.0f,
                     PivotOffset = new Vector2(200, 200),
                     Position = new Vector2(-200, -200),
-                    Modulate = new Color(1, 1, 0)
+                    Modulate = new Color(0, 0.6f, 1)
                 };
                 param.AddThemeFontSizeOverride("font_size", 200);
                 s.AddChild(param);
@@ -92,8 +93,10 @@ public abstract class Status
         }
         string path = $"res://Assets/Status/{Name}Map.png";
         Texture2D texture = null;
-        texture = GD.Load<Texture2D>(path);
-        if (texture == null)
+
+        if (ResourceLoader.Exists(path))
+            texture = GD.Load<Texture2D>(path);
+        else
             return;
         var sprite = new Sprite2D
         {

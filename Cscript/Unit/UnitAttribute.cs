@@ -401,28 +401,31 @@ public class UnitAttribute(Unit unit)
     }
     public string Description()
     {
-        string text = $@"{_parent.Name}
-HP:{CurrentHp:F0}/{MaxHp:F0}
-SP:{CurrentSp:F0}/{MaxSp:F0}
-MP:{CurrentMp:F0}/{MaxMp:F0}
-力量 :{Str + 10}  敏捷 :{Dex + 10}  体质 :{Con + 10} 
-灵力 :{Spi + 10}  魔力 :{Mag + 10}  灵巧 :{Cun + 10}
-体术命中 :{BodyDamageAccuracy * 100:F1}  弹幕命中 :{BulletDamageAccuracy * 100:F1}
-闪避 :{DamageEvasion * 100:F1}  擦弹 :{BulletGraze * 100:F1}
-当前状态:";
-        foreach (Status s in _parent.Status)
+        string text1 =
+        $"{TextEx.Tr(unit.TrName)}\n" +
+        $"HP:{unit.Ua.CurrentHp:F0}/{unit.Ua.MaxHp:F0}\n" +
+        $"SP:{unit.Ua.CurrentSp:F0}/{unit.Ua.MaxSp:F0}\n" +
+        $"MP:{unit.Ua.CurrentMp:F0}/{unit.Ua.MaxMp:F0}\n" +
+        $"{TextEx.Tr("当前状态")}: ";
+
+        foreach (Status s in unit.Status)
         {
-            text += $"{s.Name}({(s.Duration / 100):F0}回合)；";
+            text1 += $"{s.TrName}({(s.Duration / 100):F0} {TextEx.Tr("回合")} )；";
         }
-        if (_parent.Status.Count == 0)
-            text += "无";
-        text += "\n持有技能：\n";
-        foreach ((Skill si, _) in _parent.Us.skills)
-        {
-            if (si.SkillGroup != "")
-                text += $"{si.Name}\n";
-        }
-        return text;
+
+        if (unit.Status.Count == 0)
+            text1 += $" {TextEx.Tr("无")} ";
+        string text2 =
+        $"\n{TextEx.Tr("力量")} :{unit.Ua.Str + 10}  {TextEx.Tr("敏捷")} :{unit.Ua.Dex + 10}  {TextEx.Tr("体质")} :{unit.Ua.Con + 10}\n" +
+        $"{TextEx.Tr("灵力")} :{unit.Ua.Spi + 10}  {TextEx.Tr("魔力")} :{unit.Ua.Mag + 10}  {TextEx.Tr("灵巧")} :{unit.Ua.Cun + 10}\n" +
+        $"{TextEx.Tr("体术命中")} :{unit.Ua.BodyDamageAccuracy * 100:F1}  {TextEx.Tr("弹幕命中")} :{unit.Ua.BulletDamageAccuracy * 100:F1}\n" +
+        $"{TextEx.Tr("闪避")} :{unit.Ua.DamageEvasion * 100:F1}  {TextEx.Tr("擦弹")} :{unit.Ua.BulletGraze * 100:F1}\n" +
+        $"{TextEx.Tr("体术伤害")} :{unit.Ua.DamageBody:F1}%\n" +
+        $"{TextEx.Tr("弹幕伤害")} :{unit.Ua.DamageBullet:F1}%\n" +
+        $"{TextEx.Tr("整体速度")} :{unit.Ua.SpeedGlobal:F1}%\n" +
+        $"{TextEx.Tr("战斗速度")} :{unit.Ua.SpeedCombat:F1}%\n" +
+        $"{TextEx.Tr("移动速度")} :{unit.Ua.SpeedMove:F1}%\n";
+        return text1 + text2;
     }
 }
 

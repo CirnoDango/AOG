@@ -105,7 +105,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
             if (skill.CurrentCooldown > 0)
             {
                 label.Text = Math.Ceiling(skill.CurrentCooldown / 100).ToString();
-                label.Modulate = new Color(1,0,0);
+                label.Modulate = new Color(0, 1, 0);
             }
             else
             {

@@ -23,8 +23,8 @@ public class BulletModule : BarrageComponent
     }
     public override string GetDescription()
     {
-        return $"{bulletContext.Color} {bulletContext.Shape}子弹\n" +
-            $"伤害：{bulletContext.damage:F1}\n速度：{bulletContext.Speed:F1}\n距离：{bulletContext.MaxDistance:F1}";
+        return $"{bulletContext.Color} {bulletContext.Shape}\n" +
+            $"{TextEx.Tr("伤害")}：{bulletContext.damage:F1}\n{TextEx.Tr("速度")}：{bulletContext.Speed:F1}\n{TextEx.Tr("距离")}：{bulletContext.MaxDistance:F1}";
     }
     public override void Activate(ref List<BulletContext> lbc)
     {

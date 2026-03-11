@@ -9,19 +9,19 @@
 [ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="7_ofgj4"]
 [ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_7yoxt"]
 [ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="9_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://dammrg4jau5wt" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
+[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
 [ext_resource type="Texture2D" uid="uid://bt5ubtyqa4u36" path="res://Assets/UI/NaturalSpBar.png" id="10_mdtu7"]
-[ext_resource type="Texture2D" uid="uid://bdgfqw1cq5la5" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
+[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
 [ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xcvs3"]
 [ext_resource type="Texture2D" uid="uid://bbs3tfde7aewc" path="res://Assets/UI/close.png" id="13_7yoxt"]
-[ext_resource type="Texture2D" uid="uid://3n4chuooyuju" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
+[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
 [ext_resource type="Script" uid="uid://v7xido03yjql" path="res://Cscript/UI/CloseButton.cs" id="14_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://bqsexx0ejbclj" path="res://Assets/UI/equip.png" id="14_urhty"]
-[ext_resource type="Texture2D" uid="uid://wb0l3wje15ad" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
-[ext_resource type="Texture2D" uid="uid://bdy4fs4xuvfor" path="res://Assets/UI/throw.png" id="16_68pdb"]
+[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://Assets/UI/equip.png" id="14_urhty"]
+[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
+[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://Assets/UI/throw.png" id="16_68pdb"]
 [ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="17_hast1"]
 [ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="18_tk42s"]
-[ext_resource type="Texture2D" uid="uid://yvuvgmbyeb30" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
+[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
 [ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/UI/Ua.cs" id="20_5umwx"]
 [ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="21_hxw1y"]
 [ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://Nodes/Scene/SkillTree.tscn" id="22_r3qqj"]
@@ -36,7 +36,8 @@
 [ext_resource type="Script" uid="uid://ixn26ady8a3r" path="res://Cscript/UI/SkillTreeBox.cs" id="28_c2j4f"]
 [ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="28_nc36h"]
 [ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="29_ol46v"]
-[ext_resource type="Texture2D" uid="uid://cf68l0a4lmywo" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
+[ext_resource type="Script" uid="uid://lfof4tj5u6nv" path="res://Cscript/UI/SettingMenu.cs" id="30_dlj3q"]
+[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
 [ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="32_1gorf"]
 [ext_resource type="TileSet" uid="uid://sd4of61ejnal" path="res://Other/Resource/tileResource.tres" id="33_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://Nodes/Ui/ItemDropped.tscn" id="33_giel3"]
@@ -193,10 +194,11 @@ text = "100"
 [node name="Label" type="Label" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=1175531311]
 custom_minimum_size = Vector2(4800, 648)
 layout_mode = 2
-theme_override_font_sizes/font_size = 160
+theme_override_font_sizes/font_size = 200
 text = "直向移动：WASD,num2468      斜线移动：QEZC,num1379
-装备栏：I         记忆栏：M         弹幕栏：O        休息：space,num5
-技能栏：K        能力栏：B          天赋树：T        拾取：G     下楼：↓"
+装备栏：I         记忆栏：M         弹幕栏：O        
+休息：space,num5          技能栏：K        能力栏：B          
+天赋树：T        拾取：G     下楼：↓"
 autowrap_mode = 2
 
 [node name="Status" type="HBoxContainer" parent="UI/UiRoot/InfoPanel/PlayerStatusBar" unique_id=139083883]
@@ -243,7 +245,7 @@ layout_mode = 0
 offset_top = 7261.0
 offset_right = 4800.0
 offset_bottom = 10800.0
-theme_override_font_sizes/font_size = 160
+theme_override_font_sizes/font_size = 200
 autowrap_mode = 2
 
 [node name="fps" type="Label" parent="UI/UiRoot" unique_id=1730787130]
@@ -296,7 +298,7 @@ expand_mode = 5
 
 [node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer" unique_id=718823479]
 layout_mode = 2
-theme_override_font_sizes/font_size = 300
+theme_override_font_sizes/font_size = 200
 text = "535
 543
 543"
@@ -307,7 +309,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer2" unique_id=1963808869]
 layout_mode = 2
-theme_override_font_sizes/font_size = 300
+theme_override_font_sizes/font_size = 200
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer" unique_id=779671524]
 custom_minimum_size = Vector2(5500, 0)
@@ -315,7 +317,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/UiRoot/CombatAbilityBox/HBoxContainer/VBoxContainer3" unique_id=172204978]
 layout_mode = 2
-theme_override_font_sizes/font_size = 150
+theme_override_font_sizes/font_size = 200
 text = "535
 543
 543"
@@ -711,7 +713,7 @@ visible = false
 z_index = 1001
 layout_mode = 1
 
-[node name="PauseMenu" type="ColorRect" parent="UI/UiRoot" unique_id=833250350 node_paths=PackedStringArray("ResumeButton", "DebugButton", "RestartButton", "ExitButton", "DebugMenu")]
+[node name="PauseMenu" type="ColorRect" parent="UI/UiRoot" unique_id=833250350 node_paths=PackedStringArray("ResumeButton", "DebugButton", "RestartButton", "ExitButton", "DebugMenu", "tResume", "tRestart", "tDebug", "tExit", "tBack")]
 visible = false
 z_index = 2000
 layout_mode = 0
@@ -726,6 +728,11 @@ DebugButton = NodePath("VBoxContainer/Button2")
 RestartButton = NodePath("VBoxContainer/Button3")
 ExitButton = NodePath("VBoxContainer/Button5")
 DebugMenu = NodePath("DebugMenu")
+tResume = NodePath("VBoxContainer/Button/Label")
+tRestart = NodePath("VBoxContainer/Button3/Label")
+tDebug = NodePath("VBoxContainer/Button2/Label")
+tExit = NodePath("VBoxContainer/Button5/Label")
+tBack = NodePath("SettingMenu/Button5/Label")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/PauseMenu" unique_id=119241442]
 custom_minimum_size = Vector2(3000, 6000)
@@ -962,7 +969,161 @@ theme_override_font_sizes/font_size = 400
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BarrageBox" type="Control" parent="UI/UiRoot" unique_id=954789483 node_paths=PackedStringArray("BarrageList", "BagList", "equipNumber", "bagNumber")]
+[node name="SettingMenu" type="ColorRect" parent="UI/UiRoot/PauseMenu" unique_id=149178349 node_paths=PackedStringArray("language", "fps", "fpts", "fptq", "tfps", "tfpts", "tfptq", "bback")]
+visible = false
+z_index = 2000
+layout_mode = 0
+offset_right = 10000.0
+offset_bottom = 6000.0
+color = Color(0.310617, 0.310617, 0.310617, 1)
+script = ExtResource("30_dlj3q")
+language = NodePath("VBoxContainer/HBoxContainer/OptionButton")
+fps = NodePath("OptionButton")
+fpts = NodePath("OptionButton2")
+fptq = NodePath("OptionButton3")
+tfps = NodePath("VBoxContainer/HBoxContainer2/Label2")
+tfpts = NodePath("VBoxContainer/HBoxContainer3/Label2")
+tfptq = NodePath("VBoxContainer/HBoxContainer4/Label2")
+bback = NodePath("Button5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/UiRoot/PauseMenu/SettingMenu" unique_id=1918812500]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 500.0
+offset_right = 9000.0
+offset_bottom = 5500.0
+theme_override_constants/separation = 200
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer" unique_id=1519705329]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer" unique_id=1794761616]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "Language  "
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer" unique_id=1775245759]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+selected = 1
+item_count = 2
+popup/item_0/text = "中文"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer" unique_id=1640335338]
+layout_mode = 2
+theme_override_constants/separation = 2200
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer2" unique_id=1094822788]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "Frame per Second"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer2" unique_id=29719774]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "240"
+vertical_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer" unique_id=108949312]
+layout_mode = 2
+theme_override_constants/separation = 2200
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer3" unique_id=2145326076]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "Frame per Turn (Slow)"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer3" unique_id=424132310]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "100"
+vertical_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer" unique_id=542015810]
+layout_mode = 2
+theme_override_constants/separation = 2200
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer4" unique_id=1084443341]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "Frame per Turn (Quick)"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/VBoxContainer/HBoxContainer4" unique_id=603880204]
+layout_mode = 2
+theme_override_font_sizes/font_size = 400
+text = "5"
+vertical_alignment = 1
+
+[node name="Button5" type="Button" parent="UI/UiRoot/PauseMenu/SettingMenu" unique_id=1004613614]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 3459.9998
+offset_top = 4789.9995
+offset_right = 6460.0
+offset_bottom = 5789.9995
+
+[node name="Label" type="Label" parent="UI/UiRoot/PauseMenu/SettingMenu/Button5" unique_id=1806542498]
+custom_minimum_size = Vector2(3000, 1000)
+layout_mode = 0
+offset_left = 0.000610352
+offset_top = -10.0
+offset_right = 3000.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 400
+text = "返回"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OptionButton" type="HSlider" parent="UI/UiRoot/PauseMenu/SettingMenu" unique_id=468231880]
+layout_mode = 0
+offset_left = 4250.0
+offset_top = 1189.9999
+offset_right = 4450.0
+offset_bottom = 1205.9999
+scale = Vector2(10, 10)
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.0
+min_value = 30.0
+max_value = 600.0
+step = 10.0
+value = 240.0
+
+[node name="OptionButton2" type="HSlider" parent="UI/UiRoot/PauseMenu/SettingMenu" unique_id=1290704081]
+layout_mode = 0
+offset_left = 4810.0
+offset_top = 1819.9999
+offset_right = 5010.0
+offset_bottom = 1835.9999
+scale = Vector2(10, 10)
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.0
+min_value = 10.0
+max_value = 400.0
+step = 10.0
+value = 100.0
+
+[node name="OptionButton3" type="HSlider" parent="UI/UiRoot/PauseMenu/SettingMenu" unique_id=661362302]
+layout_mode = 0
+offset_left = 5040.0
+offset_top = 2410.0
+offset_right = 5240.0
+offset_bottom = 2426.0
+scale = Vector2(10, 10)
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.0
+min_value = 2.0
+max_value = 20.0
+value = 5.0
+
+[node name="BarrageBox" type="Control" parent="UI/UiRoot" unique_id=954789483 node_paths=PackedStringArray("BarrageList", "BagList", "equipNumber", "bagNumber", "info")]
 visible = false
 z_index = 100
 anchors_preset = 0
@@ -972,11 +1133,12 @@ script = ExtResource("25_v0yyt")
 barrageSetBox = ExtResource("26_bhrns")
 BarrageList = NodePath("VBoxContainer")
 BagList = NodePath("FlowContainer2")
-equipNumber = NodePath("Label3")
-bagNumber = NodePath("Label2")
+equipNumber = NodePath("equip")
+bagNumber = NodePath("bag")
+info = NodePath("info")
 BcEntryScene = ExtResource("27_a3p61")
 
-[node name="Label3" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1918580281]
+[node name="equip" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1918580281]
 layout_mode = 0
 offset_left = 750.0
 offset_top = 1090.0
@@ -986,14 +1148,22 @@ theme_override_font_sizes/font_size = 300
 text = "Equip: 0/0"
 horizontal_alignment = 1
 
+[node name="info" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1909866754]
+layout_mode = 0
+offset_left = 9750.0
+offset_top = 7600.0
+offset_right = 17750.0
+offset_bottom = 9600.0
+theme_override_font_sizes/font_size = 300
+
 [node name="FlowContainer2" type="FlowContainer" parent="UI/UiRoot/BarrageBox" unique_id=1547943774]
 layout_mode = 0
 offset_left = 9750.0
 offset_top = 1600.0
 offset_right = 17750.0
-offset_bottom = 9600.0
+offset_bottom = 7600.0
 
-[node name="Label2" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1101187645]
+[node name="bag" type="Label" parent="UI/UiRoot/BarrageBox" unique_id=1101187645]
 layout_mode = 0
 offset_left = 11970.0
 offset_top = 990.0
@@ -1145,12 +1315,13 @@ script = ExtResource("34_ktiqe")
 visible = false
 anchor_mode = 0
 
-[node name="HighlightManager" type="Node2D" parent="." unique_id=1649234056]
+[node name="HighlightManager" type="Node2D" parent="." unique_id=1649234056 node_paths=PackedStringArray("unitInfo")]
 script = ExtResource("35_700qy")
 highlightBlue = ExtResource("36_7nmk8")
 highlightGreen = ExtResource("37_w6faq")
 highlightRed = ExtResource("38_roil7")
 highlightYellow = ExtResource("39_fasdi")
+unitInfo = NodePath("../UI/UiRoot/InfoPanel/SkillInfo")
 
 [node name="Label" type="Label" parent="." unique_id=92523995]
 offset_left = 27.0

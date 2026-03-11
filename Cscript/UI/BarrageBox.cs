@@ -18,6 +18,8 @@ public partial class BarrageBox : Control, IRegisterToG
     [Export]
     public Label bagNumber;
     [Export]
+    public Label info;
+    [Export]
     public PackedScene BcEntryScene;
     public TextureButton EquipButton;
     public TextureRect EquipLight;

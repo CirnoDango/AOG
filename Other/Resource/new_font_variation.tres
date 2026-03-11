@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://decgaid2tvxkv"]
+
+[ext_resource type="FontFile" uid="uid://biitdjtcl1phq" path="res://Assets/Font/TjfPastaRegular-3lRDz.ttf" id="1_ga8ni"]
+[ext_resource type="FontFile" uid="uid://dimit6fhxmd12" path="res://Assets/Font/WenQuanYiBitmapSong16px.ttf" id="2_ei2dd"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_ei2dd")])
+base_font = ExtResource("1_ga8ni")

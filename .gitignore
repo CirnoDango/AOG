@@ -2,6 +2,7 @@
 .godot/
 .vs/
 
+*.cfg
 *.tmp
 *.log
 *.user

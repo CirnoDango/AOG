@@ -14,6 +14,11 @@ public partial class PauseMenu : ColorRect
     public Button ExitButton;
     [Export]
     public Control DebugMenu;
+    [Export] Label tResume;
+    [Export] Label tRestart;
+    [Export] Label tDebug;
+    [Export] Label tExit;
+    [Export] Label tBack;
     public override void _Ready()
     {
         ResumeButton.Pressed += OnResumePressed;
@@ -21,6 +26,11 @@ public partial class PauseMenu : ColorRect
         RestartButton.Pressed += OnRestartPressed;
         ExitButton.Pressed += OnExitPressed;
         Hide();
+        tResume.Text = Tr("smContinue");
+        tRestart.Text = Tr("smRestart");
+        tDebug.Text = Tr("smOptions");
+        tExit.Text = Tr("smQuit");
+        tBack.Text = Tr("smBack");
     }
     public override void _Input(InputEvent @event)
     {
@@ -42,6 +52,7 @@ public partial class PauseMenu : ColorRect
     }
     private void OnDebugPressed()
     {
+        G.I.SettingMenu.Visible = true;
         //DebugMenu.Visible = !DebugMenu.Visible;
     }
     private void OnRestartPressed()

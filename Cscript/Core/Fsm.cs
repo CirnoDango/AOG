@@ -78,8 +78,8 @@ public partial class Fsm : Node, IRegisterToG
     // 示例：初始化
     public override void _Ready()
     {
-        Engine.MaxFps = 240;
         
+        Engine.MaxFps = Setting.FPS;
         StartState = new StartState(this);
         PlayerSkillState = new PlayerSkillState(this);
         PlayerSkillTargetState = new PlayerSkillTargetState(this);
@@ -155,6 +155,10 @@ public class PlayerSkillState(Fsm fsm) : GameState(fsm), IGameState
     {
         G.I.SkillBar.UpdateSkillCooldowns();
     }
+    public override void Update()
+    {
+        G.I.HighlightManager.InfoProcess();
+    }
     public void HandleInput(InputEvent input)
     {
         OnInput?.Invoke(input);
@@ -164,6 +168,7 @@ public class PlayerSkillTargetState(Fsm fsm) : GameState(fsm), IGameState
 {
     public override void Update()
     {
+        G.I.HighlightManager.InfoProcess();
         G.I.HighlightManager.Process();
     }
 }

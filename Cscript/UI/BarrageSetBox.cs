@@ -25,10 +25,8 @@ public partial class BarrageSetBox : VBoxContainer
         {
             var item = b.Components[i];
             var entry = G.I.BarrageBox.BcEntryScene.Instantiate<TextureButton>();
-            if (item != null)
-            {
-                entry.TooltipText = item.GetDescription();
-            }
+            entry.MouseEntered += () => { if (item != null) G.I.BarrageBox.info.Text = item.GetDescription(); };
+            entry.MouseExited += () => G.I.BarrageBox.info.Text = "";
             entry.Pressed += () => G.I.BarrageBox.OnSlotClicked(this, entry);
             if (item != null)
             {

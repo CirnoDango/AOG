@@ -20,7 +20,6 @@ public partial class SpriteManager : Node
         unit.Ua.imageSizeFactor = sprite.Scale.Y;
         var tip_area = new DynamicTooltipPanel
         {
-            TooltipSource = unit.Ua.Description,
             Size = sprite.Texture.GetSize(), // sprite.Scale,
             Modulate = new Color(1, 1, 1, 0)
         };

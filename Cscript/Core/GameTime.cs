@@ -7,9 +7,9 @@ public static class GameTime
 {
     public static Queue<Unit> Update()
     {
-        float updateTime = 1f;
+        float updateTime = 100f / Setting.FPTS;
         if (CurrentMap.Bullets.Count == 0)
-            updateTime = 20;
+            updateTime = 100f / Setting.FPTQ;
         Queue<Unit> activeUnit = new();
         foreach (Unit u in CurrentMap.WakeUnits)
         {

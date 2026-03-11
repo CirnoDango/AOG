@@ -26,10 +26,27 @@ public partial class G : Node
     public SpellcardBox SpellcardBox { get; set; }
     public AnimationManager AnimationManager { get; set; }
     public Mainmenu Mainmenu { get; set; }
+    public SettingMenu SettingMenu { get; set; }
     public override void _Ready()
     {
+        Setting.LoadSettings();
         I = this;
-        TranslationServer.SetLocale("zh");
+        // 语言与字体
+        var theme = new Theme();
+        var lgg = Setting.Language;
+        switch(lgg)
+        {
+            case "中文":
+                TranslationServer.SetLocale("zh");
+                //theme.SetDefaultFont(GD.Load<FontFile>("res://Assets/Font/ark-pixel-16px-proportional-zh_cn.ttf"));
+                break;
+            case "English":
+            default:
+                TranslationServer.SetLocale("en");
+                //theme.SetDefaultFont(GD.Load<FontFile>("res://Assets/Font/TjfPastaRegular-3lRDz.ttf"));
+                break;
+        }
+        GetTree().Root.Theme = theme;
         // 先处理当前已经存在的节点
         foreach (var node in GetTree().Root.GetChildren())
             CheckAndRegisterRecursively(node);
@@ -72,6 +89,7 @@ public partial class G : Node
         Mainmenu = null;
         SpellcardBox = null;
         //Scene.CurrentMap = null;
+        SettingMenu=null;
         GameTime.Reset();
     }
 }

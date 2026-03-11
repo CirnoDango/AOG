@@ -287,7 +287,7 @@ public class SPerfectSquare : Status
     }
     public override string GetDescription()
     {
-        return string.Format(base.GetDescription(), Speedup, Speeddown, AccDown);
+        return string.Format(base.GetDescription(), Speedup, Range, Speeddown, AccDown);
     }
     public override void OnGet(Unit unit, Status status)
     {

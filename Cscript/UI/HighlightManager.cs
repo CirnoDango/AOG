@@ -15,11 +15,13 @@ public partial class HighlightManager : Node2D, IRegisterToG
     public PackedScene highlightRed;
     [Export]
     public PackedScene highlightYellow;
-
+    [Export]
+    public Label unitInfo;
     private List<Node2D> activeHighlights = [];
 
     private static bool isTargeting = false;
     public Vector2I showingTileWorldPos;
+    private Vector2I lastGrid = new(-999, -999);
     public override void _Input(InputEvent @event)
     {
         if (!isTargeting)
@@ -44,12 +46,24 @@ public partial class HighlightManager : Node2D, IRegisterToG
 
         }
     }
+    public void InfoProcess()
+    {
+        Vector2 mouseWorldPos = GetGlobalMousePosition();
+        Vector2I tileWorldPos = MapToGrid(mouseWorldPos);
+        if (tileWorldPos != lastGrid)
+        {
+            OnMouseExit();
+            OnMouseEnter(tileWorldPos);
+            lastGrid = tileWorldPos;
+        }
+    }
     public void Process()
     {
         if (!isTargeting || Skill.CurrentSkill == null) { ClearHighlights(); return; }
-        // 获取鼠标的世界坐标
         Vector2 mouseWorldPos = GetGlobalMousePosition();
         Vector2I tileWorldPos = MapToGrid(mouseWorldPos);
+        // 获取鼠标的世界坐标
+
         if (showingTileWorldPos == tileWorldPos)
             return;
         showingTileWorldPos = tileWorldPos;
@@ -62,6 +76,18 @@ public partial class HighlightManager : Node2D, IRegisterToG
         Vector2I screenPos = new((int)(screenPosf.X + 8*Setting.rootnodeScale), (int)(screenPosf.Y + 8 * Setting.rootnodeScale));
         Vector2I gridPos = screenPos / (int)(16 * Setting.rootnodeScale);
         return gridPos;
+    }
+    void OnMouseEnter(Vector2I grid)
+    {
+        if(Scene.CurrentMap.GetGrid(grid) != null && Scene.CurrentMap.GetGrid(grid).unit != null)
+            unitInfo.Text = Scene.CurrentMap.GetGrid(grid).unit.Ua.Description();
+        else
+            unitInfo.Text = "";
+    }
+
+    void OnMouseExit()
+    {
+        unitInfo.Text = "";
     }
     public void ShowHighlights(List<Vector2I> tilePositions, HighlightType color, int yellowRange = 0)
     {
