@@ -91,7 +91,7 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_unhappy"),
-            "你的地盘？这可不是什么“琪露诺领土”，我只是来找个地方练练手。")
+            "你的地盘？这又不是什么琪露诺专属领土，我只是来找个地方练练手。")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("琪露诺", LoadPortrait("cirno_fight_happy"),
@@ -200,11 +200,7 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "先通过擦弹积累SP值，然后发动技能将对手干掉！或者原地休息一回合也可以调整SP值")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "具体来说，按5或F的休息是使灵力消散，减少SP。而按0或者空格的休息则是聚集灵力，增加SP！")
+            "先通过擦弹积累SP值，然后发动技能将对手干掉！")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
@@ -217,7 +213,7 @@ public partial class Tutorial : Node
         ]); await Click();
         DialogBox.SHide();
         GameEvents.OnEnemyKilled += OnEnemyKilled;
-        var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(12, 16), "dangoPea", UnitEgo.normal, 0, false);
+        var d2 = Scene.CurrentMap.CreateEnemy(new Vector2I(6, 9), "dangoPea", UnitEgo.normal, 0, false);
         Player.PlayerUnit.Ua.BodyDamageAccuracy -= 10;
         d2.Inventory.AddItem(Item.CreateItem("PowerBlock", 1));
         await dangodie(); DialogBox.SShow();
@@ -250,15 +246,11 @@ public partial class Tutorial : Node
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "符卡是一种强大的持续数个回合的技能，需要非常高的SP值才能发动！")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("魔理沙", LoadPortrait("marisa_fight_happy"),
-            "发动符卡之后，每回合会持续消耗SP值，SP的回复会停止，此时擦弹也不再使SP增加，而是减少！")
+            "符卡是一种强大的持续数个回合的技能，需要花费大量SP值才能发动！")
         ]); await Click();
         G.I.DialogBox.ShowDialog([
             new("魔理沙", LoadPortrait("marisa_fight_confident"),
-            "如果在符卡发动中受到太多弹幕伤害，SP降至零的话，符卡就会被击破！" +
+            "如果在符卡发动中受到太多弹幕伤害，符卡耐久降至零的话，符卡就会被击破！" +
             "不仅符卡效果中断，而且被击破者会受到大量HP伤害！")
         ]); await Click();
         G.I.DialogBox.ShowDialog([

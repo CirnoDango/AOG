@@ -402,29 +402,29 @@ public class UnitAttribute(Unit unit)
     public string Description()
     {
         string text1 =
-        $"{TextEx.Tr(unit.TrName)}\n" +
-        $"HP:{unit.Ua.CurrentHp:F0}/{unit.Ua.MaxHp:F0}\n" +
-        $"SP:{unit.Ua.CurrentSp:F0}/{unit.Ua.MaxSp:F0}\n" +
-        $"MP:{unit.Ua.CurrentMp:F0}/{unit.Ua.MaxMp:F0}\n" +
+        $"{TextEx.Tr(_parent.TrName)}\n" +
+        $"HP:{_parent.Ua.CurrentHp:F0}/{_parent.Ua.MaxHp:F0}\n" +
+        $"SP:{_parent.Ua.CurrentSp:F0}/{_parent.Ua.MaxSp:F0}\n" +
+        $"MP:{_parent.Ua.CurrentMp:F0}/{_parent.Ua.MaxMp:F0}\n" +
         $"{TextEx.Tr("当前状态")}: ";
 
-        foreach (Status s in unit.Status)
+        foreach (Status s in _parent.Status)    
         {
             text1 += $"{s.TrName}({(s.Duration / 100):F0} {TextEx.Tr("回合")} )；";
         }
 
-        if (unit.Status.Count == 0)
+        if (_parent.Status.Count == 0)
             text1 += $" {TextEx.Tr("无")} ";
         string text2 =
-        $"\n{TextEx.Tr("力量")} :{unit.Ua.Str + 10}  {TextEx.Tr("敏捷")} :{unit.Ua.Dex + 10}  {TextEx.Tr("体质")} :{unit.Ua.Con + 10}\n" +
-        $"{TextEx.Tr("灵力")} :{unit.Ua.Spi + 10}  {TextEx.Tr("魔力")} :{unit.Ua.Mag + 10}  {TextEx.Tr("灵巧")} :{unit.Ua.Cun + 10}\n" +
-        $"{TextEx.Tr("体术命中")} :{unit.Ua.BodyDamageAccuracy * 100:F1}  {TextEx.Tr("弹幕命中")} :{unit.Ua.BulletDamageAccuracy * 100:F1}\n" +
-        $"{TextEx.Tr("闪避")} :{unit.Ua.DamageEvasion * 100:F1}  {TextEx.Tr("擦弹")} :{unit.Ua.BulletGraze * 100:F1}\n" +
-        $"{TextEx.Tr("体术伤害")} :{unit.Ua.DamageBody:F1}%\n" +
-        $"{TextEx.Tr("弹幕伤害")} :{unit.Ua.DamageBullet:F1}%\n" +
-        $"{TextEx.Tr("整体速度")} :{unit.Ua.SpeedGlobal:F1}%\n" +
-        $"{TextEx.Tr("战斗速度")} :{unit.Ua.SpeedCombat:F1}%\n" +
-        $"{TextEx.Tr("移动速度")} :{unit.Ua.SpeedMove:F1}%\n";
+        $"\n{TextEx.Tr("力量")} :{_parent.Ua.Str + 10}  {TextEx.Tr("敏捷")} :{_parent.Ua.Dex + 10}  {TextEx.Tr("体质")} :{_parent.Ua.Con + 10}\n" +
+        $"{TextEx.Tr("灵力")} :{_parent.Ua.Spi + 10}  {TextEx.Tr("魔力")} :{_parent.Ua.Mag + 10}  {TextEx.Tr("灵巧")} :{_parent.Ua.Cun + 10}\n" +
+        $"{TextEx.Tr("体术命中")} :{_parent.Ua.BodyDamageAccuracy * 100:F1}  {TextEx.Tr("弹幕命中")} :{_parent.Ua.BulletDamageAccuracy * 100:F1}\n" +
+        $"{TextEx.Tr("闪避")} :{_parent.Ua.DamageEvasion * 100:F1}  {TextEx.Tr("擦弹")} :{_parent.Ua.BulletGraze * 100:F1}\n" +
+        $"{TextEx.Tr("体术伤害")} :{_parent.Ua.DamageBody:F1}%\n" +
+        $"{TextEx.Tr("弹幕伤害")} :{_parent.Ua.DamageBullet:F1}%\n" +
+        $"{TextEx.Tr("整体速度")} :{_parent.Ua.SpeedGlobal:F1}%\n" +
+        $"{TextEx.Tr("战斗速度")} :{_parent.Ua.SpeedCombat:F1}%\n" +
+        $"{TextEx.Tr("移动速度")} :{_parent.Ua.SpeedMove:F1}%\n";
         return text1 + text2;
     }
 }
