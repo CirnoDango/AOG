@@ -551,6 +551,7 @@ public static class Scene
         CurrentMap.AfterEnter?.Invoke();
         Info.Print("ifNewMapMemory");
         Player.PlayerUnit.Memorys.MaxEquipWeight += 5;
+        Player.PlayerUnit.Ua.CurrentSp = CurrentMap.NaturalSp;
         eliteProp += 0.006f;
         greatProp += 0.003f;
         GameEvents.MapEnter();

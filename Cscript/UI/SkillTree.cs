@@ -24,7 +24,7 @@ public partial class SkillTree : Control
     {
         skillNames.Clear();
         name = skilltree;
-        title.Text = TextEx.Tr($"技能组 ：{skilltree}");
+        title.Text = TextEx.Tr($"{TextEx.Tr("技能组")} ：{skilltree}");
 
         int index = 0;
         foreach (var skill in Skill.SkillDeck)

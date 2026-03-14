@@ -110,8 +110,6 @@ public partial class EosdE : Node, IMapNode
         Player.PlayerUnit.Inventory.AddItem(i);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
         Unit.OnPlayerdied += Playerdied;
         static void CreateWildFloor(Map floor)
         {
@@ -142,24 +140,8 @@ public partial class EosdE : Node, IMapNode
         DialogBox.SShow();
         G.I.DialogBox.ShowDialog([
             new("", LoadPortrait("null"),
-            "游戏失败。")
+            "Game over")
         ]);
-    }
-    public async void PlayerdiedRevive()
-    {
-        G.I.DialogBox.Show();
-        G.I.Fsm.ChangeState(Fsm.TalkState);
-        G.I.DialogBox.ShowDialog([
-            new("魔理沙", LoadPortrait("marisa_fight_hahaha"),
-            "baka果然还是baka呢")
-        ]); await Click();
-        G.I.DialogBox.ShowDialog([
-            new("魔理沙", LoadPortrait("marisa_fight_hahaha"),
-            "没办法，就让你投币复活一次吧")
-        ]); await Click();
-        Player.PlayerUnit.Ua.GetHp(200);
-        G.I.Fsm.ChangeState(Fsm.UpdateState);
-        G.I.DialogBox.Hide();
     }
     public static void CreateRumia()
     {

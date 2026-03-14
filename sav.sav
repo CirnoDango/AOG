@@ -1,9 +1,9 @@
 {
   "skilltreehexXs": [
-    -1
+    0
   ],
   "skilltreehexYs": [
-    4
+    0
   ],
   "SceneName": "Eosd",
   "StageNumber": -1,
@@ -23,75 +23,81 @@
     "Cun": 10,
     "Value": 0,
     "SkillGroups": [
-      "Freeze"
+      "Freeze",
+      "Dark"
     ],
-    "Skills": {},
+    "Skills": {
+      "NightBird": 1.0,
+      "MoonlightRay": 1.0,
+      "DarkSideOfTheMoon": 1.0,
+      "MagicDark": 1.0,
+      "Demarcation": 1.0,
+      "AsteroidBelt": 1.0,
+      "MilkyWay": 1.0,
+      "BlazingStar": 1.0,
+      "DragonMeteor": 1.0,
+      "StardustReverie": 1.0,
+      "Icefall": 1.0,
+      "MinusK": 1.0,
+      "DiamondBlizzard": 1.0,
+      "PerfectGlacialist": 1.0,
+      "PerfectFreeze": 1.0,
+      "Multistrike": 1.0,
+      "SpiralLightSteps": 1.0,
+      "CrimsonEnergyRelease": 1.0,
+      "IntenseRainbowFist": 1.0,
+      "DapengFellingFist": 1.0,
+      "EvilSealingCircle": 1.0,
+      "CautionaryBorder": 1.0,
+      "BindingBorder": 1.0,
+      "PermanentBorder": 1.0,
+      "OmniDragonSlayingCircle": 1.0,
+      "SummerRed": 1.0,
+      "AgniShine": 1.0,
+      "AgniRadiance": 1.0,
+      "LavaCromlech": 1.0,
+      "PhlogisticPillar": 1.0,
+      "MesmerizingMisdirection": 1.0,
+      "ImaginaryVerticalTime": 1.0,
+      "PerfectSquare": 1.0,
+      "LunaDial": 1.0,
+      "SakuyasWorld": 1.0,
+      "StarOfDavid": 1.0,
+      "ScarletNetherworld": 1.0,
+      "ScarletDevil": 1.0,
+      "ScarletShoot": 1.0,
+      "ScarletGensokyo": 1.0
+    },
     "Equipment": [],
     "Inventory": [
       {
         "Amount": 1,
-        "Name": "HealPotion",
+        "Name": "mSkill",
         "Parameters": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
         }
       },
       {
         "Amount": 1,
-        "Name": "MagicPotion",
+        "Name": "mUaAny",
         "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-          "MpRecoverPercent": 30.0
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
         }
       },
       {
         "Amount": 1,
-        "Name": "BarrageSet",
+        "Name": "mUaCun",
         "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-          "barrage": {
-            "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-            "MaxComponents": 2,
-            "Components": {
-              "$type": "System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-              "$values": [
-                {
-                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                  "Name": "CircleFire",
-                  "Parameters": {
-                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-                  }
-                },
-                {
-                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                  "Name": "BulletModule",
-                  "Parameters": {
-                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                    "bulletContext": {
-                      "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                      "damage": 6.3888,
-                      "speed": 1.2399725,
-                      "maxDistance": 6.0,
-                      "shape": "S",
-                      "type": "arcane",
-                      "color": "Rose"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "colorR": 0.23881724,
-          "colorG": 0.77542144,
-          "colorB": 0.1802369
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
         }
       }
     ],
     "Memory": {}
   },
-  "MaxMemory": 55.0,
-  "UaPoint": 5,
-  "SkillPoint": 6,
-  "TalentPoint": 0,
+  "MaxMemory": 5.0,
+  "UaPoint": 0,
+  "SkillPoint": 0,
+  "TalentPoint": 3,
   "PlayerDamageTypeSet": {
     "DamageAdvantage": {},
     "DamageResistance": {}

@@ -42,11 +42,11 @@ public partial class Mainmenu : Control, IRegisterToG
 		OptionScene.ItemSelected += OnSceneSelected;
 		if (Setting.Language == "English")
 		{
-            OptionScene.Clear();
+			OptionScene.Clear();
 			OptionScene.AddItem("Tutorial(1)");
-            OptionScene.AddItem("Tutorial(2)");
-            OptionScene.AddItem("Scarlet Mansion");
-        }
+			OptionScene.AddItem("Tutorial(2)");
+			OptionScene.AddItem("Scarlet Mansion");
+		}
 		OnPlayerSelected(3);
 		OnSceneSelected(0);
 		
@@ -69,8 +69,8 @@ public partial class Mainmenu : Control, IRegisterToG
 
 	private void OnSceneSelected(long index)
 	{
-        
-        var s = OptionScene.GetItemText((int)index);
+		
+		var s = OptionScene.GetItemText((int)index);
 		switch (s)
 		{
 			case "教程(1)":
@@ -78,17 +78,17 @@ public partial class Mainmenu : Control, IRegisterToG
 				OptionPlayer.Selected = 3;
 				selectedScene = "tutorial";
 				break;
-            case "教程(2)":
-                OnPlayerSelected(3);
-                OptionPlayer.Selected = 3;
-                selectedScene = "tutorial2";
-                break;
-            case "Tutorial(1)":
-                OnPlayerSelected(3);
-                OptionPlayer.Selected = 3;
-                selectedScene = "tutorialE";
-                break;
-            case "Tutorial(2)":
+			case "教程(2)":
+				OnPlayerSelected(3);
+				OptionPlayer.Selected = 3;
+				selectedScene = "tutorial2";
+				break;
+			case "Tutorial(1)":
+				OnPlayerSelected(3);
+				OptionPlayer.Selected = 3;
+				selectedScene = "tutorialE";
+				break;
+			case "Tutorial(2)":
 				OnPlayerSelected(3);
 				OptionPlayer.Selected = 3;
 				selectedScene = "tutorial2E";
@@ -96,10 +96,10 @@ public partial class Mainmenu : Control, IRegisterToG
 			case "红魔馆":
 				selectedScene = "Eosd";
 				break;
-            case "Scarlet Mansion":
-                selectedScene = "EosdE";
-                break; 
-            case "测试场景":
+			case "Scarlet Mansion":
+				selectedScene = "EosdE";
+				break; 
+			case "测试场景":
 				selectedScene = "CaveD";
 				break;
 			default:

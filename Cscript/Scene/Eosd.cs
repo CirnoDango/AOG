@@ -115,8 +115,6 @@ public partial class Eosd : Node, IMapNode
         Player.PlayerUnit.Inventory.AddItem(i);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
-        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
-            new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
         Unit.OnPlayerdied += Playerdied;
         static void CreateWildFloor(Map floor)
         {
