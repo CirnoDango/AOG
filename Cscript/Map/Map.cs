@@ -317,7 +317,7 @@ public class Map
 
                 if (currentWeight + it.Weight <= capacity)
                 {
-                    unit.Memorys.TryEquip(Item.CreateItem(it.Name, 0.3f), unit);
+                    unit.Memorys.TryEquip(Item.CreateItem(it.Name, 0.6f), unit);
                     currentWeight += it.Weight;
                 }
             }
@@ -482,7 +482,7 @@ public class Map
         {
             // 提前准备“可抽取物品池”
             var itemPool = Item.ItemDeck
-                .Where(x => x is not BarrageComponent && x.chestValue > 0)
+                .Where(x => x is not BarrageComponent && x is not Memory && x.chestValue > 0)
                 .ToList();
 
             for (int i = 0; i < number; i++)

@@ -101,7 +101,7 @@ public abstract class Skill
         sc.User.Ua.GetSp(-GetSpCost());
         sc.User.Ua.GetMp(-GetMpCost());
         if (SkillGroup != "")
-            Info.Print($"{sc.User.TrName} 执行 {TrName}");
+            Info.Print($"{sc.User.TrName} 执行 {SkillName()}");
         StartActivate(sc);
         EndActive(sc);
     }
@@ -110,10 +110,7 @@ public abstract class Skill
         string text = "";
         if (IsSpellCard())
             text += $"【{TextEx.Tr("符卡")}】";
-        if (this is not SkillFromItem)
-            text += $"{TextEx.Tr(TrName)}\n";
-        else
-            text += $"{TextEx.Tr(Name.StartsWith('S') ? "i" + Name[1..] : Name)}\n";
+        text += SkillName();
         switch (EffectType)
         {
             case EffectType.Activate:
@@ -137,6 +134,17 @@ public abstract class Skill
         if (GetMpCost() != 0) { text += $"{TextEx.Tr("MP消耗")}：{GetMpCost()}\n"; }
         return text + TextEx.Tr(GetDescription() ?? "");
     }
+
+    private string SkillName()
+    {
+        string text;
+        if (this is not SkillFromItem)
+            text = $"{TextEx.Tr(TrName)}\n";
+        else
+            text = $"{TextEx.Tr(Name.StartsWith('S') ? "i" + Name[1..] : Name)}\n";
+        return text;
+    }
+
     public string SkillInfo(int level)
     {
         var skill = Clone();

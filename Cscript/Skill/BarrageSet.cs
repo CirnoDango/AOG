@@ -49,7 +49,6 @@ public class BarrageSet : SkillItem<BarrageSet.SBarrageSet>
         public SBarrageSet(BarrageSet parent) : base(parent)
         {
             SkillGroup = "Item";
-            Description = "发射弹幕";
             _BarrageSet = parent.B;
             Texture = parent.Texture;
         }

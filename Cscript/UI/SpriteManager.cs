@@ -15,7 +15,7 @@ public partial class SpriteManager : Node
         var texture = GD.Load<Texture2D>($"res://Assets/Sprites/{name}.png");
         var sprite = new Sprite2D { Texture = texture };
         Vector2 originalSize = texture.GetSize(); // 原图尺寸
-        Vector2 targetSize = new Vector2(15, 15); // 显示目标尺寸
+        Vector2 targetSize = new Vector2(16, 16); // 显示目标尺寸
         sprite.Scale = targetSize * Setting.imagePx / 16 / originalSize;
         unit.Ua.imageSizeFactor = sprite.Scale.Y;
         var tip_area = new DynamicTooltipPanel

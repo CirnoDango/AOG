@@ -100,7 +100,6 @@ public class MagicPotion : SkillItem<MagicPotion.SMagicPotion>
         {
             _mp = parent.MpRecoverPercent;
             SkillGroup = "Item";
-            Description = $"恢复{_mp}%MP";
             Cooldown = 2000;
             Targeting = new TargetType(new TargetRuleSelf());
         }
@@ -116,7 +115,7 @@ public class HealPotion : SkillItem<HealPotion.SHealPotion>
     public int HpRecoverPercent { get; private set; } = 40;
     public HealPotion()
     {
-        Weight = 8f;
+        Weight = 4f;
     }
 
     public class SHealPotion : SkillFromItem<HealPotion>
@@ -127,7 +126,6 @@ public class HealPotion : SkillItem<HealPotion.SHealPotion>
             _hp = parent.HpRecoverPercent;
             Texture = parent.Texture;
             SkillGroup = "Item";
-            Description = $"恢复{_hp}%HP";
             Cooldown = 2000;
             Targeting = new TargetType(new TargetRuleSelf());
         }

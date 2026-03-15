@@ -205,6 +205,7 @@ public abstract class SkillFromItem<TItem> : SkillFromItem
     {
         SkillGroup = "Item";
         Texture = parent.Texture;
+        Description = $"\n{TextEx.Tr($"is{parent.Name}")}\n";
     }
 }
 
@@ -229,7 +230,7 @@ public class Inventory(Unit unit)
 {
     public Unit Unit { get; set; } = unit;
     public List<Item> Items = [];
-    public float MaxWeight = 20f;
+    public float MaxWeight = 40f;
 
     public float CurrentWeight => Items.Sum(item => item.Weight);
     public bool AddItem(Item item)

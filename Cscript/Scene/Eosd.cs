@@ -115,6 +115,8 @@ public partial class Eosd : Node, IMapNode
         Player.PlayerUnit.Inventory.AddItem(i);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mTalent"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Unit.OnPlayerdied += Playerdied;
         static void CreateWildFloor(Map floor)
         {
@@ -205,7 +207,7 @@ public partial class Eosd : Node, IMapNode
         loaded = true;
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 0.8f);
+        Player.Init(player, 1f);
         G.I.SkillPanel.Refresh();
         switch (player)
         {

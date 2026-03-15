@@ -42,7 +42,6 @@ public class Save
         }
         
         // 2.装备数据
-        player.Inventory.MaxWeight *= 2;
         foreach(Item i in player.Equipment.EquippedItems.ToList())
         {
             Dictionary<string, object> itemValue = [];
@@ -175,6 +174,10 @@ public class Save
         unit.Ua.CurrentHp = unit.Ua.MaxHp;
         unit.Ua.CurrentMp = unit.Ua.MaxMp;
         unit.Ua.CurrentSp = unit.Ua.MaxSp / 2;
+        // 2.更新事件
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.HealHp(updateTime * unit.Ua.MaxHp / 10000);
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetSp(0.002f * updateTime * (Scene.CurrentMap.NaturalSp - unit.Ua.CurrentSp));
+        unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         // 3.伤害属性表
         unit.Ua.DamageTypeSet = save.PlayerDamageTypeSet;
         // 4.技能树格子

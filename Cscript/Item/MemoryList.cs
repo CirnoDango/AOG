@@ -12,6 +12,20 @@ public class mUaAny : Memory
         unit.Ua.uaPoint += 1;
     }
 }
+public class mTalent : Memory
+{
+    public mTalent()
+    {
+        Weight = 10f;
+        chestValue = 8;
+    }
+
+    public override void OnEquip(Unit unit)
+    {
+        unit.Ua.skillPoint += 1;
+        unit.Ua.talentPoint += 2;
+    }
+}
 public class mSkill : Memory
 {
     public mSkill()

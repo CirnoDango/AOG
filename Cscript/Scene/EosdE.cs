@@ -106,10 +106,12 @@ public partial class EosdE : Node, IMapNode
         Scene.Enter(Stage1Mid);
         GameEvents.OnMapEnter += AutoSave;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("HealPotion"));
-        var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30f} });
+        var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30f } });
         Player.PlayerUnit.Inventory.AddItem(i);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 2 } } } }));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mTalent"));
+        Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
         Unit.OnPlayerdied += Playerdied;
         static void CreateWildFloor(Map floor)
         {
@@ -184,7 +186,7 @@ public partial class EosdE : Node, IMapNode
         loaded = true;
         string player = GameData.SelectedCharacter;
         // 场景资源加载
-        Player.Init(player, 0.8f);
+        Player.Init(player, 1f);
         G.I.SkillPanel.Refresh();
         switch (player)
         {
