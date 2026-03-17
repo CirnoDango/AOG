@@ -5,9 +5,9 @@
             "人类",
             "巫女"
         ],
-        "HP": 100,
-        "SP": 50,
-        "MP": 10,
+        "HP": 110,
+        "SP": 56,
+        "MP": 20,
         "Str": 10,
         "Dex": 12,
         "Con": 14,
@@ -24,9 +24,9 @@
             "人类",
             "魔法使"
         ],
-        "HP": 100,
-        "SP": 40,
-        "MP": 50,
+        "HP": 90,
+        "SP": 44,
+        "MP": 40,
         "Str": 12,
         "Dex": 10,
         "Con": 10,
@@ -42,9 +42,9 @@
         "Tags": [
             "妖怪"
         ],
-        "HP": 80,
-        "SP": 50,
-        "MP": 30,
+        "HP": 110,
+        "SP": 56,
+        "MP": 20,
         "Str": 10,
         "Dex": 14,
         "Con": 12,
@@ -61,9 +61,9 @@
         "Tags": [
             "妖精"
         ],
-        "HP": 100,
-        "SP": 50,
-        "MP": 20,
+        "HP": 120,
+        "SP": 48,
+        "MP": 24,
         "Str": 10,
         "Dex": 18,
         "Con": 10,
@@ -81,7 +81,7 @@
         ],
         "HP": 150,
         "SP": 40,
-        "MP": 10,
+        "MP": 20,
         "Str": 18,
         "Dex": 14,
         "Con": 12,
@@ -97,9 +97,9 @@
         "Tags": [
             "魔法使"
         ],
-        "HP": 80,
-        "SP": 40,
-        "MP": 60,
+        "HP": 70,
+        "SP": 50,
+        "MP": 46,
         "Str": 8,
         "Dex": 10,
         "Con": 8,
@@ -115,16 +115,16 @@
         "Tags": [
             "人类"
         ],
-        "HP": 100,
-        "SP": 50,
-        "MP": 50,
+        "HP": 120,
+        "SP": 44,
+        "MP": 28,
         "Str": 10,
         "Dex": 18,
         "Con": 10,
         "Spi": 10,
         "Mag": 12,
         "Cun": 14,
-        "SkillGroups": ["Time"],
+        "SkillGroups": [ "Time" ],
         "Skills": {
         }
     }, // sakuya
@@ -133,16 +133,16 @@
         "Tags": [
             "吸血鬼"
         ],
-        "HP": 120,
-        "SP": 60,
-        "MP": 40,
+        "HP": 100,
+        "SP": 44,
+        "MP": 36,
         "Str": 10,
         "Dex": 14,
         "Con": 10,
         "Spi": 12,
         "Mag": 18,
         "Cun": 10,
-        "SkillGroups": ["Blood"],
+        "SkillGroups": [ "Blood" ],
         "Skills": {
         }
     }, // remilia
@@ -152,8 +152,8 @@
             "吸血鬼"
         ],
         "HP": 90,
-        "SP": 60,
-        "MP": 60,
+        "SP": 48,
+        "MP": 36,
         "Str": 10,
         "Dex": 12,
         "Con": 10,
@@ -164,6 +164,200 @@
         "Skills": {
         }
     }, // flandre
+    {
+        "Name": "letty",
+        "Tags": [],
+        "HP": 90,
+        "SP": 52,
+        "MP": 32,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 12,
+        "Spi": 16,
+        "Mag": 16,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // letty
+    {
+        "Name": "chen",
+        "Tags": [],
+        "HP": 120,
+        "SP": 50,
+        "MP": 22,
+        "Str": 10,
+        "Dex": 18,
+        "Con": 10,
+        "Spi": 14,
+        "Mag": 10,
+        "Cun": 12,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // chen
+    {
+        "Name": "alice",
+        "Tags": [
+
+        ],
+        "HP": 80,
+        "SP": 50,
+        "MP": 38,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 14,
+        "Cun": 20,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // alice
+    {
+        "Name": "lilywhite",
+        "Tags": [
+
+        ],
+        "HP": 130,
+        "SP": 48,
+        "MP": 20,
+        "Str": 10,
+        "Dex": 18,
+        "Con": 12,
+        "Spi": 14,
+        "Mag": 10,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // lilywhite
+    {
+        "Name": "lunasa",
+        "Tags": [
+
+        ],
+        "HP": 90,
+        "SP": 52,
+        "MP": 32,
+        "Str": 12,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 12,
+        "Mag": 12,
+        "Cun": 18,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // lunasa
+    {
+        "Name": "merlin",
+        "Tags": [
+
+        ],
+        "HP": 100,
+        "SP": 52,
+        "MP": 28,
+        "Str": 12,
+        "Dex": 10,
+        "Con": 12,
+        "Spi": 12,
+        "Mag": 10,
+        "Cun": 18,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // merlin
+    {
+        "Name": "lyrica",
+        "Tags": [
+
+        ],
+        "HP": 90,
+        "SP": 52,
+        "MP": 32,
+        "Str": 10,
+        "Dex": 12,
+        "Con": 10,
+        "Spi": 12,
+        "Mag": 12,
+        "Cun": 18,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // lyrica
+    {
+        "Name": "youmu",
+        "Tags": [
+
+        ],
+        "HP": 150,
+        "SP": 40,
+        "MP": 20,
+        "Str": 14,
+        "Dex": 16,
+        "Con": 14,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // youmu
+    {
+        "Name": "yuyuko",
+        "Tags": [
+
+        ],
+        "HP": 75,
+        "SP": 60,
+        "MP": 36,
+        "Str": 8,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 20,
+        "Mag": 18,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // yuyuko
+    {
+        "Name": "ran",
+        "Tags": [
+
+        ],
+        "HP": 110,
+        "SP": 52,
+        "MP": 24,
+        "Str": 10,
+        "Dex": 14,
+        "Con": 12,
+        "Spi": 14,
+        "Mag": 10,
+        "Cun": 14,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // flandre
+    {
+        "Name": "yukari",
+        "Tags": [
+
+        ],
+        "HP": 100,
+        "SP": 60,
+        "MP": 28,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 14,
+        "Spi": 20,
+        "Mag": 14,
+        "Cun": 10,
+        "SkillGroups": [],
+        "Skills": {
+        }
+    }, // yukari
     {
         "Name": "dangoPea",
         "Tags": [

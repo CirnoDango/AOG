@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-public partial class MistyLake : Node
+public partial class SilverForest : Node
 {
     public static Map Floor1 = new(60, 40);
-    public static Map Floor2 = new(60, 40);
-    public static Map Floor3 = new(60, 40);
-    public static Map diShuiLake = new("diShuiLake");
+
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
@@ -22,30 +20,6 @@ public partial class MistyLake : Node
             { "dangoIce",       0.3f },
             { "dangoTwinpea",   0.1f },
             { "dangoRedBean",   0.1f },
-            { "dangoSpellcard", 0.1f },
-            { "dangoLight",     0.1f },
-        };
-        Floor2.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea",       0.1f },
-            { "dangoWater",     0.3f },
-            { "dangoFist",      0.1f },
-            { "dangoDark",      0.3f },
-            { "dangoIce",       0.3f },
-            { "dangoTwinpea",   0.1f },
-            { "dangoRedBean",   0.1f },
-            { "dangoSpellcard", 0.1f },
-            { "dangoLight",     0.1f },
-        };
-        Floor3.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea",       0.1f },
-            { "dangoWater",     0.3f },
-            { "dangoFist",      0.1f },
-            { "dangoDark",      0.1f },
-            { "dangoIce",       0.3f },
-            { "dangoTwinpea",   0.2f },
-            { "dangoRedBean",   0.2f },
             { "dangoSpellcard", 0.1f },
             { "dangoLight",     0.1f },
         };
@@ -63,39 +37,30 @@ public partial class MistyLake : Node
         }
         inited = true;
         CreateFloor(Floor1);
-        CreateFloor(Floor2);
-        CreateFloor(Floor3);
-        Floor1.MapGoto = Floor2;
-        Floor2.MapGoto = Floor3;
-        Floor3.MapGoto = diShuiLake;
-        diShuiLake.Entrance = new Vector2I(0, 32);
         Scene.Enter(Floor1);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
         ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
         Unit.OnPlayerdied += Playerdied;
-        Floor2.AfterEnter += CreateMidboss;
-        diShuiLake.AfterEnter += Createboss;
         static void CreateFloor(Map floor)
         {
-            MapGenerator.ChangeMapByRegionGrow(floor, LogicMapLayer.BaseGround, LogicMapLayer.BaseGround,
-                        "Grass", "Water", 15, 1, 100, 15);
-            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.BaseGround, "Grass", floor, 1);
+            foreach(var grid in floor.Grid)
+                grid.TerrainBaseGround = "Snow";
             MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
                 new Dictionary<string, float>
                 {
-                { "Forest", 0.4f },
-                { "", 0.6f }
+                { "SnowTree", 0.45f },
+                { "", 0.55f }
                 }, floor);
-            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "Forest", floor, 2);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "SnowTree", floor, 2);
             foreach (var grid in floor.Grid)
             {
-                if (grid.TerrainBaseGround == "Water" && grid.TerrainStand == "Forest")
+                if (GD.Randf() < 0.004f && grid.TerrainStand == "")
                 {
-                    grid.TerrainStand = "";
+                    grid.TerrainStand = "SnowMan";
                 }
             }
-            MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Road", floor, out int y, out int ey);
+            MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Grass", floor, out int y, out int ey);
             floor.Entrance = new Vector2I(0, y);
             floor.SetExit(floor.GetGrid(new Vector2I(59, ey)));
         }
@@ -111,15 +76,11 @@ public partial class MistyLake : Node
 
     public static void CreateMidboss()
     {
-        Floor2.CreateEnemy(Floor2.Exit, "rumia", UnitEgo.great);
+
     }
     public void Createboss()
     {
-        var boss = diShuiLake.CreateEnemy(new Vector2I(20, 32), "cirno", UnitEgo.boss);
-        boss.Ue.OnKilled += enemy =>
-        {
-            Victory();
-        };
+
     }
     public static bool loaded = false;
     public async void Load()
@@ -156,8 +117,6 @@ public partial class MistyLake : Node
         Player.PlayerUnit.Memorys.MaxEquipWeight = 5;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("HealPotion"));
         Floor1.SummonChest(8, 3);
-        Floor2.SummonChest(8, 3);
-        Floor3.SummonChest(8, 3);
         await ToSignal(GetTree().CreateTimer(0.1), "timeout");
         G.I.Fsm.ChangeState(Fsm.TalkState);
         G.I.DialogBox.Show();
@@ -172,19 +131,7 @@ public partial class MistyLake : Node
     
     public async void Victory()
     {
-        G.I.Fsm.ChangeState(Fsm.TalkState);
-        G.I.DialogBox.Show();
-        await ShowDialogSequence(
-            new("琪露诺", L("cirno_fight_cry"),
-                "这儿……不是雾之湖？雾气、青蛙、大酱……都不在……？"),
-            new("我……想回幻想乡……想回到湖边和大酱一起玩……"),
-            new("呐，你知道回去的办法吗？我不想一个人待在这里……"),
-            new("等我回去以后，一定要在湖面上做出更漂亮的冰雕……嗯！一定要……"),
-            new("", L("null"),
-                "恭喜获得游戏胜利!v0.3版本的内容就到此为止了,敬请期待下次更新。")
-        );
-        G.I.Fsm.ChangeState(Fsm.UpdateState);
-        G.I.DialogBox.Hide();
+
     }
 
     public static async Task Click()
@@ -201,7 +148,6 @@ public partial class MistyLake : Node
         if (clickTcs != null && @event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
             clickTcs.TrySetResult();
-            //clickTcs = null;
         }
     }
     public static Texture2D L(string name)

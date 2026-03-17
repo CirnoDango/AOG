@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cpp76c0w1gks5"]
+
+[ext_resource type="Script" uid="uid://bfhpgvq7eayc0" path="res://Cscript/Scene/SilverForest.cs" id="1_c2yfg"]
+
+[node name="SilverForest" type="Node2D" unique_id=302140858]
+script = ExtResource("1_c2yfg")

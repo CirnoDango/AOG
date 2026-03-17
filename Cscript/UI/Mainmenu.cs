@@ -40,13 +40,14 @@ public partial class Mainmenu : Control, IRegisterToG
 		// 给 OptionButton 绑定信号
 		OptionPlayer.ItemSelected += OnPlayerSelected;
 		OptionScene.ItemSelected += OnSceneSelected;
-		if (Setting.Language == "English")
+		if (true || Setting.Language == "English")
 		{
-			OptionScene.Clear();
+			//OptionScene.Clear();
 			OptionScene.AddItem("Tutorial(1)");
 			OptionScene.AddItem("Tutorial(2)");
 			OptionScene.AddItem("Scarlet Mansion");
             OptionScene.AddItem("Test Scene");
+            OptionScene.AddItem("silverForest");
         }
 		OnPlayerSelected(3);
 		OnSceneSelected(0);

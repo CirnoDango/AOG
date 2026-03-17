@@ -2,6 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://2xkyfs3xqmu5" path="res://Assets/tiles/wild.png" id="1_eq3vb"]
 
+[sub_resource type="TileMapPattern" id="TileMapPattern_1u2k3"]
+tile_data = PackedInt32Array(0, 0, 0, 65536, 131072, 1, 131072, 0, 2, 1, 65536, 2, 65537, 589824, 3, 131073, 65536, 2, 2, 131072, 0, 65538, 131072, 1, 131074, 131072, 2)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wijl4"]
 texture = ExtResource("1_eq3vb")
 0:0/0 = 0
@@ -476,6 +479,30 @@ texture = ExtResource("1_eq3vb")
 11:5/0 = 0
 11:5/0/terrain_set = 0
 11:5/0/terrain = 14
+0:6/0 = 0
+0:6/0/terrain_set = 0
+0:6/0/terrain = 15
+1:6/0 = 0
+1:6/0/terrain_set = 0
+1:6/0/terrain = 15
+2:6/0 = 0
+2:6/0/terrain_set = 0
+2:6/0/terrain = 15
+3:6/0 = 0
+3:6/0/terrain_set = 0
+3:6/0/terrain = 15
+4:6/0 = 0
+4:6/0/terrain_set = 0
+4:6/0/terrain = 15
+5:6/0 = 0
+5:6/0/terrain_set = 0
+5:6/0/terrain = 15
+6:6/0 = 0
+6:6/0/terrain_set = 0
+6:6/0/terrain = 15
+7:6/0 = 0
+7:6/0/terrain_set = 0
+7:6/0/terrain = 15
 
 [resource]
 terrain_set_0/mode = 0
@@ -509,4 +536,7 @@ terrain_set_0/terrain_13/name = "Marble"
 terrain_set_0/terrain_13/color = Color(0.5, 0.25, 0.4375, 1)
 terrain_set_0/terrain_14/name = "PurpleWall"
 terrain_set_0/terrain_14/color = Color(0.5, 0.25, 0.34375, 1)
+terrain_set_0/terrain_15/name = "Snow"
+terrain_set_0/terrain_15/color = Color(0.5, 0.25, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_wijl4")
+pattern_0 = SubResource("TileMapPattern_1u2k3")

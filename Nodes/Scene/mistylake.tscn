@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpp76c0w1gks5"]
-
-[ext_resource type="Script" uid="uid://bfhpgvq7eayc0" path="res://Cscript/Scene/MistyLake.cs" id="1_joydu"]
-
-[node name="Mistylake" type="Node2D"]
-script = ExtResource("1_joydu")

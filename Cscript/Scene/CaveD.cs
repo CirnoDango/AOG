@@ -107,8 +107,19 @@ public partial class CaveD : Node
         //Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
+        Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 5), "chen", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 6), "alice", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 7), "lilywhite", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 8), "lunasa", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 9), "merlin", UnitEgo.eliteBoss);
+        Floor1.CreateEnemy(new Vector2I(3, 5), "lyrica", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(3, 6), "youmu", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 7), "yuyuko", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 8), "ran", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 9), "yukari", UnitEgo.eliteBoss);
     }
-    
+
     public async void Victory()
     {
         G.I.Fsm.ChangeState(Fsm.TalkState);

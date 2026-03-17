@@ -112,6 +112,12 @@ texture = ExtResource("1_kmr8k")
 24:0/0 = 0
 24:0/0/terrain_set = 0
 24:0/0/terrain = 19
+1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 20
+2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 21
 
 [resource]
 terrain_set_0/mode = 0
@@ -155,4 +161,8 @@ terrain_set_0/terrain_18/name = "Knife"
 terrain_set_0/terrain_18/color = Color(0.46875, 0.5, 0.25, 1)
 terrain_set_0/terrain_19/name = "DoubleBeds"
 terrain_set_0/terrain_19/color = Color(0.375, 0.5, 0.25, 1)
+terrain_set_0/terrain_20/name = "SnowTree"
+terrain_set_0/terrain_20/color = Color(0.28125, 0.5, 0.25, 1)
+terrain_set_0/terrain_21/name = "SnowMan"
+terrain_set_0/terrain_21/color = Color(0.25, 0.5, 0.3125, 1)
 sources/0 = SubResource("TileSetAtlasSource_5elg3")
