@@ -9,12 +9,6 @@ public static class MapGenerator
     /// <summary>
     /// 生成一个地图，使用细胞自动机算法，传入的第一个地形类型作为边界地形
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="terrainTypes"></param>
-    /// <param name="initialWeights"></param>
-    /// <param name="iterations"></param>
-    /// <returns></returns>
     public static Map GenerateMapByCellularAutomata(int width, int height,
         Dictionary<string, float> initialWeights,
         int iterations, bool noExit = false)
@@ -39,13 +33,6 @@ public static class MapGenerator
     /// <summary>
     /// 生成一个地图,使用BSP算法
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="initialWeights"></param>
-    /// <param name="minRoomSize"></param>
-    /// <param name="maxDepth"></param>
-    /// <param name="noExit"></param>
-    /// <returns></returns>
     public static Map GenerateMapByBSP(int width, int height, string wall, string floor,
         int minRoomSize = 6, int maxDepth = 5, bool noExit = false)
     {
@@ -435,7 +422,7 @@ public static class MapGenerator
             return 0;
         }
     }
-    public static void ChangeMapByPutRect(LogicMapLayer mapLayer, Map map,
+    public static void ChangeMapByPutRoom(LogicMapLayer mapLayer, Map map,
         int number, int size, string wall, string floor)
     {
         List<Vector2I> wallCoords = [];
@@ -530,8 +517,95 @@ public static class MapGenerator
             map.Grid[wal.X, wal.Y].TerrainBaseGround = floor;
             map.Grid[wal.X, wal.Y].TerrainStand = "DoorClosed";
         }
-            
+    }
+    public static void ChangeMapByPutRect(LogicMapLayer mapLayer, Map map,
+        int number, int size, string rect)
+    {
+        List<Vector2I> wallCoords = [];
+        List<Vector2I> roomCoords = [];
+        bool[,] outMap = new bool[map.Width, map.Height];
+        var rooms = new List<Rect>();
+        int minSize = Math.Max(3, size - 5);
+        int maxSize = size + 5;
+        for (int r = 0; r < number; r++)
+        {
+            for (int attempt = 0; attempt < 50; attempt++)
+            {
+                int w = GD.RandRange(minSize, maxSize + 1);
+                int h = GD.RandRange(minSize, maxSize + 1);
 
+                int maxX = map.Width - 1 - w;
+                int maxY = map.Height - 1 - h;
+                if (maxX < 1 || maxY < 1)
+                {
+                    continue;
+                }
+                int x = GD.RandRange(1, maxX + 1);
+                int y = GD.RandRange(1, maxY + 1);
+
+                // 检查扩展区域（房间外扩 1 格）是否与已有房间冲突或越界
+                int exMinX = x - 1;
+                int exMinY = y - 1;
+                int exMaxX = x + w;
+                int exMaxY = y + h;
+
+                // exMinX/exMinY >= 0 已保证（因为 x >= 1）， exMaxX <= mapWidth-1? 
+                // 由于我们保证 x + w - 1 <= mapWidth - 2 => x + w <= mapWidth - 1 => exMaxX <= mapWidth - 1
+                // 所以扩展区域不会越界。仍可做安全检查（可选）
+                if (exMinX < 0 || exMinY < 0 || exMaxX > map.Width - 1 || exMaxY > map.Height - 1)
+                {
+                    // 越界（理论上不应发生），当作失败
+                    continue;
+                }
+
+                // 检查扩展区域内是否已有占用
+                bool conflict = false;
+                for (int xx = exMinX; xx <= exMaxX && !conflict; xx++)
+                {
+                    for (int yy = exMinY; yy <= exMaxY; yy++)
+                    {
+                        if (outMap[xx, yy])
+                        {
+                            conflict = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (conflict) continue;
+
+                // 没有冲突，放置房间（标记实际占用区域，不标记扩展区域）
+                var room = new Rect(x, y, w, h);
+                rooms.Add(room);
+                List<Vector2I> toDoor = [];
+                for (int xx = x; xx < x + w; xx++)
+                    for (int yy = y; yy < y + h; yy++)
+                    {
+                        outMap[xx, yy] = true;
+                        wallCoords.Add(new Vector2I(xx, yy));
+                        toDoor.Add(new Vector2I(xx, yy));
+                    }
+                for (int xx = x + 1; xx < x + w - 1; xx++)
+                    for (int yy = y + 1; yy < y + h - 1; yy++)
+                    {
+                        wallCoords.Remove(new Vector2I(xx, yy));
+                        roomCoords.Add(new Vector2I(xx, yy));
+                        toDoor.Remove(new Vector2I(xx, yy));
+                    }
+                Vector2I door = toDoor[GD.RandRange(0, toDoor.Count - 1)];
+                break;
+            }
+        }
+        foreach (var wal in wallCoords)
+        {
+            map.Grid[wal.X, wal.Y].TerrainBaseGround = rect;
+            map.Grid[wal.X, wal.Y].TerrainStand = "";
+        }
+        foreach (var wal in roomCoords)
+        {
+            map.Grid[wal.X, wal.Y].TerrainBaseGround = rect;
+            map.Grid[wal.X, wal.Y].TerrainStand = "";
+        }
     }
 }
 

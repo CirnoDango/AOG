@@ -73,13 +73,6 @@ public static class MapBuilder
         return map;
     }
 
-    /// <summary>
-    /// Builds the tile map layers based on the provided map's logic.
-    /// </summary>
-    /// <remarks>This method clears the existing tile map layers and repopulates them using the terrain data
-    /// from the specified map. The method processes each grid cell in the map, setting the base ground and stand layers
-    /// accordingly.</remarks>
-    /// <param name="map">The map containing the grid and terrain data used to populate the tile map layers. Cannot be null.</param>
     public static void BuildTileMapFromLogic(Map map)
     {
         G.I.TileMapAllLayer.BaseGround.Clear();
@@ -92,6 +85,32 @@ public static class MapBuilder
                 var pos = new Vector2I(x, y);
                 SetTileMapTerrain(G.I.TileMapAllLayer.BaseGround, pos, grid.TerrainBaseGround);
                 SetTileMapTerrain(G.I.TileMapAllLayer.Stand, pos, grid.TerrainStand);
+                var tileDataStand = G.I.TileMapAllLayer.BaseGround.GetCellTileData(pos);
+                int terrainIdStand = tileDataStand.Terrain;
+                G.I.TileMapAllLayer.BaseGround.SetCellsTerrainConnect([pos], 0, terrainIdStand);
+            }
+        }
+    }
+    public static void ConnectTileMapFromLogic(Map map)
+    {
+        G.I.TileMapAllLayer.BaseGround.Clear();
+        G.I.TileMapAllLayer.Stand.Clear();
+        for (int x = 0; x < map.Width; x++)
+        {
+            for (int y = 0; y < map.Height; y++)
+            {
+                var grid = map.Grid[x, y];
+                var pos = new Vector2I(x, y);
+                SetTileMapTerrain(G.I.TileMapAllLayer.BaseGround, pos, grid.TerrainBaseGround);
+                SetTileMapTerrain(G.I.TileMapAllLayer.Stand, pos, grid.TerrainStand);
+                var tileDataBase = G.I.TileMapAllLayer.BaseGround.GetCellTileData(pos);
+                var tileDataStand = G.I.TileMapAllLayer.Stand.GetCellTileData(pos);
+                int? terrainIdBase = tileDataBase?.Terrain;
+                int? terrainIdStand = tileDataStand?.Terrain;
+                if (terrainIdBase != null)
+                    G.I.TileMapAllLayer.BaseGround.SetCellsTerrainConnect([pos], 0, (int)terrainIdBase);
+                if (terrainIdStand != null)
+                    G.I.TileMapAllLayer.Stand.SetCellsTerrainConnect([pos], 0, (int)terrainIdStand);
             }
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public partial class SilverForest : Node
 {
     public static Map Floor1 = new(60, 40);
-
+    public static Map Floor2 = new(80, 80);
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
@@ -36,8 +36,9 @@ public partial class SilverForest : Node
             //return;
         }
         inited = true;
-        CreateFloor(Floor1);
-        Scene.Enter(Floor1);
+        CreateFloor2(Floor2);
+        Floor2.NeedConnect = true;
+        Scene.Enter(Floor2);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
         ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
@@ -63,6 +64,40 @@ public partial class SilverForest : Node
             MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Grass", floor, out int y, out int ey);
             floor.Entrance = new Vector2I(0, y);
             floor.SetExit(floor.GetGrid(new Vector2I(59, ey)));
+        }
+        static void CreateFloor2(Map floor)
+        {
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.BaseGround,
+                new Dictionary<string, float>
+                {
+                { "Grass", 0.5f },
+                { "Snow", 0.5f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.BaseGround, "Grass", floor, 1);
+            MapGenerator.ChangeMapByPutRoom(LogicMapLayer.BaseGround, floor,
+                6, 5, "WoodWall", "WoodFloor");
+            MapGenerator.ChangeMapByPutRect(LogicMapLayer.BaseGround, floor,
+                4, 8, "Field");
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+                new Dictionary<string, float>
+                {
+                { "SnowTree", 0.45f },
+                { "", 0.55f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "", floor, 2);
+            foreach (var grid in floor.Grid)
+            {
+                if (grid.TerrainBaseGround != "Grass" && grid.TerrainBaseGround != "Snow")
+                {
+                    grid.TerrainStand = "";
+                }
+                if (GD.Randf() < 0.002f && grid.TerrainBaseGround == "Snow" && grid.TerrainStand == "")
+                {
+                    grid.TerrainStand = "SnowMan";
+                }
+            }
+            floor.Entrance = new Vector2I(0, GD.RandRange(10, 70));
+            floor.SetExit(floor.GetGrid(new Vector2I(79, GD.RandRange(10, 70))));
         }
     }
     private static void Playerdied()

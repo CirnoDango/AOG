@@ -87,7 +87,7 @@ public partial class RoadToScarletDevilMansion : Node
                     grid.TerrainStand = "";
                 }
             }
-            MapGenerator.ChangeMapByPutRect(LogicMapLayer.BaseGround, floor, 10, 7, "Wall", "Floor");
+            MapGenerator.ChangeMapByPutRoom(LogicMapLayer.BaseGround, floor, 10, 7, "Wall", "Floor");
             MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Road", floor, out int y, out int ey);
             floor.Entrance = new Vector2I(0, y);
             floor.SetExit(floor.GetGrid(new Vector2I(59, ey)));

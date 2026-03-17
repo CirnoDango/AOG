@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" format=3 uid="uid://wrw216byr1hh"]
 
-[ext_resource type="Texture2D" uid="uid://2xkyfs3xqmu5" path="res://Assets/tiles/wild.png" id="1_eq3vb"]
+[ext_resource type="Texture2D" uid="uid://b5whkannjwuqn" path="res://Assets/tiles/wild.png" id="1_eq3vb"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_1u2k3"]
 tile_data = PackedInt32Array(0, 0, 0, 65536, 131072, 1, 131072, 0, 2, 1, 65536, 2, 65537, 589824, 3, 131073, 65536, 2, 2, 131072, 0, 65538, 131072, 1, 131074, 131072, 2)
@@ -503,6 +503,63 @@ texture = ExtResource("1_eq3vb")
 7:6/0 = 0
 7:6/0/terrain_set = 0
 7:6/0/terrain = 15
+8:6/0 = 0
+8:6/0/terrain_set = 0
+8:6/0/terrain = 16
+9:6/0 = 0
+9:6/0/terrain_set = 0
+9:6/0/terrain = 17
+12:5/0 = 0
+12:5/0/terrain_set = 0
+12:5/0/terrain = 18
+12:5/0/terrains_peering_bit/right_side = 18
+12:5/0/terrains_peering_bit/bottom_side = 18
+12:6/0 = 0
+12:6/0/terrain_set = 0
+12:6/0/terrain = 18
+12:6/0/terrains_peering_bit/right_side = 18
+12:6/0/terrains_peering_bit/bottom_side = 18
+12:6/0/terrains_peering_bit/top_side = 18
+12:7/0 = 0
+12:7/0/terrain_set = 0
+12:7/0/terrain = 18
+12:7/0/terrains_peering_bit/right_side = 18
+12:7/0/terrains_peering_bit/top_side = 18
+13:7/0 = 0
+13:7/0/terrain_set = 0
+13:7/0/terrain = 18
+13:7/0/terrains_peering_bit/right_side = 18
+13:7/0/terrains_peering_bit/left_side = 18
+13:7/0/terrains_peering_bit/top_side = 18
+13:6/0 = 0
+13:6/0/terrain_set = 0
+13:6/0/terrain = 18
+13:6/0/terrains_peering_bit/right_side = 18
+13:6/0/terrains_peering_bit/bottom_side = 18
+13:6/0/terrains_peering_bit/left_side = 18
+13:6/0/terrains_peering_bit/top_side = 18
+13:5/0 = 0
+13:5/0/terrain_set = 0
+13:5/0/terrain = 18
+13:5/0/terrains_peering_bit/right_side = 18
+13:5/0/terrains_peering_bit/bottom_side = 18
+13:5/0/terrains_peering_bit/left_side = 18
+14:5/0 = 0
+14:5/0/terrain_set = 0
+14:5/0/terrain = 18
+14:5/0/terrains_peering_bit/bottom_side = 18
+14:5/0/terrains_peering_bit/left_side = 18
+14:6/0 = 0
+14:6/0/terrain_set = 0
+14:6/0/terrain = 18
+14:6/0/terrains_peering_bit/bottom_side = 18
+14:6/0/terrains_peering_bit/left_side = 18
+14:6/0/terrains_peering_bit/top_side = 18
+14:7/0 = 0
+14:7/0/terrain_set = 0
+14:7/0/terrain = 18
+14:7/0/terrains_peering_bit/left_side = 18
+14:7/0/terrains_peering_bit/top_side = 18
 
 [resource]
 terrain_set_0/mode = 0
@@ -538,5 +595,11 @@ terrain_set_0/terrain_14/name = "PurpleWall"
 terrain_set_0/terrain_14/color = Color(0.5, 0.25, 0.34375, 1)
 terrain_set_0/terrain_15/name = "Snow"
 terrain_set_0/terrain_15/color = Color(0.5, 0.25, 0.25, 1)
+terrain_set_0/terrain_16/name = "WoodWall"
+terrain_set_0/terrain_16/color = Color(0.5, 0.34375, 0.25, 1)
+terrain_set_0/terrain_17/name = "WoodFloor"
+terrain_set_0/terrain_17/color = Color(0.5, 0.4375, 0.25, 1)
+terrain_set_0/terrain_18/name = "Field"
+terrain_set_0/terrain_18/color = Color(0.46875, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_wijl4")
 pattern_0 = SubResource("TileMapPattern_1u2k3")

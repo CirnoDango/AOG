@@ -46,9 +46,9 @@ public partial class Mainmenu : Control, IRegisterToG
 			OptionScene.AddItem("Tutorial(1)");
 			OptionScene.AddItem("Tutorial(2)");
 			OptionScene.AddItem("Scarlet Mansion");
-            OptionScene.AddItem("Test Scene");
-            OptionScene.AddItem("silverForest");
-        }
+			OptionScene.AddItem("Test Scene");
+			OptionScene.AddItem("silverForest");
+		}
 		OnPlayerSelected(3);
 		OnSceneSelected(0);
 		
@@ -102,8 +102,8 @@ public partial class Mainmenu : Control, IRegisterToG
 				selectedScene = "eosdE";
 				break; 
 			case "测试场景":
-            case "Test Scene":
-                selectedScene = "CaveD";
+			case "Test Scene":
+				selectedScene = "CaveD";
 				break;
 			default:
 				selectedScene = s;
