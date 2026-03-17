@@ -95,10 +95,10 @@ public partial class Mainmenu : Control, IRegisterToG
 				selectedScene = "tutorial2E";
 				break;
 			case "红魔馆":
-				selectedScene = "Eosd";
+				selectedScene = "eosd";
 				break;
 			case "Scarlet Mansion":
-				selectedScene = "EosdE";
+				selectedScene = "eosdE";
 				break; 
 			case "测试场景":
             case "Test Scene":

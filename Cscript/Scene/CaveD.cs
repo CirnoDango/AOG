@@ -70,7 +70,7 @@ public partial class CaveD : Node
         // 场景资源加载
         Player.Init(player, 1);
         G.I.Player.TalentPoint = 3;
-        Player.PlayerUnit.Us.LearnSkillGroup("Yinyangball");
+        Player.PlayerUnit.Us.LearnSkillGroup("YinyangBall");
         Player.PlayerUnit.Us.LearnSkillGroup("Dark");
         Player.PlayerUnit.Us.LearnSkillGroup("Star");
         Player.PlayerUnit.Us.LearnSkillGroup("Freeze");
