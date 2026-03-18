@@ -18,6 +18,8 @@ public partial class TileMapAllLayer : Node2D, IRegisterToG
     [Export]
     public Control GeneralMap {  get; set; }
     public Control ImportMap {  get; set; }
+    [Export]
+    public TextureRect Background { get; set; }
     public override void _Ready()
     {
         Visible = true;

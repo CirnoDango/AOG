@@ -146,7 +146,6 @@ public class Map
     /// </summary>
     public Dictionary<string, float> EnemySummonValue;
     public bool IsPrebuild = false;
-    public bool NeedConnect = false;
     public int NaturalSp = 20;
     public Map(int width, int height)
     {
@@ -546,14 +545,7 @@ public static class Scene
         map.WakeUnits.Add(Player.PlayerUnit);
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));
         if (!map.IsPrebuild)
-        {
-            if (map.NeedConnect)
-                MapBuilder.ConnectTileMapFromLogic(CurrentMap);
-            else
-                MapBuilder.BuildTileMapFromLogic(CurrentMap);
-        }
-            
-
+            MapBuilder.BuildTileMapFromLogic(CurrentMap);
         CurrentMap.SummonEnemy();
         Player.PlayerUnit.Up.MoveTo(map.GetGrid(map.Entrance));//激活敌人单位
         CurrentMap.AfterEnter?.Invoke();

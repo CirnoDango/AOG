@@ -77,43 +77,59 @@ public static class MapBuilder
     {
         G.I.TileMapAllLayer.BaseGround.Clear();
         G.I.TileMapAllLayer.Stand.Clear();
+        Dictionary<int, List<Vector2I>> groundGroups = [];
+        Dictionary<int, List<Vector2I>> standGroups = [];
+        Dictionary<string, int> groundTerrains = [];
+        Dictionary<string, int> standTerrains = [];
+        groundTerrains.Add("", -1);
+        standTerrains.Add("", -1);
+        int n = G.I.TileMapAllLayer.BaseGround.TileSet.GetTerrainsCount(0);
+        for (int i = 0; i < n; i++)
+        {
+            var name = G.I.TileMapAllLayer.BaseGround.TileSet.GetTerrainName(0, i);
+            groundTerrains.Add(name, i);
+        }
+        int m = G.I.TileMapAllLayer.Stand.TileSet.GetTerrainsCount(0);
+        for (int i = 0; i < m; i++)
+        {
+            var name = G.I.TileMapAllLayer.Stand.TileSet.GetTerrainName(0, i);
+            standTerrains.Add(name, i);
+        }
         for (int x = 0; x < map.Width; x++)
         {
             for (int y = 0; y < map.Height; y++)
             {
                 var grid = map.Grid[x, y];
                 var pos = new Vector2I(x, y);
-                SetTileMapTerrain(G.I.TileMapAllLayer.BaseGround, pos, grid.TerrainBaseGround);
-                SetTileMapTerrain(G.I.TileMapAllLayer.Stand, pos, grid.TerrainStand);
-                var tileDataStand = G.I.TileMapAllLayer.BaseGround.GetCellTileData(pos);
-                int terrainIdStand = tileDataStand.Terrain;
-                G.I.TileMapAllLayer.BaseGround.SetCellsTerrainConnect([pos], 0, terrainIdStand);
+                if (!groundGroups.TryGetValue(groundTerrains[grid.TerrainBaseGround], out var groundList))
+                {
+                    groundList = [];
+                    groundGroups[groundTerrains[grid.TerrainBaseGround]] = groundList;
+                }
+                groundList.Add(pos);
+                if (!standGroups.TryGetValue(standTerrains[grid.TerrainStand], out var standList))
+                {
+                    standList = [];
+                    standGroups[standTerrains[grid.TerrainStand]] = standList;
+                }
+                standList.Add(pos);
             }
         }
-    }
-    public static void ConnectTileMapFromLogic(Map map)
-    {
-        G.I.TileMapAllLayer.BaseGround.Clear();
-        G.I.TileMapAllLayer.Stand.Clear();
-        for (int x = 0; x < map.Width; x++)
+        foreach (var kv in groundGroups)
         {
-            for (int y = 0; y < map.Height; y++)
-            {
-                var grid = map.Grid[x, y];
-                var pos = new Vector2I(x, y);
-                SetTileMapTerrain(G.I.TileMapAllLayer.BaseGround, pos, grid.TerrainBaseGround);
-                SetTileMapTerrain(G.I.TileMapAllLayer.Stand, pos, grid.TerrainStand);
-                var tileDataBase = G.I.TileMapAllLayer.BaseGround.GetCellTileData(pos);
-                var tileDataStand = G.I.TileMapAllLayer.Stand.GetCellTileData(pos);
-                int? terrainIdBase = tileDataBase?.Terrain;
-                int? terrainIdStand = tileDataStand?.Terrain;
-                if (terrainIdBase != null)
-                    G.I.TileMapAllLayer.BaseGround.SetCellsTerrainConnect([pos], 0, (int)terrainIdBase);
-                if (terrainIdStand != null)
-                    G.I.TileMapAllLayer.Stand.SetCellsTerrainConnect([pos], 0, (int)terrainIdStand);
-            }
+            int terrain = kv.Key;
+            var cells = kv.Value;
+            G.I.TileMapAllLayer.BaseGround.SetCellsTerrainConnect([.. cells], 0, terrain);
+        }
+
+        foreach (var kv in standGroups)
+        {
+            int terrain = kv.Key;
+            var cells = kv.Value;
+            G.I.TileMapAllLayer.Stand.SetCellsTerrainConnect([.. cells], 0, terrain);
         }
     }
+
     /// <summary>
     /// Sets the terrain type for the specified logic map layer at the given grid position.
     /// </summary>

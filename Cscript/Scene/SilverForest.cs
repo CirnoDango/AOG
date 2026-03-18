@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 public partial class SilverForest : Node
 {
     public static Map Floor1 = new(60, 40);
-    public static Map Floor2 = new(80, 80);
+    public static Map Floor2 = new(60, 60);
+    public static Map Floor3 = new(60, 40);
+    public static Map Floor4a = new(80, 30);
+    public static Map Floor4b = new(80, 30);
+    public static Map Floor5 = new(60, 40);
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
@@ -29,23 +33,38 @@ public partial class SilverForest : Node
         
     }
     public static bool inited = false;
-    public void Init()
+    public static void Init()
     {
         if (inited)
         {
             //return;
         }
         inited = true;
+        CreateFloor(Floor1);
         CreateFloor2(Floor2);
-        Floor2.NeedConnect = true;
-        Scene.Enter(Floor2);
+        CreateFloor3(Floor3);
+        CreateFloor4(Floor4a);
+        CreateFloor4(Floor4b);
+        Floor4a.AfterEnter += () => G.I.TileMapAllLayer.Background.Visible = true;
+        Floor4a.AfterEnter += () => Player.PlayerUnit.Ue.OnUnitMove += MoveBg;
+        Floor4b.AfterEnter += () => G.I.TileMapAllLayer.Background.Position = Vector2.Zero;
+        Floor5.AfterEnter += () =>
+        {
+            G.I.TileMapAllLayer.Background.Visible = true;
+            Player.PlayerUnit.Ue.OnUnitMove -= MoveBg;
+        };
+        Scene.Enter(Floor4a);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
         ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
         Unit.OnPlayerdied += Playerdied;
+        static void MoveBg(Unit unit)
+        {
+            G.I.TileMapAllLayer.Background.Position = new Vector2(-25 * Player.PlayerUnit.Up.Position.X, 0);
+        }
         static void CreateFloor(Map floor)
         {
-            foreach(var grid in floor.Grid)
+            foreach (var grid in floor.Grid)
                 grid.TerrainBaseGround = "Snow";
             MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
                 new Dictionary<string, float>
@@ -67,6 +86,13 @@ public partial class SilverForest : Node
         }
         static void CreateFloor2(Map floor)
         {
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+                new Dictionary<string, float>
+                {
+                { "SnowTree", 0.45f },
+                { "", 0.55f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "", floor, 2);
             MapGenerator.ChangeMapByWeight(LogicMapLayer.BaseGround,
                 new Dictionary<string, float>
                 {
@@ -78,16 +104,10 @@ public partial class SilverForest : Node
                 6, 5, "WoodWall", "WoodFloor");
             MapGenerator.ChangeMapByPutRect(LogicMapLayer.BaseGround, floor,
                 4, 8, "Field");
-            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
-                new Dictionary<string, float>
-                {
-                { "SnowTree", 0.45f },
-                { "", 0.55f }
-                }, floor);
-            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "", floor, 2);
+
             foreach (var grid in floor.Grid)
             {
-                if (grid.TerrainBaseGround != "Grass" && grid.TerrainBaseGround != "Snow")
+                if (grid.TerrainBaseGround != "Grass" && grid.TerrainBaseGround != "Snow" && grid.TerrainStand != "DoorClosed")
                 {
                     grid.TerrainStand = "";
                 }
@@ -98,6 +118,29 @@ public partial class SilverForest : Node
             }
             floor.Entrance = new Vector2I(0, GD.RandRange(10, 70));
             floor.SetExit(floor.GetGrid(new Vector2I(79, GD.RandRange(10, 70))));
+        }
+        static void CreateFloor3(Map floor)
+        {
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.BaseGround,
+                new Dictionary<string, float>
+                {
+                { "Grass", 1f },
+                }, floor);
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+                new Dictionary<string, float>
+                {
+                { "Forest", 0.5f },
+                { "", 0.5f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "Forest", floor, 2);
+            MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "Grass", floor, out int y, out int ey);
+            floor.Entrance = new Vector2I(0, y);
+            floor.SetExit(floor.GetGrid(new Vector2I(59, ey)));
+        }
+        static void CreateFloor4(Map floor)
+        {
+            foreach (var grid in floor.Grid)
+                grid.TerrainBaseGround = "Sky";
         }
     }
     private static void Playerdied()
