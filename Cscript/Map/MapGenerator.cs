@@ -422,6 +422,149 @@ public static class MapGenerator
             return 0;
         }
     }
+    public enum RoadDirection
+    {
+        LeftToRight,
+        RightToLeft,
+        TopToBottom,
+        BottomToTop
+    }
+    public static void ChangeMapByRoadEx(
+    LogicMapLayer mapLayer,
+    string terrain,
+    Map map,
+    RoadDirection roadDir,
+    int roadWidth,
+    out Vector2I startPos,
+    out Vector2I endPos)
+    {
+        int x = 0, y = 0;
+
+        // === 起点选择 ===
+        switch (roadDir)
+        {
+            case RoadDirection.LeftToRight:
+                x = 0;
+                y = GD.RandRange(0, map.Height - 1);
+                break;
+
+            case RoadDirection.RightToLeft:
+                x = map.Width - 1;
+                y = GD.RandRange(0, map.Height - 1);
+                break;
+
+            case RoadDirection.TopToBottom:
+                x = GD.RandRange(0, map.Width - 1);
+                y = 0;
+                break;
+
+            case RoadDirection.BottomToTop:
+                x = GD.RandRange(0, map.Width - 1);
+                y = map.Height - 1;
+                break;
+        }
+
+        startPos = new Vector2I(x, y);
+
+        int prevDir = 0;
+
+        while (true)
+        {
+            // === 画道路（宽度）===
+            DrawRoadWidth(map, x, y, roadDir, roadWidth, terrain);
+
+            // === 判断是否结束 ===
+            if (
+                (roadDir == RoadDirection.LeftToRight && x >= map.Width - 1) ||
+                (roadDir == RoadDirection.RightToLeft && x <= 0) ||
+                (roadDir == RoadDirection.TopToBottom && y >= map.Height - 1) ||
+                (roadDir == RoadDirection.BottomToTop && y <= 0)
+            )
+                break;
+
+            // === 马尔可夫方向 ===
+            int direction = NextDirection(prevDir);
+
+            // === 横向偏移（lateral）===
+            if (roadDir == RoadDirection.LeftToRight || roadDir == RoadDirection.RightToLeft)
+            {
+                if (direction == 1 && y > 0) y--;
+                else if (direction == 2 && y < map.Height - 1) y++;
+            }
+            else
+            {
+                if (direction == 1 && x > 0) x--;
+                else if (direction == 2 && x < map.Width - 1) x++;
+            }
+
+            // === 前进（forward）===
+            switch (roadDir)
+            {
+                case RoadDirection.LeftToRight: x++; break;
+                case RoadDirection.RightToLeft: x--; break;
+                case RoadDirection.TopToBottom: y++; break;
+                case RoadDirection.BottomToTop: y--; break;
+            }
+
+            prevDir = direction;
+        }
+
+        endPos = new Vector2I(x, y);
+
+        // =========================
+        // 局部函数
+        // =========================
+
+        void DrawRoadWidth(Map map, int cx, int cy, RoadDirection dir, int width, string terrain)
+        {
+            int half = width / 2;
+
+            for (int i = -half; i <= half; i++)
+            {
+                int tx = cx;
+                int ty = cy;
+
+                // 宽度方向要“垂直于前进方向”
+                if (dir == RoadDirection.LeftToRight || dir == RoadDirection.RightToLeft)
+                {
+                    ty = cy + i;
+                }
+                else
+                {
+                    tx = cx + i;
+                }
+
+                if (tx >= 0 && tx < map.Width && ty >= 0 && ty < map.Height)
+                {
+                    map.Grid[tx, ty].TerrainBaseGround = terrain;
+                    map.Grid[tx, ty].TerrainStand = "";
+                }
+            }
+        }
+
+        int NextDirection(int prevDir)
+        {
+            double r = GD.Randf();
+
+            switch (prevDir)
+            {
+                case 0:
+                    if (r < 0.5) return 0;
+                    if (r < 0.75) return 1;
+                    return 2;
+
+                case 1:
+                    if (r < 0.6) return 0;
+                    return 1;
+
+                case 2:
+                    if (r < 0.6) return 0;
+                    return 2;
+            }
+
+            return 0;
+        }
+    }
     public static void ChangeMapByPutRoom(LogicMapLayer mapLayer, Map map,
         int number, int size, string wall, string floor)
     {

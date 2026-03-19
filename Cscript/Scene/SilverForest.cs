@@ -11,7 +11,8 @@ public partial class SilverForest : Node
     public static Map Floor3 = new(60, 40);
     public static Map Floor4a = new(80, 30);
     public static Map Floor4b = new(80, 30);
-    public static Map Floor5 = new(60, 40);
+    public static Map Floor5 = new(40, 120);
+    public static Map Floor6 = new(60, 40);
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
@@ -45,15 +46,16 @@ public partial class SilverForest : Node
         CreateFloor3(Floor3);
         CreateFloor4(Floor4a);
         CreateFloor4(Floor4b);
+        CreateFloor5(Floor5);
         Floor4a.AfterEnter += () => G.I.TileMapAllLayer.Background.Visible = true;
         Floor4a.AfterEnter += () => Player.PlayerUnit.Ue.OnUnitMove += MoveBg;
         Floor4b.AfterEnter += () => G.I.TileMapAllLayer.Background.Position = Vector2.Zero;
         Floor5.AfterEnter += () =>
         {
-            G.I.TileMapAllLayer.Background.Visible = true;
-            Player.PlayerUnit.Ue.OnUnitMove -= MoveBg;
+            G.I.TileMapAllLayer.Background.Visible = false;
+            //Player.PlayerUnit.Ue.OnUnitMove -= MoveBg;
         };
-        Scene.Enter(Floor4a);
+        Scene.Enter(Floor5);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
         ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
@@ -116,8 +118,8 @@ public partial class SilverForest : Node
                     grid.TerrainStand = "SnowMan";
                 }
             }
-            floor.Entrance = new Vector2I(0, GD.RandRange(10, 70));
-            floor.SetExit(floor.GetGrid(new Vector2I(79, GD.RandRange(10, 70))));
+            floor.Entrance = new Vector2I(0, GD.RandRange(10, 50));
+            floor.SetExit(floor.GetGrid(new Vector2I(59, GD.RandRange(10, 50))));
         }
         static void CreateFloor3(Map floor)
         {
@@ -141,6 +143,17 @@ public partial class SilverForest : Node
         {
             foreach (var grid in floor.Grid)
                 grid.TerrainBaseGround = "Sky";
+            MapGenerator.ChangeMapByPutRect(LogicMapLayer.BaseGround, floor,
+                8, 6, "Cloud");
+        }
+        static void CreateFloor5(Map floor)
+        {
+            foreach (var grid in floor.Grid)
+                grid.TerrainBaseGround = "Wall";
+            MapGenerator.ChangeMapByRoadEx(LogicMapLayer.BaseGround, "WideStage", floor, MapGenerator.RoadDirection.BottomToTop,
+                20, out Vector2I start, out Vector2I end);
+            floor.Entrance = start;
+            floor.SetExit(floor.GetGrid(end));
         }
     }
     private static void Playerdied()
