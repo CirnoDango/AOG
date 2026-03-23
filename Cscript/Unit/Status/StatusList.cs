@@ -259,7 +259,24 @@ public class Pinned : Status
         return false;
     }
 }
-
+public class Slow : Status
+{
+    public override StatusType Type => StatusType.Negative;
+    public Slow(float duration)
+    {
+        Duration = 50;
+    }
+    public override void OnGet(Unit unit, Status status)
+    {
+        unit.Ua.SpeedGlobal -= 50;
+        CombineTime(unit, status);
+    }
+    public override void OnQuit(Unit unit)
+    {
+        unit.Ua.SpeedGlobal += 50;
+        Quit(unit);
+    }
+}
 public class Burned : Status
 {
     public override StatusType Type => StatusType.Negative;

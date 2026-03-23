@@ -114,7 +114,8 @@ public partial class SkillTree : Control
 			if (Skill.Level >= MaxLevel)
 				return;
 			Skill.Level += 1; // 升级技能
-			UpdateTree();
+			Skill.OnLevelUp(Player.PlayerUnit);
+            UpdateTree();
 			G.I.Player.SkillPoint -= 1;
 			G.I.SkillPanel.Refresh();
 		}

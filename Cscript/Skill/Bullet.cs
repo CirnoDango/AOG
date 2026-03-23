@@ -216,13 +216,15 @@ public class Bullet
         image.QueueFree();
     }
     public Action<Unit> OnActive;
+    public bool Piercing = false;
     public void Active(Unit target)
     {
         OnActive?.Invoke(target);
         skill.AwakeBullet(new SkillContext(creator, target), this);
         target.Ua.TakeBulletDamage(damage, creator, skill, crit);
         skill.ActivateBullet(new SkillContext(creator, target), this);
-        Destroy();
+        if (!Piercing)
+            Destroy();
     }
     public float AngleOfShapeBullet()
     {

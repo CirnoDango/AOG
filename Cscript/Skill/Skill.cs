@@ -169,10 +169,13 @@ public abstract class Skill
 
     }
     public virtual void OnLearn(Unit unit)
+    {//仅学习时加载的效果；如纸面数据变化
+    }
+    public virtual void OnLevelUp(Unit unit)
     {
     }
     public virtual void OnLoad(Unit unit)
-    {
+    {//学习与读档时都加载的效果；如增加触发类效果
     }
     public virtual void OffLearn(Unit unit)
     {
