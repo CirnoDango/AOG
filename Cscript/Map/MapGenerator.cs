@@ -540,6 +540,16 @@ public static class MapGenerator
                     map.Grid[tx, ty].TerrainStand = "";
                 }
             }
+            var sx1 = cx - half - 1; var sx2 = cx + half + 1;
+            // 以后再改这个
+            if (sx1 >= 0 && sx1 < map.Width && cy >= 0 && cy < map.Height)
+            {
+                map.Grid[sx1, cy].TerrainStand = "SpiritLight";
+            }
+            if (sx2 >= 0 && sx2 < map.Width && cy >= 0 && cy < map.Height)
+            {
+                map.Grid[sx2, cy].TerrainStand = "SpiritLight";
+            }
         }
 
         int NextDirection(int prevDir)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-public partial class SilverForest : Node
+public partial class SilverForest : Node, IMapNode
 {
     public static Map Floor1 = new(60, 40);
     public static Map Floor2 = new(60, 60);
@@ -16,37 +16,31 @@ public partial class SilverForest : Node
     private static TaskCompletionSource clickTcs;
     public override void _Ready()
     {
-        Floor1.EnemySummonValue = new Dictionary<string, float>
-        {
-            { "dangoPea",       0.1f },
-            { "dangoWater",     0.3f },
-            { "dangoFist",      0.1f },
-            { "dangoDark",      0.2f },
-            { "dangoIce",       0.3f },
-            { "dangoTwinpea",   0.1f },
-            { "dangoRedBean",   0.1f },
-            { "dangoSpellcard", 0.1f },
-            { "dangoLight",     0.1f },
-        };
         Fsm.StartState.OnEnd += Load;
         Fsm.StartState.OnEnd += Init;
         G.I.Fsm.ChangeState(Fsm.StartState);
         
     }
     public static bool inited = false;
-    public static void Init()
+    public void Init()
     {
         if (inited)
         {
             //return;
         }
         inited = true;
-        CreateFloor(Floor1);
+        Maps = [Floor1, Floor2, Floor3, Floor4a, Floor4b, Floor5, Floor6];
+        CreateFloor1(Floor1);
         CreateFloor2(Floor2);
         CreateFloor3(Floor3);
         CreateFloor4(Floor4a);
         CreateFloor4(Floor4b);
         CreateFloor5(Floor5);
+        CreateFloor6(Floor6);
+        for (int ii = 0; ii < Maps.Count - 1; ii++)
+        {
+            Maps[ii].MapGoto = Maps[ii + 1];
+        }
         Floor4a.AfterEnter += () => G.I.TileMapAllLayer.Background.Visible = true;
         Floor4a.AfterEnter += () => Player.PlayerUnit.Ue.OnUnitMove += MoveBg;
         Floor4b.AfterEnter += () => G.I.TileMapAllLayer.Background.Position = Vector2.Zero;
@@ -55,7 +49,7 @@ public partial class SilverForest : Node
             G.I.TileMapAllLayer.Background.Visible = false;
             //Player.PlayerUnit.Ue.OnUnitMove -= MoveBg;
         };
-        Scene.Enter(Floor5);
+        Scene.Enter(Floor1);
         var i = Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 30 } });
         ItemEffect.CreateItemEffect("AddMaxHp").ApplyItemEffect(i);
         Player.PlayerUnit.Inventory.AddItem(i);
@@ -64,7 +58,7 @@ public partial class SilverForest : Node
         {
             G.I.TileMapAllLayer.Background.Position = new Vector2(-25 * Player.PlayerUnit.Up.Position.X, 0);
         }
-        static void CreateFloor(Map floor)
+        static void CreateFloor1(Map floor)
         {
             foreach (var grid in floor.Grid)
                 grid.TerrainBaseGround = "Snow";
@@ -145,6 +139,8 @@ public partial class SilverForest : Node
                 grid.TerrainBaseGround = "Sky";
             MapGenerator.ChangeMapByPutRect(LogicMapLayer.BaseGround, floor,
                 8, 6, "Cloud");
+            floor.Entrance = new Vector2I(0, GD.RandRange(10, 20));
+            floor.SetExit(floor.GetGrid(new Vector2I(79, GD.RandRange(10, 20))));
         }
         static void CreateFloor5(Map floor)
         {
@@ -154,6 +150,20 @@ public partial class SilverForest : Node
                 20, out Vector2I start, out Vector2I end);
             floor.Entrance = start;
             floor.SetExit(floor.GetGrid(end));
+        }
+        static void CreateFloor6(Map floor)
+        {
+            foreach (var grid in floor.Grid)
+                grid.TerrainBaseGround = "CherryFloor";
+            MapGenerator.ChangeMapByWeight(LogicMapLayer.Stand,
+                new Dictionary<string, float>
+                {
+                { "CherryTree", 0.45f },
+                { "", 0.55f }
+                }, floor);
+            MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "CherryTree", floor, 2);
+            MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "CherryFloor", floor, out int y, out int ey);
+            floor.Entrance = new Vector2I(0, y);
         }
     }
     private static void Playerdied()
@@ -174,6 +184,9 @@ public partial class SilverForest : Node
 
     }
     public static bool loaded = false;
+
+    public List<Map> Maps { get; set; }
+
     public async void Load()
     {
         if (loaded)

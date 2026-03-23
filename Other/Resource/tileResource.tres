@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" format=3 uid="uid://sd4of61ejnal"]
 
-[ext_resource type="Texture2D" uid="uid://bf8btdv0nsysx" path="res://Assets/tiles/stand.png" id="1_kmr8k"]
+[ext_resource type="Texture2D" uid="uid://croyud5saj8lm" path="res://Assets/tiles/stand.png" id="1_kmr8k"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5elg3"]
 texture = ExtResource("1_kmr8k")
@@ -118,6 +118,12 @@ texture = ExtResource("1_kmr8k")
 2:1/0 = 0
 2:1/0/terrain_set = 0
 2:1/0/terrain = 21
+3:1/0 = 0
+3:1/0/terrain_set = 0
+3:1/0/terrain = 22
+10:1/0 = 0
+10:1/0/terrain_set = 0
+10:1/0/terrain = 23
 
 [resource]
 terrain_set_0/mode = 0
@@ -165,4 +171,8 @@ terrain_set_0/terrain_20/name = "SnowTree"
 terrain_set_0/terrain_20/color = Color(0.28125, 0.5, 0.25, 1)
 terrain_set_0/terrain_21/name = "SnowMan"
 terrain_set_0/terrain_21/color = Color(0.25, 0.5, 0.3125, 1)
+terrain_set_0/terrain_22/name = "CherryTree"
+terrain_set_0/terrain_22/color = Color(0.25, 0.5, 0.40625, 1)
+terrain_set_0/terrain_23/name = "SpiritLight"
+terrain_set_0/terrain_23/color = Color(0.25, 0.5, 0.5, 1)
 sources/0 = SubResource("TileSetAtlasSource_5elg3")
