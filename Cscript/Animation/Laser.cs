@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public partial class Laser : Node2D
+public partial class Laser : Control
 {
     public float Length = 400f;
-    [Export] public float Width = 8f;
+    [Export] public float Width = 80f;
     [Export] public float GrowTime = 0.15f;   // 激光延伸时间
     [Export] public float LifeTime = 1.0f;    // 激光持续时间
     public Color BeamColor = new Color(1f, 0.2f, 0.2f, 1f); // 主颜色
@@ -42,6 +42,7 @@ public partial class Laser : Node2D
 
     public override void _Process(double delta)
     {
+        delta *= 4.8;
         if (!active)
             return;
         time += (float)delta;

@@ -18,13 +18,16 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     public Godot.Label skillInfo;
     public Dictionary<string, Color> skillBoxColor = new()
     {
-        { "YinyangBall", new Color(1f, 0.2f, 0.4f) },
-        { "Circle", new Color(0f, 0.8f, 0.5f) },
-        { "Star", new Color(0.9f, 0.9f, 0.1f) },
-        { "Dark", new Color(0.2f, 0.1f, 0.1f) },
-        { "Freeze", new Color(0.5f, 0.5f, 0.9f) },
-        { "Fist", new Color(0.5f, 0.1f, 0.5f) },
-        { "FireElement", new Color(1f, 0.3f, 0.1f) },
+        { "YinyangBall", Colors.Crimson},
+        { "Circle", Colors.MediumSpringGreen },
+        { "Star", Colors.Yellow },
+        { "Dark", Colors.Maroon },
+        { "Freeze", Colors.LightSkyBlue },
+        { "Fist", Colors.MediumVioletRed},
+        { "FireElement", Colors.OrangeRed },
+        { "Time", Colors.Silver },
+        { "Blood", Colors.DarkRed },
+        { "Winter", Colors.SteelBlue },
     };
     // 学会一个技能，添加按钮
     public void LearnSkill(Skill skill)

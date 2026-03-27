@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using static MathEx;
+using static System.Net.Mime.MediaTypeNames;
 /// <summary>
 /// 寒冬系技能
 /// 包含：延长的冬日、花之凋零、波状光、北极的胜利者、符卡：寒潮
@@ -232,7 +233,7 @@ public class ColdSnap : SpellCard
     }
     
     // 子弹数量：100/125/150/150
-    int[] bulletCount = { 100, 125, 150, 150 };
+    int[] bulletCount = { 120, 144, 168, 168 };
     // 冰冻概率：30%/45%/60%/60%
     int[] freezeChance = { 30, 45, 60, 60 };
     
@@ -243,19 +244,43 @@ public class ColdSnap : SpellCard
     
     public override TargetType GetTargeting()
     {
-        return new TargetType(new TargetRuleSelf(), 1, 0);
+        return new TargetType(new TargetRuleSelf(), 1, 10);
     }
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        AddTimedEvent(Linspace(20, 300, 70), (ctx, advanceTime) =>
+        AddTimedEvent(Linspace(50, 600, 12), (ctx, advanceTime) =>
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.cold), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
-                new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12,
-                ShapeBullet.Ring, (ColorBullet)(new List<int> { 0, 4, 9, 12, 13 })[GD.RandRange(0, 4)], advanceTime);
+            var a = TimeElapsed * 1.67f / 57.3f;
+            var offset = 1.5f * new Vector2(Mathf.Cos(a), Mathf.Sin(a));
+            for (int i = 0; i < bulletCount[iLevel]/24; i++)
+            {
+                var off = offset + RandomV2(1);
+                var bullet = Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.cold), 
+                    sc.User.Up.Position + offset, sc.User.Up.Position + 2*offset, 
+                    RandomV2(1), a+(float)GD.RandRange(-10f, 10f), (float)GD.RandRange(2.0, 3.0), 10,
+                    ShapeBullet.Small, ColorBullet.Blue, advanceTime);
+                bullet.OverrideActive += OverrideActive;
+            }
+            offset = 1.5f * new Vector2(-Mathf.Cos(a), -Mathf.Sin(a));
+            for (int i = 0; i < bulletCount[iLevel] / 24; i++)
+            {
+                var off = offset + RandomV2(1);
+                var bullet = Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.cold),
+                    sc.User.Up.Position + offset, sc.User.Up.Position + 2 * offset,
+                    RandomV2(1), (float)GD.RandRange(-10f, 10f), (float)GD.RandRange(2.0, 3.0), 10,
+                    ShapeBullet.Small, ColorBullet.Ice, advanceTime);
+            }
         });
     }
-
+    public static void OverrideActive(Bullet bullet, Unit target)
+    {
+        bullet.skill.AwakeBullet(new SkillContext(bullet.creator, target), bullet);
+        target.Ua.TakeBulletDamage(bullet.damage, bullet.creator, bullet.skill, bullet.crit);
+        bullet.skill.ActivateBullet(new SkillContext(bullet.creator, target), bullet);
+        if (!bullet.Piercing)
+            bullet.Destroy(3);
+    }
     protected override void OnSpellUpdate(SkillContext sc, float delta)
     {
 

@@ -9,19 +9,19 @@
 [ext_resource type="Script" uid="uid://cw42e3kl0c1yy" path="res://Cscript/UI/Fps.cs" id="7_ofgj4"]
 [ext_resource type="Script" uid="uid://hygobr1ud2y7" path="res://Cscript/UI/PlayerStatusBar.cs" id="8_7yoxt"]
 [ext_resource type="Script" uid="uid://cm3pkk0b74d3c" path="res://Cscript/UI/CombatAbilityBox.cs" id="9_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://dammrg4jau5wt" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
+[ext_resource type="Texture2D" uid="uid://dwwygqx5pnorv" path="res://Assets/UI/CAbox.png" id="10_gx5ry"]
 [ext_resource type="Texture2D" uid="uid://bt5ubtyqa4u36" path="res://Assets/UI/NaturalSpBar.png" id="10_mdtu7"]
-[ext_resource type="Texture2D" uid="uid://bdgfqw1cq5la5" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
+[ext_resource type="Texture2D" uid="uid://dqxybs12tlgmj" path="res://Assets/Portraits/cirno_fight_hahaha.png" id="11_mdtu7"]
 [ext_resource type="Script" uid="uid://i0l3m63bsia1" path="res://Cscript/Item/InventoryBox.cs" id="12_xcvs3"]
 [ext_resource type="Texture2D" uid="uid://bbs3tfde7aewc" path="res://Assets/UI/close.png" id="13_7yoxt"]
-[ext_resource type="Texture2D" uid="uid://3n4chuooyuju" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
+[ext_resource type="Texture2D" uid="uid://duqn6pawgp3dp" path="res://Assets/UI/Inventory.png" id="13_dlj3q"]
 [ext_resource type="Script" uid="uid://v7xido03yjql" path="res://Cscript/UI/CloseButton.cs" id="14_tkdt8"]
-[ext_resource type="Texture2D" uid="uid://bqsexx0ejbclj" path="res://Assets/UI/equip.png" id="14_urhty"]
-[ext_resource type="Texture2D" uid="uid://wb0l3wje15ad" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
-[ext_resource type="Texture2D" uid="uid://bdy4fs4xuvfor" path="res://Assets/UI/throw.png" id="16_68pdb"]
+[ext_resource type="Texture2D" uid="uid://bi6y1m13jl1lm" path="res://Assets/UI/equip.png" id="14_urhty"]
+[ext_resource type="Texture2D" uid="uid://bu2k0utom4pwa" path="res://Assets/UI/bluelight.png" id="15_jpgjn"]
+[ext_resource type="Texture2D" uid="uid://ckvge2bkkolsf" path="res://Assets/UI/throw.png" id="16_68pdb"]
 [ext_resource type="Script" uid="uid://beetl4edmkm72" path="res://Cscript/Item/MemoryBox.cs" id="17_hast1"]
 [ext_resource type="Script" uid="uid://b3fjw3wtvdih6" path="res://Cscript/UI/DialogBox.cs" id="18_tk42s"]
-[ext_resource type="Texture2D" uid="uid://yvuvgmbyeb30" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
+[ext_resource type="Texture2D" uid="uid://cnffxsgf68uon" path="res://Assets/UI/box_sign.png" id="19_dkl0p"]
 [ext_resource type="Script" uid="uid://cygirslb6781m" path="res://Cscript/UI/Ua.cs" id="20_5umwx"]
 [ext_resource type="Script" uid="uid://deckquocdq5q4" path="res://Cscript/UI/SkillPanel.cs" id="21_hxw1y"]
 [ext_resource type="PackedScene" uid="uid://bh8gprhtsdnqw" path="res://Nodes/Scene/SkillTree.tscn" id="22_r3qqj"]
@@ -37,7 +37,7 @@
 [ext_resource type="Script" uid="uid://dxxgcmacqmhb4" path="res://Cscript/Map/TileMapAllLayer.cs" id="28_nc36h"]
 [ext_resource type="TileSet" uid="uid://wrw216byr1hh" path="res://Other/Resource/simple.tres" id="29_ol46v"]
 [ext_resource type="Script" uid="uid://lfof4tj5u6nv" path="res://Cscript/UI/SettingMenu.cs" id="30_dlj3q"]
-[ext_resource type="Texture2D" uid="uid://cf68l0a4lmywo" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
+[ext_resource type="Texture2D" uid="uid://da3abkyghp4m8" path="res://Assets/tiles/fog.png" id="31_jj7f0"]
 [ext_resource type="Script" uid="uid://bg6lrcrrftj0v" path="res://Cscript/UI/LayerItemDropped.cs" id="32_1gorf"]
 [ext_resource type="TileSet" uid="uid://sd4of61ejnal" path="res://Other/Resource/tileResource.tres" id="33_c2j4f"]
 [ext_resource type="PackedScene" uid="uid://dnrp0abph08yf" path="res://Nodes/Ui/ItemDropped.tscn" id="33_giel3"]
@@ -53,8 +53,10 @@
 [ext_resource type="Script" uid="uid://m0rbwcoa2hjv" path="res://Cscript/Core/Fsm.cs" id="40_m2rxn"]
 [ext_resource type="Script" uid="uid://b5v1eweho8jvw" path="res://Cscript/UI/SpriteManager.cs" id="41_es6mh"]
 [ext_resource type="Texture2D" uid="uid://bo2yymfne2i8t" path="res://Assets/UI/background.png" id="45_urhty"]
-[ext_resource type="Script" uid="uid://5xpegnyoyaks" path="res://Nodes/Scene/AnimationManager.cs" id="46_dgtui"]
+[ext_resource type="Script" uid="uid://5xpegnyoyaks" path="res://Cscript/Animation/AnimationManager.cs" id="46_dgtui"]
 [ext_resource type="PackedScene" uid="uid://c3em06b0kpfhq" path="res://Nodes/Animation/laser.tscn" id="47_ofgj4"]
+[ext_resource type="PackedScene" uid="uid://d2u8hy7ih8tgy" path="res://Nodes/Animation/damage_number.tscn" id="55_urhty"]
+[ext_resource type="PackedScene" uid="uid://dwuoqsmypnkc" path="res://Nodes/Animation/bullet_particle.tscn" id="57_68pdb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jky6x"]
 texture = ExtResource("31_jj7f0")
@@ -1357,7 +1359,10 @@ script = ExtResource("41_es6mh")
 
 [node name="MapExporterNode" type="Node" parent="." unique_id=977732578]
 
-[node name="AnimationManager" type="Node2D" parent="." unique_id=1400786942]
+[node name="AnimationManager" type="Node2D" parent="." unique_id=1400786942 node_paths=PackedStringArray("UI")]
 position = Vector2(-8, -8)
 script = ExtResource("46_dgtui")
-LaserScene = ExtResource("47_ofgj4")
+Laser = ExtResource("47_ofgj4")
+DamageNumber = ExtResource("55_urhty")
+Particle = ExtResource("57_68pdb")
+UI = NodePath("../UI/UiRoot")

@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 public class Bullet
 {
@@ -180,6 +179,7 @@ public class Bullet
             var grid = Scene.CurrentMap.GetGrid(pos);
             if (!Scene.CurrentMap.CheckGrid(pos) || !grid.IsTransparent)
             {
+
                 Destroy();
                 return;
             }
@@ -210,21 +210,34 @@ public class Bullet
             image.Rotation = Mathf.Atan2(Speed.Y, Speed.X) + Mathf.Pi / 2 - Mathf.Pi * AngleOfShapeBullet() / 180;
         }
     }
-    public void Destroy()
+    public void Destroy(float particleRate = 1)
     {
+        if(particleRate != 1)
+            Animation.CreateParticle(Position, ColorOfBullet(), (int)(SizeOfBullet() * particleRate));
+        else
+            Animation.CreateParticle(PositionFloat, ColorOfBullet(), (int)(SizeOfBullet() * particleRate));
         Scene.CurrentMap.Bullets.Remove(this);
         image.QueueFree();
     }
     public Action<Unit> OnActive;
+    public Action<Unit> OverrideActive;
     public bool Piercing = false;
     public void Active(Unit target)
     {
         OnActive?.Invoke(target);
-        skill.AwakeBullet(new SkillContext(creator, target), this);
-        target.Ua.TakeBulletDamage(damage, creator, skill, crit);
-        skill.ActivateBullet(new SkillContext(creator, target), this);
-        if (!Piercing)
-            Destroy();
+        if(OverrideActive == null)
+        {
+            skill.AwakeBullet(new SkillContext(creator, target), this);
+            target.Ua.TakeBulletDamage(damage, creator, skill, crit);
+            skill.ActivateBullet(new SkillContext(creator, target), this);
+            if (!Piercing)
+                Destroy(3);
+        }
+        else
+        {
+            OverrideActive?.Invoke(target);
+        }
+        
     }
     public float AngleOfShapeBullet()
     {
@@ -236,6 +249,27 @@ public class Bullet
             0   ,0  ,180,0  ,0  ,0  ,0  ,0  ,0  ,0,
             45  ,0  ,90 ,0  ,0  ,0  ,0  ,0  ,0  ,0];
         return angles[(int)Shape];
+    }
+    public int SizeOfBullet()
+    {
+        int[] sizes = [
+             4, 12, 24, 12, 32, 16,  8, 16, 16, 16,
+            16, 12,  8, 12,  8, 16, 16, 12, 24, 12,
+            16, 4,  24, 12, 16, 16, 32, 16, 16, 16,
+            16, 24,  0,  0,  0,  0,  4,  8,  8, 12,
+            16, 16, 16, 16, 16, 16,  0,  0,  0,  0,
+            16, 16,  8,  8,  0,  0,  0,  0,  0,  0];
+        return sizes[(int)Shape];
+    }
+    public Color ColorOfBullet()
+    {
+        Color[] colors = [
+            Colors.Red, Colors.Orange, Colors.Brown, Colors.Gold, Colors.Yellow,
+            Colors.Olive, Colors.Lime, Colors.Green, Colors.Teal, Colors.Turquoise,
+            Colors.Cyan, Colors.LightCyan, Colors.DodgerBlue, Colors.Blue, Colors.Indigo,
+            Colors.Violet, Colors.Magenta, Colors.DeepPink, Colors.Pink, Colors.White];
+
+        return colors[(int)color];
     }
 }
 public enum ColorBullet

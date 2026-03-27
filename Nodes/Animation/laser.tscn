@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3em06b0kpfhq"]
+[gd_scene format=3 uid="uid://c3em06b0kpfhq"]
 
-[ext_resource type="Script" uid="uid://ccib7e5gwqtc0" path="res://Nodes/Scene/Laser.cs" id="1_42tgp"]
+[ext_resource type="Script" uid="uid://ccib7e5gwqtc0" path="res://Cscript/Animation/Laser.cs" id="1_42tgp"]
 [ext_resource type="Texture2D" uid="uid://dq0wygby5fcxx" path="res://Assets/Animation/laser.png" id="2_42tgp"]
 
-[node name="Laser" type="Node2D"]
+[node name="Laser" type="Control" unique_id=1430006561]
 z_index = 3000
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_42tgp")
+Width = 240.0
 
-[node name="Line2D" type="Line2D" parent="."]
+[node name="Line2D" type="Line2D" parent="." unique_id=60934230]
+width = 300.0
 texture = ExtResource("2_42tgp")
 texture_mode = 2

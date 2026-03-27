@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dwuoqsmypnkc"]
+
+[ext_resource type="Texture2D" uid="uid://cvvdbvsc0nwms" path="res://Assets/Animation/particle.png" id="1_f3ec8"]
+
+[node name="BulletParticle" type="CPUParticles2D" unique_id=870993142]
+emitting = false
+amount = 48
+texture = ExtResource("1_f3ec8")
+lifetime = 0.2
+one_shot = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 810.63
+initial_velocity_max = 1550.1
+scale_amount_min = 4.0
+scale_amount_max = 10.0

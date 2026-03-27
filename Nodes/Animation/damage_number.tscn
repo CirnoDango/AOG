@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d2u8hy7ih8tgy"]
+
+[ext_resource type="Script" uid="uid://c572tjux5fjw8" path="res://Cscript/Animation/DamageNumber.cs" id="1_qwuqt"]
+[ext_resource type="FontFile" uid="uid://bvahbvuk7j1c0" path="res://Assets/Font/04B_03__.TTF" id="2_wmd33"]
+
+[node name="DamageNumber" type="Control" unique_id=151484789]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_qwuqt")
+
+[node name="Label" type="Label" parent="." unique_id=2008952858]
+custom_minimum_size = Vector2(1000, 400)
+layout_mode = 0
+offset_left = -500.0
+offset_top = -200.0
+offset_right = 500.0
+offset_bottom = 200.0
+theme_override_fonts/font = ExtResource("2_wmd33")
+theme_override_font_sizes/font_size = 300
+horizontal_alignment = 1
+vertical_alignment = 1

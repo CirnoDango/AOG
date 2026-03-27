@@ -72,7 +72,7 @@ public class MoonlightRay : Skill
 
     protected override void StartActivate(SkillContext sc)
     {
-        Animation.ShootLaser(sc.User.Up.Position, sc.GridsTarget[^1].Position - sc.User.Up.Position, Colors.Gold);
+        Animation.CreateLaser(sc.User.Up.Position, sc.GridsTarget[^1].Position - sc.User.Up.Position, Colors.Gold);
         foreach (var g in sc.GridsTarget)
         {
             if(g.unit != null)

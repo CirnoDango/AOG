@@ -201,6 +201,8 @@ public class UnitAttribute(Unit unit)
     }
     public void GetHp(float amount)
     {
+        if (amount < 0)
+            Animation.CreateDamageNumber(_parent.Up.Position, (int)-amount, Colors.Firebrick);
         CurrentHp = Math.Clamp(CurrentHp + amount, 0, MaxHp);
         UpdateHpBar();
         if (_parent == Player.PlayerUnit)

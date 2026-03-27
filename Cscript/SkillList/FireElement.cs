@@ -386,7 +386,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = 144; i <= 216; i += 36f)
             {
@@ -402,7 +402,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = -18; i <= 18; i += 36f)
             {
@@ -418,7 +418,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 162; i <= 198; i += 36f)
             {
@@ -434,7 +434,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
         });
         AddTimedEvent(Linspace(150, 350, 2), (ctx, advanceTime) =>
@@ -453,7 +453,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 234; i <= 306; i += 36f)
             {
@@ -469,7 +469,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
             }
             for (float i = 72; i <= 108; i += 36f)
             {
@@ -485,7 +485,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
             for (float i = 252; i <= 288; i += 36f)
             {
@@ -501,7 +501,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.ShootLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
             }
         });
     }

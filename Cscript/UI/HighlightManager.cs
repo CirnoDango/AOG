@@ -77,6 +77,18 @@ public partial class HighlightManager : Node2D, IRegisterToG
         Vector2I gridPos = screenPos / (int)(16 * Setting.rootnodeScale);
         return gridPos;
     }
+    public static Vector2 GridToMap(Vector2I gridPos)
+    {
+        float s = Setting.rootnodeScale;
+        float tileSize = 16f * s;
+
+        Vector2 screenPos = new Vector2(
+            gridPos.X * tileSize - 8f * s,
+            gridPos.Y * tileSize - 8f * s
+        );
+
+        return screenPos;
+    }
     void OnMouseEnter(Vector2I grid)
     {
         if(Scene.CurrentMap.GetGrid(grid) != null && Scene.CurrentMap.GetGrid(grid).unit != null)
