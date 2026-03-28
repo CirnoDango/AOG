@@ -70,15 +70,8 @@ public partial class CaveD : Node
         // 场景资源加载
         Player.Init(player, 1);
         G.I.Player.TalentPoint = 3;
-        Player.PlayerUnit.Us.LearnSkillGroup("YinyangBall");
-        Player.PlayerUnit.Us.LearnSkillGroup("Dark");
-        Player.PlayerUnit.Us.LearnSkillGroup("Star");
-        Player.PlayerUnit.Us.LearnSkillGroup("Freeze");
-        Player.PlayerUnit.Us.LearnSkillGroup("Fist");
-        Player.PlayerUnit.Us.LearnSkillGroup("Circle");
-        Player.PlayerUnit.Us.LearnSkillGroup("FireElement");
-        Player.PlayerUnit.Us.LearnSkillGroup("Time");
-        Player.PlayerUnit.Us.LearnSkillGroup("Blood");
+        foreach(var s in SkillBar.skillBoxColor)
+            Player.PlayerUnit.Us.LearnSkillGroup(s.Key);
         G.I.SkillPanel.Refresh();
         G.I.SkillTreeBox.Expert(0, 0);
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("mSkill"));
@@ -93,6 +86,8 @@ public partial class CaveD : Node
         Player.PlayerUnit.Inventory.AddItem(
             Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
         Player.PlayerUnit.Ua.Cun += 1000;
+        Floor1.NaturalSp = 200;
+        Player.PlayerUnit.Ua.Spi += 100;
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 3 } } } }));
         Player.PlayerUnit.Inventory.AddItem(Item.CreateItem("BarrageSet",
@@ -107,17 +102,17 @@ public partial class CaveD : Node
         //Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
-        Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);
-        Floor1.CreateEnemy(new Vector2I(2, 5), "chen", UnitEgo.great);
-        Floor1.CreateEnemy(new Vector2I(2, 6), "alice", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 7), "lilywhite", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 8), "lunasa", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 9), "merlin", UnitEgo.eliteBoss);
-        Floor1.CreateEnemy(new Vector2I(3, 5), "lyrica", UnitEgo.great);
-        Floor1.CreateEnemy(new Vector2I(3, 6), "youmu", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(3, 7), "yuyuko", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(3, 8), "ran", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(3, 9), "yukari", UnitEgo.eliteBoss);
+        //Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);
+        //Floor1.CreateEnemy(new Vector2I(2, 5), "chen", UnitEgo.great);
+        //Floor1.CreateEnemy(new Vector2I(2, 6), "alice", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 7), "lilywhite", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 8), "lunasa", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(2, 9), "merlin", UnitEgo.eliteBoss);
+        //Floor1.CreateEnemy(new Vector2I(3, 5), "lyrica", UnitEgo.great);
+        //Floor1.CreateEnemy(new Vector2I(3, 6), "youmu", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(3, 7), "yuyuko", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(3, 8), "ran", UnitEgo.boss);
+        //Floor1.CreateEnemy(new Vector2I(3, 9), "yukari", UnitEgo.eliteBoss);
     }
 
     public async void Victory()

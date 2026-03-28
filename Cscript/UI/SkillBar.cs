@@ -15,8 +15,8 @@ public partial class SkillBar : FlowContainer, IRegisterToG
     [Export]
     public PackedScene spellButtonScene;
     [Export]
-    public Godot.Label skillInfo;
-    public Dictionary<string, Color> skillBoxColor = new()
+    public Label skillInfo;
+    public static Dictionary<string, Color> skillBoxColor = new()
     {
         { "YinyangBall", Colors.Crimson},
         { "Circle", Colors.MediumSpringGreen },

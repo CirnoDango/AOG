@@ -228,6 +228,7 @@ public class UnitAttribute(Unit unit)
         if (_parent == Player.PlayerUnit)
             G.I.PlayerStatusBar.UpdateStatusUI();
     }
+    
     /// <summary>
     /// 造成子弹伤害，返回值为实际造成的伤害
     /// </summary>
@@ -237,7 +238,7 @@ public class UnitAttribute(Unit unit)
     /// <returns></returns>
     public float TakeBulletDamage(Damage damage, Unit user, Skill skill, float crit = 0)
     {
-        if(GD.Randf() < user.Ua.CritRate + crit)
+        if (GD.Randf() < user.Ua.CritRate + crit)
         {
             Info.Print($"{user.TrName} ifCrit");
             user.Ue.Crit(user);

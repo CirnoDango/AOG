@@ -219,12 +219,12 @@ public class Bullet
         Scene.CurrentMap.Bullets.Remove(this);
         image.QueueFree();
     }
-    public Action<Unit> OnActive;
-    public Action<Unit> OverrideActive;
+    public Action<Bullet, Unit> OnActive;
+    public Action<Bullet, Unit> OverrideActive;
     public bool Piercing = false;
     public void Active(Unit target)
     {
-        OnActive?.Invoke(target);
+        OnActive?.Invoke(this, target);
         if(OverrideActive == null)
         {
             skill.AwakeBullet(new SkillContext(creator, target), this);
@@ -235,7 +235,7 @@ public class Bullet
         }
         else
         {
-            OverrideActive?.Invoke(target);
+            OverrideActive?.Invoke(this, target);
         }
         
     }

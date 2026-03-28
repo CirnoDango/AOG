@@ -42,7 +42,7 @@ public class LingeringCold : Skill
         // 发射子弹
         for (int i = 0; i < c; i++)
         {
-            var percent = (i + 1) / c;
+            var percent = (i + 1f) / c;
             var x = 1 - percent;
             float angle = 30*percent;
             float speed = 1.5f + 3 * percent;
@@ -100,7 +100,7 @@ public class FlowerWitherAway : Skill
     
     public override TargetType GetTargeting()
     {
-        return new TargetType(new TargetRuleAny(), 1, aoeRange[iLevel]);
+        return new TargetType(new TargetRuleSelf(), 1, aoeRange[iLevel]);
     }
     
     protected override void StartActivate(SkillContext sc)
@@ -108,9 +108,9 @@ public class FlowerWitherAway : Skill
         int dmg = damage[iLevel];
         int con = conReduce[iLevel];
         int dur = duration[iLevel];
-        
+
         // 对范围内所有其他单位造成效果
-        foreach (var grid in sc.GridsTarget)
+        foreach (Grid grid in sc.User.Up.CurrentGrid.NearGrids(aoeRange[iLevel]))
         {
             if (grid.unit != null && grid.unit != sc.User)
             {
@@ -153,7 +153,7 @@ public class UndulationRay : Skill
         // 发射可穿透的激光子弹
         for (int i = 0; i < count; i++)
         {
-            float angle = -20 + (40f / (count - 1)) * i;
+            float angle = -30 + (60f / (count - 1)) * i;
             float speed = 4.0f;
             
             var bullet = Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.cold), 
@@ -229,7 +229,7 @@ public class ColdSnap : SpellCard
         SkillGroup = "Winter";
         SpCost = 40;
         Cooldown = 3000;
-        Duration = 6;
+        Duration = 600;
     }
     
     // 子弹数量：100/125/150/150
@@ -249,9 +249,10 @@ public class ColdSnap : SpellCard
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
+        GameEvents.OnUseSkill += OnUseSkill;
         AddTimedEvent(Linspace(50, 600, 12), (ctx, advanceTime) =>
         {
-            var a = TimeElapsed * 1.67f / 57.3f;
+            var a = TimeElapsed * 0.67f / 57.3f;
             var offset = 1.5f * new Vector2(Mathf.Cos(a), Mathf.Sin(a));
             for (int i = 0; i < bulletCount[iLevel]/24; i++)
             {
@@ -273,21 +274,108 @@ public class ColdSnap : SpellCard
             }
         });
     }
+    public override void OnSpellEnd(SkillContext sc)
+    {
+        GameEvents.OnUseSkill -= OnUseSkill;
+        base.OnSpellEnd(sc);
+    }
     public static void OverrideActive(Bullet bullet, Unit target)
     {
         bullet.skill.AwakeBullet(new SkillContext(bullet.creator, target), bullet);
-        target.Ua.TakeBulletDamage(bullet.damage, bullet.creator, bullet.skill, bullet.crit);
+        TakeBulletDamage(target, bullet.damage, bullet.creator, bullet.skill, bullet.crit);
         bullet.skill.ActivateBullet(new SkillContext(bullet.creator, target), bullet);
         if (!bullet.Piercing)
             bullet.Destroy(3);
-    }
-    protected override void OnSpellUpdate(SkillContext sc, float delta)
-    {
 
     }
-    public override void ActivateBullet(SkillContext sc, Bullet bullet)
+    public static float TakeBulletDamage(Unit unit, Damage damage, Unit user, Skill skill, float crit = 0)
     {
-        if (GD.Randf() < new float[] { 0.2f, 0.3f, 0.4f, 0.4f }[iLevel])
-            sc.UnitOne.GetStatus(new Frozen(new int[] { 400, 500, 600, 600 }[iLevel]));
+        if (GD.Randf() < user.Ua.CritRate + crit)
+        {
+            Info.Print($"{user.TrName} ifCrit");
+            user.Ue.Crit(user);
+            switch (damage.Type)
+            {
+                default:
+                    damage.Value *= 1.5f; break;
+            }
+        }
+        Damage amount = damage.ApplyModifiers(user.Ua.DamageTypeSet, unit.Ua.DamageTypeSet);
+        foreach (var status in unit.Status)
+            status.OnTakeBulletDamage(unit, skill, ref amount);
+        amount = user.Ue.DealBulletDamage(unit, amount);
+        amount = unit.Ue.TakeBulletDamage(user, amount);
+        amount *= user.Ua.DamageBullet / 100;
+        float rd = 0;
+        // 擦弹检定
+        if (GD.Randf() < UnitAttribute.GrazePercent(unit.Ua, user.Ua))
+        {
+            amount = unit.Ue.Graze(unit, amount);
+            unit.Ua.CurrentSp += amount.Value;
+            if (unit.Ua.CurrentSp > unit.Ua.MaxSp)
+            {
+                float overflow = unit.Ua.CurrentSp - unit.Ua.MaxSp;
+                unit.Ua.CurrentSp = unit.Ua.MaxSp;
+                unit.Ua.GetHp(-overflow);
+                string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                    user.TrName, skill.TrName, unit.TrName, new Damage(overflow, damage.Type).ToString());
+                Info.Print(msg);
+                rd = overflow;
+            }
+            else
+            {
+                string
+                msg = string.Format(TranslationServer.Translate("acGraze"),
+                    user.TrName, skill.TrName, unit.TrName, amount.Value.ToString("F0"));
+                Info.Print(msg);
+            }
+        }
+        else
+        {
+            unit.Ua.GetHp(-amount.Value);
+            // 扣除HP且增加SP
+            float k = 1;
+            if (skill.iLevel == 4)
+                k = 1.5f;
+            unit.Ua.CurrentSp += amount.Value * k;
+            string msg = string.Format(TranslationServer.Translate("acOverflow"),
+                user.TrName, skill.TrName, unit.TrName, amount.ToString());
+            Info.Print(msg);
+            rd = amount.Value;
+        }
+
+        if (unit.Us.currentSpellcard != null)
+        {
+            unit.Us.currentSpellcard.CurrentDurability -= amount.Value;
+            if (unit.Us.currentSpellcard.CurrentDurability < 0)
+            {
+                float overflow = -unit.Us.currentSpellcard.CurrentDurability;
+                float dam = overflow * 2 + unit.Ua.MaxHp / 3;
+                dam = unit.Ue.TakeSpellcardBreakDamage(unit, dam);
+                unit.Ua.GetHp(-dam);
+                string template = TranslationServer.Translate("acSpellBreak");
+                string result = string.Format(template, user.TrName, skill.TrName, unit.TrName, unit.Us.currentSpellcard.TrName, damage.ToString());
+                Info.Print(result);
+                unit.Us.currentSpellcard.OnSpellBreak(new SkillContext(unit));
+                rd = dam;
+            }
+        }
+        else
+        {
+
+        }
+        unit.Ua.GetSp(0);
+        return rd;
+
+    }
+    public void OnUseSkill(Unit user, SkillContext sc, Skill si)
+    {
+        if(si.GetSpCost() > 0 &&(user.Up.Position - User.Up.Position).Length() <= 5.5f && !user.IsFriend(User))
+        {
+            if(GD.Randf() < freezeChance[iLevel] / 100f)
+            {
+                user.GetStatus(new Frozen(200));
+            }
+        }
     }
 }
