@@ -134,4 +134,9 @@ public class UnitEvent(Unit parent)
     {
         OnCrit?.Invoke(unit);
     }
+    public event Action<Unit> OnEvade;
+    public void Evade(Unit unit)
+    {
+        OnCrit?.Invoke(unit);
+    }
 }
