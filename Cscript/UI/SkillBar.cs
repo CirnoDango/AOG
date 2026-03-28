@@ -28,6 +28,7 @@ public partial class SkillBar : FlowContainer, IRegisterToG
         { "Time", Colors.Silver },
         { "Blood", Colors.DarkRed },
         { "Winter", Colors.SteelBlue },
+        { "BlackCat", Colors.Black },
     };
     // 学会一个技能，添加按钮
     public void LearnSkill(Skill skill)

@@ -29,10 +29,10 @@ public class FenghuangSpreadWings : Skill
         {
             Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.strike), sc.User.Up.Position, sc.GridOne.Position, Vector2.Zero,
                 (float)GD.RandRange(-8f, 8f), (float)GD.RandRange(4f, 8), 12,
-                ShapeBullet.ArrowMedium, ColorBullet.Lime);
+                ShapeBullet.ArrowBig, ColorBullet.Lime);
             Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.strike), sc.User.Up.Position, sc.GridOne.Position, Vector2.Zero,
                 (float)GD.RandRange(-8f, 8f), (float)GD.RandRange(4f, 8), 12,
-                ShapeBullet.ArrowMedium, ColorBullet.Azure);
+                ShapeBullet.ArrowBig, ColorBullet.Azure);
         }
     }
 }
@@ -63,8 +63,8 @@ public class SoaringSeimei: Skill
         {
             for (float a = 0; a < 359; a += 360 / t1[iLevel])
             {
-                Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.strike), sc.User.Up.Position, sc.User.Up.Position + RandomV2(), Vector2.Zero,
-                    a, 4, 8,ShapeBullet.ArrowMedium, c);
+                Bullet.CreateBullet(sc.User, this, new Damage(15, DamageType.strike), p, p + RandomV2(), Vector2.Zero,
+                    a, 4, 8,ShapeBullet.ArrowBig, c);
             }
             if(c == ColorBullet.Red)
                 c = ColorBullet.Blue;
@@ -142,17 +142,9 @@ public class Kimontonkou : Skill
     {
         return string.Format(EffectTr(), t0[iLevel], TextEx.Tr(Extra()[iLevel]));
     }
-    public override TargetType GetTargeting()
-    {
-        return new TargetType(new TargetRuleGrid(), 1, 8, new int[] { 2, 3, 4, 4 }[iLevel]);
-    }
     protected override void StartActivate(SkillContext sc)
     {
-        foreach(var grid in sc.GridOne.NearGrids(new int[] { 2, 3, 4, 4 }[iLevel]))
-        {
-            if(grid.unit != null)
-                grid.unit.Ua.TakeBulletDamage(new Damage(40, DamageType.celestial), sc.User, this);
-        }
+        sc.User.GetStatus(new SKimontonkou(t1[iLevel], t0[iLevel], sc.User, this));
     }
 }
 public class SoaringBishamonten: SpellCard
@@ -173,26 +165,40 @@ public class SoaringBishamonten: SpellCard
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        AddTimedEvent(Linspace(20, 500, new int[] { 70,110,150,150 }[iLevel]), (ctx, advanceTime) =>
+        AddTimedEvent(Linspace(30, 360, 10), (ctx, advanceTime) =>
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.celestial), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
-                new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(2.0, 6.0), 12,
-                ShapeBullet.Star, (ColorBullet)(new List<int> { 0, 2, 5, 7, 9, 12, 13 })[GD.RandRange(0, 6)], advanceTime);
-        });
-        AddTimedEvent(Linspace(100, 500, 5), (ctx, advanceTime) =>
-        {
-            for(float a = 0; a<360; a += 360 / 16f)
+            var n = t0[iLevel] / 10;
+            for (float a = 0; a<359; a += 360f / n)
             {
-                var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.celestial), sc.User.Up.Position, sc.UnitOne.Up.Position,
-                new Vector2(0, 0), a, 3, 12,
-                ShapeBullet.Star, ColorBullet.Yellow, advanceTime);
+                var bullet = Bullet.CreateBullet(sc.User, this, new Damage(10, DamageType.pierce), sc.User.Up.Position, sc.User.Up.Position+RandomV2(),
+                new Vector2(0, 0), a, (float)GD.RandRange(3.0, 6.0), 12,
+                ShapeBullet.ArrowBig, ColorBullet.Blue, advanceTime);
             }
         });
-        sc.User.Ua.SpeedMove += new int[] { 50, 50, 50, 100 }[iLevel];
+        sc.User.Ua.SpeedMove += 100;
+        if (Level == 4)
+            sc.User.Ua.SpeedCombat += 50;
+        sc.User.Ue.OnUseSkill += AttackCheck;
     }
     public override void OnSpellEnd(SkillContext sc)
     {
-        sc.User.Ua.SpeedMove -= new int[] { 50, 50, 50, 100 }[iLevel];
+        sc.User.Ua.SpeedMove -= 100;
+        if (Level == 4)
+            sc.User.Ua.SpeedCombat -= 50;
+        sc.User.Ue.OnUseSkill -= AttackCheck;
         base.OnSpellEnd(sc);
+    }
+    private void AttackCheck(Unit u, SkillContext sc, Skill s)
+    {
+        if(s.Name == "Attack")
+        {
+            sc.User.Ue.OnUseSkill -= AttackCheck;
+            foreach(var g in sc.User.Up.CurrentGrid.NearGrids(1))
+            {
+                if (g.unit != null && !g.unit.IsFriend(sc.User))
+                    NameSkill["Attack"].Activate(new SkillContext(sc.User, g.unit));
+            }
+            sc.User.Ue.OnUseSkill += AttackCheck;
+        }
     }
 }
