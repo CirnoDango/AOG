@@ -103,7 +103,7 @@ public class SKimontonkou : Status
                 var s = 4 - 2 * MathF.Pow(((a % 90 - 45) / 45), 2);
                 Bullet.CreateBullet(unit, Skill, new Damage(10, DamageType.pierce),
                 unit.Up.Position, unit.Up.Position + MathEx.RandomV2(), Vector2.Zero,
-                a, s, 3*s, ShapeBullet.ArrowMedium, ColorBullet.Azure);
+                MathEx.Deg2Rad(a), s, 3*s, ShapeBullet.ArrowBig, ColorBullet.Azure);
             }
         }
         return d;
@@ -118,7 +118,7 @@ public class SKimontonkou : Status
                 var s = 4 - 2 * MathF.Pow(((a % 90 - 45) / 45), 2);
                 Bullet.CreateBullet(unit, Skill, new Damage(10, DamageType.pierce),
                 unit.Up.Position, unit.Up.Position + MathEx.RandomV2(), Vector2.Zero,
-                a, s, 3 * s, ShapeBullet.ArrowMedium, ColorBullet.Azure);
+                MathEx.Deg2Rad(a), s, 3 * s, ShapeBullet.ArrowBig, ColorBullet.Azure);
             }
         }
     }

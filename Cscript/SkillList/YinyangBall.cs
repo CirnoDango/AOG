@@ -55,7 +55,7 @@ public class DreamOrb : Skill
         for(float a = 0; a < 360 ; a += 360 / t1[iLevel])
         {
             Bullet.CreateBullet(sc.User, this, new Damage(6, DamageType.strike), sc.User.Up.Position, sc.GridOne.Position,
-                Vector2.Right.Rotated(a / 57.3f), a, (float)GD.RandRange(3f, 4f)
+                Vector2.Right.Rotated(Deg2Rad(a)), a, (float)GD.RandRange(3f, 4f)
                 ,t0[iLevel], ShapeBullet.Micro, ColorBullet.Red, 0, sc.GridOne);
         }
         sc.User.GetStatus(new YinyangBall(sc.User, t2[iLevel]));

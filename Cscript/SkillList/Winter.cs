@@ -252,7 +252,7 @@ public class ColdSnap : SpellCard
         GameEvents.OnUseSkill += OnUseSkill;
         AddTimedEvent(Linspace(50, 600, 12), (ctx, advanceTime) =>
         {
-            var a = TimeElapsed * 0.67f / 57.3f;
+            var a = Deg2Rad(TimeElapsed * 0.67f);
             var offset = 1.5f * new Vector2(Mathf.Cos(a), Mathf.Sin(a));
             for (int i = 0; i < bulletCount[iLevel]/24; i++)
             {

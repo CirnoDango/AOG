@@ -194,6 +194,10 @@ public class Bullet
                     Active(target);
                     return;
                 }
+                else
+                {
+                    target.Ue.Evade(target);
+                }
             }
         }
 

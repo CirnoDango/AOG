@@ -215,8 +215,6 @@ public class UnitAttribute(Unit unit)
     }
     public void GetSp(float amount)
     {
-        if (_parent.Us.currentSpellcard != null && amount > 0)
-            return;
         CurrentSp = Math.Clamp(CurrentSp + amount, 0, MaxSp);
         UpdateSpBar();
         if (_parent == Player.PlayerUnit)
@@ -341,6 +339,7 @@ public class UnitAttribute(Unit unit)
         {
             string msg = string.Format(TranslationServer.Translate("skill.evaded"), user.TrName, skill.TrName, _parent.TrName);
             Info.Print(msg);
+            _parent.Ue.Evade(_parent);
             return false;
         }
     }

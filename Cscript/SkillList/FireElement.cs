@@ -33,7 +33,7 @@ public class SummerRed : Skill
     }
     public static void SummerRedBulletUpdate(Bullet bullet, float time)
     {
-        foreach (Vector2I pos in UpdateGrid(bullet, time / 100))
+        foreach (Vector2I pos in UpdateGrid(bullet, Deg2Rad(time)))
         {
             var grid = Scene.CurrentMap.GetGrid(pos);
             if (!Scene.CurrentMap.CheckGrid(pos) || !grid.IsTransparent)
@@ -59,7 +59,7 @@ public class SummerRed : Skill
         // 设置朝向：因为默认朝上（0°），所以旋转方向就是速度向量的角度
         if (bullet.Speed.LengthSquared() > 0) // 避免除0
         {
-            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Mathf.Pi / 2 - Mathf.Pi * bullet.AngleOfShapeBullet() / 180;
+            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Deg2Rad(Mathf.Pi) - Deg2Rad(Mathf.Pi * bullet.AngleOfShapeBullet());
         }
 
         List<Vector2I> UpdateGrid(Bullet bullet, float deltaTime)
@@ -102,7 +102,7 @@ public class SummerRed : Skill
     }
     public static void SummerRedBulletUpdate4(Bullet bullet, float time)
     {
-        foreach (Vector2I pos in UpdateGrid(bullet, time / 100))
+        foreach (Vector2I pos in UpdateGrid(bullet, Deg2Rad(time)))
         {
             var grid = Scene.CurrentMap.GetGrid(pos);
             if (!Scene.CurrentMap.CheckGrid(pos) || !grid.IsTransparent)
@@ -128,7 +128,7 @@ public class SummerRed : Skill
         // 设置朝向：因为默认朝上（0°），所以旋转方向就是速度向量的角度
         if (bullet.Speed.LengthSquared() > 0) // 避免除0
         {
-            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Mathf.Pi / 2 - Mathf.Pi * bullet.AngleOfShapeBullet() / 180;
+            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Deg2Rad(Mathf.Pi) - Deg2Rad(Mathf.Pi * bullet.AngleOfShapeBullet());
         }
 
         List<Vector2I> UpdateGrid(Bullet bullet, float deltaTime)
@@ -151,11 +151,11 @@ public class SummerRed : Skill
             if ((int)bullet.DistanceLeft > (int)(bullet.DistanceLeft - travelDistance))
             {
                 Bullet.CreateBullet(bullet.creator, bullet.skill, new Damage(8, DamageType.fire),
-                    bullet.PositionFloat, bullet.PositionFloat + bullet.Speed.Rotated(90 / 57.3f),
+                    bullet.PositionFloat, bullet.PositionFloat + bullet.Speed.Rotated(Deg2Rad(90)),
                     0.6f, 1.5f,
                     ShapeBullet.Ring, ColorBullet.Orange);
                 Bullet.CreateBullet(bullet.creator, bullet.skill, new Damage(8, DamageType.fire),
-                    bullet.PositionFloat, bullet.PositionFloat + bullet.Speed.Rotated(-90 / 57.3f),
+                    bullet.PositionFloat, bullet.PositionFloat + bullet.Speed.Rotated(Deg2Rad(-90)),
                     0.6f, 1.5f,
                     ShapeBullet.Ring, ColorBullet.Orange);
             }
@@ -263,7 +263,7 @@ public class LavaCromlech : Skill
     }
     public static void LavaCromlechBulletUpdate(Bullet bullet, float time)
     {
-        foreach (Vector2I pos in UpdateGrid(bullet, time / 100))
+        foreach (Vector2I pos in UpdateGrid(bullet, Deg2Rad(time)))
         {
             var grid = Scene.CurrentMap.GetGrid(pos);
             if (!Scene.CurrentMap.CheckGrid(pos) || !grid.IsTransparent)
@@ -281,6 +281,10 @@ public class LavaCromlech : Skill
                 {
                     bullet.Active(target);
                     return;
+                }
+                else
+                {
+                    target.Ue.Evade(target);
                 }
             }
         }
@@ -302,7 +306,7 @@ public class LavaCromlech : Skill
         // 设置朝向：因为默认朝上（0°），所以旋转方向就是速度向量的角度
         if (bullet.Speed.LengthSquared() > 0) // 避免除0
         {
-            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Mathf.Pi / 2 - Mathf.Pi * bullet.AngleOfShapeBullet() / 180;
+            bullet.image.Rotation = Mathf.Atan2(bullet.Speed.Y, bullet.Speed.X) + Deg2Rad(Mathf.Pi) - Deg2Rad(Mathf.Pi * bullet.AngleOfShapeBullet());
         }
 
         List<Vector2I> UpdateGrid(Bullet bullet, float deltaTime)
@@ -364,7 +368,7 @@ public class PhlogisticPillar : SpellCard
     }
     public override string GetDescription()
     {
-        return string.Format(EffectTr(), t2[iLevel] / 100);
+        return string.Format(EffectTr(), Deg2Rad(t2[iLevel]));
     }
     protected override void OnSpellStart(SkillContext sc)
     {
@@ -377,7 +381,7 @@ public class PhlogisticPillar : SpellCard
                 Grid g; int maxD = t1[iLevel];
                 do
                 {
-                    g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(i / 57.3f)));
+                    g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(Deg2Rad(i))));
                     maxD--;
                 } while (g == null);
                 List<Grid> target = sc.User.Up.RayCheck(g);
@@ -386,14 +390,14 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.LightSkyBlue);
             }
             for (float i = 144; i <= 216; i += 36f)
             {
                 Grid g; int maxD = t1[iLevel];
                 do
                 {
-                    g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(i / 57.3f)));
+                    g = Scene.CurrentMap.GetGrid((Vector2I)(sc.User.Up.Position + maxD * zeroDir.Normalized().Rotated(Deg2Rad(i))));
                     maxD--;
                 } while (g == null);
                 List<Grid> target = sc.User.Up.RayCheck(g);
@@ -402,7 +406,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.LightSkyBlue);
             }
             for (float i = -18; i <= 18; i += 36f)
             {
@@ -418,7 +422,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.OrangeRed);
             }
             for (float i = 162; i <= 198; i += 36f)
             {
@@ -434,7 +438,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.OrangeRed);
             }
         });
         AddTimedEvent(Linspace(150, 350, 2), (ctx, advanceTime) =>
@@ -453,7 +457,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.OrangeRed);
             }
             for (float i = 234; i <= 306; i += 36f)
             {
@@ -469,7 +473,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.fire), sc.User, this);
                     unit.GetStatus(new Burned(9, t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.OrangeRed);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.OrangeRed);
             }
             for (float i = 72; i <= 108; i += 36f)
             {
@@ -485,7 +489,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.LightSkyBlue);
             }
             for (float i = 252; i <= 288; i += 36f)
             {
@@ -501,7 +505,7 @@ public class PhlogisticPillar : SpellCard
                     unit.Ua.TakeBulletDamage(new Damage(18, DamageType.cold), sc.User, this);
                     unit.GetStatus(new Frozen(t2[iLevel]));
                 }
-                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(i / 57.3f), Colors.LightSkyBlue);
+                Animation.CreateLaser(sc.User.Up.Position, zeroDir.Rotated(Deg2Rad(i)), Colors.LightSkyBlue);
             }
         });
     }

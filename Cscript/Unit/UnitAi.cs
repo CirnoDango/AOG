@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 public enum AiState
 {
     Sleep, // 空闲状态
@@ -14,11 +15,12 @@ public enum AiMode
 }
 public class UnitAi(Unit u)
 {
-    public int friendness = -1;
+    public Unit target = Player.PlayerUnit;
+    public int friendness = u.Friendness;
     public int bestDistance;
     private Unit _parent = u;
     public Dictionary<string, float> Skills { get; set; } = [];
-    public int PlayerDist => (int)Math.Round((_parent.Up.Position - Player.PlayerUnit.Up.Position).Length());
+    public int PlayerDist => (int)Math.Round((_parent.Up.Position - target.Up.Position).Length());
     public AiState State { get; set; } = AiState.Sleep;
     public AiMode Mode { get; set; } = AiMode.Attack;
     public Vector2I PlayerPosition;
@@ -33,15 +35,16 @@ public class UnitAi(Unit u)
             case AiState.Sleep:
                 break;
             case AiState.Attack:
-                if (!_parent.Up.GridInVision().Contains(Player.PlayerUnit.Up.CurrentGrid))
+                if (!_parent.Up.GridInVision().Contains(target.Up.CurrentGrid))
                     State = AiState.Track;
+                FindTarget();
                 break;
             case AiState.Track:
-                if (_parent.Up.GridInVision().Contains(Player.PlayerUnit.Up.CurrentGrid))
+                if (_parent.Up.GridInVision().Contains(target.Up.CurrentGrid))
                 {
                     State = AiState.Attack; break;
                 }
-                if(_parent.Up.Position == Player.PlayerUnit.Up.Position)
+                if(_parent.Up.Position == target.Up.Position)
                 {
                     _parent.UnitAi.SleepAi();
                     Scene.CurrentMap.WakeUnits.Remove(_parent);
@@ -55,7 +58,7 @@ public class UnitAi(Unit u)
                 SleepAi();
                 break;
             case AiState.Attack:
-                PlayerPosition = Player.PlayerUnit.Up.Position;
+                PlayerPosition = target.Up.Position;
                 AttackAi(1, 3);
                 break;
             case AiState.Track:
@@ -117,7 +120,7 @@ public class UnitAi(Unit u)
             List<Vector2I> moves = [];
             foreach (var dir in Directions)
             {
-                if (Math.Abs((int)Math.Round((_parent.Up.Position + dir - Player.PlayerUnit.Up.Position).Length())
+                if (Math.Abs((int)Math.Round((_parent.Up.Position + dir - target.Up.Position).Length())
                     - bestDistance) < Math.Abs(PlayerDist - bestDistance))
                 {
                     var gd = Scene.CurrentMap.GetGrid(_parent.Up.Position + dir);
@@ -140,7 +143,7 @@ public class UnitAi(Unit u)
             case "TacticMove":
                 foreach (var dir in Directions)
                 {
-                    if(Math.Abs((int)Math.Round((_parent.Up.Position + dir - Player.PlayerUnit.Up.Position)
+                    if(Math.Abs((int)Math.Round((_parent.Up.Position + dir - target.Up.Position)
                         .Length()) - bestDistance) < Math.Abs(PlayerDist - bestDistance))
                     {
                         var grid = Scene.CurrentMap.GetGrid(_parent.Up.Position + dir);
@@ -151,14 +154,27 @@ public class UnitAi(Unit u)
                 break;
             default:
                 return _parent.Us.GetSkill(name).CanUse(_parent) && 
-                       _parent.Up.CheckSkillTarget(_parent.Us.GetSkill(name), Player.PlayerUnit.Up.Position) == HighlightType.green;
+                       _parent.Up.CheckSkillTarget(_parent.Us.GetSkill(name), target.Up.Position) == HighlightType.green;
         }
         return false;
+    }
+    public void FindTarget()
+    {
+        for(int i = 1; i <= _parent.Up.Vision; i++)
+        {
+            Unit t = _parent.Up.CurrentGrid.NearGrids(i).FirstOrDefault(x => x.unit != null && !x.unit.IsFriend(_parent)).unit;
+            if (t != null)
+            {
+                target = t;
+                State = AiState.Attack;
+                return;
+            }
+        }
     }
     public SkillContext SelectTarget(Skill skill)
     {
         SkillContext sc = skill.GetTargeting().TargetRule.GetSc(
-                    _parent, Player.PlayerUnit.Up.CurrentGrid);
+                    _parent, target.Up.CurrentGrid);
         sc.Level = skill.Level;
         return sc;
     }

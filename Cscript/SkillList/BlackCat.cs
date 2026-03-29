@@ -144,7 +144,7 @@ public class Kimontonkou : Skill
     }
     protected override void StartActivate(SkillContext sc)
     {
-        sc.User.GetStatus(new SKimontonkou(t1[iLevel], t0[iLevel], sc.User, this));
+        sc.User.GetStatus(new SKimontonkou(t1[iLevel], t0[iLevel]*100, sc.User, this));
     }
 }
 public class SoaringBishamonten: SpellCard
