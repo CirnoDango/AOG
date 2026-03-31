@@ -7,6 +7,7 @@ public enum AiState
     Sleep, // 空闲状态
     Attack, // 攻击状态
     Track, // 移动状态
+    Follow
 }
 public enum AiMode
 {
@@ -15,17 +16,29 @@ public enum AiMode
 }
 public class UnitAi(Unit u)
 {
-    public Unit target = Player.PlayerUnit;
+    public Unit target;
     public int friendness = u.Friendness;
     public int bestDistance;
     private Unit _parent = u;
+    public Unit master;
     public Dictionary<string, float> Skills { get; set; } = [];
     public int PlayerDist => (int)Math.Round((_parent.Up.Position - target.Up.Position).Length());
     public AiState State { get; set; } = AiState.Sleep;
     public AiMode Mode { get; set; } = AiMode.Attack;
-    public Vector2I PlayerPosition;
+    public Vector2I TargetPosition;
     public void Update()
     {
+        if (target == null || target.dead)
+        {
+            if(master == null)
+            {
+                SleepAi(); return;
+            }
+            else
+            {
+                State = AiState.Follow;
+            }    
+        }
         if (Mode == AiMode.Sleep)
         {
             SleepAi(); return;
@@ -49,8 +62,9 @@ public class UnitAi(Unit u)
                     _parent.UnitAi.SleepAi();
                     Scene.CurrentMap.WakeUnits.Remove(_parent);
                 }
-                    
                 break;
+            case AiState.Follow:
+                FindTarget(); break;
         }
         switch (State)
         {
@@ -58,11 +72,14 @@ public class UnitAi(Unit u)
                 SleepAi();
                 break;
             case AiState.Attack:
-                PlayerPosition = target.Up.Position;
+                TargetPosition = target.Up.Position;
                 AttackAi(1, 3);
                 break;
             case AiState.Track:
                 TrackAi();
+                break;
+            case AiState.Follow:
+                FollowAi(); 
                 break;
         }
     }
@@ -162,7 +179,7 @@ public class UnitAi(Unit u)
     {
         for(int i = 1; i <= _parent.Up.Vision; i++)
         {
-            Unit t = _parent.Up.CurrentGrid.NearGrids(i).FirstOrDefault(x => x.unit != null && !x.unit.IsFriend(_parent)).unit;
+            Unit t = _parent.Up.CurrentGrid.NearGrids(i).FirstOrDefault(x => x.unit != null && !x.unit.IsFriend(_parent))?.unit;
             if (t != null)
             {
                 target = t;
@@ -200,8 +217,8 @@ public class UnitAi(Unit u)
     ];
     public void TrackAi()
     {
-        if (_parent.Up.Position == PlayerPosition) { State = AiState.Sleep; SleepAi(); return; }
-        float playerDist = (_parent.Up.Position - PlayerPosition).Length();
+        if (_parent.Up.Position == TargetPosition) { State = AiState.Sleep; SleepAi(); return; }
+        float playerDist = (_parent.Up.Position - TargetPosition).Length();
         Vector2I direction = Vector2I.Zero;
         foreach (var dir in Directions)
         {
@@ -209,7 +226,7 @@ public class UnitAi(Unit u)
             Grid nextGrid = Scene.CurrentMap.GetGrid(nextPosition);
             if (nextGrid != null && nextGrid.IsWalkable && nextGrid.unit == null)
             {   
-                float nextDist = (nextPosition - PlayerPosition).Length();
+                float nextDist = (nextPosition - TargetPosition).Length();
                 if (nextDist < playerDist)
                 {
                     direction = dir;    
@@ -227,5 +244,35 @@ public class UnitAi(Unit u)
             State = AiState.Sleep;
             SleepAi();
         } 
+    }
+    public void FollowAi()
+    {
+        if ((_parent.Up.Position - master.Up.Position).Length() < 1.5f) { SleepAi(); return; }
+        float playerDist = (_parent.Up.Position - master.Up.Position).Length();
+        Vector2I direction = Vector2I.Zero;
+        foreach (var dir in Directions)
+        {
+            Vector2I nextPosition = _parent.Up.Position + dir;
+            Grid nextGrid = Scene.CurrentMap.GetGrid(nextPosition);
+            if (nextGrid != null && nextGrid.IsWalkable && nextGrid.unit == null)
+            {
+                float nextDist = (nextPosition - master.Up.Position).Length();
+                if (nextDist < playerDist)
+                {
+                    direction = dir;
+                    playerDist = nextDist;
+                }
+            }
+        }
+        if (direction != Vector2I.Zero)
+        {
+            Skill.NameSkill["Move"].Activate(new SkillContext(_parent, Scene.CurrentMap.GetGrid(_parent.Up.Position + direction)));
+        }
+
+        else
+        {
+            State = AiState.Sleep;
+            SleepAi();
+        }
     }
 }

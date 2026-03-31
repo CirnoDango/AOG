@@ -264,7 +264,9 @@ public class Map
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetSp(0.002f * updateTime * (NaturalSp - unit.Ua.CurrentSp));
         unit.Ue.OnUnitUpdate += (unit, updateTime) => unit.Ua.GetMp(updateTime * unit.Ua.Mag / 1000);
         // 初始化技能,Ai
+        unit.Friendness = -1;
         unit.UnitAi = new UnitAi(unit);
+        unit.UnitAi.FindTarget();
         foreach (var gskill in Skill.SkillDeck)
         {
             if (gskill.SkillGroup == "")
@@ -379,28 +381,27 @@ public class Map
         unit.TimeEnergy = GD.RandRange(-100, 0) - 20;
         return unit;
     }
-    public Unit CreateEnemy(Vector2I position, string name, int zoom)
+    public Unit CreateFriend(Unit master, string name, UnitEgo ego = UnitEgo.random, float memoryValue = -1, bool jsonImport = true)
     {
-        Unit unit = CreateEnemy(position, name);
-        unit.TimeEnergy = 0;
-        unit.UnitAi = null;
-        var cam = new Camera2D
+        for(int d = 1; d <= 4; d++)
         {
-            Position = Vector2.Zero,
-            Zoom = new Vector2(zoom, zoom)
-        };
-        unit.Up.sprite.AddChild(cam);  // 加到角色节点下
-        cam.MakeCurrent();  // 设置为当前摄像机
-        cam.Position = new Vector2I(Setting.imagePx / 2, Setting.imagePx / 2);
-        return unit;
-    }
-    public Unit CreateEnemy(string name, int zoom)
-    {
-        return CreateEnemy(RandomEmptyGrid().Position, name, zoom);
-    }
-    public Unit CreateEnemy(string name)
-    {
-        return CreateEnemy(RandomEmptyGrid().Position, name);
+            foreach(var g in master.Up.CurrentGrid.NearGrids(d))
+            {
+                if (g.IsEmpty)
+                {
+                    Unit unit = CreateEnemy(g.Position, name, ego, memoryValue, jsonImport);
+                    unit.Friendness = master.Friendness;
+                    unit.UnitAi = new(unit)
+                    {
+                        master = master,
+                        State = AiState.Follow
+                    };
+                    unit.UnitAi.FindTarget();
+                    return unit;
+                }
+            }
+        }
+        return null;
     }
     public void DeleteUnit(Unit unit)
     {

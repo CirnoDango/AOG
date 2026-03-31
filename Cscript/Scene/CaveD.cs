@@ -96,10 +96,10 @@ public partial class CaveD : Node
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
         foreach(var i in Item.ItemDeck.Where(x=>x is not BulletModule))
             Player.PlayerUnit.Equipment.TryEquip(Item.CreateItem(i.Name), Player.PlayerUnit);
-        //Floor1.CreateEnemy(new Vector2I(2, 4), "rumia", UnitEgo.great);
-        //Floor1.CreateEnemy(new Vector2I(2, 5), "cirno", UnitEgo.great);
-        //Floor1.CreateEnemy(new Vector2I(2, 6), "meiling", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "rumia", UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "cirno", UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "meiling", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
         //Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
         //Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);

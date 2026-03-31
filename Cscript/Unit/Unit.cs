@@ -23,16 +23,8 @@ public class Unit
     public List<string> symbol { get; set; }
     public string TrName => $"u{Name}";
     public UnitAi UnitAi { get; set; }
-    public int Friendness
-    {
-        get
-        {
-            if (UnitAi != null)
-                return UnitAi.friendness;
-            else
-                return 1;
-        }
-    }
+
+    public int Friendness = 1;
     public bool IsFriend(Unit other)
     {
         return Friendness * other.Friendness > 0;
