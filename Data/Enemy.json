@@ -834,5 +834,74 @@
                 "Amount": 1
             }
         ]
-    } // dangoChest
+    }, // dangoChest
+    {
+        "Name": "dollShanghai",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 100,
+        "SP": 0,
+        "MP": 0,
+        "Str": 25,
+        "Dex": 15,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        }
+    }, // dollShanghai
+    {
+        "Name": "dollHourai",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 50,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 25,
+        "Mag": 15,
+        "Cun": 10,
+        "Skills": {
+        }
+    }, // dollHourai
+    {
+        "Name": "dollFrance",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 70,
+        "SP": 0,
+        "MP": 0,
+        "Str": 15,
+        "Dex": 25,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+        }
+    }, // dollFrance
+    {
+        "Name": "dollHolland",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 70,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 10,
+        "Mag": 25,
+        "Cun": 15,
+        "Skills": {
+        }
+    } // dollHolland
+
 ]

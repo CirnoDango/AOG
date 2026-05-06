@@ -81,7 +81,7 @@ public partial class CaveD : Node
         Floor2.MapGoto = Floor3;
         Floor1.SummonChest(200, 1);
         Floor2.SummonChest(20, 100);
-        Floor1.Entrance = new Vector2I(5, 7);
+        Floor1.Entrance = new Vector2I(11, 7);
         Scene.Enter(Floor1);
         Player.PlayerUnit.Inventory.AddItem(
             Item.CreateItem("MagicPotion", new Dictionary<string, object> { { "MpRecoverPercent", 60 } }));
@@ -96,23 +96,45 @@ public partial class CaveD : Node
             new Dictionary<string, object> { { "barrage", new Dictionary<string, object> { { "MaxComponents", 6 } } } }));
         foreach(var i in Item.ItemDeck.Where(x=>x is not BulletModule))
             Player.PlayerUnit.Equipment.TryEquip(Item.CreateItem(i.Name), Player.PlayerUnit);
-        Floor1.CreateFriend(Player.PlayerUnit, "rumia", UnitEgo.great);
-        Floor1.CreateFriend(Player.PlayerUnit, "cirno", UnitEgo.great);
-        Floor1.CreateFriend(Player.PlayerUnit, "meiling", UnitEgo.boss);
-        Floor1.CreateEnemy(new Vector2I(2, 7), "patchouli", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 8), "sakuya", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 9), "remilia", UnitEgo.eliteBoss);
-        //Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);
-        //Floor1.CreateEnemy(new Vector2I(2, 5), "chen", UnitEgo.great);
-        //Floor1.CreateEnemy(new Vector2I(2, 6), "alice", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 7), "lilywhite", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 8), "lunasa", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(2, 9), "merlin", UnitEgo.eliteBoss);
-        //Floor1.CreateEnemy(new Vector2I(3, 5), "lyrica", UnitEgo.great);
-        //Floor1.CreateEnemy(new Vector2I(3, 6), "youmu", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(3, 7), "yuyuko", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(3, 8), "ran", UnitEgo.boss);
-        //Floor1.CreateEnemy(new Vector2I(3, 9), "yukari", UnitEgo.eliteBoss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollShanghai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHourai", 5500, UnitEgo.great);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollFrance", 5500, UnitEgo.boss);
+        Floor1.CreateFriend(Player.PlayerUnit, "dollHolland", 5500, UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(1, 7), "patchouli", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(1, 8), "sakuya", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(1, 9), "remilia", UnitEgo.eliteBoss);
+        Floor1.CreateEnemy(new Vector2I(2, 4), "letty", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 5), "chen", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(2, 6), "alice", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 7), "lilywhite", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 8), "lunasa", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(2, 9), "merlin", UnitEgo.eliteBoss);
+        Floor1.CreateEnemy(new Vector2I(3, 5), "lyrica", UnitEgo.great);
+        Floor1.CreateEnemy(new Vector2I(3, 6), "youmu", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 7), "yuyuko", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 8), "ran", UnitEgo.boss);
+        Floor1.CreateEnemy(new Vector2I(3, 9), "yukari", UnitEgo.eliteBoss);
+        Player.PlayerUnit.Up.RefreshVision();
     }
 
     public async void Victory()

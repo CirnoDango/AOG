@@ -211,7 +211,7 @@ public class UnitAttribute(Unit unit)
             if (_parent == Player.PlayerUnit)
                 Unit.OnPlayerdied?.Invoke();
             else
-                Scene.CurrentMap.DeleteUnit(_parent);
+                Scene.CurrentMap.KillUnit(_parent);
     }
     public void GetSp(float amount)
     {

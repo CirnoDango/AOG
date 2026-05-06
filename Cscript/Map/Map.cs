@@ -135,6 +135,7 @@ public class Map
     public int Size => Width * Height;
     public List<Unit> Units = [];
     public HashSet<Unit> WakeUnits = [];
+    public Dictionary<Unit, float> TemUnits = [];
     public Action AfterEnter;
     public List<Bullet> Bullets = [];
     public Vector2I Entrance;
@@ -381,7 +382,7 @@ public class Map
         unit.TimeEnergy = GD.RandRange(-100, 0) - 20;
         return unit;
     }
-    public Unit CreateFriend(Unit master, string name, UnitEgo ego = UnitEgo.random, float memoryValue = -1, bool jsonImport = true)
+    public Unit CreateFriend(Unit master, string name, float time, UnitEgo ego = UnitEgo.random, float memoryValue = -1, bool jsonImport = true)
     {
         for(int d = 1; d <= 4; d++)
         {
@@ -390,6 +391,7 @@ public class Map
                 if (g.IsEmpty)
                 {
                     Unit unit = CreateEnemy(g.Position, name, ego, memoryValue, jsonImport);
+                    Scene.CurrentMap.TemUnits.Add(unit, time);
                     unit.Friendness = master.Friendness;
                     unit.UnitAi = new(unit)
                     {
@@ -397,30 +399,28 @@ public class Map
                         State = AiState.Follow
                     };
                     unit.UnitAi.FindTarget();
+                    foreach (Item i in unit.Equipment.EquippedItems.ToList())
+                        i.salvage = 0;
+                    foreach (Item i in unit.Memorys.EquippedItems.ToList())
+                        i.salvage = 0;
+                    foreach (Item i in unit.Inventory.Items.ToList())
+                        i.salvage = 0;
                     return unit;
                 }
             }
         }
         return null;
     }
-    public void DeleteUnit(Unit unit)
+    public void KillUnit(Unit unit)
     {
         if (unit == Player.PlayerUnit)
         {
             // 实际玩家死亡效果由scene脚本负责
             return;
         }
-        unit.dead = true;
+        DeleteUnit(unit);
         unit.Ue.Killed();
-        unit.Up.CurrentGrid.unit = null;
         Info.Print($"{unit.TrName} 被退治了");
-        unit.Up.sprite.QueueFree();
-        Units.Remove(unit);
-        WakeUnits.Remove(unit);
-        foreach (var si in SpellCard.currentSpellcards.Where(x => x.User == unit).ToList())
-        {
-            SpellCard.currentSpellcards.Remove(si);
-        }
         Tutorial.enemydead++;
         GameEvents.EnemyKilled(unit);
         if (unit.Ego != UnitEgo.normal)
@@ -440,6 +440,20 @@ public class Map
         {
             if (GD.Randf() < i.salvage)
                 unit.Inventory.ThrowItem(i);
+        }
+    }
+    public void DeleteUnit(Unit unit)
+    {
+        unit.dead = true;
+        unit.Up.CurrentGrid.unit = null;
+        if (TemUnits.Select(x => x.Key).ToList().Contains(unit))
+            TemUnits.Remove(unit);
+        unit.Up.sprite.QueueFree();
+        Units.Remove(unit);
+        WakeUnits.Remove(unit);
+        foreach (var si in SpellCard.currentSpellcards.Where(x => x.User == unit).ToList())
+        {
+            SpellCard.currentSpellcards.Remove(si);
         }
     }
     public void SummonEnemy()

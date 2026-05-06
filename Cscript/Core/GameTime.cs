@@ -11,6 +11,15 @@ public static class GameTime
         if (CurrentMap.Bullets.Count == 0)
             updateTime = 100f / Setting.FPTQ;
         Queue<Unit> activeUnit = new();
+        foreach (Unit u in CurrentMap.TemUnits.Keys)
+        {
+            CurrentMap.TemUnits[u] -= updateTime;
+            if (CurrentMap.TemUnits[u] <= 0)
+            {
+                Info.Print($"{u.TrName} 消失了");
+                CurrentMap.DeleteUnit(u);
+            }
+        }
         foreach (Unit u in CurrentMap.WakeUnits)
         {
             if(u.TimeEnergy > -updateTime)
