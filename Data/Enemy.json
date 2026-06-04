@@ -176,7 +176,7 @@
         "Spi": 16,
         "Mag": 16,
         "Cun": 10,
-        "SkillGroups": [],
+        "SkillGroups": [ "Winter" ],
         "Skills": {
         }
     }, // letty
@@ -192,7 +192,7 @@
         "Spi": 14,
         "Mag": 10,
         "Cun": 12,
-        "SkillGroups": [],
+        "SkillGroups": [ "BlackCat" ],
         "Skills": {
         }
     }, // chen
@@ -210,7 +210,7 @@
         "Spi": 10,
         "Mag": 14,
         "Cun": 20,
-        "SkillGroups": [],
+        "SkillGroups": [ "Doll" ],
         "Skills": {
         }
     }, // alice
@@ -840,11 +840,11 @@
         "Tags": [
             "人偶"
         ],
-        "HP": 100,
+        "HP": 50,
         "SP": 0,
         "MP": 0,
-        "Str": 25,
-        "Dex": 15,
+        "Str": 10,
+        "Dex": 10,
         "Con": 10,
         "Spi": 10,
         "Mag": 10,
@@ -863,8 +863,8 @@
         "Str": 10,
         "Dex": 10,
         "Con": 10,
-        "Spi": 25,
-        "Mag": 15,
+        "Spi": 10,
+        "Mag": 10,
         "Cun": 10,
         "Skills": {
         }
@@ -874,11 +874,11 @@
         "Tags": [
             "人偶"
         ],
-        "HP": 70,
+        "HP": 100,
         "SP": 0,
         "MP": 0,
-        "Str": 15,
-        "Dex": 25,
+        "Str": 10,
+        "Dex": 10,
         "Con": 10,
         "Spi": 10,
         "Mag": 10,
@@ -891,15 +891,15 @@
         "Tags": [
             "人偶"
         ],
-        "HP": 70,
+        "HP": 50,
         "SP": 0,
         "MP": 0,
         "Str": 10,
         "Dex": 10,
         "Con": 10,
         "Spi": 10,
-        "Mag": 25,
-        "Cun": 15,
+        "Mag": 10,
+        "Cun": 10,
         "Skills": {
         }
     } // dollHolland

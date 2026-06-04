@@ -214,6 +214,15 @@ public partial class EosdE : Node, IMapNode
             case "remilia":
                 G.I.SkillTreeBox.Expert("Blood");
                 break;
+            case "letty":
+                G.I.SkillTreeBox.Expert("Winter");
+                break;
+            case "chen":
+                G.I.SkillTreeBox.Expert("BlackCat");
+                break;
+            case "alice":
+                G.I.SkillTreeBox.Expert("Doll");
+                break;
         }
         Player.PlayerUnit.Ua.skillPoint += 6;
         Player.PlayerUnit.Ua.uaPoint += 5;

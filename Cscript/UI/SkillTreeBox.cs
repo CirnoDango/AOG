@@ -20,7 +20,7 @@ public partial class SkillTreeBox : Control, IRegisterToG
 
     public override void _Ready()
     {
-        SummonHexs(4, -4, 4, -4, 4, -4);
+        SummonHexs(5, -5, 5, -5, 5, -5);
         SetHex(2, 1, "YinyangBall");
         SetHex(0, 0, "Dark");
         SetHex(3, -2, "Fist");
@@ -29,6 +29,9 @@ public partial class SkillTreeBox : Control, IRegisterToG
         SetHex(-3, 4, "FireElement");
         SetHex(-3, -1, "Time");
         SetHex(-1, -1, "Blood");
+        SetHex(1, 4, "Winter");
+        SetHex(5, -1, "BlackCat");
+        SetHex(-4, 3, "Doll");
     }
 
     public void SummonHex(int x, int y)

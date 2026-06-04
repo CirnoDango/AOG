@@ -201,19 +201,37 @@ public partial class SilverForest : Node, IMapNode
         switch (player)
         {
             case "reimu":
-                G.I.SkillPanel.Add("YinyangBall");
+                G.I.SkillTreeBox.Expert("YinyangBall");
                 break;
             case "marisa":
-                G.I.SkillPanel.Add("Star");
+                G.I.SkillTreeBox.Expert("Star");
                 break;
             case "rumia":
-                G.I.SkillPanel.Add("Dark");
+                G.I.SkillTreeBox.Expert("Dark");
                 break;
             case "cirno":
-                G.I.SkillPanel.Add("Freeze");
+                G.I.SkillTreeBox.Expert("Freeze");
                 break;
-            case "meilin":
-                G.I.SkillPanel.Add("Fist");
+            case "meiling":
+                G.I.SkillTreeBox.Expert("Fist");
+                break;
+            case "patchouli":
+                G.I.SkillTreeBox.Expert("FireElement");
+                break;
+            case "sakuya":
+                G.I.SkillTreeBox.Expert("Time");
+                break;
+            case "remilia":
+                G.I.SkillTreeBox.Expert("Blood");
+                break;
+            case "letty":
+                G.I.SkillTreeBox.Expert("Winter");
+                break;
+            case "chen":
+                G.I.SkillTreeBox.Expert("BlackCat");
+                break;
+            case "alice":
+                G.I.SkillTreeBox.Expert("Doll");
                 break;
         }
         Player.PlayerUnit.Ua.skillPoint += 6;
