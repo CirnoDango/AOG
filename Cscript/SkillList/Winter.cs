@@ -1,14 +1,8 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using static MathEx;
-using static System.Net.Mime.MediaTypeNames;
-/// <summary>
-/// 寒冬系技能
-/// 包含：延长的冬日、花之凋零、波状光、北极的胜利者、符卡：寒潮
-/// </summary>
+
 public class LingeringCold : Skill
 {
     public LingeringCold()

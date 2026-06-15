@@ -24,9 +24,6 @@ public class Grid : IInteractable
     {
         switch (_terrainBaseGround)
         {
-            case "Road":
-            case "Grass":
-            case "Floor":
             default:
                 IsWalkable = true;
                 IsTransparent = true;
@@ -34,6 +31,8 @@ public class Grid : IInteractable
             case "Wall":
             case "ScarletWall":
             case "Stone":
+            case "WoodWall":
+            case "Cloud":
                 IsWalkable = false;
                 IsTransparent = false;
                 break;
@@ -46,6 +45,8 @@ public class Grid : IInteractable
         {
             case "DoorClosed":
             case "Forest":
+            case "SnowTree":
+            case "CherryTree":
                 IsWalkable = false;
                 IsTransparent = false;
                 break;

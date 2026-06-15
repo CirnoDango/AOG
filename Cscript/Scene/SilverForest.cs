@@ -37,6 +37,11 @@ public partial class SilverForest : Node, IMapNode
         CreateFloor4(Floor4b);
         CreateFloor5(Floor5);
         CreateFloor6(Floor6);
+        List<string> s123 =                              ["dangoPea", "dangoWater", "dangoFist", "dangoSnow", "dangoIce", "dangoTwinpea", "dangoRedBean", "dangoCat", "dollGroup"];
+        Floor1.EnemySummonValue = EnemySummonValue(s123, [     0.20,         0.10,        0.10,        0.30,       0.20,           0.10,           0.05,       0.15,        0.00]);
+        Floor2.EnemySummonValue = EnemySummonValue(s123, [     0.20,         0.20,        0.10,        0.25,       0.15,           0.15,           0.05,       0.40,        0.00]);
+        Floor3.EnemySummonValue = EnemySummonValue(s123, [     0.20,         0.20,        0.10,        0.10,       0.10,           0.10,           0.05,       0.25,        0.40]);
+
         for (int ii = 0; ii < Maps.Count - 1; ii++)
         {
             Maps[ii].MapGoto = Maps[ii + 1];
@@ -164,6 +169,15 @@ public partial class SilverForest : Node, IMapNode
             MapGenerator.ChangeMapByEnvolve(LogicMapLayer.Stand, "CherryTree", floor, 2);
             MapGenerator.ChangeMapByRoad(LogicMapLayer.BaseGround, "CherryFloor", floor, out int y, out int ey);
             floor.Entrance = new Vector2I(0, y);
+        }
+        static Dictionary<string, float> EnemySummonValue(List<string> names, List<double> values)
+        {
+            Dictionary<string, float> keyValuePairs = [];
+            for (int i = 0; i < names.Count; i++)
+            {
+                keyValuePairs.Add(names[i], (float)values[i]);
+            }
+            return keyValuePairs;
         }
     }
     private static void Playerdied()

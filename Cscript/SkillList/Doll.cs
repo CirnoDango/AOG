@@ -25,7 +25,13 @@ public class MagicallyLuminousShanghaiDolls : Skill
         doll.Ua.Str += sc.User.Ua.Cun + 10;
         doll.Ua.SpeedMove += 1;
         if (iLevel == 4)
-            doll.Us.AddSkill(new WhirlwindSlash());
+        {
+            var s = new WhirlwindSlash()
+            {
+                Level = Level
+            };
+            doll.Us.AddSkill(s);
+        }
     }
 }
 public class HangedHouraiDolls : Skill
@@ -46,7 +52,11 @@ public class HangedHouraiDolls : Skill
     {
         var doll = Scene.CurrentMap.CreateFriend(sc.User, "dollHourai", t0[iLevel], UnitEgo.normal);
         doll.Ua.Mag += sc.User.Ua.Cun + 10;
-        doll.Us.AddSkill(new LaserShoot());
+        var s = new LaserShoot()
+        {
+            Level = Level
+        };
+        doll.Us.AddSkill(s);
     }
 }
 public class FraternalFrenchDolls : Skill
@@ -68,7 +78,11 @@ public class FraternalFrenchDolls : Skill
         var doll = Scene.CurrentMap.CreateFriend(sc.User, "dollFrance", t0[iLevel], UnitEgo.normal);
         doll.Ua.Con += sc.User.Ua.Cun + 10;
         doll.Ua.Spi += sc.User.Ua.Cun + 10;
-        doll.Us.AddSkill(new Taunt());
+        var s = new Taunt()
+        {
+            Level = Level
+        };
+        doll.Us.AddSkill(s);
         if (iLevel == 4)
             doll.Us.AddSkill(new GroupHeal());
 
@@ -112,8 +126,8 @@ public class ArtfulSacrifice : SpellCard
         Cooldown = 3000;
         Targeting = new TargetType(new TargetRuleSelf(), 1, 10);
     }
-    int[] t0 = { 20, 30, 40, 40 };
-    int[] t1 = { 4, 5, 6, 6 };
+    int[] t0 = [30, 40, 50, 50];
+    int[] t1 = [1, 1, 1, 2];
     public override string GetDescription()
     {
         return string.Format(EffectTr(), t0[iLevel], t1[iLevel]);
@@ -121,12 +135,14 @@ public class ArtfulSacrifice : SpellCard
     protected override void OnSpellStart(SkillContext sc)
     {
         Info.Print($"{sc.User.TrName} 展开了 {TrName} ！");
-        AddTimedEvent(Linspace(20, 300, 70), (ctx, advanceTime) =>
+        foreach(var u in Scene.CurrentMap.Units.Where(x=>x.IsFriend(sc.User) && x.symbol.Contains("人偶")))
         {
-            var bullet = Bullet.CreateBullet(sc.User, this, new Damage(12, DamageType.cold), sc.User.Up.Position, sc.User.Up.Position + RandomV2(),
-                new Vector2(0, 0), Vector2.Right, (float)GD.RandRange(1.0, 4.0), 12,
-                ShapeBullet.Ring, (ColorBullet)(new List<int> { 0, 4, 9, 12, 13 })[GD.RandRange(0, 4)], advanceTime);
-        });
+            var s = new Explosion
+            {
+                Level = Level
+            };
+            u.Us.AddSkill(s, 99999);
+        }
     }
 
     protected override void OnSpellUpdate(SkillContext sc, float delta)
@@ -171,7 +187,7 @@ public class LaserShoot : Skill
         Animation.CreateLaser(sc.User.Up.Position, sc.GridsTarget[^1].Position - sc.User.Up.Position, Colors.Gold);
         foreach (var g in sc.GridsTarget)
         {
-            g.unit.Ua.TakeBulletDamage(new Damage(30, DamageType.celestial), sc.User, this);
+            g.unit.Ua.TakeBulletDamage(new Damage(30, DamageType.arcane), sc.User, this);
         }
     }
 }
@@ -230,7 +246,8 @@ public class Explosion : Skill
         foreach (var g in sc.User.Up.CurrentGrid.NearGrids(t0[iLevel]))
         {
             if (g.unit != null && !g.unit.IsFriend(sc.User))
-                g.unit.Ua.TakeBodyDamage(new Damage(t1[iLevel], DamageType.arcane), sc.User, this);
+                g.unit.Ua.TakeBodyDamage(new Damage(t1[iLevel], DamageType.strike), sc.User, this);
         }
+        sc.User.Ua.TakeBodyDamage(new Damage(99999, DamageType.strike), sc.User, this);
     }
 }

@@ -902,6 +902,64 @@
         "Cun": 10,
         "Skills": {
         }
-    } // dollHolland
-
+    }, // dollHolland
+    {
+        "Name": "dollGroup",
+        "Tags": [
+            ""
+        ],
+        "HP": 100,
+        "SP": 0,
+        "MP": 0,
+        "Str": 15,
+        "Dex": 10,
+        "Con": 15,
+        "Spi": 15,
+        "Mag": 15,
+        "Cun": 20,
+        "Skills": {
+            "MagicallyLuminousShanghaiDolls": 30,
+            "HangedHouraiDolls": 30,
+            "FraternalFrenchDolls": 30,
+            "RedHairedDutchDolls": 30
+        }
+    }, // dollGroup
+    {
+        "Name": "dangoSnow",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 50,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 10,
+        "Con": 10,
+        "Spi": 20,
+        "Mag": 15,
+        "Cun": 10,
+        "Skills": {
+            "LingeringCold": 30,
+            "UndulationRay": 20
+        }
+    }, // dangoSnow
+    {
+        "Name": "dangoCat",
+        "Tags": [
+            "人偶"
+        ],
+        "HP": 50,
+        "SP": 0,
+        "MP": 0,
+        "Str": 10,
+        "Dex": 20,
+        "Con": 10,
+        "Spi": 16,
+        "Mag": 10,
+        "Cun": 10,
+        "Skills": {
+            "FenghuangSpreadWings": 30,
+            "SoaringSeimei": 20
+        }
+    } // dangoCat
 ]
