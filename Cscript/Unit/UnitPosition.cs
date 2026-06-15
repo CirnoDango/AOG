@@ -79,7 +79,7 @@ public class UnitPosition(Unit unit)
             if (g.unit != null && g.unit != Player.PlayerUnit && g.unit.Up.GridInVision().Contains(CurrentGrid))
             {
                 Scene.CurrentMap.WakeUnits.Add(g.unit);
-                g.unit.UnitAi.State = AiState.Attack;
+                g.unit.UnitAi.FindTarget();
             }
         }
     }
