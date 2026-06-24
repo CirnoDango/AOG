@@ -5,145 +5,42 @@
   "skilltreehexYs": [
     4
   ],
-  "SceneName": "Eosd",
-  "StageNumber": 1,
+  "SceneName": "SilverForest",
+  "StageNumber": 0,
   "PlayerData": {
     "Name": "cirno",
     "Tags": [
       "妖精"
     ],
-    "HP": 130.0,
-    "SP": 72.0,
-    "MP": 22.0,
+    "HP": 120.0,
+    "SP": 56.0,
+    "MP": 26.0,
     "Str": 10,
     "Dex": 18,
-    "Con": 16,
-    "Spi": 21,
+    "Con": 10,
+    "Spi": 14,
     "Mag": 12,
     "Cun": 10,
     "Value": 0,
     "SkillGroups": [
       "Freeze"
     ],
-    "Skills": {
-      "Icefall": 2.0,
-      "MinusK": 1.0,
-      "DiamondBlizzard": 1.0,
-      "PerfectGlacialist": 1.0,
-      "PerfectFreeze": 1.0
-    },
-    "Equipment": [
+    "Skills": {},
+    "Equipment": [],
+    "Inventory": [
       {
         "Amount": 1,
         "Name": "HealPotion",
         "Parameters": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
         }
-      },
-      {
-        "Amount": 1,
-        "Name": "MagicPotion",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-          "MpRecoverPercent": 30.0
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "BarrageSet",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-          "barrage": {
-            "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-            "MaxComponents": 2,
-            "Components": {
-              "$type": "System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-              "$values": [
-                {
-                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                  "Name": "PyramidFire",
-                  "Parameters": {
-                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-                  }
-                },
-                {
-                  "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                  "Name": "BulletModule",
-                  "Parameters": {
-                    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                    "bulletContext": {
-                      "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-                      "damage": 5.7081676,
-                      "speed": 1.4356217,
-                      "maxDistance": 12.0,
-                      "shape": "Ring",
-                      "type": "spirit",
-                      "color": "Cyan"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "colorR": 0.13665387,
-          "colorG": 0.6038925,
-          "colorB": 0.12220099
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "TenguFan",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
       }
     ],
-    "Inventory": [
-      {
-        "Amount": 1,
-        "Name": "Axe",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "IllnessRecoveryCharm",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "SpiritualStrikeTalisman",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "SoulTorch",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
-      },
-      {
-        "Amount": 1,
-        "Name": "PowerBlock",
-        "Parameters": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib"
-        }
-      }
-    ],
-    "Memory": {
-      "mUaAny": 2.0,
-      "mUaCon": 1.0,
-      "mUaSpi": 1.0
-    }
+    "Memory": {}
   },
-  "MaxMemory": 20.0,
-  "UaPoint": 2,
-  "SkillPoint": 0,
+  "MaxMemory": 10.0,
+  "UaPoint": 5,
+  "SkillPoint": 6,
   "TalentPoint": 0,
   "PlayerDamageTypeSet": {
     "DamageAdvantage": {},

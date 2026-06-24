@@ -115,7 +115,7 @@ public partial class SkillTree : Control
 				return;
 			Skill.Level += 1; // 升级技能
 			Skill.OnLevelUp(Player.PlayerUnit);
-            UpdateTree();
+			UpdateTree();
 			G.I.Player.SkillPoint -= 1;
 			G.I.SkillPanel.Refresh();
 		}

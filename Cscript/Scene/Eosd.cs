@@ -166,7 +166,7 @@ public partial class Eosd : Node, IMapNode
         G.I.Fsm.ChangeState(Fsm.UpdateState);
         G.I.DialogBox.Hide();
     }
-    public static void CreateRumia()
+    public void CreateRumia()
     {
         Stage1Fin.CreateEnemy(Stage1Fin.Exit, "rumia", UnitEgo.great);
     }
